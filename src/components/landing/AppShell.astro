@@ -1,0 +1,54 @@
+---
+/**
+ * The app's window chrome, drawn once and reused by every mockup so they cannot
+ * drift apart: sidebar full height on the left, then the 30px titlebar over the
+ * screen content. Values come from the app's App.css and Sidebar.css.
+ *
+ * `nav` picks which sidebar item is active. Content goes in the default slot.
+ */
+import logo from '../../assets/app-logo-dark.svg?raw';
+import { NAV_ICONS, WIN_ICONS } from './app-parts';
+
+interface Props {
+	nav?: 'clipboard' | 'notes' | 'spaces' | 'shortcuts';
+	class?: string;
+}
+
+const { nav = 'clipboard', class: klass = '' } = Astro.props;
+const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
+---
+
+<div class:list={['oc-window', klass]}>
+	<div class="oc-sidebar">
+		<span class="oc-side-logo"><img src={logoUrl} width="30" height="30" alt="" /></span>
+		<hr class="oc-side-divider" />
+		<div class="oc-side-nav">
+			<span class:list={['oc-navbtn', nav === 'clipboard' && 'active']} set:html={NAV_ICONS.clipboard} />
+			<span class:list={['oc-navbtn', nav === 'notes' && 'active']} set:html={NAV_ICONS.notes} />
+			<span
+				class:list={['oc-navbtn', nav === 'spaces' && 'active']}
+				style={nav === 'spaces' ? undefined : 'color:#22c55e'}
+				set:html={NAV_ICONS.cloudCheck}
+			/>
+			<span class:list={['oc-navbtn', nav === 'shortcuts' && 'active']} set:html={NAV_ICONS.keyboard} />
+		</div>
+		<div class="oc-side-bottom">
+			<span class="oc-navbtn" set:html={NAV_ICONS.sun} />
+			<span class="oc-navbtn" set:html={NAV_ICONS.bell} />
+			<span class="oc-navbtn" set:html={NAV_ICONS.user} />
+			<span class="oc-navbtn" set:html={NAV_ICONS.gear} />
+		</div>
+	</div>
+
+	<div class="oc-main">
+		<div class="oc-titlebar">
+			<span class="oc-title">Orange Copy Paste</span>
+			<span class="oc-winbtns">
+				<span class="oc-winbtn" set:html={WIN_ICONS.min} />
+				<span class="oc-winbtn" set:html={WIN_ICONS.max} />
+				<span class="oc-winbtn" set:html={WIN_ICONS.close} />
+			</span>
+		</div>
+		<slot />
+	</div>
+</div>

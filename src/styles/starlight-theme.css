@@ -59,3 +59,17 @@
 	background: var(--sl-color-gray-6);
 	white-space: nowrap;
 }
+
+/* The app's orange is the only brand color; keep titles white so the accent
+   marks links and the current page instead of tinting everything. */
+:root {
+	--sl-color-text-accent: #ff6a4d;
+}
+
+.site-title {
+	color: var(--sl-color-white);
+}
+
+[data-theme='light'] {
+	--sl-color-text-accent: #d92b09;
+}

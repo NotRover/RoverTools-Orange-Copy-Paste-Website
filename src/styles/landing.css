@@ -28,9 +28,15 @@
 	--kind-document: #f97316;
 	--kind-video: #ef4444;
 
+	--danger: #ef4444;
+	--danger-dim: rgba(239, 68, 68, 0.12);
+
 	--radius: 12px;
 	--radius-sm: 10px;
 	--radius-xs: 7px;
+	--chip-h: 18px;
+	--shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.35);
+	--shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 
 	--font-display: 'Sora', 'Inter', sans-serif;
 	--font-body: 'Inter', 'Segoe UI', sans-serif;
@@ -187,7 +193,8 @@ body.landing {
    mockups on this page match what installs.
    ============================================================ */
 
-/* window shell */
+/* window shell. In the app the sidebar spans the whole window height and the
+   titlebar only spans the pane to its right, so the shell is a flex row. */
 .oc-window {
 	border: 1px solid var(--border);
 	border-radius: var(--radius);
@@ -196,6 +203,19 @@ body.landing {
 	overflow: hidden;
 	position: relative;
 	text-align: left;
+	display: flex;
+	/* the app's UI font and 13px base, not the site's body font */
+	font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	font-size: 13px;
+	line-height: normal;
+}
+
+.oc-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 /* titlebar: 30px, 11px/600 muted title, 30x30 window buttons */
@@ -204,6 +224,7 @@ body.landing {
 	align-items: center;
 	justify-content: space-between;
 	height: 30px;
+	flex-shrink: 0;
 	border-bottom: 1px solid var(--border);
 	background: var(--bg);
 }
@@ -218,7 +239,9 @@ body.landing {
 
 .oc-winbtns {
 	display: flex;
+	align-items: stretch;
 	height: 30px;
+	flex-shrink: 0;
 }
 
 .oc-winbtn {
@@ -228,16 +251,21 @@ body.landing {
 	align-items: center;
 	justify-content: center;
 	color: var(--text-muted);
-	font-size: 10px;
-	font-family: var(--font-body);
+}
+
+.oc-winbtn svg {
+	width: 8px;
+	height: 8px;
+	display: block;
 }
 
 .oc-body {
+	flex: 1;
 	display: flex;
 	min-height: 0;
 }
 
-/* sidebar: 58px, logo 36, accent divider, 38x38 nav buttons */
+/* sidebar: 58px, logo 36 holding a 30px mark, accent divider, 38x38 buttons */
 .oc-sidebar {
 	width: 58px;
 	flex-shrink: 0;
@@ -257,11 +285,12 @@ body.landing {
 	align-items: center;
 	justify-content: center;
 	margin-bottom: 10px;
+	flex-shrink: 0;
 }
 
 .oc-side-logo img {
-	width: 26px;
-	height: 26px;
+	width: 30px;
+	height: 30px;
 	display: block;
 }
 
@@ -269,7 +298,22 @@ body.landing {
 	width: 28px;
 	border-top: 1px solid var(--accent);
 	opacity: 0.6;
-	margin-bottom: 10px;
+	margin: 0 0 10px;
+}
+
+.oc-side-nav {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+}
+
+.oc-side-bottom {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
 }
 
 .oc-navbtn {
@@ -281,7 +325,7 @@ body.landing {
 	justify-content: center;
 	color: var(--text-muted);
 	position: relative;
-	margin-bottom: 4px;
+	flex-shrink: 0;
 }
 
 .oc-navbtn svg {
@@ -294,15 +338,16 @@ body.landing {
 	color: var(--accent);
 }
 
+/* the indicator sits at the left edge of the 38px button, not the sidebar */
 .oc-navbtn.active::before {
 	content: '';
 	position: absolute;
-	left: -10px;
+	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
 	width: 3px;
-	height: 18px;
-	border-radius: 2px;
+	height: 20px;
+	border-radius: 0 2px 2px 0;
 	background: var(--accent);
 }
 
@@ -319,9 +364,10 @@ body.landing {
 }
 
 .oc-card-media {
+	width: 100%;
 	background: var(--bg);
 	border-bottom: 1px solid var(--border);
-	height: 74px;
+	overflow: hidden;
 }
 
 .oc-card-body {
@@ -331,18 +377,36 @@ body.landing {
 	gap: 6px;
 }
 
+/* card text is the app's code face at 12px/1.25, wrapping on words */
 .oc-card-text {
-	font-family: var(--font-mono);
+	font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+	font-weight: 400;
 	font-size: 12px;
 	line-height: 1.25;
 	color: var(--text);
 	word-break: break-word;
+	white-space: pre-wrap;
+	margin: 0;
 }
 
+/* file and folder names get one line with an ellipsis */
 .oc-card-text--clamp {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+/* image entries name themselves, in the UI font at 11px/500 */
+.oc-imgname,
+.oc-card-text--imgname {
+	font-family: inherit;
+	font-size: 11px;
+	font-weight: 500;
+	color: var(--text-secondary);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0;
 }
 
 .oc-card-footer {
@@ -357,82 +421,354 @@ body.landing {
 	align-items: center;
 	gap: 4px;
 	flex-wrap: wrap;
+	flex: 1;
 	min-width: 0;
 }
 
+/* the app always renders the time in accent at 600, aligned to the chip row */
 .oc-time {
 	font-size: 10.5px;
-	color: var(--text-muted);
+	font-weight: 600;
+	color: var(--accent);
 	white-space: nowrap;
 	flex-shrink: 0;
+	padding-top: 3px;
 }
 
-/* type chip: 18px tall, radius 7, 10px/600, tinted bg + colored label */
+.oc-time--copied {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	color: var(--success);
+}
+
+/* type chip: 18px tall, radius 7, 10px/600, 9px icon, tinted background */
 .oc-chip {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
 	height: 18px;
-	padding: 0 7px;
+	padding: 0 7px 0 5px;
 	border-radius: var(--radius-xs);
-	font-family: var(--font-body);
+	font-family: inherit;
 	font-size: 10px;
 	font-weight: 600;
 	letter-spacing: 0.2px;
+	line-height: 1;
+	flex-shrink: 0;
 	color: var(--cc, var(--accent));
 	background: color-mix(in srgb, var(--cc, var(--accent)) 12%, transparent);
 	white-space: nowrap;
 }
 
 .oc-chip svg {
-	width: 10px;
-	height: 10px;
+	width: 9px;
+	height: 9px;
 	flex-shrink: 0;
 }
 
-/* status pills, bottom-right of the window like the app */
+/* group tags carry a dot instead of an icon, and clip long names */
+.oc-chip--group {
+	min-width: 0;
+}
+
+.oc-chip--group .oc-chip-label {
+	max-width: 74px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.oc-chip-dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: currentColor;
+	opacity: 0.7;
+	flex-shrink: 0;
+}
+
+/* ---- the screen toolbar: 6/12 padding, icon buttons, inline search ---- */
+.oc-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px 0;
+	flex-shrink: 0;
+}
+
+.oc-tb-group {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.oc-tb-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+	padding: 5px 7px;
+	border-radius: 8px;
+	border: 1px solid var(--border);
+	background: var(--surface);
+	color: var(--text-secondary);
+	box-shadow: var(--shadow-sm);
+	position: relative;
+	flex-shrink: 0;
+}
+
+.oc-tb-btn--danger {
+	color: color-mix(in srgb, var(--danger) 72%, var(--text-muted));
+	border-color: color-mix(in srgb, var(--danger) 28%, var(--border));
+}
+
+.oc-tb-n {
+	font-size: 9.5px;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.oc-tb-badge {
+	position: absolute;
+	top: -3px;
+	right: -3px;
+	min-width: 13px;
+	height: 13px;
+	padding: 0 3px;
+	font-size: 8px;
+	font-weight: 700;
+	line-height: 1;
+	border-radius: 99px;
+	background: var(--accent);
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.oc-tb-sep {
+	width: 1px;
+	height: 18px;
+	background: var(--border);
+	flex-shrink: 0;
+}
+
+/* the three-way layout switch, with the accent slider under the active one */
+.oc-seg {
+	position: relative;
+	display: flex;
+	align-items: center;
+	border-radius: 8px;
+	border: 1px solid var(--border);
+	background: var(--surface);
+	padding: 2px;
+	box-shadow: var(--shadow-sm);
+	flex-shrink: 0;
+}
+
+.oc-seg-slider {
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: calc((100% - 4px) / 3);
+	height: calc(100% - 4px);
+	border-radius: 6px;
+	background: var(--accent);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+	z-index: 0;
+}
+
+.oc-seg-btn {
+	position: relative;
+	z-index: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px 8px;
+	border-radius: 6px;
+	color: var(--text-muted);
+}
+
+.oc-seg-btn--active {
+	color: #fff;
+}
+
+.oc-search {
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex: 1;
+	min-width: 60px;
+}
+
+.oc-search-icon {
+	position: absolute;
+	left: 7px;
+	color: var(--text-muted);
+	width: 11px;
+	height: 11px;
+}
+
+.oc-search-field {
+	width: 100%;
+	padding: 4px 24px 4px 25px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--surface);
+	color: var(--text-muted);
+	font-size: 10.5px;
+	line-height: normal;
+	box-shadow: var(--shadow-sm);
+}
+
+/* ---- day group header: dot on the rail, accent label, hairline ---- */
+.oc-day-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px 8px 0;
+	position: relative;
+}
+
+.oc-day-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--bg);
+	border: 2px solid var(--accent);
+	box-shadow: 0 0 0 3px var(--accent-dim);
+	margin-left: -5px;
+	flex-shrink: 0;
+}
+
+.oc-day-label {
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--accent);
+	letter-spacing: -0.2px;
+	white-space: nowrap;
+}
+
+.oc-day-sub {
+	font-size: 11.5px;
+	font-weight: 400;
+	color: var(--text-muted);
+	white-space: nowrap;
+}
+
+.oc-day-row::after {
+	content: '';
+	flex: 1;
+	height: 0.5px;
+	background: var(--accent);
+	opacity: 0.25;
+	margin-left: 4px;
+}
+
+.oc-day-chevron {
+	color: var(--accent);
+	opacity: 0.5;
+	width: 10px;
+	height: 10px;
+	flex-shrink: 0;
+	margin-right: 4px;
+}
+
+/* ---- scroll area and tiles grid, at the app's real insets ---- */
+.oc-viewport {
+	flex: 1;
+	min-height: 0;
+	margin: 0 8px;
+	overflow: hidden;
+}
+
+.oc-timeline {
+	display: flex;
+	padding: 10px 0 14px;
+}
+
+.oc-groups {
+	flex: 1;
+	min-width: 0;
+	margin-left: 15px;
+}
+
+.oc-grid {
+	columns: 3;
+	column-gap: 10px;
+	padding: 14px 14px 14px 15px;
+}
+
+.oc-grid .oc-card {
+	break-inside: avoid;
+	margin-bottom: 10px;
+}
+
+/* ---- the two pills the app floats bottom-right ---- */
 .oc-pill-row {
 	position: absolute;
 	bottom: 10px;
 	right: 18px;
 	display: flex;
+	align-items: center;
 	gap: 6px;
 }
 
-.oc-status-pill {
-	display: inline-flex;
+.oc-stat-pill {
+	display: flex;
 	align-items: center;
-	gap: 5px;
-	font-size: 10.5px;
-	color: var(--text-secondary);
+	gap: 7px;
+	padding: 4px 11px;
 	background: var(--surface);
 	border: 1px solid var(--border);
 	border-radius: 7.5px;
-	padding: 3px 8px;
+	box-shadow: var(--shadow-sm);
 }
 
-.oc-status-pill .dot {
-	width: 6px;
-	height: 6px;
-	border-radius: 50%;
-	background: var(--success);
-	box-shadow: 0 0 4px 1px rgba(34, 197, 94, 0.5);
-}
-
-/* search input look */
-/* search field: app metrics are 11px text, 8px radius, 4/26/4/28 padding,
-   with the magnifier sitting 9px from the left edge */
-.oc-search {
-	font-size: 11px;
-	line-height: 16px;
+.oc-stat {
+	font-size: 10.5px;
 	color: var(--text-muted);
-	background: var(--surface)
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6e6e' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4.2-4.2'/%3E%3C/svg%3E")
-		no-repeat 9px center;
-	background-size: 12px 12px;
+	letter-spacing: 0.2px;
+	white-space: nowrap;
+}
+
+.oc-stat b {
+	color: var(--text-secondary);
+	font-weight: 600;
+}
+
+.oc-stat-sep {
+	width: 2.5px;
+	height: 2.5px;
+	border-radius: 50%;
+	background: var(--border-light);
+	flex-shrink: 0;
+}
+
+.oc-sync-pill {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	padding: 4px 11px;
+	border-radius: 7.5px;
 	border: 1px solid var(--border);
-	border-radius: 8px;
-	padding: 4px 26px 4px 28px;
+	background: var(--surface);
+	box-shadow: var(--shadow-sm);
+	font-size: 10.5px;
+	letter-spacing: 0.2px;
+	color: #22c55e;
+	white-space: nowrap;
+}
+
+.oc-sync-pill .dot {
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: #22c55e;
+	box-shadow: 0 0 4px 1px rgba(34, 197, 94, 0.5);
+	flex-shrink: 0;
 }
 
 /* subtle mesh washes for cards and sections */
