@@ -23,30 +23,31 @@ bun run build
 
 Static output lands in `dist/`.
 
-## Deploy (Cloudflare Workers)
+## Deploy (Cloudflare Pages)
 
-The site is fully static - no adapter, no server code. The Worker is a static asset
-binding over `dist/`, configured in `wrangler.toml`.
+The site is fully static - no adapter, no Functions, no server runtime.
 
-| Workers Builds setting | Value |
+| Pages setting | Value |
 | --- | --- |
-| Project name | `rovertools-orangecp-website` (must match `name` in `wrangler.toml`) |
+| Project name | `orange-copy-paste-app`, which is also the `orange-copy-paste-app.pages.dev` host |
 | Build command | `bun run build` |
-| Deploy command | `npx wrangler deploy` |
+| Build output directory | `dist` |
 | Root directory | repo root |
+| Production branch | `main` |
 
-`bun.lock` is committed, so the build installs with bun on its own. `.node-version`
-pins the build image to Node 22.
+`bun.lock` is committed, so Pages installs with bun on its own. `.node-version` pins
+the build image to Node 22. `wrangler.toml` carries the project name and the same
+output directory, for the Git integration and for `wrangler pages deploy` alike.
 
-Set one build environment variable on the project:
+One build environment variable, once a custom domain is attached:
 
 - `SITE_URL` - the canonical origin, e.g. `https://rovertools.app`, used for canonical
-  links and the sitemap. Workers Builds does not expose the deployment's own URL to the
-  build, so without this the config falls back to a placeholder host.
+  links and the sitemap. Without it the build falls back to `CF_PAGES_URL`, which is
+  the per-deploy host and correct for previews, and to the production `pages.dev` host
+  for a local build.
 
-`public/_headers` sets the security headers and caches `/_astro/*` immutably - Workers
-static assets reads it from the output directory the same way Pages did.
-`not_found_handling = "404-page"` sends unmatched paths to `src/pages/404.astro`.
+`public/_headers` sets the security headers and caches `/_astro/*` immutably. Pages
+serves `404.html`, built from `src/pages/404.astro`, for unmatched paths.
 
 ## Where facts live
 
