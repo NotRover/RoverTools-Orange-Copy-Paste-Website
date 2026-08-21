@@ -1,0 +1,119 @@
+---
+/**
+ * The right-click menu the app opens on an entry card, drawn from
+ * src/components/app/card-menu/CardMenu.tsx. Values (142px min width, 4px
+ * padding, 1px gaps, the 0.5px separator) come from CardMenu.css.
+ *
+ * Positioned absolutely inside the window shell, so the caller places it over
+ * whichever card it is meant to belong to. Pass `anchor` instead of x/y to hang
+ * it off a positioned parent - a bento tile rather than the window shell.
+ */
+import { MENU_ICONS } from './app-parts';
+
+interface Props {
+	/** left offset inside the window, in the window's own pixels */
+	x?: number;
+	/** top offset inside the window */
+	y?: number;
+	/** how many spaces this item is already in, shown beside "Share to space" */
+	spaces?: number;
+}
+
+const { x, y, spaces = 2 } = Astro.props;
+const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
+---
+
+<div class="oc-menu" style={pos}>
+	<span class="oc-menu-item oc-menu-item--copy">
+		<Fragment set:html={MENU_ICONS.copy} />Copy
+	</span>
+	<span class="oc-menu-item oc-menu-item--pin">
+		<Fragment set:html={MENU_ICONS.pin} />Pin
+	</span>
+	<span class="oc-menu-item oc-menu-item--save">
+		<Fragment set:html={MENU_ICONS.star} />Save
+	</span>
+	<span class="oc-menu-item">
+		<Fragment set:html={MENU_ICONS.cloudUp} />Upload to cloud
+	</span>
+	<span class="oc-menu-item oc-menu-item--sub">
+		<Fragment set:html={MENU_ICONS.share} />
+		<span class="oc-menu-label">Share to space</span>
+		<span class="oc-menu-count">{spaces}</span>
+		<span class="oc-menu-caret" set:html={MENU_ICONS.caret} />
+	</span>
+	<span class="oc-menu-item oc-menu-item--sub">
+		<Fragment set:html={MENU_ICONS.tag} />
+		<span class="oc-menu-label">Groups</span>
+		<span class="oc-menu-caret" set:html={MENU_ICONS.caret} />
+	</span>
+	<span class="oc-menu-item oc-menu-item--expand">
+		<Fragment set:html={MENU_ICONS.expand} />Expand
+	</span>
+	<span class="oc-menu-sep"></span>
+	<span class="oc-menu-item oc-menu-item--danger">
+		<Fragment set:html={MENU_ICONS.trash} />Delete
+	</span>
+</div>
+
+<style>
+	.oc-menu {
+		position: absolute;
+		z-index: 40;
+		min-width: 142px;
+		padding: 4px;
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		background: var(--surface);
+		box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+	}
+
+	.oc-menu-item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 9px;
+		border-radius: var(--radius-xs);
+		color: var(--text);
+		font-size: 12px;
+		white-space: nowrap;
+	}
+
+	/* One row is drawn hovered, so the menu reads as something being used
+	   rather than a static list. Copy is the row that gets the green tint in
+	   the app, so it is the one shown. */
+	.oc-menu-item--copy {
+		background: rgba(34, 197, 94, 0.08);
+		color: #22c55e;
+	}
+
+	.oc-menu-item--danger {
+		color: var(--danger, #ef4444);
+	}
+
+	.oc-menu-label {
+		flex: 1;
+	}
+
+	.oc-menu-count {
+		color: var(--accent);
+		font-size: 12px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.oc-menu-caret {
+		display: inline-flex;
+		align-items: center;
+		opacity: 0.5;
+	}
+
+	.oc-menu-sep {
+		height: 0.5px;
+		margin: 3px 4px;
+		background: var(--border);
+	}
+</style>

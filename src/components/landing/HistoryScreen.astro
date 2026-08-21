@@ -17,6 +17,12 @@ interface Props {
 	earlierDate?: string;
 	/** id put on the tiles grid, so a script can drop cards straight into it */
 	gridId?: string;
+	/** draw the app's scrollbar down the right edge of the viewport */
+	scrollbar?: boolean;
+	/** thumb top as a percentage of the track */
+	thumbTop?: number;
+	/** thumb height as a percentage of the track */
+	thumbHeight?: number;
 }
 
 const {
@@ -25,7 +31,12 @@ const {
 	date = 'Aug 21, 2026',
 	earlierDate = 'Aug 20, 2026',
 	gridId,
+	scrollbar = false,
+	thumbTop = 4,
+	thumbHeight = 44,
 } = Astro.props;
+
+const hasEarlier = Astro.slots.has('earlier');
 ---
 
 <div class="oc-screen">
@@ -66,16 +77,18 @@ const {
 	<div class="oc-viewport">
 		<div class="oc-timeline">
 			<div class="oc-groups">
-				<div class="oc-day-row">
-					<span class="oc-day-dot"></span>
-					<span class="oc-day-label">Today</span>
-					<span class="oc-day-sub">{date}</span>
-					<span class="oc-day-chevron" set:html={TB_ICONS.dayChevron} />
+				<div class:list={['oc-group', !hasEarlier && 'oc-group--only']}>
+					<div class="oc-day-row">
+						<span class="oc-day-dot"></span>
+						<span class="oc-day-label">Today</span>
+						<span class="oc-day-sub">{date}</span>
+						<span class="oc-day-chevron" set:html={TB_ICONS.dayChevron} />
+					</div>
+					<div class="oc-grid" id={gridId}><slot /></div>
 				</div>
-				<div class="oc-grid" id={gridId}><slot /></div>
 				{
-					Astro.slots.has('earlier') && (
-						<>
+					hasEarlier && (
+						<div class="oc-group oc-group--last">
 							<div class="oc-day-row">
 								<span class="oc-day-dot" />
 								<span class="oc-day-label">Yesterday</span>
@@ -85,12 +98,23 @@ const {
 							<div class="oc-grid">
 								<slot name="earlier" />
 							</div>
-						</>
+						</div>
 					)
 				}
 			</div>
 		</div>
+		{
+			scrollbar && (
+				<div class="oc-sb">
+					<span
+						class="oc-sb-thumb"
+						style={`top:${thumbTop}%;height:${thumbHeight}%`}
+					/>
+				</div>
+			)
+		}
 	</div>
+	<slot name="menu" />
 </div>
 
 <style>
@@ -100,5 +124,31 @@ const {
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
+	}
+
+	/* the scrollbar hangs off the scrolling box, not the screen */
+	.oc-viewport {
+		position: relative;
+	}
+
+	/* The viewport really does scroll in the app; a static shot has to say so.
+	   Values from .layout-viewport::-webkit-scrollbar in ClipboardScreen.css:
+	   12px wide, transparent track, --border-light thumb with a 2px --bg ring
+	   and a fully round cap. */
+	.oc-sb {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 12px;
+		pointer-events: none;
+	}
+
+	.oc-sb-thumb {
+		position: absolute;
+		left: 2px;
+		right: 2px;
+		border-radius: 999px;
+		background: var(--border-light);
 	}
 </style>
