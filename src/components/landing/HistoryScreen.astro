@@ -13,11 +13,19 @@ interface Props {
 	groups?: number;
 	/** the date line beside "Today" */
 	date?: string;
+	/** the date line beside "Yesterday", when an earlier group is passed in */
+	earlierDate?: string;
 	/** id put on the tiles grid, so a script can drop cards straight into it */
 	gridId?: string;
 }
 
-const { count = 128, groups = 3, date = 'Aug 21, 2026', gridId } = Astro.props;
+const {
+	count = 128,
+	groups = 3,
+	date = 'Aug 21, 2026',
+	earlierDate = 'Aug 20, 2026',
+	gridId,
+} = Astro.props;
 ---
 
 <div class="oc-screen">
@@ -65,6 +73,21 @@ const { count = 128, groups = 3, date = 'Aug 21, 2026', gridId } = Astro.props;
 					<span class="oc-day-chevron" set:html={TB_ICONS.dayChevron} />
 				</div>
 				<div class="oc-grid" id={gridId}><slot /></div>
+				{
+					Astro.slots.has('earlier') && (
+						<>
+							<div class="oc-day-row">
+								<span class="oc-day-dot" />
+								<span class="oc-day-label">Yesterday</span>
+								<span class="oc-day-sub">{earlierDate}</span>
+								<span class="oc-day-chevron" set:html={TB_ICONS.dayChevron} />
+							</div>
+							<div class="oc-grid">
+								<slot name="earlier" />
+							</div>
+						</>
+					)
+				}
 			</div>
 		</div>
 	</div>
