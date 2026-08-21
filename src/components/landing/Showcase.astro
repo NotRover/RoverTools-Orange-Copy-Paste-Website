@@ -1,18 +1,26 @@
 ---
 import appIcon from '../../assets/app-icon.png';
+import AppShell from './AppShell.astro';
+import HistoryScreen from './HistoryScreen.astro';
+import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS, TB_ICONS, TYPE_LABELS, MENU_ICONS, SRC_ICONS, NAV_ICONS } from './app-parts';
 
-const iconText =
-	'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
-const iconUrl =
-	'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 15l6-6M8 12l-3 3a4 4 0 105.7 5.7l3-3M16 12l3-3A4 4 0 1013.3 3.3l-3 3"/></svg>';
-const iconImage =
-	'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="9" cy="9" r="1.6"/></svg>';
-const iconDoc =
-	'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>';
-const iconFile =
-	'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/></svg>';
-const iconPin =
-	'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 17v5M7 4h10l-1 7 3 3H5l3-3z"/></svg>';
+/* close glyph the popups use: CloseIcon at 10px, stroke 2.5 */
+const CLOSE_ICON =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+/* Phosphor Copy and ShareNetwork at 12px, as the invite row uses them */
+const COPY_ICON =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></svg>';
+/* Phosphor DownloadSimple 15/14 and Key 20, as the update card and the recovery
+   gate call them */
+const DOWNLOAD_ICON =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 256 256"><path d="M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0ZM93.66,109.66,120,83.31V152a8,8,0,0,0,16,0V83.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,11.32,11.32Z"/></svg>';
+/* the same DownloadSimple at 14, as the row button calls it */
+const DOWNLOAD_ICON14 = DOWNLOAD_ICON.replace(/width="15" height="15"/, 'width="14" height="14"');
+const KEY_ICON =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M216.57,39.43A80,80,0,0,0,83.91,120.78L28.69,176A15.86,15.86,0,0,0,24,187.31V216a16,16,0,0,0,16,16H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A79.73,79.73,0,0,0,160,176h.1A80,80,0,0,0,216.57,39.43ZM224,98.1c-1.09,34.09-29.75,61.86-63.89,61.9H160a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A63.72,63.72,0,0,1,96,95.92c0-34.14,27.81-62.8,61.9-63.89A64,64,0,0,1,224,98.1ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"/></svg>';
+const SHARE_ICON =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256"><path d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z"/></svg>';
+
 ---
 
 <section class="section show" id="showcase">
@@ -26,138 +34,149 @@ const iconPin =
 
 		<!-- wide shot: the clipboard screen -->
 		<figure class="wide reveal">
-			<div class="oc-window">
-				<div class="oc-titlebar">
-					<span class="oc-title">Orange Copy Paste</span>
-					<span class="oc-winbtns">
-						<span class="oc-winbtn">&#8211;</span>
-						<span class="oc-winbtn">&#9633;</span>
-						<span class="oc-winbtn">&#10005;</span>
-					</span>
-				</div>
-				<div class="oc-body">
-					<div class="oc-sidebar">
-						<span class="oc-side-logo"><img src={appIcon.src} alt="" /></span>
-						<span class="oc-side-divider"></span>
-						<span class="oc-navbtn active">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 2h6v4H9z"/></svg>
-						</span>
-						<span class="oc-navbtn">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
-						</span>
-						<span class="oc-navbtn">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="15" r="3"/><path d="M11 11l4 3"/></svg>
-						</span>
-						<span class="oc-navbtn">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
-						</span>
-					</div>
-					<div class="clip-pane">
-						<div class="clip-topbar">
-							<div class="oc-search">Search history...</div>
-							<span class="clip-tool">Filters</span>
-							<span class="clip-tool">Newest</span>
-							<span class="clip-tool clip-tool--accent">Groups</span>
-						</div>
-						<div class="day-label">Today</div>
-						<div class="clip-grid">
-							<div class="oc-card oc-card--in-clipboard">
-								<div class="oc-card-body">
-									<div class="oc-card-text">Meet at the station, platform 4, 9:40. Bring the badge for the side door.</div>
-									<div class="oc-card-footer">
-										<span class="oc-chips">
-											<span class="oc-chip" style="--cc:var(--kind-text)" set:html={iconText + 'Text'} />
-											<span class="oc-chip" style="--cc:#14b8a6">work</span>
-										</span>
-										<span class="oc-time">just now</span>
-									</div>
-								</div>
-							</div>
-							<div class="oc-card">
-								<div class="oc-card-media grad-blue"></div>
-								<div class="oc-card-body">
-									<div class="oc-imgname">Image Aug 21, 2:45 PM</div>
-									<div class="oc-card-footer">
-										<span class="oc-chips">
-											<span class="oc-chip" style="--cc:var(--kind-image)" set:html={iconImage + 'Image'} />
-										</span>
-										<span class="oc-time">2:45 PM</span>
-									</div>
-								</div>
-							</div>
-							<div class="oc-card">
-								<div class="oc-card-body">
-									<div class="oc-card-text oc-card-text--clamp">github.com/Spectrewolf8/RoverTools-Releases</div>
-									<div class="oc-card-footer">
-										<span class="oc-chips">
-											<span class="oc-chip" style="--cc:var(--kind-url)" set:html={iconUrl + 'URL'} />
-											<span class="oc-chip" style="--cc:var(--accent)" set:html={iconPin + 'Pinned'} />
-										</span>
-										<span class="oc-time">1:12 PM</span>
-									</div>
-								</div>
-							</div>
-							<div class="oc-card">
-								<div class="oc-card-body">
-									<div class="oc-card-text oc-card-text--clamp">quarterly-report.pdf</div>
-									<div class="oc-card-footer">
-										<span class="oc-chips">
-											<span class="oc-chip" style="--cc:var(--kind-document)" set:html={iconDoc + 'Doc'} />
-										</span>
-										<span class="oc-time">12:58 PM</span>
-									</div>
-								</div>
-							</div>
-							<div class="oc-card">
-								<div class="oc-card-body">
-									<div class="oc-card-text oc-card-text--clamp">brand-assets (3 files)</div>
-									<div class="oc-card-footer">
-										<span class="oc-chips">
-											<span class="oc-chip" style="--cc:var(--kind-file)" set:html={iconFile + 'File'} />
-											<span class="oc-chip" style="--cc:#6366f1">ideas</span>
-										</span>
-										<span class="oc-time">11:31 AM</span>
-									</div>
-								</div>
-							</div>
-							<div class="oc-card">
-								<div class="oc-card-body">
-									<div class="oc-card-text">Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.</div>
-									<div class="oc-card-footer">
-										<span class="oc-chips">
-											<span class="oc-chip" style="--cc:var(--kind-text)" set:html={iconText + 'Text'} />
-										</span>
-										<span class="oc-time">10:02 AM</span>
-									</div>
-								</div>
+			<AppShell nav="clipboard">
+				<HistoryScreen count={128} groups={3}>
+					<div class="oc-card oc-card--in-clipboard">
+						<div class="oc-card-body">
+							<p class="oc-card-text">Meet at the station, platform 4, 9:40. Bring the badge for the side door.</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.teal}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">work</span></span>
+								</span>
+								<span class="oc-time">Just now</span>
 							</div>
 						</div>
 					</div>
-				</div>
+
+					<div class="oc-card">
+						<div class="oc-card-media grad-blue"></div>
+						<div class="oc-card-body">
+							<p class="oc-imgname">#a1b2c3d4 Image Aug 21, 2:45 PM</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
+								</span>
+								<span class="oc-time">4m ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="oc-card">
+						<div class="oc-card-body">
+							<p class="oc-card-text oc-card-text--clamp">github.com/Spectrewolf8/RoverTools-Releases</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.pinned}`}><Fragment set:html={CHIP_ICONS.pin} /><span class="oc-chip-label">Pinned</span></span>
+								</span>
+								<span class="oc-time">32m ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="oc-card">
+						<div class="oc-card-body">
+							<p class="oc-card-text oc-card-text--clamp">quarterly-report.pdf</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.saved}`}><Fragment set:html={CHIP_ICONS.saved} /><span class="oc-chip-label">Saved</span></span>
+								</span>
+								<span class="oc-time">1h ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="oc-card">
+						<div class="oc-card-body">
+							<p class="oc-card-text oc-card-text--clamp">brand-assets (3 files)</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">Files</span></span>
+									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
+								</span>
+								<span class="oc-time">2h ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="oc-card">
+						<div class="oc-card-body">
+							<p class="oc-card-text">Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+								</span>
+								<span class="oc-time">3h ago</span>
+							</div>
+						</div>
+					</div>
+				</HistoryScreen>
 				<div class="oc-pill-row">
-					<span class="oc-status-pill"><span class="dot"></span>Connected</span>
+					<div class="oc-stat-pill">
+						<span class="oc-stat"><b>86</b> text</span>
+						<span class="oc-stat-sep"></span>
+						<span class="oc-stat"><b>7</b> rich</span>
+						<span class="oc-stat-sep"></span>
+						<span class="oc-stat"><b>21</b> img</span>
+						<span class="oc-stat-sep"></span>
+						<span class="oc-stat"><b>14</b> files</span>
+						<span class="oc-stat-sep"></span>
+						<span class="oc-stat"><b>128</b> total</span>
+					</div>
+					<div class="oc-sync-pill"><span class="dot"></span>Sync connected</div>
 				</div>
-			</div>
+			</AppShell>
 			<figcaption>
 				<strong>The history screen</strong>
-				Tiles or list, day groups, colored group tags, and the entry currently on your
-				clipboard outlined in orange.
+				Sort, filters, search and a three-way layout switch across the top; day groups
+				on a timeline; the entry sitting on your clipboard outlined in orange.
 			</figcaption>
 		</figure>
 
 		<div class="bento">
 			<!-- row 1: paste popup + notes -->
 			<figure class="tile tile--s3 reveal">
-				<div class="mock">
+				<div class="mock mock--popup">
 					<div class="pp">
-						<div class="pp-tabs">
-							<span class="pp-tab active">Recent</span>
-							<span class="pp-tab">Pinned</span>
+						<div class="pp-header">
+							<div class="pp-header-left">
+								<span class="pp-title">Quick Paste</span>
+								<span class="pp-count">5</span>
+							</div>
+							<div class="pp-tabs">
+								<span class="pp-tab pp-tab--active">Recent<span class="pp-tab-count">5</span></span>
+								<span class="pp-tab">Pinned<span class="pp-tab-count">2</span></span>
+							</div>
+							<span class="pp-close" set:html={CLOSE_ICON} />
 						</div>
-						<div class="pp-row"><span class="slot">1</span><span class="pp-text">Meet at the station, platform 4</span></div>
-						<div class="pp-row sel"><span class="slot">2</span><span class="pp-text">github.com/Spectrewolf8</span></div>
-						<div class="pp-row"><span class="slot">3</span><span class="pp-text">Invoice INV-20418, due Sep 5</span></div>
-						<div class="pp-hint"><span class="kbd">1</span>-<span class="kbd">9</span> paste by slot <span class="kbd">Tab</span> switch tab</div>
+						<div class="pp-list">
+							<div class="pp-item">
+								<span class="pp-badge">1</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+									<span class="pp-filename">Meet at the station, platform 4, 9:40...</span>
+								</div>
+								<span class="pp-meta"><span class="pp-time">2m</span></span>
+							</div>
+							<div class="pp-item pp-item--selected">
+								<span class="pp-badge">2</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+									<span class="pp-filename">github.com/Spectrewolf8/RoverTools-Rel...</span>
+								</div>
+								<span class="pp-meta"><span class="pp-pin" set:html={CHIP_ICONS.pin} /><span class="pp-time">1h</span></span>
+							</div>
+							<div class="pp-item">
+								<span class="pp-badge">3</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+									<span class="pp-filename">quarterly-report.pdf</span>
+								</div>
+								<span class="pp-meta"><span class="pp-time">3d</span></span>
+							</div>
+						</div>
 						<span class="pp-cursor" aria-hidden="true">
 							<span class="pp-ring"></span>
 							<svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 2l0 17 4.2-3.6 2.6 6 3-1.3-2.6-5.9 6-.6z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
@@ -165,33 +184,62 @@ const iconPin =
 					</div>
 				</div>
 				<figcaption>
-					<strong>Quick-paste popup</strong>
-					Opens at your cursor with Ctrl+Shift+V. Press a digit and it pastes.
+					<strong>Quick Paste</strong>
+					Ctrl+Shift+V opens it at your cursor. Press a digit and that item pastes.
 				</figcaption>
 			</figure>
 
 			<figure class="tile tile--s3 reveal">
 				<div class="mock">
-					<div class="note">
-						<div class="note-h">Release checklist</div>
-						<div class="task done"><span class="cb"></span>Draft the notes</div>
-						<div class="task done"><span class="cb"></span>Verify both channels</div>
-						<div class="task"><span class="cb"></span>Ship v0.1.16</div>
-						<div class="code">bun run tauri build</div>
+					<div class="ns-card">
+						<div class="ns-card-body">
+							<div class="ns-card-title">Release checklist</div>
+							<div class="ns-card-preview">
+								<ul class="ns-tasks">
+									<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Draft the notes in changelog/next.md</li>
+									<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Check the updater on both channels</li>
+									<li class="ns-task"><span class="ns-task-box"></span>Ship 0.1.16</li>
+								</ul>
+								<pre class="ns-code">bun run tauri build</pre>
+							</div>
+							<div class="ns-card-footer">
+								<div class="ns-card-chips">
+									<span class="ns-chip ns-chip--pinned"><Fragment set:html={CHIP_ICONS.pin} /><span class="ns-chip-label">Pinned</span></span>
+									<span class="ns-chip" style="background:rgba(20,184,166,0.12);color:#14b8a6"><span class="ns-chip-dot"></span><span class="ns-chip-label">work</span></span>
+								</div>
+								<span class="ns-card-time ns-card-time--pinned"><Fragment set:html={CHIP_ICONS.pin} />12m ago</span>
+							</div>
+						</div>
 					</div>
 				</div>
 				<figcaption>
 					<strong>Notes, next to your clips</strong>
-					Task lists, tables, code blocks and callouts. Exports to Markdown.
+					Task lists, tables, code blocks and callouts. A note can be pinned, tagged and
+					shared like any clip.
 				</figcaption>
 			</figure>
 
 			<!-- row 2 -->
 			<figure class="tile tile--s2 reveal">
 				<div class="mock">
-					<div class="radio-row on"><span class="radio"></span><div><b>Realtime</b><small>Items arrive the moment they are copied.</small></div></div>
-					<div class="radio-row"><span class="radio"></span><div><b>Passive</b><small>Arrivals every 5 minutes, or on Refresh.</small></div></div>
-					<div class="radio-row"><span class="radio"></span><div><b>Manual</b><small>You pick what uploads, item by item.</small></div></div>
+					<div class="acct-mode">
+						<div class="acct-mode-head">
+							<span class="set-row-label">Automatic syncing</span>
+							<div class="acct-seg">
+								<span class="acct-seg-pill active">Realtime</span>
+								<span class="acct-seg-pill">Passive</span>
+								<span class="acct-seg-pill">Manual</span>
+							</div>
+						</div>
+						<p class="acct-card-desc">
+							Items from your other devices arrive the moment they are copied, and what you
+							copy here uploads right away.
+						</p>
+						<p class="acct-mode-note">
+							Spaces are not affected. What you share to a space still goes out right away, and
+							what other people share with you always arrives live.
+						</p>
+					</div>
 				</div>
 				<figcaption>
 					<strong>Three sync modes</strong>
@@ -201,20 +249,54 @@ const iconPin =
 
 			<figure class="tile tile--s2 reveal">
 				<div class="mock">
-					<div class="mem"><span class="avatar" style="--ac:#3b82f6">S</span><div><b>sam</b><small class="on-dot">Online now</small></div><span class="badge">owner</span></div>
-					<div class="mem"><span class="avatar" style="--ac:#a855f7">R</span><div><b>rio</b><small class="on-dot">Online now</small></div></div>
-					<div class="mem"><span class="avatar" style="--ac:#14b8a6">M</span><div><b>mei</b><small>Offline</small></div></div>
+					<div class="sp-settings-block">
+						<div class="sp-settings-label">People<span class="sp-settings-count">4</span></div>
+						<div class="sp-member-list">
+							<div class="sp-member-row">
+								<span class="sp-member-pic">YO</span>
+								<span class="sp-member-name">You</span>
+								<span class="sp-badge sp-badge--owner">owner</span>
+								<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+							</div>
+							<div class="sp-member-row">
+								<span class="sp-member-pic">RI</span>
+								<span class="sp-member-name">rio</span>
+								<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+							</div>
+							<div class="sp-member-row">
+								<span class="sp-member-pic">ME</span>
+								<span class="sp-member-name">mei</span>
+								<span class="sp-badge sp-badge--warn">waiting for key</span>
+								<span class="sp-member-dot"><span class="sp-dot"></span></span>
+							</div>
+						</div>
+					</div>
 				</div>
 				<figcaption>
-					<strong>Spaces members</strong>
-					See who is in a space and who is online. Removing one rotates the key.
+					<strong>Who is in a space</strong>
+					Presence per member, and a badge while someone is still waiting for the space key.
 				</figcaption>
 			</figure>
 
 			<figure class="tile tile--s2 reveal">
 				<div class="mock">
-					<div class="sw-row"><div><b>Auto-share to this space</b><small>Off. Only items you share by hand go in.</small></div><span class="switch"></span></div>
-					<div class="sw-row"><div><b>Auto-copy incoming</b><small>Shared items land on your clipboard.</small></div><span class="switch on"></span></div>
+					<div class="sp-settings-block">
+						<div class="sp-settings-label">Rules<span class="sp-settings-count">auto</span></div>
+						<div class="sp-toggle-row">
+							<span class="sp-toggle-text">
+								<span class="sp-toggle-title">Copy new items in</span>
+								<span class="sp-toggle-desc">Anything shared here lands on your clipboard as it arrives.</span>
+							</span>
+							<span class="sp-switch sp-switch--on"></span>
+						</div>
+						<div class="sp-toggle-row">
+							<span class="sp-toggle-text">
+								<span class="sp-toggle-title">Share new items out</span>
+								<span class="sp-toggle-desc">Off. Only items you share by hand go into this space.</span>
+							</span>
+							<span class="sp-switch"></span>
+						</div>
+					</div>
 				</div>
 				<figcaption>
 					<strong>Sharing is opt-in</strong>
@@ -226,9 +308,20 @@ const iconPin =
 			<figure class="tile tile--s2 reveal">
 				<div class="mock">
 					<div class="cp">
-						<div class="cp-head"><span class="oc-chip" style="--cc:var(--kind-text)" set:html={iconText + 'Text'} /><span class="muted">Captured</span></div>
-						<div class="cp-body">The quarterly numbers land Thursday</div>
-						<div class="cp-actions"><span class="cp-btn">Pin</span><span class="cp-btn danger">Delete</span></div>
+						<div class="cp-head">
+							<div class="cp-head-left">
+								<span class="cp-title">Copied</span>
+								<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+							</div>
+							<span class="cp-close" set:html={CLOSE_ICON} />
+						</div>
+						<div class="cp-preview"><p class="cp-preview-text">The quarterly numbers land Thursday</p></div>
+						<div class="cp-actions">
+							<span class="cp-item"><Fragment set:html={MENU_ICONS.pin} />Pin</span>
+							<span class="cp-item"><Fragment set:html={MENU_ICONS.star} />Save</span>
+							<span class="cp-sep"></span>
+							<span class="cp-item cp-item--danger"><Fragment set:html={MENU_ICONS.trash} />Delete</span>
+						</div>
 					</div>
 				</div>
 				<figcaption>
@@ -238,11 +331,69 @@ const iconPin =
 			</figure>
 
 			<figure class="tile tile--s2 reveal">
-				<div class="mock">
-					<div class="fl-row"><span class="oc-chip" style="--cc:var(--kind-text)" set:html={iconText + 'Text'} /><span class="count">41</span></div>
-					<div class="fl-row"><span class="oc-chip" style="--cc:var(--kind-url)" set:html={iconUrl + 'URL'} /><span class="count">17</span></div>
-					<div class="fl-row"><span class="oc-chip" style="--cc:var(--kind-image)" set:html={iconImage + 'Image'} /><span class="count">9</span></div>
-					<div class="fl-row"><span class="oc-chip" style="--cc:var(--kind-document)" set:html={iconDoc + 'Doc'} /><span class="count">4</span></div>
+				<div class="mock mock--filter">
+					<div class="cs-filter-card">
+					<div class="cs-card-head">
+						<span class="cs-card-head-icon"><Fragment set:html={SRC_ICONS.funnel12} /></span>
+						<span class="cs-card-title">Filters</span>
+						<span class="cs-card-result"><b>42</b> of 128</span>
+						<span class="cs-card-head-clear">Clear</span>
+					</div>
+					<div class="cs-card-body">
+					<div class="cs-card-col">
+					<div class="cs-section-label">Type<span class="cs-count">6</span></div>
+					<div class="cs-type-grid">
+						{
+							[
+								['text', 41, true],
+								['url', 17, true],
+								['image', 9, false],
+								['document', 4, true],
+								['file', 6, false],
+								['html', 2, true],
+							['video', 0, false],
+							['folder', 3, true],
+							].map(([kind, n, on]) => (
+								<label class:list={['cs-type-option', on && 'cs-type-option--on']}>
+									<span class:list={['cs-type-cb', on && 'cs-type-cb--on']} />
+									<span class="cs-type-icon" style={`--cc:${KIND_COLORS[kind as string]}`}>
+										<Fragment set:html={CHIP_ICONS[kind as string]} />
+									</span>
+									<span class="cs-type-name">{TYPE_LABELS[kind as string]}</span>
+									<span class="cs-option-count">{n}</span>
+								</label>
+							))
+						}
+					</div>
+					<div class="cs-card-divider"></div>
+					<div class="cs-section-label">Cloud<span class="cs-count">1</span></div>
+					<div class="cs-seg">
+						<span class="cs-seg-btn">Any</span>
+						<span class="cs-seg-btn cs-seg-btn--on"><Fragment set:html={NAV_ICONS.cloudCheck11} />In cloud<span class="cs-seg-count">96</span></span>
+						<span class="cs-seg-btn"><Fragment set:html={SRC_ICONS.cloudSlash11} />Local<span class="cs-seg-count">32</span></span>
+					</div>
+					<div class="cs-seg">
+						<span class="cs-seg-btn cs-seg-btn--on">Any</span>
+						<span class="cs-seg-btn"><Fragment set:html={SRC_ICONS.shareNetwork11} />In a space<span class="cs-seg-count">24</span></span>
+						<span class="cs-seg-btn">Not shared<span class="cs-seg-count">104</span></span>
+					</div>
+					<div class="cs-chip-row">
+						{
+							[
+								['Design', '#f59e0b'],
+								['Ops', '#38bdf8'],
+								['Family', '#a78bfa'],
+							].map(([name, c]) => (
+								<span class="cs-chip">
+									<span class="cs-chip-dot" style={`background:${c}`} />
+									{name}
+								</span>
+							))
+						}
+					</div>
+					</div>
+					</div>
+					</div>
 				</div>
 				<figcaption>
 					<strong>Filters that count ahead</strong>
@@ -252,118 +403,311 @@ const iconPin =
 
 			<figure class="tile tile--s2 reveal">
 				<div class="mock">
-					<div class="up">
-						<div class="up-head"><b>0.1.15 is ready</b><span class="up-btn">Download</span></div>
-						<small>New: sounds for shared arrivals, invites and refusals. Updates never install without asking.</small>
+					<div class="set-section">
+						<div class="set-section-head">
+							<span class="set-section-icon" set:html={DOWNLOAD_ICON} />
+							<h3 class="set-section-title">Updates</h3>
+						</div>
+						<div class="set-group">
+							<div class="set-row set-row--stack">
+								<div class="set-row-header">
+									<div class="set-row-info">
+										<span class="set-row-label">App version 0.1.15</span>
+										<span class="set-row-desc">Version 0.1.16 is available.</span>
+									</div>
+									<span class="settings-action-btn"><Fragment set:html={DOWNLOAD_ICON14} />Download</span>
+								</div>
+							</div>
+							<div class="set-row">
+								<div class="set-row-info">
+									<span class="set-row-label">Check for updates automatically</span>
+									<span class="set-row-desc">Look for a newer version shortly after the app starts. Updates are never installed without asking.</span>
+								</div>
+								<span class="settings-toggle active"><span class="settings-toggle-knob"></span></span>
+							</div>
+						</div>
 					</div>
 				</div>
 				<figcaption>
 					<strong>Signed updates</strong>
-					Every bundle is checked against a key baked into the app before it installs.
+					Every bundle is checked against a key baked into the app, and nothing installs
+					until you say so.
 				</figcaption>
 			</figure>
 
 			<!-- row 4: full-width band -->
 			<figure class="tile tile--band reveal">
 				<div class="mock">
-					<div class="rc">7XKQM-2WNPF-9RTLC-4HVGB-8ZJSD-6YEAU</div>
-					<div class="muted rc-note">Shown once. Stored nowhere.</div>
+					<div class="auth-card">
+						<div class="auth-brand">
+							<div class="auth-brand-badge" set:html={KEY_ICON} />
+							<h3 class="auth-title">Save your recovery code</h3>
+							<p class="auth-subtitle">
+								If you forget your password, this code is the only thing that can unlock
+								your synced items on a new device. We cannot recover them for you.
+							</p>
+						</div>
+						<div class="auth-form">
+							<p class="acct-recovery-code">7XKQM-2WNPF-9RTLC-4HVGB-8ZJSD</p>
+							<div class="acct-recovery-actions">
+								<span class="acct-btn">Copy</span>
+								<span class="acct-btn">Save as file</span>
+							</div>
+							<label class="acct-recovery-ack">
+								<span class="settings-checkbox settings-checkbox--on"></span>
+								<span>I saved my recovery code</span>
+							</label>
+							<span class="auth-submit">Continue</span>
+						</div>
+					</div>
 				</div>
 				<figcaption>
 					<strong>Recovery code</strong>
-					150 bits that make a forgotten password survivable without giving the server a
-					key.
+					Shown once when you sign up. It is the only way back into your synced items
+					without your password, and the server never sees it.
 				</figcaption>
 			</figure>
 		</div>
 
 		<!-- wide shot: the spaces screen -->
-		<figure class="wide reveal">
-			<div class="oc-window">
-				<div class="oc-titlebar">
-					<span class="oc-title">Orange Copy Paste</span>
-					<span class="oc-winbtns">
-						<span class="oc-winbtn">&#8211;</span>
-						<span class="oc-winbtn">&#9633;</span>
-						<span class="oc-winbtn">&#10005;</span>
-					</span>
-				</div>
-				<div class="oc-body">
-					<div class="oc-sidebar">
-						<span class="oc-side-logo"><img src={appIcon.src} alt="" /></span>
-						<span class="oc-side-divider"></span>
-						<span class="oc-navbtn">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 2h6v4H9z"/></svg>
-						</span>
-						<span class="oc-navbtn">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
-						</span>
-						<span class="oc-navbtn active">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="15" r="3"/><path d="M11 11l4 3"/></svg>
-						</span>
-						<span class="oc-navbtn">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
-						</span>
-					</div>
-					<div class="sp-pane">
-						<div class="sp-feed">
-							<div class="sp-feed-head">
-								<b>design-team</b>
-								<span class="muted">4 members</span>
+		<figure class="wide wide--spaces reveal">
+			<AppShell nav="spaces">
+				<div class="sp-screen">
+					<!-- DOM order is feed, rules, list: the list is pulled left with order:-1,
+					     exactly as the app does it -->
+					<div class="sp-feed-panel">
+						<div class="sp-feed-scroll">
+							<div class="sp-timeline-wrap">
+								<div class="sp-timeline-groups">
+									<div class="sp-timeline-group sp-timeline-group--only">
+										<div class="sp-timeline-day-row">
+											<div class="sp-timeline-day-dot"></div>
+											<span class="sp-timeline-day-label">Today</span>
+											<span class="sp-timeline-day-chevron" set:html={TB_ICONS.dayChevron} />
+										</div>
+										<div class="sp-feed-card-grid">
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text">#ff3e1c on #0e0e0e reads 4.6:1, so the label needs 600 weight.</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+														</span>
+														<span class="oc-time">4m ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">staging.rovertools.app/preview/920x560</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+															<span class="sp-owner sp-owner--self">You</span>
+														</span>
+														<span class="oc-time">Just now</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-media grad-teal"></div>
+												<div class="oc-card-body">
+													<p class="oc-imgname">#7f31c0ab Image Aug 21, 11:06 AM</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+														</span>
+														<span class="oc-time">18m ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">brand-assets (3 files)</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span>
+															<span class="sp-owner sp-owner--self">You</span>
+														</span>
+														<span class="oc-time">26m ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text">Ship the rail at 272 and let people drag it. The old fixed one was too tight for four members.</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">A</span><span class="sp-owner-name">Ada Lovelace</span></span>
+														</span>
+														<span class="oc-time">2h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="ns-card">
+												<div class="ns-card-body">
+													<div class="ns-card-title">Launch checklist</div>
+													<div class="ns-card-preview">Sign the bundles, check both channels, then publish the notes.</div>
+													<div class="ns-card-footer">
+														<div class="ns-card-chips">
+															<span class="oc-chip sp-source-chip--note"><Fragment set:html={SRC_ICONS.note} /><span class="oc-chip-label">Note</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+														</div>
+														<span class="ns-card-time ns-card-time--pinned">1h ago</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="sp-timeline-end"><span class="sp-timeline-end-text">You are all caught up</span></div>
 							</div>
-							<div class="sp-cols">
-								<div class="oc-card">
-									<div class="oc-card-body">
-										<div class="sp-owner"><span class="avatar sm" style="--ac:#a855f7">R</span><span class="sp-name">rio</span><span class="oc-time">2m</span></div>
-										<div class="oc-card-text oc-card-text--clamp">#ff3e1c on #0e0e0e, ratio 4.6:1</div>
-										<div class="oc-card-footer">
-											<span class="oc-chips"><span class="oc-chip" style="--cc:var(--kind-text)" set:html={iconText + 'Text'} /></span>
-											<span class="oc-time">2 comments</span>
-										</div>
+						</div>
+					</div>
+
+					<!-- the rules rail, at its 272px default, so the copy buttons are icon-only -->
+					<aside class="sp-rules">
+						<header class="sp-rules-head">
+							<span class="sp-rules-avatar" style="background:#3b82f6">DE</span>
+							<span class="sp-rules-head-text">
+								<span class="sp-rules-name">Design</span>
+								<span class="sp-rules-sub">4 members - you own it</span>
+							</span>
+						</header>
+						<div class="sp-rules-body">
+							<div class="sp-settings-block">
+								<div class="sp-settings-label">Rules<span class="sp-settings-count">auto</span></div>
+								<div class="sp-toggle-row">
+									<span class="sp-toggle-text">
+										<span class="sp-toggle-title">Copy new items in</span>
+										<span class="sp-toggle-desc">Anything shared here lands on your clipboard as it arrives.</span>
+									</span>
+									<span class="sp-switch sp-switch--on"></span>
+								</div>
+								<div class="sp-toggle-row">
+									<span class="sp-toggle-text">
+										<span class="sp-toggle-title">Share new items out</span>
+										<span class="sp-toggle-desc">Off. Only items you share by hand go into this space.</span>
+									</span>
+									<span class="sp-switch"></span>
+								</div>
+							</div>
+							<div class="sp-settings-block">
+								<div class="sp-settings-label">People<span class="sp-settings-count">4</span></div>
+								<div class="sp-member-list">
+									<div class="sp-member-row">
+										<span class="sp-member-pic">YO</span>
+										<span class="sp-member-name">You</span>
+										<span class="sp-badge sp-badge--owner">owner</span>
+										<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+									</div>
+									<div class="sp-member-row">
+										<span class="sp-member-pic">RI</span>
+										<span class="sp-member-name">rio</span>
+										<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+									</div>
+									<div class="sp-member-row">
+										<span class="sp-member-pic">ME</span>
+										<span class="sp-member-name">mei</span>
+										<span class="sp-member-dot"><span class="sp-dot"></span></span>
+									</div>
+									<div class="sp-member-row">
+										<span class="sp-member-pic">AL</span>
+										<span class="sp-member-name">Ada Lovelace</span>
+										<span class="sp-member-dot"><span class="sp-dot"></span></span>
 									</div>
 								</div>
-								<div class="oc-card">
-									<div class="oc-card-media grad-teal"></div>
-									<div class="oc-card-body">
-										<div class="sp-owner"><span class="avatar sm" style="--ac:#14b8a6">M</span><span class="sp-name">mei</span><span class="oc-time">9m</span></div>
-										<div class="oc-card-footer">
-											<span class="oc-chips"><span class="oc-chip" style="--cc:var(--kind-image)" set:html={iconImage + 'Image'} /></span>
-										</div>
-									</div>
-								</div>
-								<div class="oc-card oc-card--in-clipboard">
-									<div class="oc-card-body">
-										<div class="sp-owner"><span class="avatar sm" style="--ac:#3b82f6">S</span><span class="sp-name">sam</span><span class="oc-time">now</span></div>
-										<div class="oc-card-text oc-card-text--clamp">staging.rovertools.app/preview</div>
-										<div class="oc-card-footer">
-											<span class="oc-chips"><span class="oc-chip" style="--cc:var(--kind-url)" set:html={iconUrl + 'URL'} /></span>
-											<span class="arrived">arrived</span>
-										</div>
+								<div class="sp-invite-box">
+									<div class="sp-invite-row">
+										<code class="sp-invite-code">7K2M-9QX4</code>
+										<span class="sp-btn sp-btn--icon"><Fragment set:html={COPY_ICON} /></span>
+										<span class="sp-btn sp-btn--icon"><Fragment set:html={SHARE_ICON} /></span>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="sp-rail">
-							<div class="rail-head">Your spaces</div>
-							<div class="rail-space active"><span class="rail-dot"></span>design-team</div>
-							<div class="rail-space"><span class="rail-dot off"></span>family</div>
-							<div class="rail-space"><span class="rail-dot off"></span>ops-oncall</div>
-							<div class="rail-head">Invites</div>
-							<div class="rail-invite">
-								<span>launch-week</span>
-								<span class="rail-actions"><span class="rail-btn ok">Accept</span><span class="rail-btn">Decline</span></span>
+						<div class="sp-rules-foot">
+							<span class="sp-btn sp-btn--danger">Delete space</span>
+							<span class="sp-danger-note">Stops sharing for everyone. Items already on their devices stay.</span>
+						</div>
+					</aside>
+
+					<!-- the space list, 252px, ordered first -->
+					<aside class="sp-panel-right">
+						<div class="sp-panel-header">
+							<span class="sp-panel-title">Spaces</span>
+							<span class="sp-conn-chip sp-conn-chip--on"><span class="sp-conn-dot"></span>Live</span>
+						</div>
+						<div class="sp-panel-scroll">
+							<div class="sp-space-section">
+								<div class="sp-space-group">Active now<span class="sp-space-group-n">2</span><span class="sp-space-group-rule"></span></div>
+								<div class="sp-space-card active">
+									<span class="sp-space-avatar" style="background:#3b82f6">DE</span>
+									<span class="sp-space-card-body">
+										<span class="sp-space-card-name">Design</span>
+										<span class="sp-space-card-meta">2/4 online - 18 items</span>
+									</span>
+									<span class="sp-space-card-flags">
+										<span class="sp-badge sp-badge--owner">owner</span>
+										<span class="sp-flag-dot" set:html={SRC_ICONS.clipboard9} />
+									</span>
+								</div>
+								<div class="sp-space-card">
+									<span class="sp-space-avatar" style="background:#f97316">OP</span>
+									<span class="sp-space-card-body">
+										<span class="sp-space-card-name">Ops oncall</span>
+										<span class="sp-space-card-meta">3/5 online - 41 items</span>
+									</span>
+									<span class="sp-space-card-flags">
+										<span class="sp-flag-dot" set:html={SRC_ICONS.funnel9} />
+									</span>
+								</div>
+							</div>
+							<div class="sp-space-section">
+								<div class="sp-space-group">Quiet<span class="sp-space-group-n">2</span><span class="sp-space-group-rule"></span></div>
+								<div class="sp-space-card">
+									<span class="sp-space-avatar" style="background:#22c55e">FA</span>
+									<span class="sp-space-card-body">
+										<span class="sp-space-card-name">Family</span>
+										<span class="sp-space-card-meta">0/3 online - 6 items</span>
+									</span>
+								</div>
+								<div class="sp-space-card">
+									<span class="sp-space-avatar" style="background:#8b5cf6">RE</span>
+									<span class="sp-space-card-body">
+										<span class="sp-space-card-name">Reading list</span>
+										<span class="sp-space-card-meta">2 members - 1 item</span>
+									</span>
+								</div>
 							</div>
 						</div>
-					</div>
+						<div class="sp-panel-actions">
+							<span class="sp-invites-btn">Invites<span class="sp-invites-count">3</span></span>
+							<div class="sp-panel-btns">
+								<span class="sp-action-btn sp-action-btn--primary"><Fragment set:html={SRC_ICONS.plus11} />Create</span>
+								<span class="sp-action-btn"><Fragment set:html={SRC_ICONS.key11} />Join</span>
+							</div>
+						</div>
+					</aside>
 				</div>
-				<div class="oc-pill-row oc-pill-row--left-of-rail">
-					<span class="oc-status-pill"><span class="dot"></span>Connected</span>
-				</div>
-			</div>
+			</AppShell>
 			<figcaption>
 				<strong>The Spaces screen</strong>
-				A live shared feed on the left, your spaces and invites on the right. Panels
-				resize and remember where you left them.
+				Your spaces on the left, the shared feed in the middle, and the rules and people
+				for that space on the right. Both side panels resize and stay where you put them.
 			</figcaption>
 		</figure>
 	</div>
@@ -380,18 +724,19 @@ const iconPin =
 
 	/* the app window is 920x560; draw it at that size and zoom the whole shot
 	   down on narrow screens so nothing inside it changes proportion */
-	.wide .oc-window {
+	.wide :global(.oc-window) {
 		width: 920px;
 		height: 560px;
-		display: flex;
-		flex-direction: column;
 		margin: 0 auto;
 		zoom: var(--mz, 1);
 	}
 
-	.wide .oc-body {
-		flex: 1;
-		min-height: 0;
+	/* the spaces screen only makes sense with room for three panels, so it is
+	   drawn at 1180x680 and scaled to the same rendered width as the 920 shot */
+	.wide--spaces :global(.oc-window) {
+		width: 1180px;
+		height: 680px;
+		zoom: calc(var(--mz, 1) * 0.78);
 	}
 
 	.wide + .bento {
@@ -420,54 +765,12 @@ const iconPin =
 	}
 
 	/* clipboard pane */
-	.clip-pane {
-		flex: 1;
-		min-width: 0;
-		padding: 12px 14px 44px;
-	}
 
-	.clip-topbar {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		margin-bottom: 10px;
-	}
 
-	.clip-topbar .oc-search {
-		flex: 1;
-	}
 
-	.clip-tool {
-		font-size: 11px;
-		color: var(--text-secondary);
-		border: 1px solid var(--border);
-		background: var(--surface);
-		border-radius: var(--radius-xs);
-		padding: 5px 10px;
-		white-space: nowrap;
-	}
 
-	.clip-tool--accent {
-		color: var(--accent);
-		background: var(--accent-dim);
-		border-color: transparent;
-	}
 
-	.day-label {
-		font-family: var(--font-mono);
-		font-size: 0.64rem;
-		text-transform: uppercase;
-		letter-spacing: 0.07em;
-		color: var(--text-muted);
-		margin: 0 0 8px 2px;
-	}
 
-	.clip-grid {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 10px;
-		align-items: start;
-	}
 
 	.oc-card-media.grad-blue {
 		background:
@@ -491,169 +794,729 @@ const iconPin =
 		text-overflow: ellipsis;
 	}
 
-	/* spaces pane */
-	.sp-pane {
+	/* ---- the spaces screen, values from SpacesScreen.css ---- */
+	:global(.sp-screen) {
+		--cta: #ff5535;
+		display: flex;
+		flex-direction: row;
+		flex: 1;
+		min-height: 0;
+		overflow: hidden;
+	}
+
+	:global(.sp-feed-panel) {
 		flex: 1;
 		min-width: 0;
 		display: flex;
+		flex-direction: column;
+		overflow: hidden;
 	}
 
-	.sp-feed {
+	:global(.sp-feed-scroll) {
 		flex: 1;
-		min-width: 0;
-		padding: 12px 14px 44px;
+		overflow: hidden;
+		padding: 10px 0 14px;
 	}
 
-	.sp-feed-head {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		margin-bottom: 10px;
-	}
-
-	.sp-feed-head b {
-		font-family: var(--font-display);
-		font-size: 0.9rem;
-	}
-
-	.sp-cols {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 10px;
-		align-items: start;
-	}
-
-	.sp-owner {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-	}
-
-	.sp-name {
-		font-size: 11px;
-		font-weight: 600;
-	}
-
-	.sp-owner .oc-time {
-		margin-left: auto;
-	}
-
-	.avatar {
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 0.66rem;
-		font-weight: 600;
-		color: #fff;
-		background: color-mix(in srgb, var(--ac) 75%, #000);
+	/* left panel, 252px, pulled ahead of the feed the way the app does */
+	:global(.sp-panel-right) {
+		order: -1;
+		width: 252px;
 		flex-shrink: 0;
-	}
-
-	.avatar.sm {
-		width: 18px;
-		height: 18px;
-		font-size: 0.56rem;
-	}
-
-	.arrived {
-		font-family: var(--font-mono);
-		font-size: 0.6rem;
-		color: var(--accent);
-		background: var(--accent-dim);
-		padding: 0.12rem 0.5rem;
-		border-radius: var(--radius-xs);
-	}
-
-	.sp-rail {
-		width: 190px;
-		flex-shrink: 0;
-		border-left: 1px solid var(--border);
 		background: var(--sidebar-bg);
-		padding: 12px;
+		border-right: 1px solid var(--border);
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
 	}
 
-	.rail-head {
-		font-family: var(--font-mono);
-		font-size: 0.62rem;
-		text-transform: uppercase;
-		letter-spacing: 0.07em;
-		color: var(--text-muted);
-		margin: 0 0 8px 2px;
+	:global(.sp-rules) {
+		width: 272px;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		background: var(--sidebar-bg);
+		border-left: 1px solid var(--border);
 	}
 
-	.rail-space {
+	/* panel header */
+	.sp-panel-header {
 		display: flex;
 		align-items: center;
-		gap: 7px;
-		font-size: 12px;
-		padding: 6px 8px;
-		border-radius: var(--radius-xs);
-		border: 1px solid transparent;
-		color: var(--text-secondary);
-		margin-bottom: 4px;
+		justify-content: space-between;
+		gap: 8px;
+		padding: 12px 14px;
+		border-bottom: 1px solid var(--border);
+		flex-shrink: 0;
 	}
 
-	.rail-space.active {
-		background: var(--accent-dim);
-		border-color: var(--accent-dim-strong);
+	.sp-panel-title {
+		font-size: 13.5px;
+		font-weight: 600;
+		letter-spacing: -0.1px;
 		color: var(--text);
 	}
 
-	.rail-dot {
-		width: 6px;
-		height: 6px;
-		border-radius: 50%;
-		background: var(--success);
-	}
-
-	.rail-dot.off {
-		background: var(--text-muted);
-	}
-
-	.rail-space + .rail-head {
-		margin-top: 14px;
-	}
-
-	.rail-invite {
-		font-size: 12px;
-		background: var(--surface);
-		border: 1px solid var(--border);
+	.sp-conn-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 2px 7px;
 		border-radius: var(--radius-xs);
-		padding: 8px;
+		border: 1px solid var(--border);
+		font-size: 9px;
+		font-weight: 600;
+		color: var(--text-muted);
+		letter-spacing: 0.2px;
+		flex-shrink: 0;
 	}
 
-	.rail-actions {
+	.sp-conn-dot {
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background: var(--text-muted);
+		flex-shrink: 0;
+	}
+
+	.sp-conn-chip--on {
+		border-color: rgba(34, 197, 94, 0.3);
+		color: #22c55e;
+	}
+
+	.sp-conn-chip--on .sp-conn-dot {
+		background: #22c55e;
+		box-shadow: 0 0 5px rgba(34, 197, 94, 0.55);
+	}
+
+	.sp-panel-scroll {
+		flex: 1;
 		display: flex;
-		gap: 6px;
-		margin-top: 7px;
+		flex-direction: column;
+		overflow: hidden;
+		padding: 12px 10px;
 	}
 
-	.rail-btn {
+	.sp-space-section {
+		margin-bottom: 8px;
+	}
+
+	.sp-space-section + .sp-space-section {
+		margin-top: 6px;
+	}
+
+	.sp-space-group {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 4px 5px;
+		font-size: 9.5px;
+		font-weight: 700;
+		letter-spacing: 0.6px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.sp-space-group-n {
+		font-weight: 600;
+		letter-spacing: 0;
+	}
+
+	.sp-space-group-rule {
+		flex: 1;
+		height: 1px;
+		background: var(--border);
+	}
+
+	.sp-space-card {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		width: 100%;
+		padding: 8px 10px;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--surface);
+		text-align: left;
+		position: relative;
+		margin-bottom: 5px;
+	}
+
+	.sp-space-card.active {
+		background: var(--accent-dim);
+		border-color: var(--accent-dim-strong);
+	}
+
+	.sp-space-card.active::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 9px;
+		bottom: 9px;
+		width: 3px;
+		border-radius: 0 3px 3px 0;
+		background: var(--accent);
+	}
+
+	.sp-space-avatar {
+		flex-shrink: 0;
+		width: 32px;
+		height: 32px;
+		border-radius: 9px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 11px;
+		font-weight: 800;
+		color: #fff;
+		letter-spacing: 0.3px;
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+	}
+
+	.sp-space-card-body {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+	}
+
+	.sp-space-card-name {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--text);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.sp-space-card.active .sp-space-card-name {
+		color: var(--accent);
+	}
+
+	.sp-space-card-meta {
+		font-size: 10.5px;
+		color: var(--text-secondary);
+		margin-top: 1px;
+	}
+
+	.sp-space-card-flags {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		flex-shrink: 0;
+	}
+
+	.sp-flag-dot {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background: var(--accent-dim);
+		color: var(--accent);
+	}
+
+	.sp-badge {
+		padding: 1px 6px;
+		border-radius: 5px;
+		border: 1px solid var(--border);
+		font-size: 8.5px;
+		font-weight: 700;
+		letter-spacing: 0.3px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		flex-shrink: 0;
+	}
+
+	.sp-badge--owner {
+		border-color: transparent;
+		background: color-mix(in srgb, var(--text) 8%, transparent);
+		color: var(--text-muted);
+	}
+
+	.sp-panel-actions {
+		flex-shrink: 0;
+		padding: 8px 10px 10px;
+		border-top: 1px solid var(--border);
+	}
+
+	.sp-invites-btn {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 6px;
+		margin-bottom: 5px;
+		padding: 6px 9px;
+		border: 1px solid var(--border);
+		border-radius: 9px;
+		color: var(--text-secondary);
+		font-size: 11px;
+		font-weight: 550;
+	}
+
+	.sp-invites-count {
 		font-size: 10.5px;
 		font-weight: 600;
-		padding: 3px 9px;
-		border-radius: var(--radius-xs);
-		border: 1px solid var(--border-light);
-		color: var(--text-secondary);
+		font-variant-numeric: tabular-nums;
+		color: var(--accent);
 	}
 
-	.rail-btn.ok {
-		background: var(--accent);
+	.sp-panel-btns {
+		display: flex;
+		gap: 5px;
+	}
+
+	.sp-action-btn {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		padding: 8px;
+		border: 1px solid var(--border);
+		border-radius: 9px;
+		background: var(--surface);
+		color: var(--text-secondary);
+		font-size: 11.5px;
+		font-weight: 600;
+	}
+
+	.sp-action-btn--primary {
 		border-color: transparent;
+		background: var(--cta, var(--accent));
 		color: #fff;
 	}
 
-	.oc-pill-row--left-of-rail {
-		right: 208px;
+	/* the feed's timeline rail */
+	.sp-timeline-wrap {
+		min-height: 100%;
 	}
 
-	@media (max-width: 860px) {
-		.oc-pill-row--left-of-rail {
-			right: 18px;
-		}
+	.sp-timeline-groups {
+		display: flex;
+		flex-direction: column;
+		margin-left: 15px;
+	}
+
+	.sp-timeline-group {
+		display: flex;
+		flex-direction: column;
+		position: relative;
+	}
+
+	.sp-timeline-day-row {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 16px 8px 0;
+		position: relative;
+		width: 100%;
+	}
+
+	.sp-timeline-day-dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: var(--bg);
+		border: 2px solid var(--accent);
+		box-shadow: 0 0 0 3px var(--accent-dim);
+		flex-shrink: 0;
+		margin-left: -5px;
+		position: relative;
+		z-index: 1;
+	}
+
+	.sp-timeline-day-label {
+		font-size: 12.5px;
+		font-weight: 700;
+		color: var(--accent);
+		letter-spacing: -0.2px;
+		white-space: nowrap;
+	}
+
+	.sp-timeline-day-row::after {
+		content: '';
+		flex: 1;
+		height: 0.5px;
+		background: var(--accent);
+		opacity: 0.25;
+		margin-left: 4px;
+	}
+
+	.sp-timeline-day-chevron {
+		flex-shrink: 0;
+		display: inline-flex;
+		color: var(--accent);
+		opacity: 0.5;
+		margin-right: 4px;
+	}
+
+	.sp-feed-card-grid {
+		columns: 2;
+		column-gap: 10px;
+		padding-top: 4px;
+		padding-left: 15px;
+		padding-right: 14px;
+	}
+
+	.sp-feed-card-grid :global(.oc-card),
+	.sp-feed-card-grid .ns-card {
+		break-inside: avoid;
+		margin-bottom: 10px;
+	}
+
+	.sp-timeline-end {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 18px 16px 20px;
+	}
+
+	.sp-timeline-end-text {
+		font-size: 11px;
+		font-weight: 500;
+		color: var(--text-muted);
+		letter-spacing: 0.4px;
+		opacity: 0.6;
+	}
+
+	/* source and owner chips on a shared item */
+	:global(.sp-source-chip--clip) {
+		background: rgba(99, 102, 241, 0.12) !important;
+		color: #6366f1 !important;
+	}
+
+	:global(.sp-source-chip--note) {
+		background: rgba(244, 63, 94, 0.12) !important;
+		color: #f43f5e !important;
+	}
+
+	.sp-owner {
+		flex-shrink: 0;
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		max-width: 130px;
+		height: var(--chip-h);
+		padding: 0 7px 0 2px;
+		line-height: 1.4;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		background: var(--surface-hover);
+		font-size: 10px;
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.sp-owner-avatar {
+		width: 14px;
+		height: 14px;
+		flex-shrink: 0;
+		border-radius: 6px;
+	}
+
+	.sp-owner-avatar--initials {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--accent-dim-strong);
+		color: var(--accent);
+		font-size: 8.5px;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.sp-owner--self {
+		padding: 0 8px;
+		color: var(--text-muted);
+		background: transparent;
+	}
+
+	/* the rules rail */
+	.sp-rules-head {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		flex-shrink: 0;
+		padding: 12px;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.sp-rules-avatar {
+		display: grid;
+		place-items: center;
+		width: 26px;
+		height: 26px;
+		flex-shrink: 0;
+		border-radius: var(--radius-xs);
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.4px;
+		color: #fff;
+	}
+
+	.sp-rules-head-text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.sp-rules-name {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--text);
+	}
+
+	.sp-rules-sub {
+		font-size: 10.5px;
+		color: var(--text-muted);
+	}
+
+	.sp-rules-body {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding: 12px;
+		overflow: hidden;
+	}
+
+	.sp-settings-block {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.sp-settings-label {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 9.5px;
+		font-weight: 700;
+		letter-spacing: 0.6px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.sp-settings-count {
+		padding: 1px 6px;
+		border-radius: 5px;
+		background: var(--accent-dim);
+		color: var(--accent);
+		font-size: 9px;
+		font-weight: 700;
+		letter-spacing: 0.2px;
+		text-transform: none;
+	}
+
+	.sp-toggle-row {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+		padding: 9px 11px;
+		border: 1px solid var(--border);
+		border-radius: 9px;
+		background: var(--surface);
+	}
+
+	.sp-toggle-text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.sp-toggle-title {
+		font-size: 12px;
+		font-weight: 600;
+		color: var(--text);
+	}
+
+	.sp-toggle-desc {
+		font-size: 10.5px;
+		line-height: 1.4;
+		color: var(--text-muted);
+	}
+
+	/* the app's switch: 30x17 track, 11px knob, 13px travel */
+	.sp-switch {
+		position: relative;
+		flex-shrink: 0;
+		width: 30px;
+		height: 17px;
+		margin-top: 1px;
+		border-radius: 99px;
+		border: 1px solid var(--border);
+		background: var(--bg);
+	}
+
+	.sp-switch::after {
+		content: '';
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 11px;
+		height: 11px;
+		border-radius: 50%;
+		background: var(--text-muted);
+	}
+
+	.sp-switch--on {
+		background: var(--cta, var(--accent));
+		border-color: transparent;
+	}
+
+	.sp-switch--on::after {
+		transform: translateX(13px);
+		background: #fff;
+	}
+
+	.sp-member-list {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.sp-member-row {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		padding: 6px 9px;
+		border-radius: 8px;
+		background: var(--surface);
+		flex-wrap: wrap;
+	}
+
+	.sp-member-pic {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		font-size: 8px;
+		font-weight: 650;
+		color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 14%, transparent);
+	}
+
+	.sp-member-name {
+		font-size: 11.5px;
+		font-weight: 600;
+		color: var(--text);
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.sp-member-dot {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 8px;
+	}
+
+	.sp-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: #6b7280;
+	}
+
+	.sp-dot--on {
+		background: #22c55e;
+	}
+
+	.sp-invite-box {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		margin-top: 8px;
+		padding-top: 10px;
+		border-top: 1px solid var(--border);
+	}
+
+	.sp-invite-row {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		flex-wrap: nowrap;
+	}
+
+	.sp-invite-code {
+		flex: 1;
+		min-width: 0;
+		padding: 4px 9px;
+		border: 1px dashed var(--border);
+		border-radius: 7px;
+		background: var(--surface);
+		font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+		font-size: 11.5px;
+		letter-spacing: 1px;
+		color: var(--text);
+	}
+
+	.sp-inline-input {
+		flex: 1;
+		min-width: 0;
+		padding: 5px 8px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		background: var(--surface);
+		color: var(--text-muted);
+		font-size: 12px;
+	}
+
+	.sp-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		padding: 5px 10px;
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		background: var(--surface);
+		color: var(--text-secondary);
+		font-size: 10.5px;
+		font-weight: 600;
+		flex-shrink: 0;
+	}
+
+	/* icon-only until the rail is dragged past 336px, which it is not here */
+	.sp-btn--icon {
+		padding: 5px 7px;
+	}
+
+	.sp-btn--danger {
+		color: var(--danger);
+		border-color: color-mix(in srgb, var(--danger) 34%, transparent);
+	}
+
+	.sp-rules-foot {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+		flex-shrink: 0;
+		padding: 10px 12px;
+		border-top: 1px solid var(--border);
+	}
+
+	.sp-danger-note {
+		font-size: 10px;
+		font-weight: 500;
+		color: var(--text-muted);
+		line-height: 1.4;
 	}
 
 	/* ---- bento grid of small tiles ---- */
@@ -688,8 +1551,8 @@ const iconPin =
 		align-items: stretch;
 	}
 
-	.tile--band .mock {
-		flex: 0 0 46%;
+	.tile.tile--band .mock {
+		flex: 0 0 clamp(424px, 44%, 480px);
 		border-bottom: none;
 		border-right: 1px solid var(--border);
 		justify-content: center;
@@ -701,7 +1564,7 @@ const iconPin =
 
 	.tile .mock {
 		flex: 1;
-		justify-content: flex-start;
+		justify-content: center;
 	}
 
 	.tile:hover {
@@ -738,12 +1601,190 @@ const iconPin =
 		font-size: 0.68rem;
 	}
 
-	/* paste popup */
+	/* ---- Quick Paste popup: 340px wide, the app's own metrics ---- */
+	.mock--popup {
+		display: flex;
+		justify-content: center;
+		padding: 0.9rem 0;
+	}
+
 	.pp {
+		position: relative;
+		width: 340px;
+		background: var(--bg);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		padding: 10px 10px 4px;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+		font-size: 13px;
+		line-height: normal;
+	}
+
+	.pp-header {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 2px 2px 6px;
+	}
+
+	.pp-header-left {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.pp-title {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--accent);
+	}
+
+	.pp-count {
+		font-size: 10px;
+		font-weight: 600;
+		color: var(--text-muted);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 3px 8px;
+		line-height: 1;
+		letter-spacing: 0.2px;
+	}
+
+	.pp-tabs {
+		display: flex;
+		gap: 1px;
+		margin-left: auto;
+		margin-right: 6px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 2px;
+	}
+
+	.pp-tab {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		font-size: 10px;
+		font-weight: 600;
+		color: var(--text-muted);
+		border-radius: 4px;
+		padding: 3px 8px;
+		line-height: 1;
+	}
+
+	.pp-tab--active {
+		background: var(--accent-dim);
+		color: var(--accent);
+	}
+
+	.pp-tab-count {
+		font-size: 9px;
+		font-weight: 600;
+		color: var(--text-muted);
+		min-width: 14px;
+		text-align: center;
+	}
+
+	.pp-tab--active .pp-tab-count {
+		color: var(--accent);
+	}
+
+	.pp-close {
+		width: 22px;
+		height: 22px;
+		border: 1px solid var(--border);
+		background: var(--surface);
+		color: var(--text-muted);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6px;
+		flex-shrink: 0;
+	}
+
+	.pp-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.4rem;
-		position: relative;
+		gap: 3px;
+	}
+
+	.pp-item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 7px 10px;
+		min-height: 40px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		background: var(--surface);
+		color: var(--text);
+		font-size: 12px;
+	}
+
+	/* selected row: accent border, and the badge picks up accent - no fill */
+	.pp-item--selected {
+		border-color: var(--accent);
+	}
+
+	.pp-item--selected .pp-badge {
+		color: var(--accent);
+	}
+
+	.pp-badge {
+		width: 20px;
+		height: 20px;
+		border-radius: 5px;
+		border: 1px solid var(--border);
+		background: var(--bg);
+		color: var(--text-muted);
+		font-size: 10px;
+		font-weight: 600;
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.pp-wrap {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		overflow: hidden;
+	}
+
+	.pp-filename {
+		font-size: 11px;
+		color: var(--text-secondary);
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		min-width: 0;
+		flex: 1;
+	}
+
+	.pp-meta {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		flex-shrink: 0;
+	}
+
+	.pp-pin {
+		color: var(--accent);
+		display: flex;
+	}
+
+	.pp-time {
+		font-size: 10px;
+		color: var(--text-muted);
+		white-space: nowrap;
 	}
 
 	/* looping cursor that clicks slot 2 */
@@ -768,18 +1809,14 @@ const iconPin =
 		animation: ppRing 6.5s ease-out infinite;
 	}
 
-	.pp-row.sel {
-		animation: ppRowPulse 6.5s ease infinite;
-	}
-
 	@keyframes ppCursor {
-		0%, 12% { transform: translate(150px, 150px); opacity: 0; }
+		0%, 12% { transform: translate(210px, 190px); opacity: 0; }
 		22% { opacity: 1; }
-		38% { transform: translate(130px, 45px); opacity: 1; }
-		52%, 60% { transform: translate(120px, 76px); opacity: 1; }
-		56% { transform: translate(120px, 76px) scale(0.85); }
-		80% { transform: translate(150px, 150px); opacity: 1; }
-		88%, 100% { transform: translate(150px, 150px); opacity: 0; }
+		38% { transform: translate(190px, 60px); opacity: 1; }
+		52%, 60% { transform: translate(176px, 92px); opacity: 1; }
+		56% { transform: translate(176px, 92px) scale(0.85); }
+		80% { transform: translate(210px, 190px); opacity: 1; }
+		88%, 100% { transform: translate(210px, 190px); opacity: 0; }
 	}
 
 	@keyframes ppRing {
@@ -789,326 +1826,887 @@ const iconPin =
 		100% { opacity: 0; }
 	}
 
-	@keyframes ppRowPulse {
-		0%, 54%, 70%, 100% { background: var(--accent-dim); }
-		58% { background: var(--accent-dim-strong); }
-	}
-
 	@media (prefers-reduced-motion: reduce) {
 		.pp-cursor,
 		.pp-ring {
 			animation: none;
 			opacity: 0;
 		}
-		.pp-row.sel {
-			animation: none;
-		}
-	}
-	.pp-tabs {
-		display: flex;
-		gap: 0.35rem;
-		margin-bottom: 0.2rem;
-	}
-	.pp-tab {
-		font-size: 0.68rem;
-		padding: 0.18rem 0.6rem;
-		border-radius: var(--radius-xs);
-		color: var(--text-muted);
-		background: var(--surface);
-		border: 1px solid var(--border);
-	}
-	.pp-tab.active {
-		color: var(--accent);
-		background: var(--accent-dim);
-		border-color: transparent;
-	}
-	.pp-row {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.35rem 0.45rem;
-		border-radius: var(--radius-xs);
-		border: 1px solid var(--border);
-		background: var(--surface);
-	}
-	.pp-row.sel {
-		border-color: var(--accent);
-		background: var(--accent-dim);
-	}
-	.slot {
-		font-family: var(--font-mono);
-		font-size: 0.62rem;
-		width: 16px;
-		height: 16px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 5px;
-		background: var(--surface-hover);
-		border: 1px solid var(--border-light);
-		color: var(--text-secondary);
-		flex-shrink: 0;
-	}
-	.pp-text {
-		font-family: var(--font-mono);
-		font-size: 0.7rem;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	.pp-hint {
-		font-size: 0.62rem;
-		color: var(--text-muted);
-		display: flex;
-		align-items: center;
-		gap: 0.3rem;
-		margin-top: 0.15rem;
-	}
-	.pp-hint .kbd {
-		font-size: 0.58rem;
-		padding: 0.2em 0.45em;
 	}
 
-	/* sync mode radios */
-	.radio-row {
-		display: flex;
-		gap: 0.6rem;
-		align-items: flex-start;
-		padding: 0.5rem 0.55rem;
-		border-radius: var(--radius-xs);
+	/* ---- capture popup ---- */
+	.cp {
+		height: 248px;
+		background: var(--bg);
 		border: 1px solid var(--border);
-		background: var(--surface);
-	}
-	.radio-row.on {
-		border-color: var(--accent);
-		background: var(--accent-dim);
-	}
-	.radio {
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		border: 1.5px solid var(--text-muted);
-		margin-top: 3px;
-		flex-shrink: 0;
-	}
-	.radio-row.on .radio {
-		border-color: var(--accent);
-		box-shadow: inset 0 0 0 3px var(--bg), inset 0 0 0 8px var(--accent);
-	}
-	.radio-row b {
-		font-size: 0.78rem;
-		display: block;
-	}
-	.radio-row small,
-	.sw-row small,
-	.mem small {
-		font-size: 0.66rem;
-		color: var(--text-muted);
-		display: block;
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+		line-height: normal;
 	}
 
-	/* members */
-	.mem {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		padding: 0.4rem 0.5rem;
-		border-radius: var(--radius-xs);
-		background: var(--surface);
-		border: 1px solid var(--border);
-	}
-	.mem b {
-		font-size: 0.78rem;
-	}
-	.on-dot::before {
-		content: '';
-		display: inline-block;
-		width: 5px;
-		height: 5px;
-		border-radius: 50%;
-		background: var(--success);
-		margin-right: 0.3rem;
-		vertical-align: 1px;
-	}
-	.badge {
-		margin-left: auto;
-		font-family: var(--font-mono);
-		font-size: 0.58rem;
-		color: var(--accent);
-		background: var(--accent-dim);
-		padding: 0.12rem 0.45rem;
-		border-radius: var(--radius-xs);
-	}
-
-	/* filter counts */
-	.fl-row {
+	.cp-head {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0.32rem 0.45rem;
-		border-radius: var(--radius-xs);
+		padding: 2px;
+	}
+
+	.cp-head-left {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.cp-title {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--accent);
+	}
+
+	.cp-close {
+		width: 22px;
+		height: 22px;
+		border: 1px solid var(--border);
+		background: var(--surface);
+		color: var(--text-muted);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6px;
+		flex-shrink: 0;
+	}
+
+	.cp-preview {
+		flex: 1;
+		min-height: 0;
 		background: var(--surface);
 		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		padding: 8px 10px;
 	}
-	.count {
-		font-family: var(--font-mono);
-		font-size: 0.66rem;
+
+	.cp-preview-text {
+		margin: 0;
+		font-size: 11.5px;
+		line-height: 1.5;
+		color: var(--text-secondary);
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+	}
+
+	.cp-actions {
+		display: flex;
+		gap: 1px;
+	}
+
+	.cp-item {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		padding: 6px 9px;
+		border-radius: var(--radius-xs);
+		color: var(--text);
+		font-size: 12px;
+	}
+
+	.cp-item--danger {
+		color: var(--text);
+	}
+
+	.cp-sep {
+		width: 1px;
+		align-self: stretch;
+		background: var(--border);
+		margin: 3px 2px;
+	}
+
+	/* ---- account screen: the sync-mode segment, from AccountScreen.css ---- */
+	.acct-mode {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.acct-mode-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		min-height: 26px;
+	}
+
+	.acct-seg {
+		display: flex;
+		gap: 2px;
+		padding: 2px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--bg);
+	}
+
+	.acct-seg-pill {
+		font-size: 11.5px;
+		font-weight: 500;
+		color: var(--text-muted);
+		border-radius: 6px;
+		padding: 4px 10px;
+	}
+
+	.acct-seg-pill.active {
+		color: var(--text);
+		background: var(--surface-hover);
+	}
+
+	.acct-card-desc {
+		margin: 0;
+		font-size: 12px;
+		line-height: 1.45;
 		color: var(--text-muted);
 	}
 
-	/* note */
-	.note-h {
-		font-family: var(--font-display);
-		font-weight: 700;
-		font-size: 0.9rem;
-		margin-bottom: 0.35rem;
+	.acct-mode-note {
+		margin: 2px 0 0;
+		font-size: 10.5px;
+		line-height: 1.4;
+		color: var(--text-muted);
 	}
-	.task {
+
+	.sp-badge--warn {
+		border-color: rgba(245, 158, 11, 0.4);
+		color: #f59e0b;
+		text-transform: none;
+		letter-spacing: 0;
+	}
+
+	/* ---- settings screen: the update card, from SettingsScreen.css ---- */
+	.set-section {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.set-section-head {
 		display: flex;
 		align-items: center;
-		gap: 0.45rem;
-		font-size: 0.76rem;
-		padding: 0.14rem 0;
+		gap: 8px;
 	}
-	.cb {
-		width: 12px;
-		height: 12px;
-		border-radius: 4px;
-		border: 1.5px solid var(--text-muted);
+
+	.set-section-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border-radius: 6px;
+		color: var(--accent);
+		background: var(--accent-dim);
 		flex-shrink: 0;
 	}
-	.task.done {
-		color: var(--text-muted);
-		text-decoration: line-through;
+
+	.set-section-title {
+		margin: 0;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: -0.1px;
+		color: var(--text-secondary);
 	}
-	.task.done .cb {
+
+	.set-group {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+	}
+
+	.set-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 11px 14px;
+		border-top: 1px solid var(--border);
+	}
+
+	.set-group > .set-row:first-child {
+		border-top: none;
+	}
+
+	.set-row--stack {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0;
+	}
+
+	.set-row-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+	}
+
+	.set-row-info {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		min-width: 0;
+	}
+
+	.set-row-label {
+		font-size: 12.5px;
+		font-weight: 500;
+		color: var(--text);
+	}
+
+	.set-row-desc {
+		font-size: 11px;
+		color: var(--text-muted);
+		line-height: 1.4;
+	}
+
+	.settings-action-btn {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		flex-shrink: 0;
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--text);
+		background: var(--surface-hover);
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		padding: 6px 12px;
+	}
+
+	.settings-action-btn svg {
+		color: var(--text-muted);
+	}
+
+	/* 37x21 track, 15px knob, 16px travel */
+	.settings-toggle {
+		position: relative;
+		flex-shrink: 0;
+		width: 37px;
+		height: 21px;
+		border-radius: 11px;
+		border: 1px solid var(--border);
+		background: var(--surface-hover);
+	}
+
+	.settings-toggle.active {
 		background: var(--accent);
 		border-color: var(--accent);
 	}
-	.code {
-		font-family: var(--font-mono);
-		font-size: 0.68rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-xs);
-		padding: 0.4rem 0.55rem;
-		margin-top: 0.4rem;
-		color: var(--text-secondary);
-	}
 
-	/* copy popup */
-	.cp-head {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-	.cp-body {
-		font-family: var(--font-mono);
-		font-size: 0.74rem;
-		padding: 0.5rem 0.55rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-xs);
-	}
-	.cp-actions {
-		display: flex;
-		gap: 0.4rem;
-	}
-	.cp-btn {
-		font-size: 0.68rem;
-		padding: 0.22rem 0.7rem;
-		border-radius: var(--radius-xs);
-		background: var(--surface);
-		border: 1px solid var(--border-light);
-	}
-	.cp-btn.danger {
-		color: #ef4444;
-	}
-
-	/* switches */
-	.sw-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.7rem;
-		padding: 0.5rem 0.55rem;
-		border-radius: var(--radius-xs);
-		background: var(--surface);
-		border: 1px solid var(--border);
-	}
-	.sw-row b {
-		font-size: 0.76rem;
-	}
-	.switch {
-		width: 28px;
-		height: 16px;
-		border-radius: 9px;
-		background: var(--border-light);
-		position: relative;
-		flex-shrink: 0;
-	}
-	.switch::after {
-		content: '';
+	.settings-toggle-knob {
 		position: absolute;
 		top: 2px;
 		left: 2px;
-		width: 12px;
-		height: 12px;
+		width: 15px;
+		height: 15px;
 		border-radius: 50%;
-		background: var(--text-secondary);
+		background: var(--text-muted);
 	}
-	.switch.on {
-		background: var(--accent);
-	}
-	.switch.on::after {
-		left: auto;
-		right: 2px;
+
+	.settings-toggle.active .settings-toggle-knob {
+		transform: translateX(16px);
 		background: #fff;
 	}
 
-	/* recovery code */
-	.rc {
-		font-family: var(--font-mono);
-		font-size: 0.72rem;
-		letter-spacing: 0.04em;
-		padding: 0.6rem 0.65rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-xs);
-		color: var(--text);
-		word-break: break-all;
-	}
-	.rc-note {
-		text-align: center;
+	.settings-checkbox {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 16px;
+		height: 16px;
+		border-radius: 4px;
+		border: 1.5px solid var(--border-light);
+		background: var(--surface-hover);
+		flex-shrink: 0;
 	}
 
-	/* update banner */
-	.up {
-		padding: 0.6rem 0.65rem;
+	.settings-checkbox--on {
+		border-color: var(--accent);
+		background: var(--accent);
+		color: #fff;
+	}
+
+	.settings-checkbox--on::after {
+		content: '';
+		width: 4px;
+		height: 7px;
+		margin-top: -2px;
+		border: 2px solid #fff;
+		border-top: none;
+		border-left: none;
+		transform: rotate(40deg);
+	}
+
+	.set-update-notes {
+		margin: 10px 0 0;
+		padding: 10px 12px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+	}
+
+	.set-update-lead {
+		margin: 0 0 9px;
+		font-size: 11.5px;
+		line-height: 1.6;
+		color: var(--text-secondary);
+	}
+
+	.set-update-section {
+		display: block;
+		margin-bottom: 3px;
+		font-size: 9.5px;
+		font-weight: 600;
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.set-update-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.set-update-list li {
+		position: relative;
+		padding-left: 13px;
+		font-size: 11.5px;
+		line-height: 1.7;
+		color: var(--text-secondary);
+	}
+
+	.set-update-list li::before {
+		content: '';
+		position: absolute;
+		left: 1px;
+		top: 9px;
+		width: 4px;
+		height: 1px;
+		background: var(--text-muted);
+	}
+
+	/* filter counts */
+	/* the filter card itself, from SearchFilter.css - the single-column shell
+	   is 304px in the app, so the mock draws it at exactly that */
+	.mock--filter {
+		align-items: center;
+		justify-content: center;
+	}
+
+	.cs-filter-card {
+		width: 304px;
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--surface);
+		overflow: hidden;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.cs-card-head {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		flex-shrink: 0;
+		padding: 8px 9px;
+		border-bottom: 0.5px solid var(--border);
+	}
+
+	.cs-card-head-icon {
+		display: flex;
+		color: var(--accent);
+		flex-shrink: 0;
+	}
+
+	.cs-card-title {
+		font-size: 11.5px;
+		font-weight: 700;
+		color: var(--text);
+	}
+
+	.cs-card-result {
+		margin-left: auto;
+		font-size: 10px;
+		color: var(--text-muted);
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+	}
+
+	.cs-card-result b {
+		color: var(--accent);
+		font-weight: 700;
+	}
+
+	.cs-card-head-clear {
+		flex-shrink: 0;
+		padding: 2px 6px;
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		color: var(--text-muted);
+		font-size: 10px;
+		font-weight: 600;
+		opacity: 0.32;
+	}
+
+	.cs-card-body {
+		display: flex;
+		align-items: stretch;
+		padding: 10px;
+		gap: 10px;
+	}
+
+	.cs-card-col {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.cs-card-divider {
+		height: 0.5px;
+		background: var(--border);
+		margin: 6px 0;
+	}
+
+	.cs-chip-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+		padding: 1px 2px 0;
+	}
+
+	.cs-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		padding: 3.5px 8px;
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		background: var(--bg);
+		color: var(--text-secondary);
+		font-size: 10.5px;
+		font-weight: 600;
+		white-space: nowrap;
+	}
+
+	.cs-chip-dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		flex-shrink: 0;
+	}
+
+	.cs-section-label {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		font-size: 10px;
+		font-weight: 600;
+		letter-spacing: 0.15px;
+		color: var(--text-muted);
+		padding: 0 2px;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.cs-count {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 13px;
+		height: 13px;
+		padding: 0 3px;
+		font-size: 8.5px;
+		font-weight: 700;
+		border-radius: 99px;
+		background: var(--accent-dim-strong);
+		color: var(--accent);
+		line-height: 1;
+	}
+
+	.cs-seg {
+		display: flex;
+		gap: 2px;
+		margin: 4px 2px 6px;
+		padding: 2px;
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		background: var(--bg);
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.cs-seg-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
+		flex: 1;
+		min-width: 0;
+		padding: 4px 5px;
+		border-radius: 5px;
+		color: var(--text-muted);
+		font-size: 10px;
+		font-weight: 600;
+	}
+
+	.cs-seg-btn--on {
+		color: var(--accent);
+		background: var(--accent-dim-strong);
+	}
+
+	.cs-seg-count {
+		font-size: 9px;
+		font-weight: 700;
+		opacity: 0.6;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* the filter dropdown's type grid, from SearchFilter.css */
+	.cs-type-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.cs-type-option {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 4px 6px;
+		border-radius: 6px;
+	}
+
+	.cs-type-cb {
+		width: 13px;
+		height: 13px;
+		flex-shrink: 0;
+		border: 1px solid var(--border-light);
+		border-radius: 3px;
+		background: var(--bg);
+	}
+
+	.cs-type-cb--on {
+		border-color: var(--accent);
+		background: var(--accent);
+		background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+		background-size: 11px 11px;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
+	.cs-type-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		border-radius: 5px;
+		flex-shrink: 0;
+		color: var(--cc);
+		background: color-mix(in srgb, var(--cc) 12%, transparent);
+		opacity: 0.5;
+	}
+
+	.cs-type-option--on .cs-type-icon {
+		opacity: 1;
+	}
+
+	.cs-type-name {
+		font-size: 11.5px;
+		font-weight: 500;
+		color: var(--text-secondary);
+	}
+
+	.cs-type-option--on .cs-type-name {
+		color: var(--text);
+		font-weight: 600;
+	}
+
+	.cs-option-count {
+		margin-left: auto;
+		padding-left: 4px;
+		font-size: 9.5px;
+		font-weight: 600;
+		color: var(--text-muted);
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* ---- notes: the note card, from note-card.css ---- */
+	.ns-card {
+		border-radius: var(--radius);
 		background: var(--surface);
 		border: 1px solid var(--border);
-		border-radius: var(--radius-xs);
+		overflow: hidden;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 	}
-	.up-head {
+
+	.ns-card-body {
+		padding: 10px 12px 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.ns-card-title {
+		font-size: 13.5px;
+		font-weight: 750;
+		color: var(--text);
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	.ns-card-preview {
+		font-size: 12px;
+		line-height: 1.4;
+		color: var(--text-secondary);
+	}
+
+	.ns-tasks {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.ns-task {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+	}
+
+	.ns-task-box {
+		width: 13px;
+		height: 13px;
+		flex-shrink: 0;
+		border-radius: 3px;
+		border: 1.5px solid var(--border-light);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		color: #fff;
+	}
+
+	.ns-task--done .ns-task-box {
+		background: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.ns-task--done {
+		color: var(--text-muted);
+		text-decoration: line-through;
+	}
+
+	.ns-code {
+		margin: 8px 0 0;
+		padding: 7px 9px;
+		border-radius: var(--radius-xs);
+		background: var(--bg);
+		border: 1px solid var(--border);
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+		font-size: 11px;
+		color: var(--text-secondary);
+		overflow: hidden;
+	}
+
+	.ns-card-footer {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 0.3rem;
+		gap: 6px;
 	}
-	.up b {
-		font-size: 0.8rem;
+
+	.ns-card-chips {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 4px;
+		flex: 1;
+		min-width: 0;
 	}
-	.up small {
-		font-size: 0.68rem;
+
+	.ns-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		height: var(--chip-h);
+		padding: 0 7px 0 5px;
+		border-radius: var(--radius-xs);
+		font-size: 10px;
+		font-weight: 600;
+		letter-spacing: 0.2px;
+		flex-shrink: 0;
+	}
+
+	.ns-chip--pinned {
+		background: var(--accent-dim);
+		color: var(--accent);
+	}
+
+	.ns-chip-dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: currentColor;
+		flex-shrink: 0;
+		opacity: 0.7;
+	}
+
+	.ns-chip-label {
+		line-height: 1;
+		max-width: 60px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.ns-chip--pinned .ns-chip-label {
+		max-width: none;
+	}
+
+	.ns-card-time {
+		font-size: 10.5px;
+		color: var(--text-muted);
+		flex-shrink: 0;
+		white-space: nowrap;
+		display: inline-flex;
+		align-items: center;
+		gap: 3px;
+	}
+
+	.ns-card-time--pinned {
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	/* ---- the recovery-code gate, from AccountScreen.css ---- */
+	.auth-card {
+		width: 100%;
+		max-width: 392px;
+		padding: 26px 24px 22px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+		font-size: 13px;
+	}
+
+	.auth-brand {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 5px;
+		margin-bottom: 18px;
+	}
+
+	.auth-brand-badge {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		margin-bottom: 6px;
+		border-radius: 11px;
+		color: var(--accent);
+		background: var(--accent-dim);
+	}
+
+	.auth-title {
+		margin: 0;
+		font-size: 16.5px;
+		font-weight: 650;
+		letter-spacing: -0.2px;
+		color: var(--text);
+	}
+
+	.auth-subtitle {
+		margin: 0;
+		font-size: 12px;
+		line-height: 1.45;
 		color: var(--text-muted);
 	}
-	.up-btn {
-		font-size: 0.66rem;
-		font-weight: 600;
+
+	.auth-form {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.auth-submit {
+		width: 100%;
+		box-sizing: border-box;
+		text-align: center;
+		font-size: 13px;
+		font-weight: 650;
 		color: #fff;
-		background: var(--accent);
-		padding: 0.2rem 0.6rem;
-		border-radius: var(--radius-xs);
+		background: var(--cta, #ff5535);
+		border: 1px solid transparent;
+		border-radius: 8px;
+		padding: 10px 14px;
+		margin-top: 2px;
+	}
+
+	.acct-recovery-code {
+		margin: 2px 0 0;
+		padding: 11px 12px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--surface);
+		font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+		font-size: 13.5px;
+		font-weight: 600;
+		letter-spacing: 1.2px;
+		text-align: center;
+		word-break: break-all;
+		color: var(--text);
+	}
+
+	.acct-recovery-actions {
+		display: flex;
+		gap: 8px;
+	}
+
+	.acct-recovery-actions .acct-btn {
+		flex: 1;
+	}
+
+	.acct-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		font-size: 12px;
+		font-weight: 600;
+		color: var(--text);
+		background: var(--bg);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 7px 12px;
+	}
+
+	.acct-recovery-ack {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 11.5px;
+		color: var(--text-muted);
 	}
 
 	@media (max-width: 980px) {
@@ -1126,31 +2724,31 @@ const iconPin =
 
 	/* the window shots only ever scale as a whole, they never reflow */
 	@media (max-width: 1010px) {
-		.wide .oc-window {
+		.wide :global(.oc-window) {
 			--mz: 0.82;
 		}
 	}
 
 	@media (max-width: 820px) {
-		.wide .oc-window {
+		.wide :global(.oc-window) {
 			--mz: 0.68;
 		}
 	}
 
 	@media (max-width: 680px) {
-		.wide .oc-window {
+		.wide :global(.oc-window) {
 			--mz: 0.55;
 		}
 	}
 
 	@media (max-width: 540px) {
-		.wide .oc-window {
+		.wide :global(.oc-window) {
 			--mz: 0.44;
 		}
 	}
 
 	@media (max-width: 430px) {
-		.wide .oc-window {
+		.wide :global(.oc-window) {
 			--mz: 0.36;
 		}
 	}
@@ -1162,10 +2760,40 @@ const iconPin =
 		.tile--band {
 			flex-direction: column;
 		}
-		.tile--band .mock {
+		.tile.tile--band .mock {
 			flex: none;
 			border-right: none;
 			border-bottom: 1px solid var(--border);
+		}
+	}
+
+	/* same rule as the window shots: the two panels the app draws at a fixed
+	   304px and 392px scale whole rather than reflowing into a width the app
+	   never renders. Only the widths where they would not fit are scaled - the
+	   two-column band between 600 and 690, and the narrowest phones. */
+	@media (max-width: 690px) and (min-width: 601px) {
+		.cs-filter-card {
+			zoom: 0.85;
+		}
+	}
+
+	@media (max-width: 360px) {
+		.cs-filter-card {
+			zoom: 0.85;
+		}
+	}
+
+	@media (max-width: 470px) {
+		.auth-card {
+			width: 392px;
+			max-width: none;
+			zoom: 0.8;
+		}
+	}
+
+	@media (max-width: 390px) {
+		.auth-card {
+			zoom: 0.74;
 		}
 	}
 </style>

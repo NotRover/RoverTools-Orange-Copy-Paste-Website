@@ -1,0 +1,81 @@
+---
+/**
+ * The clipboard history screen as the app draws it: toolbar (sort, filters,
+ * search, layout switch, select, groups, clear), the Today group header on the
+ * timeline rail, then the three-column tiles grid. Cards come from the slot.
+ */
+import { TB_ICONS } from './app-parts';
+
+interface Props {
+	/** entry count shown on the clear button */
+	count?: number;
+	/** number of groups on the groups badge */
+	groups?: number;
+	/** the date line beside "Today" */
+	date?: string;
+	/** id put on the tiles grid, so a script can drop cards straight into it */
+	gridId?: string;
+}
+
+const { count = 128, groups = 3, date = 'Aug 21, 2026', gridId } = Astro.props;
+---
+
+<div class="oc-screen">
+	<div class="oc-toolbar">
+		<div class="oc-tb-group">
+			<span class="oc-tb-btn">
+				<Fragment set:html={TB_ICONS.sortArrow} />
+				<Fragment set:html={TB_ICONS.chevron} />
+			</span>
+			<span class="oc-tb-btn" set:html={TB_ICONS.filter} />
+		</div>
+
+		<div class="oc-search">
+			<span class="oc-search-icon" set:html={TB_ICONS.search} />
+			<span class="oc-search-field">Search...</span>
+		</div>
+
+		<div class="oc-tb-group">
+			<div class="oc-seg">
+				<span class="oc-seg-slider"></span>
+				<span class="oc-seg-btn oc-seg-btn--active" set:html={TB_ICONS.tiles} />
+				<span class="oc-seg-btn" set:html={TB_ICONS.columns} />
+				<span class="oc-seg-btn" set:html={TB_ICONS.single} />
+			</div>
+			<span class="oc-tb-sep"></span>
+			<span class="oc-tb-btn" set:html={TB_ICONS.select} />
+			<span class="oc-tb-btn">
+				<Fragment set:html={TB_ICONS.groups} />
+				<span class="oc-tb-badge">{groups}</span>
+			</span>
+			<span class="oc-tb-btn oc-tb-btn--danger">
+				<Fragment set:html={TB_ICONS.trash} />
+				<span class="oc-tb-n">{count}</span>
+			</span>
+		</div>
+	</div>
+
+	<div class="oc-viewport">
+		<div class="oc-timeline">
+			<div class="oc-groups">
+				<div class="oc-day-row">
+					<span class="oc-day-dot"></span>
+					<span class="oc-day-label">Today</span>
+					<span class="oc-day-sub">{date}</span>
+					<span class="oc-day-chevron" set:html={TB_ICONS.dayChevron} />
+				</div>
+				<div class="oc-grid" id={gridId}><slot /></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.oc-screen {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+</style>
