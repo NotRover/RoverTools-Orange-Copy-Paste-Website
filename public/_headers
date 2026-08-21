@@ -1,0 +1,17 @@
+# Cloudflare Pages header rules. The site is static and ships no user data, so
+# this is only about not letting the pages be framed or sniffed, and about
+# caching the fingerprinted assets hard while keeping HTML fresh.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Astro fingerprints everything under _astro, so these can never go stale.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=604800

@@ -1,0 +1,6 @@
+# Cloudflare Pages project config. The site is fully static, so Pages only needs
+# to know where the build lands - there are no Functions, bindings or runtime.
+# Build command: bun run build
+name = "orange-copy-paste"
+compatibility_date = "2026-08-21"
+pages_build_output_dir = "./dist"
