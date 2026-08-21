@@ -1,6 +1,17 @@
-# Cloudflare Pages project config. The site is fully static, so Pages only needs
-# to know where the build lands - there are no Functions, bindings or runtime.
-# Build command: bun run build
-name = "orange-copy-paste"
+# Cloudflare Workers config. The site is fully static - there is no server code,
+# so the Worker is nothing but a static asset binding over the Astro output.
+#
+# Workers Builds settings that are not expressible here:
+#   Build command:  bun run build
+#   Deploy command: npx wrangler deploy
+#
+# The name has to match the project name in the Cloudflare dashboard.
+name = "rovertools-orangecp-website"
 compatibility_date = "2026-08-21"
-pages_build_output_dir = "./dist"
+
+[assets]
+directory = "./dist"
+# Astro writes directory-style pages (/docs/faq/index.html), which is what
+# auto-trailing-slash resolves; unmatched paths get src/pages/404.astro.
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"
