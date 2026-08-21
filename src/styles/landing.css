@@ -42,7 +42,7 @@
 	--font-body: 'Inter', 'Segoe UI', sans-serif;
 	--font-mono: 'Fira Code', 'Cascadia Code', Consolas, monospace;
 
-	--measure: 62rem;
+	--measure: 76rem;
 }
 
 * {
@@ -78,12 +78,10 @@ body.landing {
 	max-width: 96rem;
 }
 
-/* the bento column. Sized by the widest fixed-width panel the app draws inside a
-   half-width tile: a 340px popup needs a 349px mock, so a two-of-six tile has to
-   clear 380px and the six columns plus their gaps have to clear 1168. */
-.wrap--bento {
-	max-width: 76rem;
-}
+/* Every section shares one measure, and it is set by the widest fixed-width
+   panel the app draws inside a bento tile: a 340px popup needs a 349px mock, so
+   a tile has to clear 380px and the twelve columns plus their gaps have to clear
+   1168. Narrower than this and the mocks clip. */
 
 .section {
 	padding: 4.5rem 0;

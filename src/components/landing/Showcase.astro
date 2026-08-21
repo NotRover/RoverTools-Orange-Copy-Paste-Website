@@ -24,7 +24,7 @@ const SHARE_ICON =
 ---
 
 <section class="section show" id="showcase">
-	<div class="wrap wrap--bento">
+	<div class="wrap">
 		<p class="eyebrow reveal">In the app</p>
 		<h2 class="section-title reveal">Every surface, up close.</h2>
 		<p class="section-lead reveal">
@@ -112,6 +112,43 @@ const SHARE_ICON =
 							</div>
 						</div>
 					</div>
+
+					<div class="oc-card" slot="earlier">
+						<div class="oc-card-body">
+							<p class="oc-card-text oc-card-text--clamp">docs.rovertools.app/spaces/invites</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+								</span>
+								<span class="oc-time">18h ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="oc-card" slot="earlier">
+						<div class="oc-card-body">
+							<p class="oc-card-text">Rename the beta channel to preview before the next build goes out.</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
+								</span>
+								<span class="oc-time">22h ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="oc-card" slot="earlier">
+						<div class="oc-card-body">
+							<p class="oc-card-text oc-card-text--clamp">meeting-notes-aug-20.md</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+								</span>
+								<span class="oc-time">1d ago</span>
+							</div>
+						</div>
+					</div>
 				</HistoryScreen>
 				<div class="oc-pill-row">
 					<div class="oc-stat-pill">
@@ -137,7 +174,7 @@ const SHARE_ICON =
 
 		<div class="bento">
 			<!-- row 1: paste popup + notes -->
-			<figure class="tile tile--s3 reveal">
+			<figure class="tile tile--c7 reveal">
 				<div class="mock mock--popup">
 					<div class="pp">
 						<div class="pp-header">
@@ -189,7 +226,7 @@ const SHARE_ICON =
 				</figcaption>
 			</figure>
 
-			<figure class="tile tile--s3 reveal">
+			<figure class="tile tile--c5 reveal">
 				<div class="mock">
 					<div class="ns-card">
 						<div class="ns-card-body">
@@ -220,7 +257,7 @@ const SHARE_ICON =
 			</figure>
 
 			<!-- row 2 -->
-			<figure class="tile tile--s2 reveal">
+			<figure class="tile tile--c5 reveal">
 				<div class="mock mock--panel">
 					<div class="acct-mode">
 						<div class="acct-mode-head">
@@ -247,7 +284,7 @@ const SHARE_ICON =
 				</figcaption>
 			</figure>
 
-			<figure class="tile tile--s2 reveal">
+			<figure class="tile tile--c4 reveal">
 				<div class="mock mock--panel">
 					<div class="sp-settings-block">
 						<div class="sp-settings-label">People<span class="sp-settings-count">4</span></div>
@@ -278,7 +315,7 @@ const SHARE_ICON =
 				</figcaption>
 			</figure>
 
-			<figure class="tile tile--s2 reveal">
+			<figure class="tile tile--c3 reveal">
 				<div class="mock mock--panel">
 					<div class="sp-settings-block">
 						<div class="sp-settings-label">Rules<span class="sp-settings-count">auto</span></div>
@@ -305,7 +342,7 @@ const SHARE_ICON =
 			</figure>
 
 			<!-- row 3 -->
-			<figure class="tile tile--s2 reveal">
+			<figure class="tile tile--c4 reveal">
 				<div class="mock mock--popup">
 					<div class="cp">
 						<div class="cp-head">
@@ -330,7 +367,7 @@ const SHARE_ICON =
 				</figcaption>
 			</figure>
 
-			<figure class="tile tile--s2 reveal">
+			<figure class="tile tile--c5 reveal">
 				<div class="mock mock--filter">
 					<div class="cs-filter-card">
 					<div class="cs-card-head">
@@ -401,7 +438,7 @@ const SHARE_ICON =
 				</figcaption>
 			</figure>
 
-			<figure class="tile tile--s2 reveal">
+			<figure class="tile tile--c3 reveal">
 				<div class="mock mock--panel">
 					<div class="set-section">
 						<div class="set-section-head">
@@ -742,6 +779,7 @@ const SHARE_ICON =
 	.wide + .bento {
 		margin-top: 0.4rem;
 	}
+
 
 	.wide figcaption {
 		padding: 0.9rem 0.2rem 0;
@@ -1520,9 +1558,14 @@ const SHARE_ICON =
 	}
 
 	/* ---- bento grid of small tiles ---- */
+	/* Twelve columns, so a row can be split unevenly. Nothing here is the same
+	   size as the thing next to it: each row mixes spans, and the rows differ in
+	   height, so the eye has something to travel along instead of a checkerboard.
+	   The narrowest span still has to clear the panel the app draws inside it,
+	   which is why the popup and filter tiles never go below four. */
 	.bento {
 		display: grid;
-		grid-template-columns: repeat(6, minmax(0, 1fr));
+		grid-template-columns: repeat(12, minmax(0, 1fr));
 		gap: 0.9rem;
 	}
 
@@ -1537,12 +1580,20 @@ const SHARE_ICON =
 		transition: border-color 0.2s ease, transform 0.2s ease;
 	}
 
-	.tile--s2 {
-		grid-column: span 2;
+	.tile--c3 {
+		grid-column: span 3;
 	}
 
-	.tile--s3 {
-		grid-column: span 3;
+	.tile--c4 {
+		grid-column: span 4;
+	}
+
+	.tile--c5 {
+		grid-column: span 5;
+	}
+
+	.tile--c7 {
+		grid-column: span 7;
 	}
 
 	.tile--band {
@@ -2717,8 +2768,10 @@ const SHARE_ICON =
 		.bento {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
-		.tile--s2,
-		.tile--s3 {
+		.tile--c3,
+		.tile--c4,
+		.tile--c5,
+		.tile--c7 {
 			grid-column: span 1;
 		}
 		.tile--band {
