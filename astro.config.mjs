@@ -2,9 +2,15 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
+// Canonical origin. Set SITE_URL in the Cloudflare Pages project once the custom
+// domain is attached; until then Pages hands us CF_PAGES_URL, which is the right
+// answer for a preview deploy anyway. The literal is only the local fallback.
+const site =
+	process.env.SITE_URL ?? process.env.CF_PAGES_URL ?? 'https://orange-copy-paste.pages.dev';
+
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://spectrewolf8.github.io',
+	site,
 	integrations: [
 		starlight({
 			title: 'Orange Copy Paste',
@@ -20,6 +26,9 @@ export default defineConfig({
 				},
 			],
 			customCss: ['./src/styles/starlight-theme.css'],
+			// src/pages/404.astro serves the whole site, docs included, so Starlight's
+			// own /404 would only collide with it.
+			disable404Route: true,
 			sidebar: [
 				{
 					label: 'Start here',
