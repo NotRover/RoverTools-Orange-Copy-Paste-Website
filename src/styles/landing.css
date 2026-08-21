@@ -200,6 +200,17 @@ body.landing {
 
 /* window shell. In the app the sidebar spans the whole window height and the
    titlebar only spans the pane to its right, so the shell is a flex row. */
+/* Nothing in a mockup is text you would ever want to select - the app itself
+   sets user-select: none on its chrome for the same reason. Dragging across a
+   shot should not blue-highlight half the window. */
+.oc-window,
+.oc-window *,
+.mock,
+.mock * {
+	user-select: none;
+	-webkit-user-select: none;
+}
+
 .oc-window {
 	border: 1px solid var(--border);
 	border-radius: var(--radius);
@@ -373,6 +384,161 @@ body.landing {
 	background: var(--bg);
 	border-bottom: 1px solid var(--border);
 	overflow: hidden;
+}
+
+/* the image/video strip at the top of a card, and the picture inside it */
+.oc-card-media-img {
+	display: block;
+	width: 100%;
+	max-height: 240px;
+	object-fit: cover;
+}
+
+/* a video entry gets the same strip with a play badge over it */
+.oc-card-media--video {
+	position: relative;
+}
+
+.oc-card-play {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+}
+
+.oc-card-play span {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.55);
+}
+
+/* multi-image entries show a square thumbnail strip, the last one counting the rest */
+.oc-card-media--multi {
+	display: flex;
+	gap: 2px;
+	background: var(--bg);
+	border-bottom: 1px solid var(--border);
+}
+
+.oc-card-thumb {
+	flex: 1;
+	min-width: 0;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	background: var(--surface);
+	position: relative;
+}
+
+.oc-card-thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.oc-card-thumb-more {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.52);
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: -0.3px;
+}
+
+/* rich text keeps its own formatting, capped and faded out rather than cut */
+.oc-card-html {
+	font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+	font-size: 12px;
+	line-height: 1.35;
+	color: var(--text);
+	word-break: break-word;
+	overflow: hidden;
+	max-height: 120px;
+	-webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+	mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
+
+.oc-card-html :is(p, ul, ol, li, h4) {
+	margin: 2px 0;
+	padding: 0;
+}
+
+.oc-card-html ul {
+	padding-left: 14px;
+}
+
+.oc-card-html code {
+	font-family: inherit;
+	font-size: 11px;
+	background: var(--surface-hover);
+	border-radius: 3px;
+	padding: 1px 3px;
+}
+
+/* a folder or multi-file entry lists the first few names, then counts the rest */
+.oc-card-files {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.oc-card-file {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	min-width: 0;
+	color: var(--text-secondary);
+}
+
+.oc-card-file svg {
+	flex-shrink: 0;
+	opacity: 0.7;
+}
+
+.oc-card-file-name {
+	font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+	font-size: 11.5px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	min-width: 0;
+}
+
+.oc-card-file-more {
+	font-size: 10.5px;
+	color: var(--text-muted);
+	padding-left: 14px;
+}
+
+/* a file that is gone from disk is struck through, with the app's own hint word */
+.oc-card-text--missing {
+	opacity: 0.7;
+	text-decoration: line-through;
+}
+
+/* the hint opts out of the strike-through the file name carries, the same way
+   the app's own .card-missing-hint does - the word is a label, not struck text */
+.oc-card-missing {
+	font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--accent);
+	margin-left: 5px;
+	flex-shrink: 0;
+	text-decoration: none;
+	opacity: 1;
+	display: inline-flex;
+	align-items: center;
 }
 
 .oc-card-body {
@@ -646,6 +812,9 @@ body.landing {
 	box-shadow: 0 0 0 3px var(--accent-dim);
 	margin-left: -5px;
 	flex-shrink: 0;
+	/* sits on the rail, not behind it */
+	position: relative;
+	z-index: 1;
 }
 
 .oc-day-label {
@@ -698,6 +867,41 @@ body.landing {
 	flex: 1;
 	min-width: 0;
 	margin-left: 15px;
+}
+
+/* Each day group draws the timeline rail down its own left edge, with the day dot
+   sitting on top of it. The first group starts at the dot's centre instead of the
+   top edge, and the last one fades out below its dot, so the line has ends rather
+   than stopping dead. One group on its own gets no rail at all - there is nothing
+   for it to connect to. Values from the app's ClipboardScreen.css. */
+.oc-group {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.oc-group::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: var(--accent);
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+.oc-group:first-child::before {
+	top: 15px;
+}
+
+.oc-group--last::before {
+	background: linear-gradient(to bottom, var(--accent) 70%, transparent 100%);
+}
+
+.oc-group--only::before {
+	display: none;
 }
 
 .oc-grid {

@@ -1,6 +1,22 @@
 ---
 import AppShell from './AppShell.astro';
+import CardMenu from './CardMenu.astro';
 import HistoryScreen from './HistoryScreen.astro';
+import { CHIP_ICONS, GROUP_COLORS, KIND_COLORS, TYPE_LABELS } from './app-parts';
+
+/* The Yesterday group. Static, because the animation only ever touches the
+   Today group - and a second group is what gives the timeline rail two ends,
+   a divider between the days, and something below the fold to scroll to. */
+const earlier = [
+	{
+		kind: 'text',
+		text: 'Rotate the space key before the beta goes out, then re-wrap for everyone.',
+		group: ['release', 'amber'],
+	},
+	{ kind: 'document', text: 'meeting-notes-aug-20.md' },
+	{ kind: 'url', text: 'staging.rovertools.app/preview/920x560' },
+	{ kind: 'folder', text: '/home/rio/projects/orangecp/assets/press' },
+] as const;
 ---
 
 <section class="hero">
@@ -37,7 +53,36 @@ import HistoryScreen from './HistoryScreen.astro';
 
 			<!-- the app window, drawn from the shared shell so it matches the product -->
 			<AppShell nav="clipboard" class="hero-window">
-				<HistoryScreen count={128} groups={3} gridId="stack" />
+				<HistoryScreen count={128} groups={3} gridId="stack" scrollbar thumbTop={2} thumbHeight={40}>
+					{
+						earlier.map((e) => (
+							<div class="oc-card" slot="earlier">
+								<div class="oc-card-body">
+									<p class="oc-card-text oc-card-text--clamp">{e.text}</p>
+									<div class="oc-card-footer">
+										<span class="oc-chips">
+											<span class="oc-chip" style={`--cc:${KIND_COLORS[e.kind]}`}>
+												<Fragment set:html={CHIP_ICONS[e.kind]} />
+												<span class="oc-chip-label">{TYPE_LABELS[e.kind]}</span>
+											</span>
+											{'group' in e && e.group && (
+												<span
+													class="oc-chip oc-chip--group"
+													style={`--cc:${GROUP_COLORS[e.group[1]]}`}
+												>
+													<span class="oc-chip-dot" />
+													<span class="oc-chip-label">{e.group[0]}</span>
+												</span>
+											)}
+										</span>
+										<span class="oc-time">Yesterday</span>
+									</div>
+								</div>
+							</div>
+						))
+					}
+					<CardMenu slot="menu" x={556} y={214} spaces={2} />
+				</HistoryScreen>
 				<div class="oc-pill-row">
 					<div class="oc-stat-pill">
 						<span class="oc-stat"><b>86</b> text</span>
@@ -58,15 +103,18 @@ import HistoryScreen from './HistoryScreen.astro';
 </section>
 
 <script>
-	import { CHIP_ICONS, TYPE_LABELS, KIND_COLORS, GROUP_COLORS } from './app-parts';
+	import { CHIP_ICONS, TYPE_LABELS, KIND_COLORS, GROUP_COLORS, THUMBS } from './app-parts';
 
 	/* what the watcher picks up, in the order it happens */
 	const snippets = [
 		{ kind: 'text', content: 'Meet at the station, platform 4, 9:40. Bring the badge for the side door.', group: ['work', 'teal'] },
 		{ kind: 'url', content: 'github.com/Spectrewolf8/RoverTools-Releases' },
-		{ kind: 'image', content: '#a1b2c3d4 Image Aug 21, 2:45 PM' },
+		{ kind: 'image', content: '#a1b2c3d4 Image Aug 21, 2:45 PM', thumb: 'photo' },
+		{ kind: 'html', content: '<h4>Release checklist</h4><ul><li>Bump the version and tag it</li><li>Sign both bundles</li></ul>', group: ['release', 'amber'] },
 		{ kind: 'document', content: 'quarterly-report.pdf' },
+		{ kind: 'video', content: 'popup-placement-bug.mp4', thumb: 'ui' },
 		{ kind: 'text', content: 'Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.' },
+		{ kind: 'folder', content: '/home/rio/projects/orangecp/assets' },
 		{ kind: 'file', content: 'brand-assets (3 files)', group: ['ideas', 'indigo'] },
 	] as const;
 
@@ -113,20 +161,32 @@ import HistoryScreen from './HistoryScreen.astro';
 	function makeCard(s: (typeof snippets)[number], active: boolean, age: string) {
 		const card = document.createElement('div');
 		card.className = 'oc-card' + (active ? ' oc-card--in-clipboard' : '');
-		const media = s.kind === 'image' ? '<div class="oc-card-media img-grad"></div>' : '';
+		const thumb = 'thumb' in s && s.thumb ? THUMBS[s.thumb] : '';
+		const media =
+			s.kind === 'image'
+				? `<div class="oc-card-media"><img class="oc-card-media-img" src="${thumb}" alt="" /></div>`
+				: s.kind === 'video'
+					? `<div class="oc-card-media oc-card-media--video"><img class="oc-card-media-img" src="${thumb}" alt="" /><span class="oc-card-play"><span>${CHIP_ICONS.video}</span></span></div>`
+					: '';
 		const textCls =
 			s.kind === 'image'
 				? 'oc-card-text--imgname'
 				: s.kind === 'text'
 					? 'oc-card-text'
 					: 'oc-card-text oc-card-text--clamp';
+		// rich text is the one kind that is not a string of characters: it keeps
+		// its own headings and lists, capped and faded exactly as the app does.
+		const bodyMarkup =
+			s.kind === 'html'
+				? `<div class="oc-card-html">${s.content}</div>`
+				: `<p class="${textCls}">${s.content}</p>`;
 		const group = 'group' in s && s.group
 			? `<span class="oc-chip oc-chip--group" style="--cc:${GROUP_COLORS[s.group[1]]}"><span class="oc-chip-dot"></span><span class="oc-chip-label">${s.group[0]}</span></span>`
 			: '';
 		card.innerHTML = `
 			${media}
 			<div class="oc-card-body">
-				<p class="${textCls}">${s.content}</p>
+				${bodyMarkup}
 				<div class="oc-card-footer">
 					<span class="oc-chips">
 						<span class="oc-chip" style="--cc:${KIND_COLORS[s.kind]}">${CHIP_ICONS[s.kind] ?? ''}<span class="oc-chip-label">${TYPE_LABELS[s.kind]}</span></span>
@@ -147,7 +207,7 @@ import HistoryScreen from './HistoryScreen.astro';
 		card.classList.add('enter');
 		stack.prepend(card);
 		requestAnimationFrame(() => requestAnimationFrame(() => card.classList.remove('enter')));
-		if (stack.children.length > 6) {
+		if (stack.children.length > 7) {
 			const last = stack.lastElementChild as HTMLElement;
 			last.classList.add('leave');
 			setTimeout(() => last.remove(), 350);
@@ -320,14 +380,6 @@ import HistoryScreen from './HistoryScreen.astro';
 	.hero-demo :global(.oc-card.leave) {
 		transform: translateY(10px);
 		opacity: 0;
-	}
-
-	/* stand-in for a copied screenshot */
-	.hero-demo :global(.oc-card-media.img-grad) {
-		height: 96px;
-		background:
-			linear-gradient(135deg, rgba(59, 130, 246, 0.45), rgba(139, 92, 246, 0.3)),
-			var(--bg);
 	}
 
 	/* fake cursor */

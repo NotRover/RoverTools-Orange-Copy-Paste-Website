@@ -2,7 +2,18 @@
 import appIcon from '../../assets/app-icon.png';
 import AppShell from './AppShell.astro';
 import HistoryScreen from './HistoryScreen.astro';
-import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS, TB_ICONS, TYPE_LABELS, MENU_ICONS, SRC_ICONS, NAV_ICONS } from './app-parts';
+import CardMenu from './CardMenu.astro';
+import {
+	CHIP_ICONS,
+	KIND_COLORS,
+	GROUP_COLORS,
+	TB_ICONS,
+	TYPE_LABELS,
+	MENU_ICONS,
+	SRC_ICONS,
+	NAV_ICONS,
+	THUMBS,
+} from './app-parts';
 
 /* close glyph the popups use: CloseIcon at 10px, stroke 2.5 */
 const CLOSE_ICON =
@@ -16,8 +27,6 @@ const DOWNLOAD_ICON =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 256 256"><path d="M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0ZM93.66,109.66,120,83.31V152a8,8,0,0,0,16,0V83.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,11.32,11.32Z"/></svg>';
 /* the same DownloadSimple at 14, as the row button calls it */
 const DOWNLOAD_ICON14 = DOWNLOAD_ICON.replace(/width="15" height="15"/, 'width="14" height="14"');
-const KEY_ICON =
-	'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M216.57,39.43A80,80,0,0,0,83.91,120.78L28.69,176A15.86,15.86,0,0,0,24,187.31V216a16,16,0,0,0,16,16H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A79.73,79.73,0,0,0,160,176h.1A80,80,0,0,0,216.57,39.43ZM224,98.1c-1.09,34.09-29.75,61.86-63.89,61.9H160a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A63.72,63.72,0,0,1,96,95.92c0-34.14,27.81-62.8,61.9-63.89A64,64,0,0,1,224,98.1ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"/></svg>';
 const SHARE_ICON =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256"><path d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z"/></svg>';
 
@@ -28,8 +37,8 @@ const SHARE_ICON =
 		<p class="eyebrow reveal">In the app</p>
 		<h2 class="section-title reveal">Every surface, up close.</h2>
 		<p class="section-lead reveal">
-			Drawn with the app's own colors, spacing and type, so what you see here is what
-			installs.
+			Real screens, drawn at the sizes the app renders them. Nothing here is a
+			stylised version of the product.
 		</p>
 
 		<!-- wide shot: the clipboard screen -->
@@ -50,7 +59,7 @@ const SHARE_ICON =
 					</div>
 
 					<div class="oc-card">
-						<div class="oc-card-media grad-blue"></div>
+						<div class="oc-card-media"><img class="oc-card-media-img" src={THUMBS.photo} alt="" /></div>
 						<div class="oc-card-body">
 							<p class="oc-imgname">#a1b2c3d4 Image Aug 21, 2:45 PM</p>
 							<div class="oc-card-footer">
@@ -77,6 +86,26 @@ const SHARE_ICON =
 
 					<div class="oc-card">
 						<div class="oc-card-body">
+							<div class="oc-card-html">
+								<h4>Release checklist</h4>
+								<ul>
+									<li>Bump the version and tag it</li>
+									<li>Sign both bundles</li>
+									<li>Publish <code>next.md</code> as the notes</li>
+								</ul>
+							</div>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.html}`}><Fragment set:html={CHIP_ICONS.html} /><span class="oc-chip-label">Rich Text</span></span>
+									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.amber}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">release</span></span>
+								</span>
+								<span class="oc-time">51m ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="oc-card">
+						<div class="oc-card-body">
 							<p class="oc-card-text oc-card-text--clamp">quarterly-report.pdf</p>
 							<div class="oc-card-footer">
 								<span class="oc-chips">
@@ -89,66 +118,111 @@ const SHARE_ICON =
 					</div>
 
 					<div class="oc-card">
-						<div class="oc-card-body">
-							<p class="oc-card-text oc-card-text--clamp">brand-assets (3 files)</p>
-							<div class="oc-card-footer">
-								<span class="oc-chips">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">Files</span></span>
-									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
-								</span>
-								<span class="oc-time">2h ago</span>
-							</div>
+						<div class="oc-card-media oc-card-media--video">
+							<img class="oc-card-media-img" src={THUMBS.ui} alt="" />
+							<span class="oc-card-play"><span><Fragment set:html={CHIP_ICONS.video} /></span></span>
 						</div>
-					</div>
-
-					<div class="oc-card">
 						<div class="oc-card-body">
-							<p class="oc-card-text">Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.</p>
+							<p class="oc-card-text oc-card-text--clamp">popup-placement-bug.mp4</p>
 							<div class="oc-card-footer">
 								<span class="oc-chips">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.video}`}><Fragment set:html={CHIP_ICONS.video} /><span class="oc-chip-label">Video</span></span>
 								</span>
 								<span class="oc-time">3h ago</span>
 							</div>
 						</div>
 					</div>
 
-					<div class="oc-card" slot="earlier">
+					<div class="oc-card">
 						<div class="oc-card-body">
-							<p class="oc-card-text oc-card-text--clamp">docs.rovertools.app/spaces/invites</p>
+							<p class="oc-card-text oc-card-text--clamp">/home/rio/projects/orangecp/assets</p>
 							<div class="oc-card-footer">
 								<span class="oc-chips">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.folder}`}><Fragment set:html={CHIP_ICONS.folder} /><span class="oc-chip-label">Folder</span></span>
 								</span>
-								<span class="oc-time">18h ago</span>
+								<span class="oc-time">4h ago</span>
 							</div>
 						</div>
 					</div>
 
-					<div class="oc-card" slot="earlier">
+					<div class="oc-card">
 						<div class="oc-card-body">
-							<p class="oc-card-text">Rename the beta channel to preview before the next build goes out.</p>
+							<p class="oc-card-text oc-card-text--clamp oc-card-text--missing">old-mockup-v3.fig<span class="oc-card-missing">missing</span></p>
 							<div class="oc-card-footer">
 								<span class="oc-chips">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span>
 								</span>
-								<span class="oc-time">22h ago</span>
+								<span class="oc-time">6h ago</span>
 							</div>
 						</div>
 					</div>
 
-					<div class="oc-card" slot="earlier">
-						<div class="oc-card-body">
-							<p class="oc-card-text oc-card-text--clamp">meeting-notes-aug-20.md</p>
-							<div class="oc-card-footer">
-								<span class="oc-chips">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
-								</span>
-								<span class="oc-time">1d ago</span>
+					<Fragment slot="earlier">
+						<div class="oc-card">
+							<div class="oc-card-media"><img class="oc-card-media-img" src={THUMBS.chart} alt="" /></div>
+							<div class="oc-card-body">
+								<p class="oc-imgname">#5e90d2f1 Image Aug 20, 4:38 PM</p>
+								<div class="oc-card-footer">
+									<span class="oc-chips">
+										<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
+										<span class="oc-chip" style={`--cc:${KIND_COLORS.saved}`}><Fragment set:html={CHIP_ICONS.saved} /><span class="oc-chip-label">Saved</span></span>
+									</span>
+									<span class="oc-time">19h ago</span>
+								</div>
 							</div>
 						</div>
-					</div>
+
+						<div class="oc-card">
+							<div class="oc-card-media oc-card-media--multi">
+								<div class="oc-card-thumb"><img src={THUMBS.swatchA} alt="" /></div>
+								<div class="oc-card-thumb"><img src={THUMBS.swatchB} alt="" /></div>
+								<div class="oc-card-thumb">
+									<img src={THUMBS.ui} alt="" />
+									<span class="oc-card-thumb-more">+2</span>
+								</div>
+							</div>
+							<div class="oc-card-body">
+								<div class="oc-card-files">
+									<span class="oc-card-file"><Fragment set:html={CHIP_ICONS.image} /><span class="oc-card-file-name">logo-orange.svg</span></span>
+									<span class="oc-card-file"><Fragment set:html={CHIP_ICONS.image} /><span class="oc-card-file-name">wordmark-dark.png</span></span>
+									<span class="oc-card-file"><Fragment set:html={CHIP_ICONS.file} /><span class="oc-card-file-name">brand-guide.pdf</span></span>
+									<span class="oc-card-file-more">+2 more</span>
+								</div>
+								<div class="oc-card-footer">
+									<span class="oc-chips">
+										<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">Files</span></span>
+										<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
+									</span>
+									<span class="oc-time">20h ago</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="oc-card">
+							<div class="oc-card-body">
+								<p class="oc-card-text">Rename the beta channel to preview before the next build goes out.</p>
+								<div class="oc-card-footer">
+									<span class="oc-chips">
+										<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+										<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
+									</span>
+									<span class="oc-time">22h ago</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="oc-card">
+							<div class="oc-card-body">
+								<p class="oc-card-text oc-card-text--clamp">meeting-notes-aug-20.md</p>
+								<div class="oc-card-footer">
+									<span class="oc-chips">
+										<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+									</span>
+									<span class="oc-time">1d ago</span>
+								</div>
+							</div>
+						</div>
+					</Fragment>
 				</HistoryScreen>
 				<div class="oc-pill-row">
 					<div class="oc-stat-pill">
@@ -173,61 +247,8 @@ const SHARE_ICON =
 		</figure>
 
 		<div class="bento">
-			<!-- row 1: paste popup + notes -->
 			<figure class="tile tile--c7 reveal">
-				<div class="mock mock--popup">
-					<div class="pp">
-						<div class="pp-header">
-							<div class="pp-header-left">
-								<span class="pp-title">Quick Paste</span>
-								<span class="pp-count">5</span>
-							</div>
-							<div class="pp-tabs">
-								<span class="pp-tab pp-tab--active">Recent<span class="pp-tab-count">5</span></span>
-								<span class="pp-tab">Pinned<span class="pp-tab-count">2</span></span>
-							</div>
-							<span class="pp-close" set:html={CLOSE_ICON} />
-						</div>
-						<div class="pp-list">
-							<div class="pp-item">
-								<span class="pp-badge">1</span>
-								<div class="pp-wrap">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-									<span class="pp-filename">Meet at the station, platform 4, 9:40...</span>
-								</div>
-								<span class="pp-meta"><span class="pp-time">2m</span></span>
-							</div>
-							<div class="pp-item pp-item--selected">
-								<span class="pp-badge">2</span>
-								<div class="pp-wrap">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
-									<span class="pp-filename">github.com/Spectrewolf8/RoverTools-Rel...</span>
-								</div>
-								<span class="pp-meta"><span class="pp-pin" set:html={CHIP_ICONS.pin} /><span class="pp-time">1h</span></span>
-							</div>
-							<div class="pp-item">
-								<span class="pp-badge">3</span>
-								<div class="pp-wrap">
-									<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
-									<span class="pp-filename">quarterly-report.pdf</span>
-								</div>
-								<span class="pp-meta"><span class="pp-time">3d</span></span>
-							</div>
-						</div>
-						<span class="pp-cursor" aria-hidden="true">
-							<span class="pp-ring"></span>
-							<svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 2l0 17 4.2-3.6 2.6 6 3-1.3-2.6-5.9 6-.6z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
-						</span>
-					</div>
-				</div>
-				<figcaption>
-					<strong>Quick Paste</strong>
-					Ctrl+Shift+V opens it at your cursor. Press a digit and that item pastes.
-				</figcaption>
-			</figure>
-
-			<figure class="tile tile--c5 reveal">
-				<div class="mock">
+				<div class="mock mock--notes">
 					<div class="ns-card">
 						<div class="ns-card-body">
 							<div class="ns-card-title">Release checklist</div>
@@ -248,125 +269,83 @@ const SHARE_ICON =
 							</div>
 						</div>
 					</div>
-				</div>
-				<figcaption>
-					<strong>Notes, next to your clips</strong>
-					Task lists, tables, code blocks and callouts. A note can be pinned, tagged and
-					shared like any clip.
-				</figcaption>
-			</figure>
 
-			<!-- row 2 -->
-			<figure class="tile tile--c5 reveal">
-				<div class="mock mock--panel">
-					<div class="acct-mode">
-						<div class="acct-mode-head">
-							<span class="set-row-label">Automatic syncing</span>
-							<div class="acct-seg">
-								<span class="acct-seg-pill active">Realtime</span>
-								<span class="acct-seg-pill">Passive</span>
-								<span class="acct-seg-pill">Manual</span>
+					<div class="ns-card">
+						<div class="ns-card-body">
+							<div class="ns-card-title">Reply to the beta thread</div>
+							<div class="ns-card-preview">
+								<p class="ns-p">Yes, the history stays on disk when sync is off. Nothing is uploaded until you sign in.</p>
 							</div>
-						</div>
-						<p class="acct-card-desc">
-							Items from your other devices arrive the moment they are copied, and what you
-							copy here uploads right away.
-						</p>
-						<p class="acct-mode-note">
-							Spaces are not affected. What you share to a space still goes out right away, and
-							what other people share with you always arrives live.
-						</p>
-					</div>
-				</div>
-				<figcaption>
-					<strong>Three sync modes</strong>
-					Per device, so your laptop can sync live while your desktop stays manual.
-				</figcaption>
-			</figure>
-
-			<figure class="tile tile--c4 reveal">
-				<div class="mock mock--panel">
-					<div class="sp-settings-block">
-						<div class="sp-settings-label">People<span class="sp-settings-count">4</span></div>
-						<div class="sp-member-list">
-							<div class="sp-member-row">
-								<span class="sp-member-pic">YO</span>
-								<span class="sp-member-name">You</span>
-								<span class="sp-badge sp-badge--owner">owner</span>
-								<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
-							</div>
-							<div class="sp-member-row">
-								<span class="sp-member-pic">RI</span>
-								<span class="sp-member-name">rio</span>
-								<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
-							</div>
-							<div class="sp-member-row">
-								<span class="sp-member-pic">ME</span>
-								<span class="sp-member-name">mei</span>
-								<span class="sp-badge sp-badge--warn">waiting for key</span>
-								<span class="sp-member-dot"><span class="sp-dot"></span></span>
+							<div class="ns-card-footer">
+								<div class="ns-card-chips">
+									<span class="ns-chip" style="background:rgba(16,185,129,0.12);color:#10b981"><span class="ns-chip-dot"></span><span class="ns-chip-label">support</span></span>
+								</div>
+								<span class="ns-card-time">Yesterday</span>
 							</div>
 						</div>
 					</div>
-				</div>
-				<figcaption>
-					<strong>Who is in a space</strong>
-					Presence per member, and a badge while someone is still waiting for the space key.
-				</figcaption>
-			</figure>
 
-			<figure class="tile tile--c3 reveal">
-				<div class="mock mock--panel">
-					<div class="sp-settings-block">
-						<div class="sp-settings-label">Rules<span class="sp-settings-count">auto</span></div>
-						<div class="sp-toggle-row">
-							<span class="sp-toggle-text">
-								<span class="sp-toggle-title">Copy new items in</span>
-								<span class="sp-toggle-desc">Anything shared here lands on your clipboard as it arrives.</span>
-							</span>
-							<span class="sp-switch sp-switch--on"></span>
+					<div class="ns-card">
+						<div class="ns-card-body">
+							<div class="ns-card-title">Popup sizes</div>
+							<div class="ns-card-preview">
+								<table class="ns-table">
+									<tr><th>Window</th><th>Size</th></tr>
+									<tr><td>Copy popup</td><td>340 x 260</td></tr>
+									<tr><td>Paste popup</td><td>340 x 460</td></tr>
+									<tr><td>Main window</td><td>920 x 560</td></tr>
+								</table>
+							</div>
+							<div class="ns-card-footer">
+								<div class="ns-card-chips">
+									<span class="ns-chip" style="background:rgba(99,102,241,0.12);color:#6366f1"><span class="ns-chip-dot"></span><span class="ns-chip-label">ideas</span></span>
+								</div>
+								<span class="ns-card-time">2h ago</span>
+							</div>
 						</div>
-						<div class="sp-toggle-row">
-							<span class="sp-toggle-text">
-								<span class="sp-toggle-title">Share new items out</span>
-								<span class="sp-toggle-desc">Off. Only items you share by hand go into this space.</span>
-							</span>
-							<span class="sp-switch"></span>
+					</div>
+
+					<div class="ns-card">
+						<div class="ns-card-body">
+							<div class="ns-card-title">Keys, in order</div>
+							<div class="ns-card-preview">
+								<ol class="ns-ol">
+									<li>Password unwraps the master key</li>
+									<li>Master key unwraps each space key</li>
+									<li>Space key opens what people shared</li>
+								</ol>
+							</div>
+							<div class="ns-card-footer">
+								<div class="ns-card-chips">
+									<span class="ns-chip" style="background:rgba(168,85,247,0.12);color:#a855f7"><span class="ns-chip-dot"></span><span class="ns-chip-label">crypto</span></span>
+								</div>
+								<span class="ns-card-time">3d ago</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="ns-card">
+						<div class="ns-card-body">
+							<div class="ns-card-title">From the design review</div>
+							<div class="ns-card-preview">
+								<blockquote class="ns-quote">The rail should have ends. A line that stops dead reads as a bug.</blockquote>
+								<p class="ns-p">Fixed by fading the last group out under its own dot.</p>
+							</div>
+							<div class="ns-card-footer">
+								<div class="ns-card-chips">
+									<span class="ns-chip" style="background:rgba(245,158,11,0.12);color:#f59e0b"><span class="ns-chip-dot"></span><span class="ns-chip-label">release</span></span>
+								</div>
+								<span class="ns-card-time"><span class="ns-card-sync ns-card-sync--shared"><Fragment set:html={SRC_ICONS.shareNetwork11} /><span class="ns-card-sync-count">2</span></span>Yesterday</span>
+							</div>
 						</div>
 					</div>
 				</div>
 				<figcaption>
-					<strong>Sharing is opt-in</strong>
-					Nothing leaves your machine unless you shared it or switched a filter on.
+					<strong>Notes, in the same window</strong>
+					Task lists, tables, code and quotes. A note pins, tags and shares exactly like a
+					copied item.
 				</figcaption>
 			</figure>
-
-			<!-- row 3 -->
-			<figure class="tile tile--c4 reveal">
-				<div class="mock mock--popup">
-					<div class="cp">
-						<div class="cp-head">
-							<div class="cp-head-left">
-								<span class="cp-title">Copied</span>
-								<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-							</div>
-							<span class="cp-close" set:html={CLOSE_ICON} />
-						</div>
-						<div class="cp-preview"><p class="cp-preview-text">The quarterly numbers land Thursday</p></div>
-						<div class="cp-actions">
-							<span class="cp-item"><Fragment set:html={MENU_ICONS.pin} />Pin</span>
-							<span class="cp-item"><Fragment set:html={MENU_ICONS.star} />Save</span>
-							<span class="cp-sep"></span>
-							<span class="cp-item cp-item--danger"><Fragment set:html={MENU_ICONS.trash} />Delete</span>
-						</div>
-					</div>
-				</div>
-				<figcaption>
-					<strong>Capture receipt</strong>
-					Ctrl+Shift+C shows what was just grabbed, with pin and delete one click away.
-				</figcaption>
-			</figure>
-
 			<figure class="tile tile--c5 reveal">
 				<div class="mock mock--filter">
 					<div class="cs-filter-card">
@@ -434,11 +413,419 @@ const SHARE_ICON =
 				</div>
 				<figcaption>
 					<strong>Filters that count ahead</strong>
-					Every option shows how many items it would leave you, before you apply it.
+					Every type, cloud state and space carries the number of items it would leave
+					you, counted before you click it.
 				</figcaption>
 			</figure>
+			<figure class="tile tile--c7 reveal">
+				<div class="mock mock--editor">
+					<div class="ns-editor">
+						<div class="ns-editor-header">
+							<span class="ns-back-btn" set:html={CLOSE_ICON} />
+							<span class="ns-title-input">Release checklist</span>
+							<div class="ns-editor-actions">
+								<span class="ns-tb-btn" set:html={MENU_ICONS.pin} />
+								<span class="ns-tb-btn ns-tb-btn--danger" set:html={MENU_ICONS.trash} />
+							</div>
+						</div>
+						<div class="ns-format-bar">
+							<div class="ns-fmt-group">
+								<span class="ns-fmt-btn ns-fmt-btn--active" set:html={SRC_ICONS.bold13} />
+								<span class="ns-fmt-btn" set:html={SRC_ICONS.italic13} />
+								<span class="ns-fmt-btn" set:html={SRC_ICONS.strike13} />
+								<span class="ns-fmt-btn" set:html={SRC_ICONS.code13} />
+							</div>
+							<div class="ns-fmt-group">
+								<span class="ns-fmt-btn ns-fmt-btn--dropdown">H1<Fragment set:html={MENU_ICONS.caret} /></span>
+								<span class="ns-fmt-btn" set:html={SRC_ICONS.alignLeft13} />
+							</div>
+							<div class="ns-fmt-group">
+								<span class="ns-fmt-btn" set:html={SRC_ICONS.bullets13} />
+								<span class="ns-fmt-btn ns-fmt-btn--active" set:html={SRC_ICONS.checks13} />
+								<span class="ns-fmt-btn" set:html={SRC_ICONS.link13} />
+							</div>
+						</div>
+						<div class="ns-editor-groups">
+							<span class="ns-editor-group-chip" style="background:rgba(20,184,166,0.12);color:#14b8a6"><span class="ns-chip-dot"></span>work</span>
+							<span class="ns-editor-group-chip" style="background:rgba(245,158,11,0.12);color:#f59e0b"><span class="ns-chip-dot"></span>release</span>
+							<span class="ns-add-group-btn">+</span>
+						</div>
+						<div class="ns-editor-content">
+							<p class="ed-h">Before the tag</p>
+							<ul class="ns-tasks">
+								<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Draft the notes in changelog/next.md</li>
+								<li class="ns-task"><span class="ns-task-box"></span>Check the updater on both channels</li>
+							</ul>
+							<p class="ns-p">Checksum came in on the URL below.</p>
+							<span class="ee-clip-embed ee-clip-embed--open">
+								<span class="ee-clip-embed-inner ee-clip-embed-inner--url">
+									<span class="ee-clip-embed-icon" set:html={CHIP_ICONS.url} />
+									<span class="ee-clip-embed-label">github.com/Spectrewolf8/RoverTools-Releases</span>
+								</span>
+								<span class="ee-embed-panel">
+									<span class="ee-embed-panel-meta">
+										<span class="ee-embed-panel-type"><Fragment set:html={CHIP_ICONS.url} />URL</span>
+										<span class="ee-embed-panel-time">32m ago</span>
+									</span>
+									<span class="ee-embed-panel-body">github.com/Spectrewolf8/RoverTools-Releases/releases/tag/v0.1.16</span>
+								</span>
+							</span>
+						</div>
+						<div class="ns-editor-footer">
+							<span class="ns-editor-footer-text">Saved</span>
+							<span class="ns-editor-footer-stats">38 words - 214 characters</span>
+						</div>
+					</div>
+				</div>
+				<figcaption>
+					<strong>A real editor, not a text box</strong>
+					Headings, checklists, tables, code and colors. Drop a copied item into the text
+					and it stays linked, openable in place.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c5 reveal">
+				<div class="mock mock--panel mock--account">
+					<div class="acct-mode">
+						<div class="acct-mode-head">
+							<span class="set-row-label">Automatic syncing</span>
+							<div class="acct-seg">
+								<span class="acct-seg-pill active">Realtime</span>
+								<span class="acct-seg-pill">Passive</span>
+								<span class="acct-seg-pill">Manual</span>
+							</div>
+						</div>
+						<p class="acct-card-desc">
+							Items from your other devices arrive the moment they are copied, and what you
+							copy here uploads right away.
+						</p>
+						<p class="acct-mode-note">
+							Spaces are not affected. What you share to a space still goes out right away, and
+							what other people share with you always arrives live.
+						</p>
+					</div>
 
-			<figure class="tile tile--c3 reveal">
+					<div class="acct-zone">
+						<div class="acct-zone-head">
+							<span class="acct-zone-icon" set:html={SRC_ICONS.desktop13} />
+							<span class="acct-zone-label">Devices</span>
+						</div>
+						<div class="acct-card acct-card--rows">
+							<div class="acct-row">
+								<span class="acct-row-icon" set:html={SRC_ICONS.desktop15} />
+								<div class="acct-row-main">
+									<span class="acct-row-name">studio-desktop<span class="acct-badge acct-badge--owner">this device</span></span>
+									<span class="acct-row-meta">windows - online</span>
+								</div>
+								<span class="acct-dot online"></span>
+							</div>
+							<div class="acct-row">
+								<span class="acct-row-icon" set:html={SRC_ICONS.laptop15} />
+								<div class="acct-row-main">
+									<span class="acct-row-name">rio-macbook</span>
+									<span class="acct-row-meta">macos - online</span>
+								</div>
+								<span class="acct-dot online"></span>
+								<div class="acct-row-actions"><span class="acct-btn acct-btn--sm acct-btn--danger">Remove</span></div>
+							</div>
+							<div class="acct-row">
+								<span class="acct-row-icon" set:html={SRC_ICONS.desktop15} />
+								<div class="acct-row-main">
+									<span class="acct-row-name">work-pc</span>
+									<span class="acct-row-meta">windows - last seen 2 days ago</span>
+								</div>
+								<span class="acct-dot"></span>
+								<div class="acct-row-actions"><span class="acct-btn acct-btn--sm acct-btn--danger">Remove</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<figcaption>
+					<strong>Sync per device</strong>
+					Realtime, passive or manual, chosen on each machine. Your laptop can stay live
+					while your desktop only syncs when you ask.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c7 reveal">
+				<div class="mock mock--panel mock--account">
+					<div class="acct-zone">
+						<div class="acct-zone-head">
+							<span class="acct-zone-icon" set:html={SRC_ICONS.keyboard13} />
+							<span class="acct-zone-label">Shortcuts</span>
+						</div>
+						<div class="acct-card acct-card--rows">
+							<div class="shortcut-row">
+								<span class="shortcut-desc">Capture the selection into the history</span>
+								<span class="shortcut-keys"><kbd class="shortcut-key">Ctrl</kbd><kbd class="shortcut-key">Shift</kbd><kbd class="shortcut-key">C</kbd></span>
+							</div>
+							<div class="shortcut-row">
+								<span class="shortcut-desc">Open the quick-paste popup</span>
+								<span class="shortcut-keys"><kbd class="shortcut-key">Ctrl</kbd><kbd class="shortcut-key">Shift</kbd><kbd class="shortcut-key">V</kbd></span>
+							</div>
+							<div class="shortcut-row">
+								<span class="shortcut-desc">Paste an entry by its slot number</span>
+								<span class="shortcut-keys"><kbd class="shortcut-key">1-9, 0</kbd></span>
+							</div>
+							<div class="shortcut-row">
+								<span class="shortcut-desc">Switch between Recent and Pinned</span>
+								<span class="shortcut-keys"><kbd class="shortcut-key">Tab</kbd></span>
+							</div>
+							<div class="shortcut-row">
+								<span class="shortcut-desc">Close the popup</span>
+								<span class="shortcut-keys"><kbd class="shortcut-key">Esc</kbd></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<figcaption>
+					<strong>Everything has a key</strong>
+					Capture and paste without opening the window. The popup answers to digits,
+					arrows and Esc, and the app lists every binding it uses.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c5 reveal">
+				<div class="mock mock--menu">
+					<div class="oc-card oc-card--in-clipboard">
+						<div class="oc-card-body">
+							<p class="oc-card-text">Meet at the station, platform 4, 9:40. Bring the badge for the side door.</p>
+							<div class="oc-card-footer">
+								<span class="oc-chips">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.teal}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">work</span></span>
+								</span>
+								<span class="oc-time">Just now</span>
+							</div>
+						</div>
+					</div>
+					<CardMenu spaces={2} />
+				</div>
+				<figcaption>
+					<strong>Right-click any item</strong>
+					Copy, pin, save, put it in the cloud, share it to a space, tag it, or delete it,
+					without leaving the list.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c7 reveal">
+				<div class="mock mock--rows">
+					<div class="rows-head">
+						<div class="oc-seg oc-seg--2">
+							<span class="oc-seg-slider oc-seg-slider--right"></span>
+							<span class="oc-seg-btn" set:html={TB_ICONS.tiles} />
+							<span class="oc-seg-btn oc-seg-btn--active" set:html={SRC_ICONS.rows12} />
+						</div>
+						<span class="rows-head-label">Rows</span>
+					</div>
+					<div class="sp-feed-card-list">
+							<div class="sp-list-card">
+								<span class="sp-list-dir sp-list-dir--out" set:html={SRC_ICONS.arrowUp10} />
+								<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span></span>
+								<span class="sp-owner sp-owner--self">You</span>
+								<span class="sp-list-text">#ff3e1c on #0e0e0e reads 4.6:1</span>
+								<span class="sp-list-time">4m</span>
+							</div>
+							<div class="sp-list-card">
+								<span class="sp-list-dir sp-list-dir--in" set:html={SRC_ICONS.arrowDown10} />
+								<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span></span>
+								<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+								<span class="sp-list-text">brand-assets (3 files)</span>
+								<span class="sp-list-time">26m</span>
+							</div>
+							<div class="sp-list-card">
+								<span class="sp-list-dir sp-list-dir--out" set:html={SRC_ICONS.arrowUp10} />
+								<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span></span>
+								<span class="sp-owner sp-owner--self">You</span>
+								<span class="sp-list-text">staging.rovertools.app/preview</span>
+								<span class="sp-list-time">1h</span>
+							</div>
+							<div class="sp-list-card">
+								<span class="sp-list-dir sp-list-dir--in" set:html={SRC_ICONS.arrowDown10} />
+								<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span></span>
+								<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+								<span class="sp-list-text">#7f31c0ab Image Aug 21</span>
+								<span class="sp-list-time">18m</span>
+							</div>
+							<div class="sp-list-card">
+								<span class="sp-list-dir sp-list-dir--in" set:html={SRC_ICONS.arrowDown10} />
+								<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span></span>
+								<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+								<span class="sp-list-text">press-kit-aug.pdf</span>
+								<span class="sp-list-time">5h</span>
+							</div>
+					</div>
+				</div>
+				<figcaption>
+					<strong>Cards or rows</strong>
+					The same shared feed as one line per item. The arrow says which way it went:
+					orange for what you sent, grey for what arrived.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c5 reveal">
+				<div class="mock mock--popup">
+					<div class="pp">
+						<div class="pp-header">
+							<div class="pp-header-left">
+								<span class="pp-title">Quick Paste</span>
+								<span class="pp-count">5</span>
+							</div>
+							<div class="pp-tabs">
+								<span class="pp-tab pp-tab--active">Recent<span class="pp-tab-count">5</span></span>
+								<span class="pp-tab">Pinned<span class="pp-tab-count">2</span></span>
+							</div>
+							<span class="pp-close" set:html={CLOSE_ICON} />
+						</div>
+						<div class="pp-list">
+							<div class="pp-item">
+								<span class="pp-badge">1</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+									<span class="pp-filename">Meet at the station, platform 4, 9:40...</span>
+								</div>
+								<span class="pp-meta"><span class="pp-time">2m</span></span>
+							</div>
+							<div class="pp-item pp-item--selected">
+								<span class="pp-badge">2</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+									<span class="pp-filename">github.com/Spectrewolf8/RoverTools-Rel...</span>
+								</div>
+								<span class="pp-meta"><span class="pp-pin" set:html={CHIP_ICONS.pin} /><span class="pp-time">1h</span></span>
+							</div>
+							<div class="pp-item">
+								<span class="pp-badge">3</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+									<span class="pp-filename">quarterly-report.pdf</span>
+								</div>
+								<span class="pp-meta"><span class="pp-time">3d</span></span>
+							</div>
+							<div class="pp-item">
+								<span class="pp-badge">4</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
+									<span class="pp-filename">#a1b2c3d4 Image Aug 21, 2:45 PM</span>
+								</div>
+								<span class="pp-meta"><span class="pp-time">4d</span></span>
+							</div>
+							<div class="pp-item">
+								<span class="pp-badge">5</span>
+								<div class="pp-wrap">
+									<span class="oc-chip" style={`--cc:${KIND_COLORS.folder}`}><Fragment set:html={CHIP_ICONS.folder} /><span class="oc-chip-label">Folder</span></span>
+									<span class="pp-filename">/home/rio/projects/orangecp/assets</span>
+								</div>
+								<span class="pp-meta"><span class="pp-time">6d</span></span>
+							</div>
+						</div>
+						<span class="pp-cursor" aria-hidden="true">
+							<span class="pp-ring"></span>
+							<svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 2l0 17 4.2-3.6 2.6 6 3-1.3-2.6-5.9 6-.6z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
+						</span>
+					</div>
+				</div>
+				<figcaption>
+					<strong>Quick Paste</strong>
+					Ctrl+Shift+V opens it at your cursor. Press a digit and that item pastes into
+					whatever you were typing in.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c4 reveal">
+				<div class="mock mock--popup">
+					<div class="cp">
+						<div class="cp-head">
+							<div class="cp-head-left">
+								<span class="cp-title">Copied</span>
+								<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+							</div>
+							<span class="cp-close" set:html={CLOSE_ICON} />
+						</div>
+						<div class="cp-preview"><p class="cp-preview-text">The quarterly numbers land Thursday</p></div>
+						<div class="cp-actions">
+							<span class="cp-item"><Fragment set:html={MENU_ICONS.pin} />Pin</span>
+							<span class="cp-item"><Fragment set:html={MENU_ICONS.star} />Save</span>
+							<span class="cp-sep"></span>
+							<span class="cp-item cp-item--danger"><Fragment set:html={MENU_ICONS.trash} />Delete</span>
+						</div>
+					</div>
+				</div>
+				<figcaption>
+					<strong>The copy popup</strong>
+					Ctrl+Shift+C shows what the app just captured, so you can pin, save or drop it
+					without opening the window.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c4 reveal">
+				<div class="mock mock--panel">
+					<div class="sp-settings-block">
+						<div class="sp-settings-label">Rules<span class="sp-settings-count">auto</span></div>
+						<div class="sp-toggle-row">
+							<span class="sp-toggle-text">
+								<span class="sp-toggle-title">Copy new items in</span>
+								<span class="sp-toggle-desc">Anything shared here lands on your clipboard as it arrives.</span>
+							</span>
+							<span class="sp-switch sp-switch--on"></span>
+						</div>
+						<div class="sp-toggle-row">
+							<span class="sp-toggle-text">
+								<span class="sp-toggle-title">Share new items out</span>
+								<span class="sp-toggle-desc">Off. Only items you share by hand go into this space.</span>
+							</span>
+							<span class="sp-switch"></span>
+						</div>
+						<div class="sp-toggle-row">
+							<span class="sp-toggle-text">
+								<span class="sp-toggle-title">Show removed items</span>
+								<span class="sp-toggle-desc">Keeps a line where something used to be, with who took it out.</span>
+							</span>
+							<span class="sp-switch"></span>
+						</div>
+					</div>
+				</div>
+				<figcaption>
+					<strong>Sharing is opt-in</strong>
+					Nothing leaves this machine unless you shared it or turned one of these on.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c4 reveal">
+				<div class="mock mock--panel">
+					<div class="sp-settings-block">
+						<div class="sp-settings-label">People<span class="sp-settings-count">4</span></div>
+						<div class="sp-member-list">
+							<div class="sp-member-row">
+								<span class="sp-member-pic">YO</span>
+								<span class="sp-member-name">You</span>
+								<span class="sp-badge sp-badge--owner">owner</span>
+								<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+							</div>
+							<div class="sp-member-row">
+								<span class="sp-member-pic">RI</span>
+								<span class="sp-member-name">rio</span>
+								<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+							</div>
+							<div class="sp-member-row">
+								<span class="sp-member-pic">ME</span>
+								<span class="sp-member-name">mei</span>
+								<span class="sp-badge sp-badge--warn">waiting for key</span>
+								<span class="sp-member-dot"><span class="sp-dot"></span></span>
+							</div>
+						</div>
+							<div class="sp-member-row">
+								<span class="sp-member-pic">DE</span>
+								<span class="sp-member-name">dev-box</span>
+								<span class="sp-member-dot"><span class="sp-dot"></span></span>
+							</div>
+					</div>
+						<div class="sp-invite-box">
+							<div class="sp-invite-row">
+								<code class="sp-invite-code">7K2M-9QX4</code>
+								<span class="sp-btn sp-btn--icon"><Fragment set:html={COPY_ICON} /><span class="sp-btn-label">Copy code</span></span>
+							</div>
+						</div>
+				</div>
+				<figcaption>
+					<strong>Who is in a space</strong>
+					Who is online right now, and a badge on anyone whose device has not picked up
+					the space key yet.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c6 reveal">
 				<div class="mock mock--panel">
 					<div class="set-section">
 						<div class="set-section-head">
@@ -467,41 +854,40 @@ const SHARE_ICON =
 				</div>
 				<figcaption>
 					<strong>Signed updates</strong>
-					Every bundle is checked against a key baked into the app, and nothing installs
-					until you say so.
+					A bundle installs only if its signature matches the key baked into the app, and
+					nothing installs until you say so.
 				</figcaption>
 			</figure>
-
-			<!-- row 4: full-width band -->
-			<figure class="tile tile--band reveal">
-				<div class="mock">
-					<div class="auth-card">
-						<div class="auth-brand">
-							<div class="auth-brand-badge" set:html={KEY_ICON} />
-							<h3 class="auth-title">Save your recovery code</h3>
-							<p class="auth-subtitle">
-								If you forget your password, this code is the only thing that can unlock
-								your synced items on a new device. We cannot recover them for you.
-							</p>
+			<figure class="tile tile--c6 reveal">
+				<div class="mock mock--panel mock--account">
+					<div class="acct-zone">
+						<div class="acct-zone-head">
+							<span class="acct-zone-icon" set:html={SRC_ICONS.cloud13} />
+							<span class="acct-zone-label">Storage</span>
 						</div>
-						<div class="auth-form">
-							<p class="acct-recovery-code">7XKQM-2WNPF-9RTLC-4HVGB-8ZJSD</p>
-							<div class="acct-recovery-actions">
-								<span class="acct-btn">Copy</span>
-								<span class="acct-btn">Save as file</span>
+						<div class="acct-card acct-card--rows">
+							<div class="acct-quota">
+								<div class="acct-quota-head">
+									<span>Cloud storage</span>
+									<span class="acct-quota-value">12.4 MB of 50 MB</span>
+								</div>
+								<div class="acct-quota-track"><div class="acct-quota-fill" style="width:25%"></div></div>
+								<p class="acct-quota-note">Images and files take almost all of it. Text and notes barely register.</p>
 							</div>
-							<label class="acct-recovery-ack">
-								<span class="settings-checkbox settings-checkbox--on"></span>
-								<span>I saved my recovery code</span>
-							</label>
-							<span class="auth-submit">Continue</span>
+							<div class="acct-row">
+								<div class="acct-row-main">
+									<span class="acct-row-name">Items in the cloud</span>
+									<span class="acct-row-meta">96 of the 128 in this history</span>
+								</div>
+								<span class="acct-badge">encrypted</span>
+							</div>
 						</div>
 					</div>
 				</div>
 				<figcaption>
-					<strong>Recovery code</strong>
-					Shown once when you sign up. It is the only way back into your synced items
-					without your password, and the server never sees it.
+					<strong>You can see what you use</strong>
+					The quota sits in the open, per account, and every byte of it was encrypted
+					before it left the machine.
 				</figcaption>
 			</figure>
 		</div>
@@ -513,6 +899,38 @@ const SHARE_ICON =
 					<!-- DOM order is feed, rules, list: the list is pulled left with order:-1,
 					     exactly as the app does it -->
 					<div class="sp-feed-panel">
+						<div class="oc-toolbar">
+							<div class="oc-tb-group">
+								<div class="sp-feed-segment">
+									<span class="sp-feed-segment-slider"></span>
+									<span class="sp-feed-seg-btn sp-feed-seg-btn--active" set:html={SRC_ICONS.squares12} />
+									<span class="sp-feed-seg-btn" set:html={SRC_ICONS.clipboard11} />
+									<span class="sp-feed-seg-btn" set:html={SRC_ICONS.note11} />
+								</div>
+								<span class="oc-tb-sep"></span>
+								<span class="oc-tb-btn">
+									<Fragment set:html={TB_ICONS.sortArrow} />
+									<Fragment set:html={TB_ICONS.chevron} />
+								</span>
+								<span class="oc-tb-btn" set:html={TB_ICONS.filter} />
+							</div>
+
+							<div class="oc-search">
+								<span class="oc-search-icon" set:html={TB_ICONS.search} />
+								<span class="oc-search-field">Search...</span>
+							</div>
+
+							<div class="oc-tb-group">
+								<div class="oc-seg oc-seg--2">
+									<span class="oc-seg-slider"></span>
+									<span class="oc-seg-btn oc-seg-btn--active" set:html={TB_ICONS.tiles} />
+									<span class="oc-seg-btn" set:html={SRC_ICONS.rows12} />
+								</div>
+								<span class="oc-tb-sep"></span>
+								<span class="oc-tb-btn" set:html={TB_ICONS.select} />
+							</div>
+						</div>
+
 						<div class="sp-feed-scroll">
 							<div class="sp-timeline-wrap">
 								<div class="sp-timeline-groups">
@@ -531,10 +949,18 @@ const SHARE_ICON =
 															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 															<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
 															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+																			<span class="sp-cmt-chip sp-cmt-chip--new"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">3</span></span>
 														</span>
 														<span class="oc-time">4m ago</span>
 													</div>
 												</div>
+											</div>
+
+											<div class="sp-removed-row">
+												<span class="sp-removed-icon" set:html={SRC_ICONS.prohibit11} />
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="sp-removed-text">Stopped sharing this item here</span>
+												<span class="sp-removed-time">1h ago</span>
 											</div>
 
 											<div class="oc-card">
@@ -545,6 +971,7 @@ const SHARE_ICON =
 															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 															<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
 															<span class="sp-owner sp-owner--self">You</span>
+																			<span class="sp-cmt-chip"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">1</span></span>
 														</span>
 														<span class="oc-time">Just now</span>
 													</div>
@@ -607,6 +1034,129 @@ const SHARE_ICON =
 													</div>
 												</div>
 											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<div class="oc-card-html">
+														<h4>Handover</h4>
+														<ul>
+															<li>Rotate the space key</li>
+															<li>Re-wrap for the four of us</li>
+														</ul>
+													</div>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.html}`}><Fragment set:html={CHIP_ICONS.html} /><span class="oc-chip-label">Rich Text</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+														</span>
+														<span class="oc-time">3h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">/home/rio/projects/orangecp/assets/press</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.folder}`}><Fragment set:html={CHIP_ICONS.folder} /><span class="oc-chip-label">Folder</span></span>
+															<span class="sp-owner sp-owner--self">You</span>
+														</span>
+														<span class="oc-time">4h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">press-kit-aug.pdf</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+														</span>
+														<span class="oc-time">5h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-media oc-card-media--video">
+													<img class="oc-card-media-img" src={THUMBS.ui} alt="" />
+													<span class="oc-card-play" set:html={CHIP_ICONS.video} />
+												</div>
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">popup-placement-bug.mp4</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.video}`}><Fragment set:html={CHIP_ICONS.video} /><span class="oc-chip-label">Video</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+														</span>
+														<span class="oc-time">7h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">Ship the popup clamp fix first, then the rail. The clamp is the one people hit.</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">A</span><span class="sp-owner-name">Ada Lovelace</span></span>
+															<span class="sp-cmt-chip"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">2</span></span>
+														</span>
+														<span class="oc-time">6h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="ns-card">
+												<div class="ns-card-body">
+													<div class="ns-card-title">Colour audit</div>
+													<div class="ns-card-preview">Muted text on surface is 3.1:1. Needs to clear 4.5 before the beta.</div>
+													<div class="ns-card-footer">
+														<div class="ns-card-chips">
+															<span class="oc-chip sp-source-chip--note"><Fragment set:html={SRC_ICONS.note} /><span class="oc-chip-label">Note</span></span>
+															<span class="sp-owner sp-owner--self">You</span>
+														</div>
+														<span class="ns-card-time">6h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">figma.com/file/orangecp/spaces-rails</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+														</span>
+														<span class="oc-time">8h ago</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="oc-card">
+												<div class="oc-card-body">
+													<p class="oc-card-text oc-card-text--clamp">beta-icons (11 files)</p>
+													<div class="oc-card-footer">
+														<span class="oc-chips">
+															<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+															<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span>
+															<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+														</span>
+														<span class="oc-time">9h ago</span>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -615,8 +1165,9 @@ const SHARE_ICON =
 						</div>
 					</div>
 
-					<!-- the rules rail, at its 272px default, so the copy buttons are icon-only -->
-					<aside class="sp-rules">
+					<!-- the rules rail. The app spells the invite actions out at 336px
+					     and up (RULES_LABEL_WIDTH), so at 340 it is sp-rules--wide. -->
+					<aside class="sp-rules sp-rules--wide">
 						<header class="sp-rules-head">
 							<span class="sp-rules-avatar" style="background:#3b82f6">DE</span>
 							<span class="sp-rules-head-text">
@@ -641,6 +1192,27 @@ const SHARE_ICON =
 									</span>
 									<span class="sp-switch"></span>
 								</div>
+								<div class="sp-toggle-row">
+									<span class="sp-toggle-text">
+										<span class="sp-toggle-title">Share earlier items</span>
+										<span class="sp-toggle-desc">Everyone here can read what was shared before they joined.</span>
+									</span>
+									<span class="sp-switch sp-switch--on"></span>
+								</div>
+								<div class="sp-toggle-row">
+									<span class="sp-toggle-text">
+										<span class="sp-toggle-title">Members can approve requests</span>
+										<span class="sp-toggle-desc">Anyone here can let in someone who used the code or a join link.</span>
+									</span>
+									<span class="sp-switch"></span>
+								</div>
+								<div class="sp-toggle-row">
+									<span class="sp-toggle-text">
+										<span class="sp-toggle-title">Show removed items</span>
+										<span class="sp-toggle-desc">Items taken out of this space leave a line saying who removed them and when.</span>
+									</span>
+									<span class="sp-switch sp-switch--on"></span>
+								</div>
 							</div>
 							<div class="sp-settings-block">
 								<div class="sp-settings-label">People<span class="sp-settings-count">4</span></div>
@@ -654,24 +1226,32 @@ const SHARE_ICON =
 									<div class="sp-member-row">
 										<span class="sp-member-pic">RI</span>
 										<span class="sp-member-name">rio</span>
+										<span class="sp-btn sp-btn--danger sp-member-remove">Remove</span>
 										<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
 									</div>
 									<div class="sp-member-row">
 										<span class="sp-member-pic">ME</span>
 										<span class="sp-member-name">mei</span>
+										<span class="sp-badge sp-badge--warn">waiting for key</span>
+										<span class="sp-btn sp-btn--danger sp-member-remove">Remove</span>
 										<span class="sp-member-dot"><span class="sp-dot"></span></span>
 									</div>
 									<div class="sp-member-row">
 										<span class="sp-member-pic">AL</span>
 										<span class="sp-member-name">Ada Lovelace</span>
+										<span class="sp-btn sp-btn--danger sp-member-remove">Remove</span>
 										<span class="sp-member-dot"><span class="sp-dot"></span></span>
 									</div>
 								</div>
 								<div class="sp-invite-box">
 									<div class="sp-invite-row">
 										<code class="sp-invite-code">7K2M-9QX4</code>
-										<span class="sp-btn sp-btn--icon"><Fragment set:html={COPY_ICON} /></span>
-										<span class="sp-btn sp-btn--icon"><Fragment set:html={SHARE_ICON} /></span>
+										<span class="sp-btn sp-btn--icon"><Fragment set:html={COPY_ICON} /><span class="sp-btn-label">Copy code</span></span>
+										<span class="sp-btn sp-btn--icon"><Fragment set:html={SHARE_ICON} /><span class="sp-btn-label">Copy link</span></span>
+									</div>
+									<div class="sp-invite-row">
+										<span class="sp-inline-input">Invite by email</span>
+										<span class="sp-btn">Send</span>
 									</div>
 								</div>
 							</div>
@@ -768,12 +1348,21 @@ const SHARE_ICON =
 		zoom: var(--mz, 1);
 	}
 
-	/* the spaces screen only makes sense with room for three panels, so it is
-	   drawn at 1180x680 and scaled to the same rendered width as the 920 shot */
+	/* Three panels and a three-column feed do not fit 1180: the feed alone needs
+	   3 x 240 plus its gaps. Drawn at 1440x830 and scaled to the section measure
+	   rather than to the 920 shot, so this one shot is wider than the others -
+	   which is the point, it is the screen with the most in it.
+	   It gets its own scale ladder (--sz) rather than riding on the 920 shot's
+	   --mz: 1440 runs out of room at a different viewport width than 920 does,
+	   so multiplying one by a constant overflows on half the steps. */
 	.wide--spaces :global(.oc-window) {
-		width: 1180px;
-		height: 680px;
-		zoom: calc(var(--mz, 1) * 0.78);
+		width: 1440px;
+		height: 830px;
+		zoom: var(--sz, 0.8);
+	}
+
+	.wide--spaces figcaption {
+		max-width: 1152px;
 	}
 
 	.wide + .bento {
@@ -832,6 +1421,123 @@ const SHARE_ICON =
 		text-overflow: ellipsis;
 	}
 
+	/* what is left where a shared item used to be: a dashed placeholder saying
+	   who took it out, so the item does not just vanish from everyone's feed */
+	:global(.sp-removed-row) {
+		break-inside: avoid;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 10px;
+		padding: 7px 10px;
+		border: 1px dashed var(--border-light);
+		border-radius: var(--radius-sm);
+		background: transparent;
+		color: var(--text-muted);
+	}
+
+	:global(.sp-removed-icon) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 20px;
+		height: 20px;
+		border-radius: 5px;
+		background: var(--surface-hover);
+	}
+
+	:global(.sp-removed-text) {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 11.5px;
+		font-style: italic;
+	}
+
+	:global(.sp-removed-time) {
+		flex-shrink: 0;
+		font-size: 10px;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* the feed filter segment: all items, clipboard only, notes only. Three
+	   buttons, so the slider is a third wide - SpacesScreen.css again. */
+	:global(.sp-feed-segment) {
+		position: relative;
+		display: flex;
+		align-items: center;
+		border-radius: 8px;
+		border: 1px solid var(--border);
+		background: var(--surface);
+		padding: 2px;
+		box-shadow: var(--shadow-sm);
+		flex-shrink: 0;
+	}
+
+	:global(.sp-feed-segment-slider) {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: calc((100% - 4px) / 3);
+		height: calc(100% - 4px);
+		border-radius: 6px;
+		background: var(--accent);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+		z-index: 0;
+	}
+
+	:global(.sp-feed-seg-btn) {
+		position: relative;
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 4px 8px;
+		border-radius: 6px;
+		color: var(--text-muted);
+	}
+
+	:global(.sp-feed-seg-btn--active) {
+		color: #fff;
+	}
+
+	/* Spaces offers Cards and Rows, not the clipboard's three layouts, so the
+	   slider covers a half rather than a third. */
+	:global(.oc-seg--2) .oc-seg-slider,
+	:global(.oc-seg--2) :global(.oc-seg-slider) {
+		width: calc((100% - 4px) / 2);
+	}
+
+	/* thread count on a shared item. Coloured when something arrived since this
+	   device last opened it, plain otherwise. */
+	:global(.sp-cmt-chip) {
+		display: inline-flex;
+		align-items: center;
+		gap: 3px;
+		flex-shrink: 0;
+		height: var(--chip-h);
+		padding: 0 6px;
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-xs);
+		color: var(--text-secondary);
+		font-size: 10px;
+		line-height: 1.5;
+	}
+
+	:global(.sp-cmt-chip--new) {
+		border-color: var(--accent);
+		background: var(--accent-dim);
+		color: var(--accent);
+	}
+
+	:global(.sp-cmt-chip-n) {
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+	}
+
 	/* ---- the spaces screen, values from SpacesScreen.css ---- */
 	:global(.sp-screen) {
 		--cta: #ff5535;
@@ -869,7 +1575,7 @@ const SHARE_ICON =
 	}
 
 	:global(.sp-rules) {
-		width: 272px;
+		width: 340px;
 		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
@@ -1194,7 +1900,7 @@ const SHARE_ICON =
 	}
 
 	.sp-feed-card-grid {
-		columns: 2;
+		columns: 3;
 		column-gap: 10px;
 		padding-top: 4px;
 		padding-left: 15px;
@@ -1540,6 +2246,39 @@ const SHARE_ICON =
 		border-color: color-mix(in srgb, var(--danger) 34%, transparent);
 	}
 
+	/* Icon-only until the rail is dragged past 336px, which is the app's own
+	   rule - this shot is drawn at 340, so the labels are in. */
+	.sp-btn-label {
+		display: none;
+	}
+
+	.sp-rules--wide .sp-btn-label {
+		display: inline;
+	}
+
+	.sp-rules--wide :global(.sp-btn--icon) {
+		padding: 5px 9px;
+	}
+
+	.sp-member-remove {
+		padding: 3px 8px;
+		border-radius: 6px;
+		font-size: 10px;
+	}
+
+	/* the invite-by-email field, drawn as static text since nothing is typed */
+	.sp-inline-input {
+		flex: 1;
+		min-width: 0;
+		padding: 5px 8px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		background: var(--surface);
+		color: var(--text-muted);
+		font-size: 12px;
+		box-sizing: border-box;
+	}
+
 	.sp-rules-foot {
 		display: flex;
 		flex-direction: column;
@@ -1557,27 +2296,152 @@ const SHARE_ICON =
 		line-height: 1.4;
 	}
 
+	/* ---- rows layout, values from .sp-list-* in SpacesScreen.css ---- */
+	.sp-feed-card-list {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.sp-list-card {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		height: 38px;
+		padding: 0 10px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		background: var(--surface);
+		overflow: hidden;
+	}
+
+	.sp-list-card--note {
+		height: 46px;
+	}
+
+	/* Accent is reserved for what this account sent: if a row is orange, you
+	   put it there. */
+	.sp-list-dir {
+		flex-shrink: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border: 1px solid transparent;
+		border-radius: var(--radius-xs);
+	}
+
+	.sp-list-dir--in {
+		background: var(--surface-hover);
+		border-color: var(--border-light);
+		color: var(--text-secondary);
+	}
+
+	.sp-list-dir--out {
+		background: var(--accent-dim);
+		color: var(--accent);
+	}
+
+	.sp-list-type-wrap {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+	}
+
+	.sp-list-note-badge {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border-radius: var(--radius-xs);
+		background: var(--accent-dim);
+		color: var(--accent);
+	}
+
+	.sp-list-note-content {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+	}
+
+	.sp-list-title {
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--text);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.sp-list-text {
+		flex: 1;
+		min-width: 0;
+		font-size: 11.5px;
+		color: var(--text-secondary);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.sp-list-preview {
+		font-size: 10.5px;
+		color: var(--text-muted);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.sp-list-time {
+		flex-shrink: 0;
+		font-size: 10.5px;
+		color: var(--text-muted);
+		white-space: nowrap;
+	}
+
+	/* ---- the rows-layout shot ---- */
+	.mock--rows {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		align-items: stretch;
+		justify-content: flex-start;
+	}
+
+	.rows-head {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.rows-head-label {
+		font-size: 10.5px;
+		font-weight: 700;
+		letter-spacing: 0.3px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	/* the layout segment with the right half selected */
+	.oc-seg-slider--right {
+		left: auto;
+		right: 2px;
+	}
+
 	/* ---- bento grid of small tiles ---- */
-	/* Twelve columns, so a row can be split unevenly. Nothing here is the same
-	   size as the thing next to it: each row mixes spans, and the rows differ in
-	   height, so the eye has something to travel along instead of a checkerboard.
-	   The narrowest span still has to clear the panel the app draws inside it,
-	   which is why the popup and filter tiles never go below four. */
+	/* Twelve columns, so a row can be split unevenly. Three rows of two, each
+	   split the other way from the row above, and the two tiles in a row stretch
+	   to the same height: every horizontal edge in the block lines up, while no
+	   two tiles side by side are the same width. The narrower span still has to
+	   clear the panel the app draws inside it, so nothing goes below five. */
 	.bento {
 		display: grid;
 		grid-template-columns: repeat(12, minmax(0, 1fr));
 		gap: 0.9rem;
-	}
-
-	.tile {
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius);
-		overflow: hidden;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		transition: border-color 0.2s ease, transform 0.2s ease;
 	}
 
 	.tile--c3 {
@@ -1592,29 +2456,35 @@ const SHARE_ICON =
 		grid-column: span 5;
 	}
 
+	.tile--c6 {
+		grid-column: span 6;
+	}
+
 	.tile--c7 {
 		grid-column: span 7;
 	}
 
-	.tile--band {
-		grid-column: 1 / -1;
-		flex-direction: row;
-		align-items: stretch;
+	.tile {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		overflow: hidden;
+		/* a figure carries a 40px UA margin, which in a grid track eats 80px of
+		   the column and leaves the 340px popup inside it clipped */
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		transition: border-color 0.2s ease, transform 0.2s ease;
 	}
 
-	.tile.tile--band .mock {
-		flex: 0 0 clamp(424px, 44%, 480px);
-		border-bottom: none;
-		border-right: 1px solid var(--border);
-		justify-content: center;
-	}
-
-	.tile--band figcaption {
-		align-self: center;
-	}
-
+	/* The mock takes the room the caption does not, and gives way when its
+	   content is taller than that: without min-height:0 a flex item refuses to
+	   shrink past its content and pushes the caption out of the tile. Cropping a
+	   scrolled list is the honest outcome; hiding the caption is not. */
 	.tile .mock {
 		flex: 1;
+		min-height: 0;
+		overflow: hidden;
 		justify-content: center;
 	}
 
@@ -1650,6 +2520,311 @@ const SHARE_ICON =
 	.muted {
 		color: var(--text-muted);
 		font-size: 0.68rem;
+	}
+
+	/* the menu hangs off the tile, not the window shell, so the card behind it can
+	   sit at the top and the menu overlap it from the corner where the pointer was */
+	.tile .mock--menu {
+		position: relative;
+		justify-content: flex-start;
+	}
+
+	.mock--menu :global(.oc-menu) {
+		top: 8px;
+		left: 40%;
+	}
+
+	/* ---- the note editor, from notes-screen/note-editor/note-editor.css ---- */
+	/* The editor fills its pane in the app, so the mock gives it the tile: one
+	   column, no centring, and the panel takes the whole width it is given. */
+	.tile .mock--editor {
+		display: block;
+		padding: 0;
+	}
+
+	.ns-editor {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: var(--surface);
+	}
+
+	.ns-editor-header {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 16px;
+		border-bottom: 1px solid var(--border);
+		background: #1a1a1a;
+		flex-shrink: 0;
+	}
+
+	.ns-back-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		flex-shrink: 0;
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		background: var(--bg);
+		color: var(--text-muted);
+	}
+
+	.ns-title-input {
+		flex: 1;
+		min-width: 0;
+		padding: 4px 10px;
+		border: 1px solid transparent;
+		border-radius: 10px;
+		background: #171717;
+		color: var(--text);
+		font-size: 23px;
+		font-weight: 800;
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.ns-editor-actions {
+		display: flex;
+		gap: 4px;
+		flex-shrink: 0;
+	}
+
+	.ns-tb-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 26px;
+		height: 26px;
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		background: var(--bg);
+		color: var(--text-muted);
+	}
+
+	.ns-tb-btn--danger {
+		color: var(--danger);
+	}
+
+	.ns-format-bar {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		row-gap: 4px;
+		padding: 6px 12px;
+		border-bottom: 1px solid var(--border);
+		flex-shrink: 0;
+	}
+
+	.ns-fmt-group {
+		display: inline-flex;
+		align-items: center;
+		gap: 1px;
+	}
+
+	.ns-fmt-group + .ns-fmt-group {
+		margin-left: 6px;
+		padding-left: 7px;
+		border-left: 1px solid var(--border);
+	}
+
+	.ns-fmt-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 6px;
+		color: var(--text-muted);
+		flex-shrink: 0;
+	}
+
+	.ns-fmt-btn--active {
+		color: var(--accent);
+		background: rgba(255, 62, 28, 0.12);
+	}
+
+	.ns-fmt-btn--dropdown {
+		width: auto;
+		gap: 4px;
+		padding: 0 7px;
+		font-size: 11.5px;
+		font-weight: 700;
+	}
+
+	.ns-editor-groups {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 8px 16px 7px;
+		border-bottom: 1px solid var(--border);
+		flex-shrink: 0;
+	}
+
+	.ns-editor-group-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 3px 9px;
+		border-radius: 6px;
+		font-size: 10.5px;
+		font-weight: 600;
+	}
+
+	.ns-add-group-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border: 1.5px dashed var(--border-light);
+		border-radius: 50%;
+		color: var(--text-muted);
+		font-size: 12px;
+		line-height: 1;
+	}
+
+	.ns-editor-content {
+		flex: 1;
+		min-height: 0;
+		overflow: hidden;
+		padding: 12px;
+		font-size: 12px;
+		line-height: 1.5;
+		color: var(--text-secondary);
+	}
+
+	.ed-h {
+		margin: 0 0 0.4em;
+		color: var(--text);
+		font-size: 15px;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	}
+
+	/* an entry pulled into a note: a coloured pill that opens a panel under
+	   itself, from notes-screen/editor-engine. Type tints mirror the entry chips. */
+	.ee-clip-embed {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: stretch;
+		max-width: 100%;
+		margin: 2px 2px 0;
+		vertical-align: middle;
+	}
+
+	.ee-clip-embed-inner {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 3px 5px 3px 7px;
+		border-radius: 7px;
+		font-size: 0.82em;
+		font-weight: 600;
+		line-height: 1.4;
+		white-space: nowrap;
+	}
+
+	.ee-clip-embed-inner--url {
+		background: rgba(16, 185, 129, 0.12);
+		color: #10b981;
+	}
+
+	/* open: the pill and the panel become one shape */
+	.ee-clip-embed--open .ee-clip-embed-inner {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	.ee-clip-embed-icon {
+		display: inline-flex;
+		align-items: center;
+		flex-shrink: 0;
+		opacity: 0.85;
+	}
+
+	.ee-clip-embed-label {
+		max-width: 220px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		letter-spacing: 0.01em;
+	}
+
+	.ee-embed-panel {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		min-width: 240px;
+		max-width: 360px;
+		border: 1px solid var(--border);
+		border-top: none;
+		border-radius: 0 0 8px 8px;
+		background: var(--surface);
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+		overflow: hidden;
+	}
+
+	.ee-embed-panel-meta {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 5px 10px 4px;
+		border-bottom: 1px solid var(--border);
+		background: #1c1c1c;
+	}
+
+	.ee-embed-panel-type {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		color: #10b981;
+		font-size: 10px;
+		font-weight: 650;
+		letter-spacing: 0.3px;
+		text-transform: uppercase;
+	}
+
+	.ee-embed-panel-time {
+		margin-left: auto;
+		font-size: 10px;
+		color: var(--text-muted);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.ee-embed-panel-body {
+		padding: 9px 10px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		line-height: 1.45;
+		color: var(--text-secondary);
+		word-break: break-all;
+	}
+
+	.ns-editor-footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 5px 14px;
+		border-top: 1px solid var(--border);
+		flex-shrink: 0;
+	}
+
+	.ns-editor-footer-text,
+	.ns-editor-footer-stats {
+		font-size: 10.5px;
+		color: var(--text-muted);
+		letter-spacing: 0.2px;
+	}
+
+	.ns-editor-footer-stats {
+		font-variant-numeric: tabular-nums;
 	}
 
 	/* ---- Quick Paste popup: 340px wide, the app's own metrics ---- */
@@ -2013,6 +3188,239 @@ const SHARE_ICON =
 	.acct-seg-pill.active {
 		color: var(--text);
 		background: var(--surface-hover);
+	}
+
+	/* the account screen stacks its zones down one column at a 14px rhythm */
+	.tile .mock--account {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		justify-content: flex-start;
+	}
+
+	/* ---- the shortcut list, from ShortcutsScreen.css ---- */
+	.shortcut-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 10px 14px;
+		border-top: 1px solid var(--border);
+	}
+
+	.acct-card--rows .shortcut-row:first-child {
+		border-top: none;
+	}
+
+	.shortcut-desc {
+		flex: 1;
+		min-width: 0;
+		font-size: 12.5px;
+		color: var(--text);
+	}
+
+	.shortcut-keys {
+		display: flex;
+		align-items: center;
+		gap: 3px;
+		flex-shrink: 0;
+	}
+
+	.shortcut-key {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2px 7px;
+		border: 1px solid var(--border-light);
+		border-bottom-width: 2px;
+		border-radius: 5px;
+		background: var(--bg);
+		color: var(--text-secondary);
+		font-family: var(--font-mono);
+		font-size: 11px;
+		font-weight: 600;
+	}
+
+	/* ---- the storage quota, from AccountScreen.css ---- */
+	.acct-quota {
+		display: flex;
+		flex-direction: column;
+		gap: 7px;
+		padding: 11px 14px;
+		border-top: 1px solid var(--border);
+	}
+
+	.acct-card--rows .acct-quota:first-child {
+		border-top: none;
+	}
+
+	.acct-quota-head {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+		color: var(--text-muted);
+	}
+
+	.acct-quota-value {
+		margin-left: auto;
+	}
+
+	.acct-quota-track {
+		height: 5px;
+		border-radius: 3px;
+		background: rgba(240, 240, 240, 0.1);
+		overflow: hidden;
+	}
+
+	.acct-quota-fill {
+		height: 100%;
+		border-radius: 3px;
+		background: var(--accent);
+	}
+
+	.acct-quota-note {
+		margin: 6px 0 0;
+		font-size: 11px;
+		line-height: 1.4;
+		color: var(--text-muted);
+		opacity: 0.75;
+	}
+
+	/* ---- the Devices zone, from AccountScreen.css ---- */
+	.acct-zone {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+	}
+
+	.acct-zone-head {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		min-height: 26px;
+	}
+
+	.acct-zone-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border-radius: 6px;
+		color: var(--accent);
+		background: var(--accent-dim);
+		flex-shrink: 0;
+	}
+
+	.acct-zone-label {
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: -0.1px;
+		color: var(--text-secondary);
+	}
+
+	.acct-card {
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+		padding: 14px;
+	}
+
+	/* a grouped-rows card puts the padding on the rows, not the card */
+	.acct-card--rows {
+		padding: 0;
+		overflow: hidden;
+	}
+
+	.acct-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 14px;
+		border-top: 1px solid var(--border);
+	}
+
+	.acct-card--rows .acct-row:first-child {
+		border-top: none;
+	}
+
+	.acct-row-icon {
+		display: flex;
+		align-items: center;
+		flex: 0 0 auto;
+		color: var(--text-muted);
+	}
+
+	.acct-row-main {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		flex: 1;
+	}
+
+	.acct-row-name {
+		font-size: 13px;
+		font-weight: 550;
+		color: var(--text);
+	}
+
+	.acct-row-name > .acct-badge {
+		margin-left: 8px;
+	}
+
+	.acct-row-meta {
+		font-size: 11.5px;
+		color: var(--text-muted);
+	}
+
+	.acct-row-actions {
+		display: flex;
+		gap: 6px;
+		flex: 0 0 auto;
+	}
+
+	/* one shared badge metric, so every pill on the screen lines up */
+	.acct-badge {
+		display: inline-flex;
+		align-items: center;
+		flex: 0 0 auto;
+		padding: 1px 8px;
+		border-radius: var(--radius-xs);
+		color: var(--text-muted);
+		background: rgba(240, 240, 240, 0.07);
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1.5;
+		white-space: nowrap;
+	}
+
+	.acct-badge--owner {
+		color: var(--accent);
+		background: var(--accent-dim);
+	}
+
+	.acct-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: #9ca3af;
+		flex: 0 0 auto;
+	}
+
+	.acct-dot.online {
+		background: #22c55e;
+	}
+
+	/* destructive at rest, so it reads as different before it is hovered */
+	.acct-btn--sm {
+		padding: 4px 9px;
+		font-size: 11.5px;
+	}
+
+	.acct-btn--danger {
+		color: var(--danger);
+		border-color: rgba(239, 68, 68, 0.34);
 	}
 
 	.acct-card-desc {
@@ -2498,6 +3906,81 @@ const SHARE_ICON =
 	}
 
 	/* ---- notes: the note card, from note-card.css ---- */
+	/* the notes grid, the way NotesScreen.css draws it: columns, a 10px gutter,
+	   and a card that never breaks across a column. A wide tile fits two. */
+	.tile .mock--notes {
+		display: block;
+		columns: 2;
+		column-gap: 10px;
+	}
+
+	.mock--notes .ns-card {
+		break-inside: avoid;
+		margin-bottom: 10px;
+	}
+
+	/* note previews carry real markdown: a table, a quote, a paragraph */
+	.ns-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 11px;
+		margin: 0.3em 0;
+	}
+
+	.ns-table :is(th, td) {
+		padding: 2px 5px;
+		line-height: 1.3;
+		border: 1px solid var(--border);
+		text-align: left;
+	}
+
+	.ns-table th {
+		color: var(--text);
+		font-weight: 600;
+		background: var(--surface-hover);
+	}
+
+	.ns-table td {
+		color: var(--text-secondary);
+	}
+
+	.ns-quote {
+		margin: 0 0 0.3em;
+		padding: 0.1em 0.6em;
+		border-left: 2px solid var(--accent);
+		color: var(--text-secondary);
+	}
+
+	.ns-ol {
+		margin: 0 0 0.3em;
+		padding-left: 1.1em;
+	}
+
+	.ns-ol li {
+		margin-bottom: 0.15em;
+	}
+
+	.ns-p {
+		margin: 0 0 0.3em;
+	}
+
+	/* the share badge the app puts beside a note's time, with its member count */
+	.ns-card-sync {
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+		flex-shrink: 0;
+		color: var(--accent);
+		opacity: 0.8;
+		margin-right: 5px;
+	}
+
+	.ns-card-sync-count {
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1;
+	}
+
 	.ns-card {
 		border-radius: var(--radius);
 		background: var(--surface);
@@ -2646,99 +4129,6 @@ const SHARE_ICON =
 		font-weight: 600;
 	}
 
-	/* ---- the recovery-code gate, from AccountScreen.css ---- */
-	.auth-card {
-		width: 100%;
-		max-width: 392px;
-		margin: 0 auto;
-		padding: 26px 24px 22px;
-		border: 1px solid var(--border);
-		border-radius: var(--radius);
-		background: var(--surface);
-		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-		font-size: 13px;
-	}
-
-	.auth-brand {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 5px;
-		margin-bottom: 18px;
-	}
-
-	.auth-brand-badge {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 40px;
-		height: 40px;
-		margin-bottom: 6px;
-		border-radius: 11px;
-		color: var(--accent);
-		background: var(--accent-dim);
-	}
-
-	.auth-title {
-		margin: 0;
-		font-size: 16.5px;
-		font-weight: 650;
-		letter-spacing: -0.2px;
-		color: var(--text);
-	}
-
-	.auth-subtitle {
-		margin: 0;
-		font-size: 12px;
-		line-height: 1.45;
-		color: var(--text-muted);
-	}
-
-	.auth-form {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
-
-	.auth-submit {
-		width: 100%;
-		box-sizing: border-box;
-		text-align: center;
-		font-size: 13px;
-		font-weight: 650;
-		color: #fff;
-		background: var(--cta, #ff5535);
-		border: 1px solid transparent;
-		border-radius: 8px;
-		padding: 10px 14px;
-		margin-top: 2px;
-	}
-
-	.acct-recovery-code {
-		margin: 2px 0 0;
-		padding: 11px 12px;
-		border: 1px solid var(--border);
-		border-radius: 8px;
-		background: var(--surface);
-		font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
-		font-size: 13.5px;
-		font-weight: 600;
-		letter-spacing: 1.2px;
-		text-align: center;
-		word-break: break-all;
-		color: var(--text);
-	}
-
-	.acct-recovery-actions {
-		display: flex;
-		gap: 8px;
-	}
-
-	.acct-recovery-actions .acct-btn {
-		flex: 1;
-	}
-
 	.acct-btn {
 		display: inline-flex;
 		align-items: center;
@@ -2753,29 +4143,20 @@ const SHARE_ICON =
 		padding: 7px 12px;
 	}
 
-	.acct-recovery-ack {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		font-size: 11.5px;
-		color: var(--text-muted);
-	}
-
-	/* Six columns only while a two-of-six tile still clears the 340px popup the
-	   app draws inside it, which needs the full 76rem measure. Below that the
-	   grid halves rather than cramping every mock. */
+	/* Uneven spans only while the narrower of the two still clears the 340px
+	   popup the app draws inside it, which needs the full 76rem measure. Below
+	   that every tile takes a half, then the whole width. */
 	@media (max-width: 1220px) {
 		.bento {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
+
 		.tile--c3,
 		.tile--c4,
 		.tile--c5,
+		.tile--c6,
 		.tile--c7 {
 			grid-column: span 1;
-		}
-		.tile--band {
-			grid-column: 1 / -1;
 		}
 	}
 
@@ -2825,17 +4206,66 @@ const SHARE_ICON =
 		}
 	}
 
+	/* Each step is the width at which the one above it stops fitting the
+	   column, which is the viewport less 3rem of section padding: 1440 * sz has
+	   to stay under it. */
+	@media (max-width: 1200px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.72;
+		}
+	}
+
+	@media (max-width: 1085px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.62;
+		}
+	}
+
+	@media (max-width: 941px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.52;
+		}
+	}
+
+	@media (max-width: 797px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.43;
+		}
+	}
+
+	@media (max-width: 667px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.35;
+		}
+	}
+
+	@media (max-width: 552px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.28;
+		}
+	}
+
+	@media (max-width: 451px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.22;
+		}
+	}
+
+	@media (max-width: 365px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.18;
+		}
+	}
+
+	@media (max-width: 307px) {
+		.wide--spaces :global(.oc-window) {
+			--sz: 0.15;
+		}
+	}
+
 	@media (max-width: 600px) {
 		.bento {
 			grid-template-columns: minmax(0, 1fr);
-		}
-		.tile--band {
-			flex-direction: column;
-		}
-		.tile.tile--band .mock {
-			flex: none;
-			border-right: none;
-			border-bottom: 1px solid var(--border);
 		}
 	}
 
@@ -2900,26 +4330,6 @@ const SHARE_ICON =
 		.mock--popup,
 		.mock--filter {
 			--fz: 0.7;
-		}
-	}
-
-	@media (max-width: 470px) {
-		.auth-card {
-			width: 392px;
-			max-width: none;
-			zoom: 0.8;
-		}
-	}
-
-	@media (max-width: 390px) {
-		.auth-card {
-			zoom: 0.74;
-		}
-	}
-
-	@media (max-width: 350px) {
-		.auth-card {
-			zoom: 0.6;
 		}
 	}
 </style>
