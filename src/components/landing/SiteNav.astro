@@ -1,0 +1,80 @@
+---
+import logo from '../../assets/app-icon.png';
+---
+
+<header class="nav">
+	<div class="wrap nav-row">
+		<a href="/" class="brand">
+			<img src={logo.src} alt="" width="26" height="26" />
+			<span>Orange Copy Paste</span>
+		</a>
+		<nav class="links" aria-label="Site">
+			<a href="#features">Features</a>
+			<a href="#sync">Sync</a>
+			<a href="#spaces">Spaces</a>
+			<a href="#security">Security</a>
+			<a href="/docs/">Docs</a>
+		</nav>
+		<a class="btn btn-primary nav-cta" href="#download">Download</a>
+	</div>
+</header>
+
+<style>
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: color-mix(in srgb, var(--bg) 82%, transparent);
+		backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.nav-row {
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+		height: 62px;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.02rem;
+		text-decoration: none;
+		letter-spacing: -0.01em;
+	}
+
+	.links {
+		display: flex;
+		gap: 1.5rem;
+		margin-left: auto;
+	}
+
+	.links a {
+		text-decoration: none;
+		font-size: 0.92rem;
+		color: var(--text-secondary);
+		transition: color 0.15s ease;
+	}
+
+	.links a:hover {
+		color: var(--text);
+	}
+
+	.nav-cta {
+		padding: 0.5rem 1.05rem;
+		font-size: 0.88rem;
+	}
+
+	@media (max-width: 720px) {
+		.links {
+			display: none;
+		}
+		.nav-cta {
+			margin-left: auto;
+		}
+	}
+</style>

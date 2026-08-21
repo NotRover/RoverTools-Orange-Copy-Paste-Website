@@ -1,0 +1,61 @@
+/* Starlight theme tuned to the app's own tokens (App.css in the client repo).
+   Accent #ff3e1c is identical in both themes, exactly like the app. */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+	--sl-font: 'Inter', 'Segoe UI', sans-serif;
+	--sl-font-mono: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+	/* dark = default, matching the app */
+	--sl-color-accent-low: #3a1008;
+	--sl-color-accent: #ff3e1c;
+	--sl-color-accent-high: #ffb3a3;
+	--sl-color-white: #f0f0f0;
+	--sl-color-gray-1: #d9d9d9;
+	--sl-color-gray-2: #a0a0a0;
+	--sl-color-gray-3: #7a7a7a;
+	--sl-color-gray-4: #444444;
+	--sl-color-gray-5: #272727;
+	--sl-color-gray-6: #181818;
+	--sl-color-black: #0e0e0e;
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: #ffd9d0;
+	--sl-color-accent: #e0300f;
+	--sl-color-accent-high: #7c1a06;
+	--sl-color-white: #111111;
+	--sl-color-gray-1: #2a2a2a;
+	--sl-color-gray-2: #555555;
+	--sl-color-gray-3: #767676;
+	--sl-color-gray-4: #c8c8c8;
+	--sl-color-gray-5: #dcdcdc;
+	--sl-color-gray-6: #ffffff;
+	--sl-color-gray-7: #f4f4f4;
+	--sl-color-black: #f0f0f0;
+}
+
+.site-title {
+	font-family: 'Sora', 'Inter', sans-serif;
+	font-weight: 700;
+}
+
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+	font-family: 'Sora', 'Inter', sans-serif;
+	letter-spacing: -0.01em;
+}
+
+/* keycap style used across the docs for hotkeys */
+.sl-markdown-content kbd {
+	font-family: var(--sl-font-mono);
+	font-size: 0.82em;
+	padding: 0.12em 0.5em;
+	border: 1px solid var(--sl-color-gray-4);
+	border-bottom-width: 2px;
+	border-radius: 7px;
+	background: var(--sl-color-gray-6);
+	white-space: nowrap;
+}

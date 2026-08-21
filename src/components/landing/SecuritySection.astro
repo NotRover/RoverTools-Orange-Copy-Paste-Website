@@ -1,0 +1,115 @@
+---
+const specs = [
+	{
+		term: 'AES-256-GCM',
+		def: 'Encrypts every clip, note, key wrap and even your settings blob before anything leaves your machine.',
+	},
+	{
+		term: 'Argon2id',
+		def: 'Turns your password into a key on your device. The password itself is never sent anywhere.',
+	},
+	{
+		term: 'X25519',
+		def: 'Moves keys between your devices and space members without the server ever holding a usable one.',
+	},
+	{
+		term: 'Per-item keys',
+		def: 'Every item is encrypted under its own random key. One item never unlocks another, and sharing wraps a key instead of re-encrypting content.',
+	},
+	{
+		term: 'OS keychain',
+		def: 'Device keys live in Windows Credential Manager or your Linux keyring, and master keys exist in memory only, wiped on exit.',
+	},
+	{
+		term: 'Recovery code',
+		def: 'A 150-bit code, shown once and stored nowhere, that makes a forgotten password survivable.',
+	},
+	{
+		term: 'Signed updates',
+		def: 'A bundle installs only if its minisign signature matches the key baked into the app.',
+	},
+	{
+		term: 'Local first',
+		def: 'The encryption boundary is the network. Your local data stays plain and fast, and the app works fully offline.',
+	},
+];
+---
+
+<section class="section sec" id="security">
+	<div class="wrap">
+		<p class="eyebrow reveal">Security</p>
+		<h2 class="section-title reveal">Built so trust is not required.</h2>
+		<p class="section-lead reveal">
+			A wrong password is just a failed decryption. There is nothing on the server to
+			guess against, reset, or subpoena into plaintext.
+		</p>
+		<dl class="specs">
+			{
+				specs.map((s, i) => (
+					<div class={`spec reveal`}>
+						<dt>{s.term}</dt>
+						<dd>{s.def}</dd>
+					</div>
+				))
+			}
+		</dl>
+		<p class="sec-link reveal">
+			The full model, including what the server does see, is written down plainly
+			in <a href="/docs/security/">the security docs</a>.
+		</p>
+	</div>
+</section>
+
+<style>
+	.sec {
+	}
+
+	.specs {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.9rem;
+		margin: 0;
+	}
+
+	.spec {
+		border-top: 2px solid var(--accent);
+		background: var(--surface);
+		border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+		padding: 0.8rem 0.95rem 0.95rem;
+	}
+
+	dt {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text);
+		margin-bottom: 0.35rem;
+	}
+
+	dd {
+		margin: 0;
+		font-size: 0.82rem;
+		color: var(--text-secondary);
+	}
+
+	.sec-link {
+		margin: 2rem 0 0;
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+	}
+
+	.sec-link a {
+		color: var(--accent);
+	}
+
+	@media (max-width: 980px) {
+		.specs {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.specs {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>

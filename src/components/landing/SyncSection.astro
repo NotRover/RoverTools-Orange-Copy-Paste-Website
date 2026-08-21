@@ -1,0 +1,199 @@
+---
+---
+
+<section class="section sync" id="sync">
+	<div class="wrap">
+		<p class="eyebrow reveal">Cloud sync</p>
+		<h2 class="section-title reveal">Sync that cannot read your data.</h2>
+		<p class="section-lead reveal">
+			Your password is the encryption secret, not just a login. Everything is encrypted
+			on your machine before it leaves, so the server only ever stores ciphertext. Not
+			your clips, not your notes, not even your settings are readable to anyone but you.
+		</p>
+
+		<div class="flow reveal" aria-label="How encryption travels">
+			<div class="node">
+				<div class="node-title">Your device</div>
+				<div class="node-body mono">Meet at the station, platform 4</div>
+				<div class="node-note">Plaintext stays here</div>
+			</div>
+			<div class="arrow">
+				<span class="lock">AES-256-GCM</span>
+			</div>
+			<div class="node">
+				<div class="node-title">The server</div>
+				<div class="node-body mono cipher">q9J2xK41Vd8mThPZC7oW3nRl...</div>
+				<div class="node-note">Ciphertext only. No key, ever.</div>
+			</div>
+			<div class="arrow">
+				<span class="lock">wrapped key</span>
+			</div>
+			<div class="node">
+				<div class="node-title">Your other devices</div>
+				<div class="node-body mono">Meet at the station, platform 4</div>
+				<div class="node-note">Decrypted on arrival</div>
+			</div>
+		</div>
+
+		<div class="modes reveal">
+			<div class="mode">
+				<h3>Realtime</h3>
+				<p>
+					Items from your other devices arrive the moment they are copied, and what you
+					copy here uploads right away.
+				</p>
+			</div>
+			<div class="mode">
+				<h3>Passive</h3>
+				<p>
+					Items from your other devices arrive every 5 minutes, or when you press
+					Refresh. What you copy here still uploads right away.
+				</p>
+			</div>
+			<div class="mode">
+				<h3>Manual</h3>
+				<p>
+					Nothing new uploads on its own. Pick what to send with Upload to cloud, on an
+					item or on a selection.
+				</p>
+			</div>
+		</div>
+		<p class="mode-note reveal">
+			The mode is per device. Deletes travel too, offline work queues up, and conflicts
+			resolve to the latest edit.
+		</p>
+	</div>
+</section>
+
+<style>
+	.sync {
+	}
+
+	.flow {
+		display: grid;
+		grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);
+		gap: 0.9rem;
+		align-items: stretch;
+		margin-bottom: 3rem;
+	}
+
+	.node {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 1.1rem;
+	}
+
+	.node-title {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 0.95rem;
+		margin-bottom: 0.55rem;
+	}
+
+	.node-body {
+		font-size: 0.76rem;
+		background: var(--bg);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		padding: 0.5rem 0.6rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.mono {
+		font-family: var(--font-mono);
+	}
+
+	.cipher {
+		color: var(--text-muted);
+	}
+
+	.node-note {
+		margin-top: 0.5rem;
+		font-size: 0.74rem;
+		color: var(--text-secondary);
+	}
+
+	.arrow {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		min-width: 90px;
+	}
+
+	.arrow::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 50%;
+		border-top: 1px dashed var(--border-light);
+	}
+
+	.lock {
+		position: relative;
+		font-family: var(--font-mono);
+		font-size: 0.62rem;
+		color: var(--accent);
+		background: var(--bg);
+		border: 1px solid var(--accent-dim-strong);
+		border-radius: 9px;
+		padding: 0.2rem 0.55rem;
+		white-space: nowrap;
+	}
+
+	.modes {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.9rem;
+	}
+
+	.mode {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 1rem 1.1rem;
+	}
+
+	.mode h3 {
+		font-family: var(--font-display);
+		font-size: 1rem;
+		margin: 0 0 0.35rem;
+		letter-spacing: -0.01em;
+	}
+
+	.mode p {
+		margin: 0;
+		font-size: 0.87rem;
+		color: var(--text-secondary);
+	}
+
+	.mode-note {
+		margin: 1.4rem 0 0;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+	}
+
+	@media (max-width: 900px) {
+		.flow {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.arrow {
+			min-height: 44px;
+		}
+		.arrow::before {
+			left: 50%;
+			right: auto;
+			top: 0;
+			bottom: 0;
+			border-top: none;
+			border-left: 1px dashed var(--border-light);
+		}
+		.modes {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>

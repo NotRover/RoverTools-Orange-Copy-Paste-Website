@@ -1,0 +1,174 @@
+---
+const faqs = [
+	{
+		q: 'Is it free?',
+		a: 'Yes. The app is free, works without an account, and cloud sync comes with 50 MB of encrypted file storage for images and files. Text and notes sync does not count against it.',
+	},
+	{
+		q: 'Can the server read my clipboard?',
+		a: 'No. Everything is encrypted on your device before upload, and your password never leaves your machine. The server stores ciphertext it has no key for.',
+	},
+	{
+		q: 'What happens if I forget my password?',
+		a: 'Use your recovery code. It re-wraps the same master key, so your synced data survives the reset. Without the code (and no other signed-in device), encrypted cloud data is unrecoverable by design.',
+	},
+	{
+		q: 'Does it slow anything down?',
+		a: 'The watcher is a light poll a few times a second, images are kept on disk instead of memory, and the UI renders long histories progressively. It is built to live in the tray for weeks.',
+	},
+	{
+		q: 'Where is my data stored locally?',
+		a: 'In your user app-data folder, and Settings has an Open data folder button that takes you straight there. History persistence across restarts is off by default until you turn it on.',
+	},
+	{
+		q: 'Windows only?',
+		a: 'Windows is the primary target. Linux builds ship as deb, rpm and AppImage, with X11 the smoothest experience and documented notes for Wayland.',
+	},
+];
+---
+
+<section class="section faq" id="faq">
+	<div class="wrap">
+		<p class="eyebrow reveal">FAQ</p>
+		<h2 class="section-title reveal">Fair questions.</h2>
+		<div class="faq-grid">
+			{
+				faqs.map((f) => (
+					<details class="reveal">
+						<summary>{f.q}</summary>
+						<p>{f.a}</p>
+					</details>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<footer class="foot">
+	<div class="wrap foot-row">
+		<div class="foot-brand">
+			<img class="foot-logo" src="/app-icon.png" alt="" width="22" height="22" />
+			<div>
+				<b>Orange Copy Paste</b>
+				<small>A RoverTools app</small>
+			</div>
+		</div>
+		<nav class="foot-links" aria-label="Footer">
+			<a href="/docs/">Documentation</a>
+			<a href="/docs/security/">Security model</a>
+			<a href="/docs/updates/">Release notes</a>
+			<a href="https://github.com/Spectrewolf8/RoverTools-Releases">Releases on GitHub</a>
+		</nav>
+	</div>
+</footer>
+
+<style>
+	.faq-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.9rem;
+	}
+
+	details {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		padding: 0.95rem 1.2rem;
+	}
+
+	details[open] {
+		border-color: var(--border-light);
+	}
+
+	summary {
+		cursor: pointer;
+		font-weight: 600;
+		font-size: 0.96rem;
+		list-style: none;
+		position: relative;
+		padding-right: 1.4rem;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary::after {
+		content: '+';
+		position: absolute;
+		right: 0;
+		top: 0;
+		color: var(--accent);
+		font-family: var(--font-mono);
+	}
+
+	details[open] summary::after {
+		content: '-';
+	}
+
+	details p {
+		margin: 0.7rem 0 0;
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+	}
+
+	.foot {
+		border-top: 1px solid var(--border);
+		padding: 2.4rem 0;
+	}
+
+	.foot-row {
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+		flex-wrap: wrap;
+	}
+
+	.foot-brand {
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+	}
+
+	.foot-logo {
+		width: 22px;
+		height: 22px;
+	}
+
+	.foot-brand b {
+		display: block;
+		font-family: var(--font-display);
+		font-size: 0.95rem;
+	}
+
+	.foot-brand small {
+		color: var(--text-muted);
+		font-size: 0.74rem;
+	}
+
+	.foot-links {
+		margin-left: auto;
+		display: flex;
+		gap: 1.4rem;
+		flex-wrap: wrap;
+	}
+
+	.foot-links a {
+		font-size: 0.85rem;
+		color: var(--text-secondary);
+		text-decoration: none;
+	}
+
+	.foot-links a:hover {
+		color: var(--text);
+	}
+
+	@media (max-width: 720px) {
+		.faq-grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.foot-links {
+			margin-left: 0;
+		}
+	}
+</style>
