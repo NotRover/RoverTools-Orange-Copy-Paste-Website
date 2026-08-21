@@ -23,30 +23,30 @@ bun run build
 
 Static output lands in `dist/`.
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers)
 
-The site is fully static - no adapter, no Functions, no server runtime.
+The site is fully static - no adapter, no server code. The Worker is a static asset
+binding over `dist/`, configured in `wrangler.toml`.
 
-| Pages setting | Value |
+| Workers Builds setting | Value |
 | --- | --- |
-| Framework preset | Astro |
+| Project name | `rovertools-orangecp-website` (must match `name` in `wrangler.toml`) |
 | Build command | `bun run build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 | Root directory | repo root |
 
-`bun.lock` is committed, so Pages installs with bun on its own. `.node-version` pins
-the build image to Node 22. `wrangler.toml` carries the same output directory for
-`wrangler pages deploy` and for the Pages Git integration.
+`bun.lock` is committed, so the build installs with bun on its own. `.node-version`
+pins the build image to Node 22.
 
-Set one environment variable on the production branch once a custom domain is
-attached:
+Set one build environment variable on the project:
 
-- `SITE_URL` - the canonical origin, e.g. `https://rovertools.app`. Without it the
-  build falls back to `CF_PAGES_URL`, which is correct for preview deploys and gives
-  the `*.pages.dev` host in production.
+- `SITE_URL` - the canonical origin, e.g. `https://rovertools.app`, used for canonical
+  links and the sitemap. Workers Builds does not expose the deployment's own URL to the
+  build, so without this the config falls back to a placeholder host.
 
-`public/_headers` sets the security headers and caches `/_astro/*` immutably.
-`src/pages/404.astro` renders the not-found page Pages serves for unmatched paths.
+`public/_headers` sets the security headers and caches `/_astro/*` immutably - Workers
+static assets reads it from the output directory the same way Pages did.
+`not_found_handling = "404-page"` sends unmatched paths to `src/pages/404.astro`.
 
 ## Where facts live
 

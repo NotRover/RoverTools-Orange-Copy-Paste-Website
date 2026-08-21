@@ -2,11 +2,14 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
-// Canonical origin. Set SITE_URL in the Cloudflare Pages project once the custom
-// domain is attached; until then Pages hands us CF_PAGES_URL, which is the right
-// answer for a preview deploy anyway. The literal is only the local fallback.
+// Canonical origin, used for canonical links and the sitemap. Workers Builds does
+// not hand the build its own URL, so SITE_URL is the only real knob - set it in the
+// Cloudflare project. CF_PAGES_URL is kept for a Pages deploy, where it is the right
+// answer for a preview. The literal is a placeholder, not a domain anyone owns.
 const site =
-	process.env.SITE_URL ?? process.env.CF_PAGES_URL ?? 'https://orange-copy-paste.pages.dev';
+	process.env.SITE_URL ??
+	process.env.CF_PAGES_URL ??
+	'https://rovertools-orangecp-website.workers.dev';
 
 // https://astro.build/config
 export default defineConfig({
