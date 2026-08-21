@@ -1,0 +1,101 @@
+---
+const releases = 'https://github.com/Spectrewolf8/RoverTools-Releases/releases';
+---
+
+<section class="section dl" id="download">
+	<div class="wrap dl-inner">
+		<p class="eyebrow reveal">Download</p>
+		<h2 class="section-title reveal">Your clipboard is about to get a memory.</h2>
+		<p class="section-lead reveal center">
+			Free, no account, nothing to configure. Install it, copy something, press
+			Ctrl+Shift+V.
+		</p>
+		<div class="dl-cards">
+			<div class="dl-card reveal">
+				<h3>Windows</h3>
+				<p>Installer for Windows 10 and 11. Installs per user, no admin needed.</p>
+				<a class="btn btn-primary" href={`${releases}/latest`}>Download for Windows</a>
+			</div>
+			<div class="dl-card reveal">
+				<h3>Linux</h3>
+				<p>deb, rpm and AppImage builds. X11 is the smoothest ride, and Wayland works with a small setup step.</p>
+				<div class="dl-row">
+					<a class="btn btn-ghost" href={`${releases}/latest`}>Get a Linux build</a>
+					<a class="dl-note-link" href="/docs/linux/">Linux notes</a>
+				</div>
+			</div>
+		</div>
+		<p class="dl-note reveal">
+			Updates arrive inside the app, signature-checked, and never install without
+			asking. A beta channel is one switch away in Settings.
+		</p>
+	</div>
+</section>
+
+<style>
+	.dl {
+		background:
+			radial-gradient(60% 80% at 50% 110%, rgba(255, 62, 28, 0.13), transparent 70%),
+			var(--bg);
+	}
+
+	.dl-inner {
+		text-align: center;
+	}
+
+	.section-lead.center {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.dl-cards {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 24rem));
+		justify-content: center;
+		gap: 1.2rem;
+		text-align: left;
+	}
+
+	.dl-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 1.25rem 1.3rem;
+	}
+
+	.dl-card h3 {
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		margin: 0 0 0.4rem;
+	}
+
+	.dl-card p {
+		color: var(--text-secondary);
+		font-size: 0.92rem;
+		margin: 0 0 1.2rem;
+	}
+
+	.dl-row {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.dl-note-link {
+		font-size: 0.85rem;
+		color: var(--accent);
+	}
+
+	.dl-note {
+		margin: 2.2rem auto 0;
+		max-width: 34rem;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+	}
+
+	@media (max-width: 760px) {
+		.dl-cards {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>

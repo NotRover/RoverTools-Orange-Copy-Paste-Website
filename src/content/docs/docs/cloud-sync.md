@@ -1,0 +1,48 @@
+---
+title: Cloud sync
+description: Optional, end-to-end encrypted sync of your history and notes across devices.
+---
+
+Keep your clipboard history and notes in sync on every device. End-to-end encrypted, so only you can read them.
+
+## Setting up
+
+1. Open the **Account** screen and sign up with email and password, or with Google.
+2. If you signed in with Google, you still set an account password. That password is your encryption secret, and the server never sees it.
+3. Save your **recovery code** somewhere safe. It is shown once and stored nowhere.
+
+Your password does double duty: it logs you in *and* it derives the key that unlocks your data. A wrong password is simply a failed decryption; there is nothing on the server that can bypass it. The full picture is in the [security model](/docs/security/).
+
+## Sync modes
+
+The mode is per device, so a laptop can sync live while a desktop stays manual.
+
+| Mode | Behavior |
+|---|---|
+| **Realtime** | Items from your other devices arrive the moment they are copied, and what you copy here uploads right away. |
+| **Passive** | Items from your other devices arrive every 5 minutes, or when you press Refresh. What you copy here still uploads right away. |
+| **Manual** | Nothing new uploads on its own. Pick what to send with *Upload to cloud*, on an item or on a selection. Items already in the cloud stay up to date, removing one still removes it, and Refresh brings down what your other devices sent. |
+
+Spaces are not affected by the mode: what you share to a space goes out right away, and what others share with you always arrives live.
+
+## What syncs
+
+Clipboard entries, notes, and your preferences (theme, layout, sort, groups and their colors, and similar). Device-local choices like the sync mode itself, per-space auto-copy, and window position deliberately stay on each machine.
+
+## Files and images
+
+Images and files ride along, up to **5 MB per clipboard entry** (the sum of all files in one copy). An entry over the cap is skipped and the app tells you; nothing is dropped silently. Accounts start with **50 MB** of encrypted file storage, with a heads-up when you reach 90%. Text and notes do not count against it.
+
+The Account screen shows your storage, synced item counts by type, and a cloud view of everything stored.
+
+## Devices
+
+Each installation registers as a device. The Account screen lists them with live online/offline presence, and you can revoke a device you no longer use.
+
+## Offline and conflicts
+
+Offline changes queue locally and drain in order when you reconnect. Conflicts resolve to the most recent edit. Deleting an entry removes it from your other devices too, even if they were offline at the time.
+
+## Forgot your password?
+
+Use your recovery code from the sign-in screen. A reset re-wraps the same master key, so your synced data survives. Without the code and without another signed-in device, encrypted cloud data cannot be recovered by anyone, including us. That is the point.

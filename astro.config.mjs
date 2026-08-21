@@ -1,0 +1,60 @@
+// @ts-check
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+
+// https://astro.build/config
+export default defineConfig({
+	site: 'https://spectrewolf8.github.io',
+	integrations: [
+		starlight({
+			title: 'Orange Copy Paste',
+			description:
+				'Cross-device smart clipboard with history, notes and end-to-end encrypted sync.',
+			logo: { src: './src/assets/app-icon.png', alt: 'Orange Copy Paste' },
+			favicon: '/favicon-32.png',
+			social: [
+				{
+					icon: 'github',
+					label: 'Releases',
+					href: 'https://github.com/Spectrewolf8/RoverTools-Releases',
+				},
+			],
+			customCss: ['./src/styles/starlight-theme.css'],
+			sidebar: [
+				{
+					label: 'Start here',
+					items: [
+						{ label: 'What is Orange Copy Paste?', link: '/docs/' },
+						{ label: 'Install and first run', slug: 'docs/getting-started' },
+						{ label: 'Shortcuts reference', slug: 'docs/shortcuts' },
+					],
+				},
+				{
+					label: 'Using the app',
+					items: [
+						{ label: 'Clipboard history', slug: 'docs/clipboard-history' },
+						{ label: 'Quick paste and capture', slug: 'docs/quick-paste' },
+						{ label: 'Notes', slug: 'docs/notes' },
+						{ label: 'Settings', slug: 'docs/settings' },
+					],
+				},
+				{
+					label: 'Cloud',
+					items: [
+						{ label: 'Cloud sync', slug: 'docs/cloud-sync' },
+						{ label: 'Spaces and sharing', slug: 'docs/spaces' },
+						{ label: 'Security model', slug: 'docs/security' },
+					],
+				},
+				{
+					label: 'More',
+					items: [
+						{ label: 'Linux notes', slug: 'docs/linux' },
+						{ label: 'Updates and releases', slug: 'docs/updates' },
+						{ label: 'FAQ', slug: 'docs/faq' },
+					],
+				},
+			],
+		}),
+	],
+});

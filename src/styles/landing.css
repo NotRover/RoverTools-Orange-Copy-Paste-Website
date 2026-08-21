@@ -1,0 +1,485 @@
+/* Landing page tokens - lifted from the app's own App.css so the site
+   and the product are the same object. The landing commits to the app's
+   default dark look on purpose; the docs follow the reader's theme. */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+	--bg: #0e0e0e;
+	--surface: #181818;
+	--surface-hover: #202020;
+	--sidebar-bg: #111111;
+	--border: #272727;
+	--border-light: #333333;
+	--text: #f0f0f0;
+	--text-secondary: #a0a0a0;
+	--text-muted: #606060;
+	--accent: #ff3e1c;
+	--accent-hover: #ff5535;
+	--accent-dim: rgba(255, 62, 28, 0.1);
+	--accent-dim-strong: rgba(255, 62, 28, 0.18);
+	--success: #22c55e;
+
+	/* entry-kind hues, same as the app */
+	--kind-text: #ff3e1c;
+	--kind-image: #3b82f6;
+	--kind-file: #8b5cf6;
+	--kind-url: #10b981;
+	--kind-document: #f97316;
+	--kind-video: #ef4444;
+
+	--radius: 12px;
+	--radius-sm: 10px;
+	--radius-xs: 7px;
+
+	--font-display: 'Sora', 'Inter', sans-serif;
+	--font-body: 'Inter', 'Segoe UI', sans-serif;
+	--font-mono: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+	--measure: 62rem;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body.landing {
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-body);
+	font-size: 16px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+}
+
+.landing a {
+	color: inherit;
+}
+
+.wrap {
+	max-width: var(--measure);
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+
+/* wide enough to hold a 920px app window next to a column of text */
+.wrap--wide {
+	max-width: 96rem;
+}
+
+.section {
+	padding: 4.5rem 0;
+}
+
+.eyebrow {
+	font-family: var(--font-mono);
+	font-size: 0.78rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--accent);
+	margin: 0 0 0.9rem;
+}
+
+.section-title {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(1.8rem, 4vw, 2.6rem);
+	line-height: 1.12;
+	letter-spacing: -0.02em;
+	margin: 0 0 1rem;
+}
+
+.section-lead {
+	color: var(--text-secondary);
+	font-size: 1.06rem;
+	max-width: 38rem;
+	margin: 0 0 2.5rem;
+}
+
+/* keycaps */
+.kbd {
+	display: inline-block;
+	font-family: var(--font-mono);
+	font-size: 0.78em;
+	line-height: 1;
+	padding: 0.38em 0.55em 0.42em;
+	border: 1px solid var(--border-light);
+	border-bottom-width: 3px;
+	border-radius: var(--radius-xs);
+	background: var(--surface);
+	color: var(--text);
+	transition: transform 0.1s ease, border-bottom-width 0.1s ease;
+}
+
+.kbd.pressed {
+	transform: translateY(2px);
+	border-bottom-width: 1px;
+	background: var(--accent-dim-strong);
+	border-color: var(--accent);
+}
+
+/* entry kind pill, same anatomy as the app's type chips */
+.pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+	height: 18px;
+	padding: 0 0.55em;
+	border-radius: 9px;
+	font-family: var(--font-mono);
+	font-size: 0.66rem;
+	font-weight: 500;
+	color: var(--pc, var(--accent));
+	background: color-mix(in srgb, var(--pc, var(--accent)) 12%, transparent);
+}
+
+.pill::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--pc, var(--accent));
+}
+
+/* buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.4rem;
+	border-radius: var(--radius-sm);
+	font-weight: 600;
+	font-size: 0.95rem;
+	text-decoration: none;
+	border: 1px solid transparent;
+	transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-primary {
+	background: var(--accent);
+	color: #fff;
+}
+
+.btn-primary:hover {
+	background: var(--accent-hover);
+	transform: translateY(-1px);
+}
+
+.btn-ghost {
+	border-color: var(--border-light);
+	color: var(--text);
+	background: transparent;
+}
+
+.btn-ghost:hover {
+	border-color: var(--text-muted);
+	background: var(--surface);
+}
+
+/* ============================================================
+   App-faithful mock parts. Values are copied from the client's
+   own stylesheets (App.css, Sidebar.css, EntryCard.css), so the
+   mockups on this page match what installs.
+   ============================================================ */
+
+/* window shell */
+.oc-window {
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--bg);
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+	overflow: hidden;
+	position: relative;
+	text-align: left;
+}
+
+/* titlebar: 30px, 11px/600 muted title, 30x30 window buttons */
+.oc-titlebar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 30px;
+	border-bottom: 1px solid var(--border);
+	background: var(--bg);
+}
+
+.oc-title {
+	padding-left: 12px;
+	font-size: 11px;
+	font-weight: 600;
+	color: var(--text-muted);
+	letter-spacing: 0.3px;
+}
+
+.oc-winbtns {
+	display: flex;
+	height: 30px;
+}
+
+.oc-winbtn {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-muted);
+	font-size: 10px;
+	font-family: var(--font-body);
+}
+
+.oc-body {
+	display: flex;
+	min-height: 0;
+}
+
+/* sidebar: 58px, logo 36, accent divider, 38x38 nav buttons */
+.oc-sidebar {
+	width: 58px;
+	flex-shrink: 0;
+	background: var(--sidebar-bg);
+	border-right: 1px solid var(--border);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 14px 0 12px;
+}
+
+.oc-side-logo {
+	width: 36px;
+	height: 36px;
+	border-radius: var(--radius-sm);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+.oc-side-logo img {
+	width: 26px;
+	height: 26px;
+	display: block;
+}
+
+.oc-side-divider {
+	width: 28px;
+	border-top: 1px solid var(--accent);
+	opacity: 0.6;
+	margin-bottom: 10px;
+}
+
+.oc-navbtn {
+	width: 38px;
+	height: 38px;
+	border-radius: var(--radius-sm);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-muted);
+	position: relative;
+	margin-bottom: 4px;
+}
+
+.oc-navbtn svg {
+	width: 18px;
+	height: 18px;
+}
+
+.oc-navbtn.active {
+	background: var(--accent-dim-strong);
+	color: var(--accent);
+}
+
+.oc-navbtn.active::before {
+	content: '';
+	position: absolute;
+	left: -10px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 3px;
+	height: 18px;
+	border-radius: 2px;
+	background: var(--accent);
+}
+
+/* entry card: radius 12, body 10/12/8, 12px mono text, footer 10.5px time */
+.oc-card {
+	border-radius: var(--radius);
+	background: var(--surface);
+	border: 1px solid var(--border);
+	overflow: hidden;
+}
+
+.oc-card--in-clipboard {
+	border-color: var(--accent);
+}
+
+.oc-card-media {
+	background: var(--bg);
+	border-bottom: 1px solid var(--border);
+	height: 74px;
+}
+
+.oc-card-body {
+	padding: 10px 12px 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.oc-card-text {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	line-height: 1.25;
+	color: var(--text);
+	word-break: break-word;
+}
+
+.oc-card-text--clamp {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.oc-card-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 6px;
+}
+
+.oc-chips {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex-wrap: wrap;
+	min-width: 0;
+}
+
+.oc-time {
+	font-size: 10.5px;
+	color: var(--text-muted);
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+/* type chip: 18px tall, radius 7, 10px/600, tinted bg + colored label */
+.oc-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	height: 18px;
+	padding: 0 7px;
+	border-radius: var(--radius-xs);
+	font-family: var(--font-body);
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.2px;
+	color: var(--cc, var(--accent));
+	background: color-mix(in srgb, var(--cc, var(--accent)) 12%, transparent);
+	white-space: nowrap;
+}
+
+.oc-chip svg {
+	width: 10px;
+	height: 10px;
+	flex-shrink: 0;
+}
+
+/* status pills, bottom-right of the window like the app */
+.oc-pill-row {
+	position: absolute;
+	bottom: 10px;
+	right: 18px;
+	display: flex;
+	gap: 6px;
+}
+
+.oc-status-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 10.5px;
+	color: var(--text-secondary);
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 7.5px;
+	padding: 3px 8px;
+}
+
+.oc-status-pill .dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--success);
+	box-shadow: 0 0 4px 1px rgba(34, 197, 94, 0.5);
+}
+
+/* search input look */
+/* search field: app metrics are 11px text, 8px radius, 4/26/4/28 padding,
+   with the magnifier sitting 9px from the left edge */
+.oc-search {
+	font-size: 11px;
+	line-height: 16px;
+	color: var(--text-muted);
+	background: var(--surface)
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6e6e' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4.2-4.2'/%3E%3C/svg%3E")
+		no-repeat 9px center;
+	background-size: 12px 12px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 4px 26px 4px 28px;
+}
+
+/* subtle mesh washes for cards and sections */
+.mesh-a {
+	background:
+		radial-gradient(120% 90% at 0% 0%, rgba(255, 62, 28, 0.06), transparent 55%),
+		radial-gradient(110% 80% at 100% 100%, rgba(99, 102, 241, 0.05), transparent 60%),
+		var(--surface);
+}
+
+.mesh-b {
+	background:
+		radial-gradient(110% 90% at 100% 0%, rgba(59, 130, 246, 0.055), transparent 55%),
+		radial-gradient(120% 80% at 0% 100%, rgba(255, 62, 28, 0.05), transparent 60%),
+		var(--surface);
+}
+
+.mesh-c {
+	background:
+		radial-gradient(120% 90% at 50% 0%, rgba(16, 185, 129, 0.05), transparent 55%),
+		radial-gradient(110% 90% at 100% 100%, rgba(168, 85, 247, 0.05), transparent 60%),
+		var(--surface);
+}
+
+/* scroll reveal - hidden state only applies once JS has claimed the page,
+   so the content is never invisible without it */
+html.js .reveal {
+	opacity: 0;
+	transform: translateY(18px);
+	transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+html.js .reveal.in {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+	html.js .reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+	.kbd {
+		transition: none;
+	}
+}

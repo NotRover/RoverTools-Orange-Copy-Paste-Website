@@ -1,0 +1,106 @@
+---
+const features = [
+	{
+		title: 'History that holds on',
+		body: 'A rolling 100 entries, always deduped. Pin up to 10 for the quick-paste popup, save what should survive a restart, and clear-all never touches what you saved.',
+		tag: 'clipboard',
+		color: 'var(--kind-text)',
+	},
+	{
+		title: 'Groups and filters',
+		body: 'Tag entries with colored groups, then filter by type, date, group, or cloud state. Deleting a group gives you five seconds to undo it.',
+		tag: 'organize',
+		color: '#14b8a6',
+	},
+	{
+		title: 'Notes with a real editor',
+		body: 'Headings, task lists, tables, code blocks with syntax highlighting, callouts, images and attachments. Export any note as Markdown whenever you want out.',
+		tag: 'notes',
+		color: '#eab308',
+	},
+	{
+		title: 'Images, files and video',
+		body: 'Screenshots and photos are captured at full quality and kept on disk, not in memory. Copied videos play right on the card.',
+		tag: 'media',
+		color: 'var(--kind-image)',
+	},
+	{
+		title: 'Works offline, forever',
+		body: 'No account required. Everything lives on your machine, and the app is fully usable with sync off or the network gone. Cloud sync is a choice, not a requirement.',
+		tag: 'local-first',
+		color: 'var(--kind-url)',
+	},
+	{
+		title: 'Quiet by design',
+		body: 'Lives in the tray, starts with Windows if you want, and stays out of the way. Notification sounds exist, but the noisy ones are off by default.',
+		tag: 'calm',
+		color: 'var(--kind-file)',
+	},
+];
+---
+
+<section class="section feats" id="features">
+	<div class="wrap">
+		<p class="eyebrow reveal">Features</p>
+		<h2 class="section-title reveal">Small app. Long memory.</h2>
+		<p class="section-lead reveal">
+			Everything below works without an account. Sync and sharing are layered on top,
+			never wired in as a requirement.
+		</p>
+		<div class="grid">
+			{
+				features.map((f, i) => (
+					<div class={`card reveal`}>
+						<span class="oc-chip" style={`--cc:${f.color}`}>{f.tag}</span>
+						<h3>{f.title}</h3>
+						<p>{f.body}</p>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.feats {
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.9rem;
+	}
+
+	.card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 1.05rem 1.15rem;
+		transition: border-color 0.2s ease, transform 0.2s ease;
+	}
+
+	.card:hover {
+		border-color: var(--border-light);
+		transform: translateY(-2px);
+	}
+
+	.card h3 {
+		font-family: var(--font-display);
+		font-size: 1.02rem;
+		font-weight: 700;
+		margin: 0.7rem 0 0.35rem;
+		letter-spacing: -0.01em;
+	}
+
+	.card p {
+		margin: 0;
+		color: var(--text-secondary);
+		font-size: 0.88rem;
+	}
+
+	@media (max-width: 820px) {
+		.grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>

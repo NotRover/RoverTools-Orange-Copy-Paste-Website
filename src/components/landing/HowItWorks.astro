@@ -1,0 +1,103 @@
+---
+---
+
+<section class="section how" id="how">
+	<div class="wrap">
+		<p class="eyebrow reveal">How it works</p>
+		<h2 class="section-title reveal">Copy. Find. Paste.</h2>
+		<div class="steps">
+			<div class="step reveal">
+				<div class="step-keys">
+					<span class="kbd">Ctrl</span><span class="plus">+</span><span class="kbd">C</span>
+				</div>
+				<h3>Copy anywhere</h3>
+				<p>
+					Keep copying the way you always have. A background watcher notices every copy
+					in about a fifth of a second and adds it to history: text, links, images,
+					files, even rich HTML.
+				</p>
+			</div>
+			<div class="step reveal">
+				<div class="step-keys">
+					<span class="type-demo">groups <span class="oc-chip" style="--cc:#14b8a6">work</span> <span class="oc-chip" style="--cc:#6366f1">ideas</span></span>
+				</div>
+				<h3>Find it later</h3>
+				<p>
+					Search by content or group name. Filter by type, date, group, or cloud state,
+					and every filter shows how many items it would leave before you apply it.
+				</p>
+			</div>
+			<div class="step reveal">
+				<div class="step-keys">
+					<span class="kbd">Ctrl</span><span class="plus">+</span><span class="kbd">Shift</span><span class="plus">+</span><span class="kbd">V</span>
+				</div>
+				<h3>Paste it back</h3>
+				<p>
+					A small popup opens at your cursor with your recent and pinned items. Press a
+					number, 1 to 9, and that item is pasted into whatever app you are in.
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.how {
+	}
+
+	.steps {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.9rem;
+		margin-top: 2.2rem;
+	}
+
+	.step {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 1.15rem 1.2rem;
+	}
+
+	.step-keys {
+		display: flex;
+		align-items: center;
+		gap: 0.3rem;
+		min-height: 30px;
+		margin-bottom: 0.8rem;
+	}
+
+	.plus {
+		color: var(--text-muted);
+		font-size: 0.8rem;
+	}
+
+	.type-demo {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-secondary);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	.step h3 {
+		font-family: var(--font-display);
+		font-size: 1.05rem;
+		font-weight: 700;
+		margin: 0 0 0.4rem;
+		letter-spacing: -0.01em;
+	}
+
+	.step p {
+		margin: 0;
+		color: var(--text-secondary);
+		font-size: 0.88rem;
+	}
+
+	@media (max-width: 820px) {
+		.steps {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>

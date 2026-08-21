@@ -1,0 +1,31 @@
+---
+title: Install and first run
+description: Get Orange Copy Paste running on Windows or Linux.
+---
+
+## Windows
+
+1. Download the installer from the [latest release](https://github.com/Spectrewolf8/RoverTools-Releases/releases/latest).
+2. Run it. It installs per user, so no admin rights are needed.
+3. Launch the app. It appears in the system tray; left-click the tray icon to open the window.
+
+Windows 10 and 11 are supported, and Windows is the primary, fully featured target.
+
+## Linux
+
+Builds ship as `.deb`, `.rpm` and AppImage from the same [releases page](https://github.com/Spectrewolf8/RoverTools-Releases/releases/latest).
+
+X11 gives the smoothest experience. Wayland works with a small setup step for hotkeys. See the [Linux notes](/docs/linux/) for the runtime packages the app uses (`xdotool`, `wtype`, `ydotool`) and the per-compositor details.
+
+## First run
+
+- **Copy something.** It appears in the history immediately. Text, links, images, files and rich HTML are all captured.
+- **Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.** The quick-paste popup opens at your cursor with your recent items. Press <kbd>1</kbd> to paste the first one.
+- **Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>** with something selected in another app. It is captured into history and a small receipt popup shows what was grabbed, with Pin and Delete one click away.
+
+## Good to know on day one
+
+- **History is memory-only by default.** Unpinned history clears when the app restarts, until you turn on *Keep history across app restarts* in Settings. Pinned and saved entries always survive.
+- **Closing the window minimizes to the tray** by default. Quit from the tray menu.
+- **Run on startup** and **Start minimized** are one toggle each in [Settings](/docs/settings/).
+- No account is needed for any of this. When you want sync, see [Cloud sync](/docs/cloud-sync/).

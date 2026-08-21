@@ -1,0 +1,66 @@
+---
+import '../styles/landing.css';
+import SiteNav from '../components/landing/SiteNav.astro';
+import Hero from '../components/landing/Hero.astro';
+import HowItWorks from '../components/landing/HowItWorks.astro';
+import Features from '../components/landing/Features.astro';
+import Showcase from '../components/landing/Showcase.astro';
+import SyncSection from '../components/landing/SyncSection.astro';
+import SpacesSection from '../components/landing/SpacesSection.astro';
+import SecuritySection from '../components/landing/SecuritySection.astro';
+import DownloadSection from '../components/landing/DownloadSection.astro';
+import FaqFooter from '../components/landing/FaqFooter.astro';
+
+const title = 'Orange Copy Paste - The clipboard that remembers';
+const description =
+	'Cross-device smart clipboard with history, notes and end-to-end encrypted sync. Free, works offline, for Windows and Linux.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta name="color-scheme" content="dark" />
+		<link rel="icon" type="image/png" href="/favicon-32.png" />
+		<link rel="apple-touch-icon" href="/app-icon.png" />
+		<script is:inline>
+			document.documentElement.classList.add('js');
+		</script>
+	</head>
+	<body class="landing">
+		<SiteNav />
+		<main>
+			<Hero />
+			<HowItWorks />
+			<Features />
+			<Showcase />
+			<SyncSection />
+			<SpacesSection />
+			<SecuritySection />
+			<DownloadSection />
+		</main>
+		<FaqFooter />
+
+		<script>
+			// scroll reveals; disabled entirely under reduced motion (CSS shows everything)
+			const io = new IntersectionObserver(
+				(entries) => {
+					for (const e of entries) {
+						if (e.isIntersecting) {
+							e.target.classList.add('in');
+							io.unobserve(e.target);
+						}
+					}
+				},
+				{ rootMargin: '0px 0px -8% 0px' }
+			);
+			document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+		</script>
+	</body>
+</html>
