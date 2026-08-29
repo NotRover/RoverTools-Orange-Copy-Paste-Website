@@ -1,29 +1,169 @@
 ---
 /**
- * The Settings screen, from settings-screen/SettingsScreen.tsx. Two of the
- * app's sections with their real labels and descriptions, as many as the 560px
- * window holds without scrolling; metrics (620px
- * column, 22px section gap, 11/14px rows, the 37x21 toggle) come from
- * SettingsScreen.css. Styles are the global `set-*` parts in landing.css.
+ * The Settings screen, from settings-screen/SettingsScreen.tsx: every section
+ * the app draws, in the app's order, with its own labels and descriptions.
+ * The screen scrolls the way the app's does - the demo scrolls it to whatever
+ * it is about to touch. Metrics (620px column, 22px section gap, 11/14px rows,
+ * the 37x21 toggle, the 16px child checkbox) come from SettingsScreen.css.
+ * Styles are the global `set-*` parts in landing.css.
  */
-import { SET_ICONS, TB_ICONS } from './app-parts';
+import { CHIP_ICONS, SET_ICONS, TB_ICONS } from './app-parts';
+
+const general = [
+	['Close to system tray', 'Closing the window minimizes the app to the system tray instead of quitting.', true],
+	['Run on startup', 'Automatically launch when you sign in to Windows.', true],
+	['Start minimized', 'Start hidden in the system tray instead of showing the main window.', false],
+	['Show splash screen on startup', 'Display a brief startup screen when the app launches.', true],
+	[
+		'Show sync badges on cards',
+		'The cloud icon that marks whether an entry has reached the server. Turning it off changes nothing about what syncs.',
+		true,
+	],
+] as const;
 
 const history = [
-	['Keep history across app restarts', 'Clipboard history is preserved when the app restarts.', true],
+	['Keep history across app restarts', 'Clipboard history is preserved when the app restarts (cleared after reboot).', true],
 	['Click a card to view it', 'A double click copies instead. Off, a click copies and a double click opens it too.', false],
 	['Auto-save copied entries', 'Automatically add every new clipboard entry to the Saved group.', false],
 ] as const;
 
+const updates = [
+	[
+		'Check for updates automatically',
+		'Look for a newer version shortly after the app starts. Updates are never installed without asking.',
+		true,
+	],
+	['Get beta versions', 'Receive new features early, alongside every normal release. Betas are tested less, so expect the occasional rough edge.', false],
+] as const;
+
+const notifChecks = [
+	['Copy operations', 'Show notification on Ctrl+C', true],
+	['Paste operations', 'Show notification on Ctrl+Shift+V', true],
+] as const;
+
+const soundChecks = [
+	['Copying', 'A click when you copy in the app.', false],
+	['Pasting', 'A click when you paste from the popup.', false],
+] as const;
+
+const cueTests = ['Arrived', 'Invite', 'Unlocked', 'Refused'];
 const slotOptions = [5, 7, 9];
 ---
 
-<div class="set-screen">
+<div class="set-screen" id="demo-set-scroll">
 	<div class="set-inner">
 		<div class="scr-head">
 			<span class="scr-eyebrow">Preferences</span>
 			<h2 class="scr-title">Settings</h2>
-			<p class="scr-subtitle">How the app behaves on this device.</p>
+			<p class="scr-subtitle">Tune how Orange Copy Paste behaves on this device.</p>
 		</div>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.sliders} />
+				<h3 class="set-section-title">General</h3>
+			</div>
+			<div class="set-group">
+				{
+					general.map(([label, desc, on]) => (
+						<div class="set-row" data-set-row={label}>
+							<span class="set-row-info">
+								<span class="set-row-label">{label}</span>
+								<span class="set-row-desc">{desc}</span>
+							</span>
+							<span class:list={['set-toggle', on && 'is-on']}>
+								<span class="set-toggle-knob" />
+							</span>
+						</div>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.bell} />
+				<h3 class="set-section-title">Notifications</h3>
+			</div>
+			<div class="set-group">
+				<div class="set-row" data-set-row="Desktop notifications">
+					<span class="set-row-info">
+						<span class="set-row-label">Desktop notifications</span>
+						<span class="set-row-desc">Show Windows notifications while the app is in the background.</span>
+					</span>
+					<span class="set-toggle is-on"><span class="set-toggle-knob" /></span>
+				</div>
+				<div class="set-row set-row--stack">
+					<div class="set-row-header">
+						<span class="set-row-info">
+							<span class="set-row-label">In-app popup</span>
+							<span class="set-row-desc">A small popup at the bottom-right.</span>
+						</span>
+						<span class="set-toggle is-on"><span class="set-toggle-knob" /></span>
+					</div>
+					<div class="set-child-checks">
+						{
+							notifChecks.map(([label, desc, on]) => (
+								<span class="set-check-row">
+									<span class:list={['set-check', on && 'is-on']}>{on && <Fragment set:html={CHIP_ICONS.check} />}</span>
+									<span class="set-check-info">
+										<span class="set-check-label">{label}</span>
+										<span class="set-check-desc">{desc}</span>
+									</span>
+								</span>
+							))
+						}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.speaker} />
+				<h3 class="set-section-title">Sounds</h3>
+			</div>
+			<div class="set-group">
+				<div class="set-row">
+					<span class="set-row-info">
+						<span class="set-row-label">Test sounds</span>
+						<span class="set-row-desc">Hear what each one means.</span>
+					</span>
+					<span class="set-cue-tests">
+						{
+							cueTests.map((label) => (
+								<span class="set-cue-test">
+									<Fragment set:html={SET_ICONS.play8} />
+									{label}
+								</span>
+							))
+						}
+					</span>
+				</div>
+				<div class="set-row set-row--stack">
+					<div class="set-row-header">
+						<span class="set-row-info">
+							<span class="set-row-label">Sounds</span>
+							<span class="set-row-desc">Shared items, invites, and spaces opening up.</span>
+						</span>
+						<span class="set-toggle is-on"><span class="set-toggle-knob" /></span>
+					</div>
+					<div class="set-child-checks">
+						{
+							soundChecks.map(([label, desc, on]) => (
+								<span class="set-check-row">
+									<span class:list={['set-check', on && 'is-on']}>{on && <Fragment set:html={CHIP_ICONS.check} />}</span>
+									<span class="set-check-info">
+										<span class="set-check-label">{label}</span>
+										<span class="set-check-desc">{desc}</span>
+									</span>
+								</span>
+							))
+						}
+					</div>
+				</div>
+			</div>
+		</section>
 
 		<section class="set-section">
 			<div class="set-section-head">
@@ -31,7 +171,7 @@ const slotOptions = [5, 7, 9];
 				<h3 class="set-section-title">Quick Paste</h3>
 			</div>
 			<div class="set-group">
-				<div class="set-row">
+				<div class="set-row" data-set-row="Paste slots">
 					<span class="set-row-info">
 						<span class="set-row-label">Paste slots</span>
 						<span class="set-row-desc">Number of entries shown in the quick paste popup.</span>
@@ -63,6 +203,53 @@ const slotOptions = [5, 7, 9];
 			<div class="set-group">
 				{
 					history.map(([label, desc, on]) => (
+						<div class="set-row" data-set-row={label}>
+							<span class="set-row-info">
+								<span class="set-row-label">{label}</span>
+								<span class="set-row-desc">{desc}</span>
+							</span>
+							<span class:list={['set-toggle', on && 'is-on']}>
+								<span class="set-toggle-knob" />
+							</span>
+						</div>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.folderOpen} />
+				<h3 class="set-section-title">Data</h3>
+			</div>
+			<div class="set-group">
+				<div class="set-row" data-set-row="Open data folder">
+					<span class="set-row-info">
+						<span class="set-row-label">Open data folder</span>
+						<span class="set-row-desc">
+							Open the folder where clipboard history, pinned entries, and settings are stored.
+						</span>
+					</span>
+					<span class="set-action-btn"><Fragment set:html={SET_ICONS.folder14} />Open</span>
+				</div>
+			</div>
+		</section>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.download} />
+				<h3 class="set-section-title">Updates</h3>
+			</div>
+			<div class="set-group">
+				<div class="set-row">
+					<span class="set-row-info">
+						<span class="set-row-label">App version 0.2.2</span>
+						<span class="set-row-desc">Check whether a newer version has been released.</span>
+					</span>
+					<span class="set-action-btn"><Fragment set:html={SET_ICONS.refresh14} />Check now</span>
+				</div>
+				{
+					updates.map(([label, desc, on]) => (
 						<div class="set-row" data-set-row={label}>
 							<span class="set-row-info">
 								<span class="set-row-label">{label}</span>

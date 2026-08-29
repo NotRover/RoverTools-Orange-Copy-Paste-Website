@@ -181,6 +181,40 @@ export const SET_ICONS = {
 		2,
 		'<circle cx="12" cy="12" r="8.5"/><polyline points="12 7.2 12 12 15.4 14"/>',
 	),
+	bell: stroke(
+		15,
+		2,
+		'<path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14.5 18 8.5"/><path d="M13.7 19.5a2 2 0 0 1-3.4 0"/>',
+	),
+	speaker: stroke(
+		15,
+		2,
+		'<polygon points="10 6 6 9.5 3 9.5 3 14.5 6 14.5 10 18"/><path d="M14.5 9.2a4 4 0 0 1 0 5.6"/><path d="M17.5 6.5a8 8 0 0 1 0 11"/>',
+	),
+	folderOpen: stroke(
+		15,
+		2,
+		'<path d="M3 8V5.8A1.8 1.8 0 0 1 4.8 4h4l2 2.6h6.4A1.8 1.8 0 0 1 19 8.4V9"/><path d="M3 9h17.2a1 1 0 0 1 1 1.2l-1.5 7.4a1.6 1.6 0 0 1-1.6 1.4H4.6A1.6 1.6 0 0 1 3 17.4Z"/>',
+	),
+	download: stroke(
+		15,
+		2,
+		'<path d="M12 3.5v11"/><polyline points="7.5 10.5 12 15 16.5 10.5"/><path d="M4.5 18.5h15"/>',
+	),
+	/* the 14px folder on the Data section's action button */
+	folder14: stroke(
+		14,
+		2,
+		'<path d="M3 8V5.8A1.8 1.8 0 0 1 4.8 4h4l2 2.6h6.4A1.8 1.8 0 0 1 19 8.4V9"/><path d="M3 9h17.2a1 1 0 0 1 1 1.2l-1.5 7.4a1.6 1.6 0 0 1-1.6 1.4H4.6A1.6 1.6 0 0 1 3 17.4Z"/>',
+	),
+	/* the 14px refresh on the Updates button */
+	refresh14: stroke(
+		14,
+		2,
+		'<polyline points="20 5 20 10 15 10"/><polyline points="4 19 4 14 9 14"/><path d="M18.6 9.5A7.5 7.5 0 0 0 6.2 6.6L4 9"/><path d="M5.4 14.5a7.5 7.5 0 0 0 12.4 2.9L20 15"/>',
+	),
+	/* the 8px filled triangle on each sound test */
+	play8: svg('width="8" height="8" viewBox="0 0 24 24" fill="currentColor"', '<polygon points="6 4 20 12 6 20"/>'),
 };
 
 export const WIN_ICONS = {

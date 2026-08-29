@@ -53,6 +53,52 @@ html {
 	scroll-behavior: smooth;
 }
 
+/* The scrollbar is part of the theme, not the browser's business: the app
+   styles its own the same way (App.css), and a default light scrollbar down the
+   side of a #0e0e0e page is the one piece of chrome that gives it away.
+   Firefox takes the two-value form; Chromium and Safari take the pseudos. */
+/* Firefox takes the two standard properties; Chromium honours them too, and
+   when it does it ignores the pseudo-elements below - so these stay on the page
+   itself, and the app mock keeps the pseudos, which is what the app draws. */
+html:has(body.landing),
+body.landing {
+	scrollbar-width: thin;
+	scrollbar-color: var(--border-light) transparent;
+}
+
+body.landing::-webkit-scrollbar,
+.landing ::-webkit-scrollbar {
+	width: 12px;
+	height: 12px;
+}
+
+body.landing::-webkit-scrollbar-track,
+body.landing::-webkit-scrollbar-corner,
+.landing ::-webkit-scrollbar-track,
+.landing ::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+/* `background-color`, never the `background` shorthand: the shorthand resets
+   `background-clip` to border-box and the thumb paints over its own inset. */
+body.landing::-webkit-scrollbar-thumb,
+.landing ::-webkit-scrollbar-thumb {
+	background-color: var(--border-light);
+	border-radius: 999px;
+	border: 3px solid transparent;
+	background-clip: padding-box;
+}
+
+body.landing::-webkit-scrollbar-thumb:hover,
+.landing ::-webkit-scrollbar-thumb:hover {
+	background-color: var(--text-muted);
+}
+
+body.landing::-webkit-scrollbar-button,
+.landing ::-webkit-scrollbar-button {
+	display: none;
+}
+
 body.landing {
 	margin: 0;
 	background: var(--bg);
@@ -1936,7 +1982,40 @@ html.js .reveal.in {
 	flex-direction: column;
 	margin: 0 8px;
 	padding: 26px 8px 32px;
-	overflow: hidden;
+	/* the app's screen scrolls, and so does this one - the demo scrolls it to
+	   whatever it is about to touch */
+	overflow: hidden auto;
+	scrollbar-gutter: stable both-edges;
+}
+
+/* `scrollbar-color` inherits, and where Chromium honours it the pseudo-elements
+   below are ignored - which would give the mock a scrollbar the app does not
+   have. Inside the window shell the standard properties go back to auto so the
+   app's own 12px pseudo scrollbar is what draws. */
+.oc-window,
+.oc-window * {
+	scrollbar-width: auto;
+	scrollbar-color: auto;
+}
+
+/* the app's own scrollbar, from App.css: 12px with a 2px inset on the thumb */
+.set-screen::-webkit-scrollbar {
+	width: 12px;
+}
+
+.set-screen::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.set-screen::-webkit-scrollbar-thumb {
+	background-color: var(--border-light);
+	border-radius: 999px;
+	border: 2px solid transparent;
+	background-clip: padding-box;
+}
+
+.set-screen::-webkit-scrollbar-thumb:hover {
+	background-color: var(--text-muted);
 }
 
 .set-inner {
@@ -2031,6 +2110,112 @@ html.js .reveal.in {
 
 .set-group > .set-row:first-child {
 	border-top: none;
+}
+
+/* a row whose control sits above a panel that slides out under it */
+.set-row--stack {
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0;
+}
+
+.set-row-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.set-child-checks {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 10px -14px -11px;
+	padding: 12px 14px;
+	border-top: 1px solid var(--border);
+	background: var(--bg);
+	border-bottom-left-radius: var(--radius);
+	border-bottom-right-radius: var(--radius);
+}
+
+.set-check-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.set-check {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+	border: 1.5px solid var(--border-light);
+	background: var(--surface-hover);
+	flex-shrink: 0;
+}
+
+.set-check.is-on {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: #fff;
+}
+
+.set-check-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+	flex: 1;
+}
+
+.set-check-label {
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.01em;
+	color: var(--text);
+}
+
+.set-check-desc {
+	font-size: 10.5px;
+	line-height: 1.35;
+	color: var(--text-muted);
+}
+
+.set-cue-tests {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 6px;
+}
+
+.set-cue-test {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	padding: 4px 10px;
+	border: 1px solid var(--border-light);
+	border-radius: 11px;
+	background: var(--surface-hover);
+	color: var(--text-secondary);
+	font-size: 11px;
+	font-weight: 500;
+}
+
+.set-action-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-shrink: 0;
+	padding: 6px 12px;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	background: var(--surface-hover);
+	color: var(--text);
+	font-size: 12px;
+	font-weight: 500;
+	white-space: nowrap;
 }
 
 .set-row-info {

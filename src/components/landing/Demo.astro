@@ -350,6 +350,8 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		if (groupsBadge) groupsBadge.textContent = '3';
 
 		showScreen('history');
+		const scroller = document.getElementById('demo-set-scroll');
+		if (scroller) scroller.scrollTop = 0;
 		settingsScreen?.querySelectorAll<HTMLElement>('.set-toggle').forEach((t) => {
 			t.classList.toggle('is-on', t.dataset.on === '1');
 		});
@@ -495,26 +497,27 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		await hold(2000);
 	}
 
+	/** bring a settings row into view the way a person would scroll to it */
+	async function scrollSettingsTo(el: Element | null, pad = 120) {
+		const scroller = document.getElementById('demo-set-scroll');
+		if (!scroller || !el) return;
+		const top = (el.getBoundingClientRect().top - scroller.getBoundingClientRect().top) / zoom();
+		scroller.scrollTop += top - pad;
+		await hold(600);
+	}
+
 	async function sceneSettings() {
 		say('The gear at the foot of the sidebar opens Settings.');
 		await clickOn(gearBtn!, 0.5, 0.5, 800);
 		showScreen('settings');
-		await hold(1400);
-
-		const row = settingsScreen?.querySelector<HTMLElement>(
-			'[data-set-row="Click a card to view it"] .set-toggle',
-		);
-		if (row) {
-			say('Off, a click copies an entry. On, a click opens it instead.');
-			await clickOn(row, 0.5, 0.5);
-			row.classList.add('is-on');
-		}
-		await hold(1600);
+		await hold(1500);
 
 		const slots = document.getElementById('demo-slots');
 		const trigger = slots?.querySelector<HTMLElement>('.set-select-trigger');
 		const list = slots?.querySelector<HTMLElement>('.set-select-list');
 		if (slots && trigger && list) {
+			say('Notifications, sounds, quick paste, history, updates - all on one page.');
+			await scrollSettingsTo(slots.closest('.set-section'), 60);
 			say('Quick paste can hold more slots.');
 			await clickOn(trigger, 0.5, 0.5);
 			slots.classList.add('is-open');
@@ -530,8 +533,19 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			}
 			list.hidden = true;
 			slots.classList.remove('is-open');
+			await hold(1200);
 		}
-		await hold(1700);
+
+		const row = settingsScreen?.querySelector<HTMLElement>(
+			'[data-set-row="Click a card to view it"] .set-toggle',
+		);
+		if (row) {
+			await scrollSettingsTo(row.closest('.set-row'), 150);
+			say('Off, a click copies an entry. On, a click opens it instead.');
+			await clickOn(row, 0.5, 0.5);
+			row.classList.add('is-on');
+		}
+		await hold(1800);
 
 		say('Back to the history.');
 		await clickOn(clipboardNav!, 0.5, 0.5, 800);
