@@ -140,6 +140,11 @@ export const NAV_ICONS = {
 		'width="20" height="20" fill="currentColor" viewBox="0 0 256 256"',
 		'<path d="M240,128a80,80,0,0,1-80,80H72A56,56,0,1,1,85.92,97.74l0,.1A80,80,0,0,1,240,128Z" opacity="0.2"/><path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L144,148.69l42.34-42.35A8,8,0,0,1,197.66,106.34Z"/>',
 	),
+	/* Phosphor CloudArrowUp, duotone, 20px - the sidebar's "syncing" state */
+	cloudArrowUp: svg(
+		'width="20" height="20" fill="currentColor" viewBox="0 0 256 256"',
+		'<path d="M240,128a80,80,0,0,1-80,80H72A56,56,0,1,1,85.92,97.74l0,.1A80,80,0,0,1,240,128Z" opacity="0.2"/><path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1-11.32,11.32L168,123.31V172a8,8,0,0,1-16,0V123.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0Z"/>',
+	),
 	/* the same CloudCheck at 11px, as the filter's Cloud segment draws it */
 	cloudCheck11: svg(
 		'width="11" height="11" fill="currentColor" viewBox="0 0 256 256"',
@@ -489,3 +494,17 @@ export const THUMBS = {
 		<rect x="10" y="36" width="34" height="12" rx="3" fill="#93a3b5"/>`,
 	),
 };
+
+/* ---- the toolbar's sort options, 11px, from icons.tsx. Order matches
+   SORT_OPTIONS: Newest, Oldest, A to Z, Z to A, Type. ---- */
+export const SORT_ICONS: string[] = [
+	stroke(11, 2.2, '<polyline points="17 11 12 6 7 11"/><line x1="12" y1="18" x2="12" y2="6"/>'),
+	stroke(11, 2.2, '<polyline points="7 13 12 18 17 13"/><line x1="12" y1="6" x2="12" y2="18"/>'),
+	stroke(11, 2.4, '<line x1="4" y1="6" x2="10" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>'),
+	stroke(11, 2.4, '<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/>'),
+	stroke(
+		11,
+		2.2,
+		'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+	),
+];

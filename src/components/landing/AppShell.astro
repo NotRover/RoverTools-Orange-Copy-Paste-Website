@@ -26,7 +26,7 @@ const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
 			<span class:list={['oc-navbtn', nav === 'clipboard' && 'active']} set:html={NAV_ICONS.clipboard} />
 			<span class:list={['oc-navbtn', nav === 'notes' && 'active']} set:html={NAV_ICONS.notes} />
 			<span
-				class:list={['oc-navbtn', nav === 'spaces' && 'active']}
+				class:list={['oc-navbtn', 'oc-nav-sync', nav === 'spaces' && 'active']}
 				style={nav === 'spaces' ? undefined : 'color:#22c55e'}
 				set:html={NAV_ICONS.cloudCheck}
 			/>
@@ -51,4 +51,11 @@ const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
 		</div>
 		<slot />
 	</div>
+
+	<!-- Anything drawn over the whole window - a cursor, a menu, a popup - goes
+	     here rather than in the default slot. The default slot lands inside
+	     `.oc-main`, which starts after the sidebar, while an absolutely
+	     positioned child resolves against `.oc-window`: measuring in one box and
+	     placing in the other puts everything a sidebar's width out. -->
+	<slot name="overlay" />
 </div>

@@ -1,0 +1,47 @@
+---
+/**
+ * The bulk actions bar, from bulk-actions/BulkActionsBar.css. It floats under
+ * the select toggle once entries are ticked. Styles are the global
+ * `bulk-popup-*` parts in landing.css.
+ */
+import { CHIP_ICONS, MENU_ICONS, SRC_ICONS } from './app-parts';
+
+interface Props {
+	/** how many entries are ticked */
+	count?: number;
+	/** draw the Share flyout hanging open off its chip */
+	flyout?: boolean;
+	/** draw the first space as one the selection is already in */
+	picked?: boolean;
+}
+
+const { count = 7, flyout = true, picked = true } = Astro.props;
+
+/* close glyph the popups use: CloseIcon at 10px, stroke 2.5 */
+const CLOSE_ICON =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+---
+
+<div class="bulk-popup">
+	<span class="bulk-popup-count"><strong>{count}</strong> selected</span>
+	<span class="bulk-popup-toggle">Select all</span>
+	<span class="bulk-popup-vsep"></span>
+	<span class="bulk-popup-chip bulk-popup-chip--pin"><Fragment set:html={MENU_ICONS.pin} /><span>Pin</span></span>
+	<span class="bulk-popup-chip bulk-popup-chip--save"><Fragment set:html={MENU_ICONS.star} /><span>Save</span></span>
+	<span class="bulk-popup-chip"><Fragment set:html={MENU_ICONS.tag} /><span>Groups</span><Fragment set:html={MENU_ICONS.caret} /></span>
+	<span class="bulk-popup-groups-wrap">
+		<span class:list={['bulk-popup-chip', flyout && 'bulk-popup-chip--groups-active']}><Fragment set:html={MENU_ICONS.share} /><span>Share</span><Fragment set:html={MENU_ICONS.caret} /></span>
+		<span class="bulk-popup-groups-flyout" hidden={!flyout}>
+			<span class="bulk-popup-flyout-header"><Fragment set:html={MENU_ICONS.share} /><span>Share to space</span></span>
+			<span class="bulk-popup-flyout-spaces">
+				<span class:list={['bulk-popup-space-row', picked && 'bulk-popup-space-row--active']}><span class="bulk-popup-space-check">{picked && <Fragment set:html={CHIP_ICONS.check} />}</span><span class="bulk-popup-row-label">Design</span></span>
+				<span class="bulk-popup-space-row"><span class="bulk-popup-space-check"></span><span class="bulk-popup-row-label">Ops</span></span>
+				<span class="bulk-popup-space-row"><span class="bulk-popup-space-check"></span><span class="bulk-popup-row-label">Family</span><span class="bulk-popup-space-wait">waiting</span></span>
+			</span>
+		</span>
+	</span>
+	<span class="bulk-popup-chip"><Fragment set:html={SRC_ICONS.cloud13} /><span>Cloud</span><Fragment set:html={MENU_ICONS.caret} /></span>
+	<span class="bulk-popup-vsep"></span>
+	<span class="bulk-popup-chip bulk-popup-chip--delete"><Fragment set:html={MENU_ICONS.trash} /><span>Delete</span></span>
+	<span class="bulk-popup-close" set:html={CLOSE_ICON} />
+</div>
