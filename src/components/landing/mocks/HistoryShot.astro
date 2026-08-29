@@ -1,0 +1,207 @@
+---
+/**
+ * The clipboard history screen, drawn at the app window's own 920x560.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import AppShell from '../AppShell.astro';
+import HistoryScreen from '../HistoryScreen.astro';
+import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS, THUMBS } from '../app-parts';
+---
+
+<AppShell nav="clipboard">
+	<HistoryScreen count={128} groups={3}>
+		<div class="oc-card oc-card--in-clipboard">
+			<div class="oc-card-body">
+				<p class="oc-card-text">Meet at the station, platform 4, 9:40. Bring the badge for the side door.</p>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+						<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.teal}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">work</span></span>
+					</span>
+					<span class="oc-time">Just now</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="oc-card">
+			<div class="oc-card-media"><img class="oc-card-media-img" src={THUMBS.photo} alt="" /></div>
+			<div class="oc-card-body">
+				<p class="oc-imgname">#a1b2c3d4 Image Aug 21, 2:45 PM</p>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
+					</span>
+					<span class="oc-time">4m ago</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="oc-card">
+			<div class="oc-card-body">
+				<p class="oc-card-text oc-card-text--clamp">github.com/Spectrewolf8/RoverTools-Releases</p>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.pinned}`}><Fragment set:html={CHIP_ICONS.pin} /><span class="oc-chip-label">Pinned</span></span>
+					</span>
+					<span class="oc-time">32m ago</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="oc-card">
+			<div class="oc-card-body">
+				<div class="oc-card-html">
+					<h4>Release checklist</h4>
+					<ul>
+						<li>Bump the version and tag it</li>
+						<li>Sign both bundles</li>
+						<li>Publish <code>next.md</code> as the notes</li>
+					</ul>
+				</div>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.html}`}><Fragment set:html={CHIP_ICONS.html} /><span class="oc-chip-label">Rich Text</span></span>
+						<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.amber}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">release</span></span>
+					</span>
+					<span class="oc-time">51m ago</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="oc-card">
+			<div class="oc-card-body">
+				<p class="oc-card-text oc-card-text--clamp">quarterly-report.pdf</p>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.saved}`}><Fragment set:html={CHIP_ICONS.saved} /><span class="oc-chip-label">Saved</span></span>
+					</span>
+					<span class="oc-time">1h ago</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="oc-card">
+			<div class="oc-card-media oc-card-media--video">
+				<img class="oc-card-media-img" src={THUMBS.ui} alt="" />
+				<span class="oc-card-play"><span><Fragment set:html={CHIP_ICONS.video} /></span></span>
+			</div>
+			<div class="oc-card-body">
+				<p class="oc-card-text oc-card-text--clamp">popup-placement-bug.mp4</p>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.video}`}><Fragment set:html={CHIP_ICONS.video} /><span class="oc-chip-label">Video</span></span>
+					</span>
+					<span class="oc-time">3h ago</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="oc-card">
+			<div class="oc-card-body">
+				<p class="oc-card-text oc-card-text--clamp">/home/rio/projects/orangecp/assets</p>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.folder}`}><Fragment set:html={CHIP_ICONS.folder} /><span class="oc-chip-label">Folder</span></span>
+					</span>
+					<span class="oc-time">4h ago</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="oc-card">
+			<div class="oc-card-body">
+				<p class="oc-card-text oc-card-text--clamp oc-card-text--missing">old-mockup-v3.fig<span class="oc-card-missing">missing</span></p>
+				<div class="oc-card-footer">
+					<span class="oc-chips">
+						<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span>
+					</span>
+					<span class="oc-time">6h ago</span>
+				</div>
+			</div>
+		</div>
+
+		<Fragment slot="earlier">
+			<div class="oc-card">
+				<div class="oc-card-media"><img class="oc-card-media-img" src={THUMBS.chart} alt="" /></div>
+				<div class="oc-card-body">
+					<p class="oc-imgname">#5e90d2f1 Image Aug 20, 4:38 PM</p>
+					<div class="oc-card-footer">
+						<span class="oc-chips">
+							<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
+							<span class="oc-chip" style={`--cc:${KIND_COLORS.saved}`}><Fragment set:html={CHIP_ICONS.saved} /><span class="oc-chip-label">Saved</span></span>
+						</span>
+						<span class="oc-time">19h ago</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="oc-card">
+				<div class="oc-card-media oc-card-media--multi">
+					<div class="oc-card-thumb"><img src={THUMBS.swatchA} alt="" /></div>
+					<div class="oc-card-thumb"><img src={THUMBS.swatchB} alt="" /></div>
+					<div class="oc-card-thumb">
+						<img src={THUMBS.ui} alt="" />
+						<span class="oc-card-thumb-more">+2</span>
+					</div>
+				</div>
+				<div class="oc-card-body">
+					<div class="oc-card-files">
+						<span class="oc-card-file"><Fragment set:html={CHIP_ICONS.image} /><span class="oc-card-file-name">logo-orange.svg</span></span>
+						<span class="oc-card-file"><Fragment set:html={CHIP_ICONS.image} /><span class="oc-card-file-name">wordmark-dark.png</span></span>
+						<span class="oc-card-file"><Fragment set:html={CHIP_ICONS.file} /><span class="oc-card-file-name">brand-guide.pdf</span></span>
+						<span class="oc-card-file-more">+2 more</span>
+					</div>
+					<div class="oc-card-footer">
+						<span class="oc-chips">
+							<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">Files</span></span>
+							<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
+						</span>
+						<span class="oc-time">20h ago</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="oc-card">
+				<div class="oc-card-body">
+					<p class="oc-card-text">Rename the beta channel to preview before the next build goes out.</p>
+					<div class="oc-card-footer">
+						<span class="oc-chips">
+							<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+							<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.indigo}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">ideas</span></span>
+						</span>
+						<span class="oc-time">22h ago</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="oc-card">
+				<div class="oc-card-body">
+					<p class="oc-card-text oc-card-text--clamp">meeting-notes-aug-20.md</p>
+					<div class="oc-card-footer">
+						<span class="oc-chips">
+							<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+						</span>
+						<span class="oc-time">1d ago</span>
+					</div>
+				</div>
+			</div>
+		</Fragment>
+	</HistoryScreen>
+	<div class="oc-pill-row">
+		<div class="oc-stat-pill">
+			<span class="oc-stat"><b>86</b> text</span>
+			<span class="oc-stat-sep"></span>
+			<span class="oc-stat"><b>7</b> rich</span>
+			<span class="oc-stat-sep"></span>
+			<span class="oc-stat"><b>21</b> img</span>
+			<span class="oc-stat-sep"></span>
+			<span class="oc-stat"><b>14</b> files</span>
+			<span class="oc-stat-sep"></span>
+			<span class="oc-stat"><b>128</b> total</span>
+		</div>
+		<div class="oc-sync-pill"><span class="dot"></span>Sync connected</div>
+	</div>
+</AppShell>

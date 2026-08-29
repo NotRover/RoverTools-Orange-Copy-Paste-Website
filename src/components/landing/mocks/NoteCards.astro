@@ -1,0 +1,80 @@
+---
+/**
+ * Note cards, from the app's note-card.css.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { CHIP_ICONS, SRC_ICONS } from '../app-parts';
+---
+
+<div class="ns-card">
+	<div class="ns-card-body">
+		<div class="ns-card-title">Release checklist</div>
+		<div class="ns-card-preview">
+			<ul class="ns-tasks">
+				<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Draft the notes in changelog/next.md</li>
+				<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Check the updater on both channels</li>
+				<li class="ns-task"><span class="ns-task-box"></span>Ship 0.1.16</li>
+			</ul>
+			<pre class="ns-code">bun run tauri build</pre>
+		</div>
+		<div class="ns-card-footer">
+			<div class="ns-card-chips">
+				<span class="ns-chip ns-chip--pinned"><Fragment set:html={CHIP_ICONS.pin} /><span class="ns-chip-label">Pinned</span></span>
+				<span class="ns-chip" style="background:rgba(20,184,166,0.12);color:#14b8a6"><span class="ns-chip-dot"></span><span class="ns-chip-label">work</span></span>
+			</div>
+			<span class="ns-card-time ns-card-time--pinned"><Fragment set:html={CHIP_ICONS.pin} />12m ago</span>
+		</div>
+	</div>
+</div>
+
+<div class="ns-card">
+	<div class="ns-card-body">
+		<div class="ns-card-title">Reply to the beta thread</div>
+		<div class="ns-card-preview">
+			<p class="ns-p">Yes, the history stays on disk when sync is off. Nothing is uploaded until you sign in.</p>
+		</div>
+		<div class="ns-card-footer">
+			<div class="ns-card-chips">
+				<span class="ns-chip" style="background:rgba(16,185,129,0.12);color:#10b981"><span class="ns-chip-dot"></span><span class="ns-chip-label">support</span></span>
+			</div>
+			<span class="ns-card-time">Yesterday</span>
+		</div>
+	</div>
+</div>
+
+<div class="ns-card">
+	<div class="ns-card-body">
+		<div class="ns-card-title">Popup sizes</div>
+		<div class="ns-card-preview">
+			<table class="ns-table">
+				<tr><th>Window</th><th>Size</th></tr>
+				<tr><td>Copy popup</td><td>340 x 260</td></tr>
+				<tr><td>Paste popup</td><td>340 x 460</td></tr>
+				<tr><td>Main window</td><td>920 x 560</td></tr>
+			</table>
+		</div>
+		<div class="ns-card-footer">
+			<div class="ns-card-chips">
+				<span class="ns-chip" style="background:rgba(99,102,241,0.12);color:#6366f1"><span class="ns-chip-dot"></span><span class="ns-chip-label">ideas</span></span>
+			</div>
+			<span class="ns-card-time">2h ago</span>
+		</div>
+	</div>
+</div>
+
+<div class="ns-card">
+	<div class="ns-card-body">
+		<div class="ns-card-title">From the design review</div>
+		<div class="ns-card-preview">
+			<blockquote class="ns-quote">The rail should have ends. A line that stops dead reads as a bug.</blockquote>
+			<p class="ns-p">Fixed by fading the last group out under its own dot.</p>
+		</div>
+		<div class="ns-card-footer">
+			<div class="ns-card-chips">
+				<span class="ns-chip" style="background:rgba(245,158,11,0.12);color:#f59e0b"><span class="ns-chip-dot"></span><span class="ns-chip-label">release</span></span>
+			</div>
+			<span class="ns-card-time"><span class="ns-card-sync ns-card-sync--shared"><Fragment set:html={SRC_ICONS.shareNetwork11} /><span class="ns-card-sync-count">2</span></span>Yesterday</span>
+		</div>
+	</div>
+</div>

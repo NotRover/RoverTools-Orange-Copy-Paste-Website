@@ -1,0 +1,37 @@
+---
+/**
+ * The shortcut list, from ShortcutsScreen.css.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { SRC_ICONS } from '../app-parts';
+---
+
+<div class="acct-zone">
+	<div class="acct-zone-head">
+		<span class="acct-zone-icon" set:html={SRC_ICONS.keyboard13} />
+		<span class="acct-zone-label">Shortcuts</span>
+	</div>
+	<div class="acct-card acct-card--rows">
+		<div class="shortcut-row">
+			<span class="shortcut-desc">Capture the selection into the history</span>
+			<span class="shortcut-keys"><kbd class="shortcut-key">Ctrl</kbd><kbd class="shortcut-key">Shift</kbd><kbd class="shortcut-key">C</kbd></span>
+		</div>
+		<div class="shortcut-row">
+			<span class="shortcut-desc">Open the quick-paste popup</span>
+			<span class="shortcut-keys"><kbd class="shortcut-key">Ctrl</kbd><kbd class="shortcut-key">Shift</kbd><kbd class="shortcut-key">V</kbd></span>
+		</div>
+		<div class="shortcut-row">
+			<span class="shortcut-desc">Paste an entry by its slot number</span>
+			<span class="shortcut-keys"><kbd class="shortcut-key">1-9, 0</kbd></span>
+		</div>
+		<div class="shortcut-row">
+			<span class="shortcut-desc">Switch between Recent and Pinned</span>
+			<span class="shortcut-keys"><kbd class="shortcut-key">Tab</kbd></span>
+		</div>
+		<div class="shortcut-row">
+			<span class="shortcut-desc">Close the popup</span>
+			<span class="shortcut-keys"><kbd class="shortcut-key">Esc</kbd></span>
+		</div>
+	</div>
+</div>

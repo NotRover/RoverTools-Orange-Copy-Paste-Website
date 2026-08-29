@@ -35,7 +35,7 @@ Groups are colored tags you define. Create, rename, recolor and delete them from
 
 Search matches entry content and group names. Filters stack on top:
 
-- **Quick:** pinned, saved, received.
+- **Quick:** pinned, saved, and, once you are signed in, mine or from others.
 - **Type:** text, url, html, image, video, document, file, folder.
 - **Cloud:** in cloud, or local only.
 - **Sharing:** shared, not shared, or per space.

@@ -1096,8 +1096,10 @@ html.js .reveal.in {
    and the demo section draw the same card. ---- */
 .cs-filter-card {
 	/* the app widens the card rather than scrolling it: two columns, so every
-	   option stays on screen */
-	width: 604px;
+	   option stays on screen. 688px is `cs-filter-card--wide`, sized so the four
+	   Quick chips (Pinned, Saved, Mine, From others) hold one line at four-digit
+	   counts - at the old 604px the last one dropped to a line of its own. */
+	width: 688px;
 	display: flex;
 	flex-direction: column;
 	border: 1px solid var(--border);
@@ -1162,15 +1164,19 @@ html.js .reveal.in {
 .cs-card-col {
 	flex: 1;
 	min-width: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
 }
 
-/* the first column carries the widest content - three switches on one line
-   and the two-across type grid - so it gets the larger share */
+/* the first column carries the widest content - the four Quick switches on one
+   line, and the two-across type grid - so it gets the larger share. 392px of
+   chips against the second column's widest, the 198px share segment. */
 .cs-card-col:first-child {
-	flex: 1.18;
+	flex: 1.7;
+}
+
+/* a section already carries its own top divider inside a column, so the one
+   above the first section in each column is redundant */
+.cs-card-col > .cs-card-divider:first-child {
+	display: none;
 }
 
 .cs-card-col + .cs-card-col {
@@ -1217,6 +1223,12 @@ html.js .reveal.in {
 
 .cs-chip--on {
 	border-color: transparent;
+}
+
+/* nothing to find down this branch. Dimmed rather than hidden, because a
+   vanishing chip reflows every chip after it. */
+.cs-chip--dead {
+	opacity: 0.38;
 }
 
 .cs-chip-count {
@@ -1274,6 +1286,7 @@ html.js .reveal.in {
 
 .cs-seg {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 2px;
 	margin: 4px 2px 6px;
 	padding: 2px;
@@ -1288,7 +1301,7 @@ html.js .reveal.in {
 	align-items: center;
 	justify-content: center;
 	gap: 4px;
-	flex: 1;
+	flex: 1 1 auto;
 	min-width: 0;
 	white-space: nowrap;
 	padding: 4px 5px;
@@ -2340,4 +2353,39 @@ html.js .reveal.in {
 .set-select-option.is-on {
 	color: var(--accent);
 	background: var(--accent-dim);
+}
+
+/* Moved out of Showcase.astro when its mocks became components: these
+   rules style markup that now lives in those components. */
+
+.oc-imgname {
+	font-size: 11px;
+	font-weight: 500;
+	color: var(--text-secondary);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Spaces offers Cards and Rows, not the clipboard's three layouts, so the
+   slider covers a half rather than a third. */
+
+.oc-seg--2 .oc-seg-slider,
+.oc-seg--2 .oc-seg-slider {
+	width: calc((100% - 4px) / 2);
+}
+
+/* clipboard pane */
+
+.oc-card-media.grad-blue {
+	background:
+		linear-gradient(135deg, rgba(59, 130, 246, 0.45), rgba(139, 92, 246, 0.3)),
+		var(--bg);
+}
+
+.oc-card-media.grad-teal {
+	background:
+		linear-gradient(135deg, rgba(20, 184, 166, 0.4), rgba(59, 130, 246, 0.28)),
+		var(--bg);
+	height: 58px;
 }

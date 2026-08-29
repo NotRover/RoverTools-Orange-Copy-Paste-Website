@@ -1,0 +1,52 @@
+---
+/**
+ * A space's member list, from SpacesScreen.css.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { SRC_ICONS } from '../app-parts';
+---
+
+<div class="sp-settings-block">
+	<div class="sp-settings-label">People<span class="sp-settings-count">5</span></div>
+	<div class="sp-member-list">
+		<div class="sp-member-row">
+			<span class="sp-member-pic">YO</span>
+			<span class="sp-member-name">You</span>
+			<span class="sp-badge sp-badge--owner">owner</span>
+			<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+		</div>
+		<div class="sp-member-row">
+			<span class="sp-member-pic">RI</span>
+			<span class="sp-member-name">rio</span>
+			<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+		</div>
+		<div class="sp-member-row">
+			<span class="sp-member-pic">ME</span>
+			<span class="sp-member-name">mei</span>
+			<span class="sp-badge sp-badge--warn">waiting for key</span>
+			<span class="sp-member-dot"><span class="sp-dot"></span></span>
+		</div>
+		<div class="sp-member-row">
+			<span class="sp-member-pic">DE</span>
+			<span class="sp-member-name">dev-box</span>
+			<span class="sp-member-dot"><span class="sp-dot"></span></span>
+		</div>
+		<div class="sp-member-row">
+			<span class="sp-member-pic">SA</span>
+			<span class="sp-member-name">sam</span>
+			<span class="sp-member-dot"><span class="sp-dot"></span></span>
+		</div>
+	</div>
+	<div class="sp-invite-box">
+		<div class="sp-invite-row">
+			<code class="sp-invite-code">7K2M-9QX4</code>
+			<span class="sp-btn sp-btn--icon"><Fragment set:html={SRC_ICONS.copy12} /><span class="sp-btn-label">Copy code</span></span>
+			<span class="sp-btn sp-btn--icon"><Fragment set:html={SRC_ICONS.shareNetwork11} /><span class="sp-btn-label">Copy link</span></span>
+		</div>
+		<div class="sp-invite-row">
+			<span class="sp-inline-input">Invite by email</span>
+			<span class="sp-btn">Send</span>
+		</div>
+	</div>
+</div>

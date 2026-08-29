@@ -1,0 +1,408 @@
+/* Account and shortcuts screen mock parts, from AccountScreen.css and
+   ShortcutsScreen.css.
+
+   Global rather than scoped to one component: several mocks draw these parts,
+   and a copy per component is a copy that drifts. Every value is the app's
+   own - see the site CLAUDE.md on wearing the app's skin. */
+
+/* the storage zone's breakdown by type, from AccountScreen.css */
+
+.acct-comp {
+display: flex;
+flex-direction: column;
+gap: 9px;
+padding: 11px 14px 10px;
+border-top: 1px solid var(--border);
+}
+
+.acct-comp-head {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.acct-comp-total {
+margin-left: auto;
+font-size: 11.5px;
+color: var(--text-muted);
+font-variant-numeric: tabular-nums;
+}
+
+.acct-comp-bar {
+display: flex;
+height: 6px;
+border-radius: 3px;
+overflow: hidden;
+background: rgba(240, 240, 240, 0.08);
+}
+
+.acct-comp-seg {
+height: 100%;
+box-shadow: inset -1px 0 0 var(--surface);
+}
+
+.acct-comp-seg:last-child {
+box-shadow: none;
+}
+
+.acct-comp-legend {
+display: flex;
+flex-direction: column;
+}
+
+.acct-comp-row {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 5px 6px;
+margin: 0 -6px;
+border-radius: var(--radius-xs);
+color: var(--text);
+font-size: 12px;
+}
+
+.acct-comp-dot {
+width: 8px;
+height: 8px;
+border-radius: 2px;
+flex-shrink: 0;
+}
+
+.acct-comp-label {
+flex: 1;
+min-width: 0;
+}
+
+.acct-comp-count {
+font-weight: 550;
+font-variant-numeric: tabular-nums;
+}
+
+.acct-comp-pct {
+width: 34px;
+text-align: right;
+font-size: 11.5px;
+color: var(--text-muted);
+font-variant-numeric: tabular-nums;
+}
+
+.acct-comp-note {
+margin: 0;
+font-size: 11px;
+line-height: 1.4;
+color: var(--text-muted);
+opacity: 0.75;
+}
+
+.acct-card--rows .acct-comp:first-child {
+border-top: none;
+}
+
+/* the count on the right of a stat row: same metrics as .acct-row-name, so
+   the number reads as the row's subject rather than a headline over it */
+
+.acct-stat-value {
+flex-shrink: 0;
+font-size: 13px;
+font-weight: 550;
+color: var(--text);
+font-variant-numeric: tabular-nums;
+}
+
+/* ---- account screen: the sync-mode segment, from AccountScreen.css ---- */
+
+.acct-mode {
+display: flex;
+flex-direction: column;
+gap: 5px;
+font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.acct-mode-head {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+min-height: 26px;
+}
+
+.acct-seg {
+display: flex;
+gap: 2px;
+padding: 2px;
+border: 1px solid var(--border);
+border-radius: 8px;
+background: var(--bg);
+}
+
+.acct-seg-pill {
+font-size: 11.5px;
+font-weight: 500;
+color: var(--text-muted);
+border-radius: 6px;
+padding: 4px 10px;
+}
+
+/* ---- the shortcut list, from ShortcutsScreen.css ---- */
+
+.shortcut-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+padding: 10px 14px;
+border-top: 1px solid var(--border);
+}
+
+.acct-card--rows .shortcut-row:first-child {
+border-top: none;
+}
+
+.shortcut-desc {
+flex: 1;
+min-width: 0;
+font-size: 12.5px;
+color: var(--text);
+}
+
+.shortcut-keys {
+display: flex;
+align-items: center;
+gap: 3px;
+flex-shrink: 0;
+}
+
+.shortcut-key {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 2px 7px;
+border: 1px solid var(--border-light);
+border-bottom-width: 2px;
+border-radius: 5px;
+background: var(--bg);
+color: var(--text-secondary);
+font-family: var(--font-mono);
+font-size: 11px;
+font-weight: 600;
+}
+
+/* ---- the storage quota, from AccountScreen.css ---- */
+
+.acct-quota {
+display: flex;
+flex-direction: column;
+gap: 7px;
+padding: 11px 14px;
+border-top: 1px solid var(--border);
+}
+
+.acct-card--rows .acct-quota:first-child {
+border-top: none;
+}
+
+.acct-quota-head {
+display: flex;
+align-items: center;
+gap: 6px;
+font-size: 12px;
+color: var(--text-muted);
+}
+
+.acct-quota-value {
+margin-left: auto;
+}
+
+.acct-quota-track {
+height: 5px;
+border-radius: 3px;
+background: rgba(240, 240, 240, 0.1);
+overflow: hidden;
+}
+
+.acct-quota-fill {
+height: 100%;
+border-radius: 3px;
+background: var(--accent);
+}
+
+.acct-quota-note {
+margin: 6px 0 0;
+font-size: 11px;
+line-height: 1.4;
+color: var(--text-muted);
+opacity: 0.75;
+}
+
+/* ---- the Devices zone, from AccountScreen.css ---- */
+
+.acct-zone {
+display: flex;
+flex-direction: column;
+gap: 9px;
+}
+
+.acct-zone-head {
+display: flex;
+align-items: center;
+gap: 8px;
+min-height: 26px;
+}
+
+.acct-zone-icon {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 22px;
+height: 22px;
+border-radius: 6px;
+color: var(--accent);
+background: var(--accent-dim);
+flex-shrink: 0;
+}
+
+.acct-zone-label {
+font-size: 13px;
+font-weight: 600;
+letter-spacing: -0.1px;
+color: var(--text-secondary);
+}
+
+.acct-card {
+border: 1px solid var(--border);
+border-radius: var(--radius);
+background: var(--surface);
+padding: 14px;
+}
+
+/* a grouped-rows card puts the padding on the rows, not the card */
+
+.acct-card--rows {
+padding: 0;
+overflow: hidden;
+}
+
+.acct-row {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 14px;
+border-top: 1px solid var(--border);
+}
+
+.acct-card--rows .acct-row:first-child {
+border-top: none;
+}
+
+.acct-row-icon {
+display: flex;
+align-items: center;
+flex: 0 0 auto;
+color: var(--text-muted);
+}
+
+.acct-row-main {
+display: flex;
+flex-direction: column;
+min-width: 0;
+flex: 1;
+}
+
+.acct-row-name {
+font-size: 13px;
+font-weight: 550;
+color: var(--text);
+}
+
+.acct-row-name > .acct-badge {
+margin-left: 8px;
+}
+
+.acct-row-meta {
+font-size: 11.5px;
+color: var(--text-muted);
+}
+
+.acct-row-actions {
+display: flex;
+gap: 6px;
+flex: 0 0 auto;
+}
+
+/* one shared badge metric, so every pill on the screen lines up */
+
+.acct-badge {
+display: inline-flex;
+align-items: center;
+flex: 0 0 auto;
+padding: 1px 8px;
+border-radius: var(--radius-xs);
+color: var(--text-muted);
+background: rgba(240, 240, 240, 0.07);
+font-size: 11px;
+font-weight: 600;
+line-height: 1.5;
+white-space: nowrap;
+}
+
+.acct-badge--owner {
+color: var(--accent);
+background: var(--accent-dim);
+}
+
+.acct-dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #9ca3af;
+flex: 0 0 auto;
+}
+
+/* destructive at rest, so it reads as different before it is hovered */
+
+.acct-btn--sm {
+padding: 4px 9px;
+font-size: 11.5px;
+}
+
+.acct-btn--danger {
+color: var(--danger);
+border-color: rgba(239, 68, 68, 0.34);
+}
+
+.acct-card-desc {
+margin: 0;
+font-size: 12px;
+line-height: 1.45;
+color: var(--text-muted);
+}
+
+.acct-mode-note {
+margin: 2px 0 0;
+font-size: 10.5px;
+line-height: 1.4;
+color: var(--text-muted);
+}
+
+.acct-btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+font-size: 12px;
+font-weight: 600;
+color: var(--text);
+background: var(--bg);
+border: 1px solid var(--border);
+border-radius: 8px;
+padding: 7px 12px;
+}
+
+.acct-seg-pill.active {
+	color: var(--text);
+	background: var(--surface-hover);
+}
+
+.acct-dot.online {
+	background: #22c55e;
+}

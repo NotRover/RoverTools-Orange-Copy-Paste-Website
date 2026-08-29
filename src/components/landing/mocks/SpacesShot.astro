@@ -1,0 +1,437 @@
+---
+/**
+ * The spaces screen, drawn at the app window's own 920x560.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import AppShell from '../AppShell.astro';
+import { CHIP_ICONS, KIND_COLORS, TB_ICONS, SRC_ICONS, THUMBS } from '../app-parts';
+---
+
+<AppShell nav="spaces">
+	<div class="sp-screen">
+		<!-- DOM order is feed, rules, list: the list is pulled left with order:-1,
+		     exactly as the app does it -->
+		<div class="sp-feed-panel">
+			<div class="oc-toolbar">
+				<div class="oc-tb-group">
+					<div class="sp-feed-segment">
+						<span class="sp-feed-segment-slider"></span>
+						<span class="sp-feed-seg-btn sp-feed-seg-btn--active" set:html={SRC_ICONS.squares12} />
+						<span class="sp-feed-seg-btn" set:html={SRC_ICONS.clipboard11} />
+						<span class="sp-feed-seg-btn" set:html={SRC_ICONS.note11} />
+					</div>
+					<span class="oc-tb-sep"></span>
+					<span class="oc-tb-btn">
+						<Fragment set:html={TB_ICONS.sortArrow} />
+						<Fragment set:html={TB_ICONS.chevron} />
+					</span>
+					<span class="oc-tb-btn" set:html={TB_ICONS.filter} />
+				</div>
+
+				<div class="oc-search">
+					<span class="oc-search-icon" set:html={TB_ICONS.search} />
+					<span class="oc-search-field">Search...</span>
+				</div>
+
+				<div class="oc-tb-group">
+					<div class="oc-seg oc-seg--2">
+						<span class="oc-seg-slider"></span>
+						<span class="oc-seg-btn oc-seg-btn--active" set:html={TB_ICONS.tiles} />
+						<span class="oc-seg-btn" set:html={SRC_ICONS.rows12} />
+					</div>
+					<span class="oc-tb-sep"></span>
+					<span class="oc-tb-btn" set:html={TB_ICONS.select} />
+				</div>
+			</div>
+
+			<div class="sp-feed-scroll">
+				<div class="sp-timeline-wrap">
+					<div class="sp-timeline-groups">
+						<div class="sp-timeline-group sp-timeline-group--only">
+							<div class="sp-timeline-day-row">
+								<div class="sp-timeline-day-dot"></div>
+								<span class="sp-timeline-day-label">Today</span>
+								<span class="sp-timeline-day-chevron" set:html={TB_ICONS.dayChevron} />
+							</div>
+							<div class="sp-feed-card-grid">
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text">#ff3e1c on #0e0e0e reads 4.6:1, so the label needs 600 weight.</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+																<span class="sp-cmt-chip sp-cmt-chip--new"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">3</span></span>
+											</span>
+											<span class="oc-time">4m ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="sp-removed-row">
+									<span class="sp-removed-icon" set:html={SRC_ICONS.prohibit11} />
+									<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+									<span class="sp-removed-text">Stopped sharing this item here</span>
+									<span class="sp-removed-time">1h ago</span>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">staging.rovertools.app/preview/920x560</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+												<span class="sp-owner sp-owner--self">You</span>
+																<span class="sp-cmt-chip"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">1</span></span>
+											</span>
+											<span class="oc-time">Just now</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-media grad-teal"></div>
+									<div class="oc-card-body">
+										<p class="oc-imgname">#7f31c0ab Image Aug 21, 11:06 AM</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+											</span>
+											<span class="oc-time">18m ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">brand-assets (3 files)</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span>
+												<span class="sp-owner sp-owner--self">You</span>
+											</span>
+											<span class="oc-time">26m ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text">Ship the rail at 272 and let people drag it. The old fixed one was too tight for four members.</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">A</span><span class="sp-owner-name">Ada Lovelace</span></span>
+											</span>
+											<span class="oc-time">2h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="ns-card">
+									<div class="ns-card-body">
+										<div class="ns-card-title">Launch checklist</div>
+										<div class="ns-card-preview">Sign the bundles, check both channels, then publish the notes.</div>
+										<div class="ns-card-footer">
+											<div class="ns-card-chips">
+												<span class="oc-chip sp-source-chip--note"><Fragment set:html={SRC_ICONS.note} /><span class="oc-chip-label">Note</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											</div>
+											<span class="ns-card-time ns-card-time--pinned">1h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<div class="oc-card-html">
+											<h4>Handover</h4>
+											<ul>
+												<li>Rotate the space key</li>
+												<li>Re-wrap for the four of us</li>
+											</ul>
+										</div>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.html}`}><Fragment set:html={CHIP_ICONS.html} /><span class="oc-chip-label">Rich Text</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											</span>
+											<span class="oc-time">3h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">/home/rio/projects/orangecp/assets/press</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.folder}`}><Fragment set:html={CHIP_ICONS.folder} /><span class="oc-chip-label">Folder</span></span>
+												<span class="sp-owner sp-owner--self">You</span>
+											</span>
+											<span class="oc-time">4h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">press-kit-aug.pdf</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+											</span>
+											<span class="oc-time">5h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-media oc-card-media--video">
+										<img class="oc-card-media-img" src={THUMBS.ui} alt="" />
+										<span class="oc-card-play" set:html={CHIP_ICONS.video} />
+									</div>
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">popup-placement-bug.mp4</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.video}`}><Fragment set:html={CHIP_ICONS.video} /><span class="oc-chip-label">Video</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											</span>
+											<span class="oc-time">7h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">Ship the popup clamp fix first, then the rail. The clamp is the one people hit.</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">A</span><span class="sp-owner-name">Ada Lovelace</span></span>
+												<span class="sp-cmt-chip"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">2</span></span>
+											</span>
+											<span class="oc-time">6h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="ns-card">
+									<div class="ns-card-body">
+										<div class="ns-card-title">Colour audit</div>
+										<div class="ns-card-preview">Muted text on surface is 3.1:1. Needs to clear 4.5 before the beta.</div>
+										<div class="ns-card-footer">
+											<div class="ns-card-chips">
+												<span class="oc-chip sp-source-chip--note"><Fragment set:html={SRC_ICONS.note} /><span class="oc-chip-label">Note</span></span>
+												<span class="sp-owner sp-owner--self">You</span>
+											</div>
+											<span class="ns-card-time">6h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">figma.com/file/orangecp/spaces-rails</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+											</span>
+											<span class="oc-time">8h ago</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="oc-card">
+									<div class="oc-card-body">
+										<p class="oc-card-text oc-card-text--clamp">beta-icons (11 files)</p>
+										<div class="oc-card-footer">
+											<span class="oc-chips">
+												<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
+												<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span>
+												<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											</span>
+											<span class="oc-time">9h ago</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="sp-timeline-end"><span class="sp-timeline-end-text">You are all caught up</span></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- the rules rail. The app spells the invite actions out at 336px
+		     and up (RULES_LABEL_WIDTH), so at 340 it is sp-rules--wide. -->
+		<aside class="sp-rules sp-rules--wide">
+			<header class="sp-rules-head">
+				<span class="sp-rules-avatar" style="background:#3b82f6">DE</span>
+				<span class="sp-rules-head-text">
+					<span class="sp-rules-name">Design</span>
+					<span class="sp-rules-sub">4 members - you own it</span>
+				</span>
+			</header>
+			<div class="sp-rules-body">
+				<div class="sp-settings-block">
+					<div class="sp-settings-label">Rules<span class="sp-settings-count">auto</span></div>
+					<div class="sp-toggle-row">
+						<span class="sp-toggle-text">
+							<span class="sp-toggle-title">Copy new items in</span>
+							<span class="sp-toggle-desc">Anything shared here lands on your clipboard as it arrives.</span>
+						</span>
+						<span class="sp-switch sp-switch--on"></span>
+					</div>
+					<div class="sp-toggle-row">
+						<span class="sp-toggle-text">
+							<span class="sp-toggle-title">Share new items out</span>
+							<span class="sp-toggle-desc">Off. Only items you share by hand go into this space.</span>
+						</span>
+						<span class="sp-switch"></span>
+					</div>
+					<div class="sp-toggle-row">
+						<span class="sp-toggle-text">
+							<span class="sp-toggle-title">Share earlier items</span>
+							<span class="sp-toggle-desc">Everyone here can read what was shared before they joined.</span>
+						</span>
+						<span class="sp-switch sp-switch--on"></span>
+					</div>
+					<div class="sp-toggle-row">
+						<span class="sp-toggle-text">
+							<span class="sp-toggle-title">Members can approve requests</span>
+							<span class="sp-toggle-desc">Anyone here can let in someone who used the code or a join link.</span>
+						</span>
+						<span class="sp-switch"></span>
+					</div>
+					<div class="sp-toggle-row">
+						<span class="sp-toggle-text">
+							<span class="sp-toggle-title">Show removed items</span>
+							<span class="sp-toggle-desc">Items taken out of this space leave a line saying who removed them and when.</span>
+						</span>
+						<span class="sp-switch sp-switch--on"></span>
+					</div>
+				</div>
+				<div class="sp-settings-block">
+					<div class="sp-settings-label">People<span class="sp-settings-count">4</span></div>
+					<div class="sp-member-list">
+						<div class="sp-member-row">
+							<span class="sp-member-pic">YO</span>
+							<span class="sp-member-name">You</span>
+							<span class="sp-badge sp-badge--owner">owner</span>
+							<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+						</div>
+						<div class="sp-member-row">
+							<span class="sp-member-pic">RI</span>
+							<span class="sp-member-name">rio</span>
+							<span class="sp-btn sp-btn--danger sp-member-remove">Remove</span>
+							<span class="sp-member-dot"><span class="sp-dot sp-dot--on"></span></span>
+						</div>
+						<div class="sp-member-row">
+							<span class="sp-member-pic">ME</span>
+							<span class="sp-member-name">mei</span>
+							<span class="sp-badge sp-badge--warn">waiting for key</span>
+							<span class="sp-btn sp-btn--danger sp-member-remove">Remove</span>
+							<span class="sp-member-dot"><span class="sp-dot"></span></span>
+						</div>
+						<div class="sp-member-row">
+							<span class="sp-member-pic">AL</span>
+							<span class="sp-member-name">Ada Lovelace</span>
+							<span class="sp-btn sp-btn--danger sp-member-remove">Remove</span>
+							<span class="sp-member-dot"><span class="sp-dot"></span></span>
+						</div>
+					</div>
+					<div class="sp-invite-box">
+						<div class="sp-invite-row">
+							<code class="sp-invite-code">7K2M-9QX4</code>
+							<span class="sp-btn sp-btn--icon"><Fragment set:html={SRC_ICONS.copy12} /><span class="sp-btn-label">Copy code</span></span>
+							<span class="sp-btn sp-btn--icon"><Fragment set:html={SRC_ICONS.shareNetwork12} /><span class="sp-btn-label">Copy link</span></span>
+						</div>
+						<div class="sp-invite-row">
+							<span class="sp-inline-input">Invite by email</span>
+							<span class="sp-btn">Send</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="sp-rules-foot">
+				<span class="sp-btn sp-btn--danger">Delete space</span>
+				<span class="sp-danger-note">Stops sharing for everyone. Items already on their devices stay.</span>
+			</div>
+		</aside>
+
+		<!-- the space list, 252px, ordered first -->
+		<aside class="sp-panel-right">
+			<div class="sp-panel-header">
+				<span class="sp-panel-title">Spaces</span>
+				<span class="sp-conn-chip sp-conn-chip--on"><span class="sp-conn-dot"></span>Live</span>
+			</div>
+			<div class="sp-panel-scroll">
+				<div class="sp-space-section">
+					<div class="sp-space-group">Active now<span class="sp-space-group-n">2</span><span class="sp-space-group-rule"></span></div>
+					<div class="sp-space-card active">
+						<span class="sp-space-avatar" style="background:#3b82f6">DE</span>
+						<span class="sp-space-card-body">
+							<span class="sp-space-card-name">Design</span>
+							<span class="sp-space-card-meta">2/4 online - 18 items</span>
+						</span>
+						<span class="sp-space-card-flags">
+							<span class="sp-badge sp-badge--owner">owner</span>
+							<span class="sp-flag-dot" set:html={SRC_ICONS.clipboard9} />
+						</span>
+					</div>
+					<div class="sp-space-card">
+						<span class="sp-space-avatar" style="background:#f97316">OP</span>
+						<span class="sp-space-card-body">
+							<span class="sp-space-card-name">Ops oncall</span>
+							<span class="sp-space-card-meta">3/5 online - 41 items</span>
+						</span>
+						<span class="sp-space-card-flags">
+							<span class="sp-flag-dot" set:html={SRC_ICONS.funnel9} />
+						</span>
+					</div>
+				</div>
+				<div class="sp-space-section">
+					<div class="sp-space-group">Quiet<span class="sp-space-group-n">2</span><span class="sp-space-group-rule"></span></div>
+					<div class="sp-space-card">
+						<span class="sp-space-avatar" style="background:#22c55e">FA</span>
+						<span class="sp-space-card-body">
+							<span class="sp-space-card-name">Family</span>
+							<span class="sp-space-card-meta">0/3 online - 6 items</span>
+						</span>
+					</div>
+					<div class="sp-space-card">
+						<span class="sp-space-avatar" style="background:#8b5cf6">RE</span>
+						<span class="sp-space-card-body">
+							<span class="sp-space-card-name">Reading list</span>
+							<span class="sp-space-card-meta">2 members - 1 item</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="sp-panel-actions">
+				<span class="sp-invites-btn">Invites<span class="sp-invites-count">3</span></span>
+				<div class="sp-panel-btns">
+					<span class="sp-action-btn sp-action-btn--primary"><Fragment set:html={SRC_ICONS.plus11} />Create</span>
+					<span class="sp-action-btn"><Fragment set:html={SRC_ICONS.key11} />Join</span>
+				</div>
+			</div>
+		</aside>
+	</div>
+</AppShell>

@@ -1,0 +1,1005 @@
+/* Spaces screen mock parts, values from the app's SpacesScreen.css.
+
+   Global rather than scoped to one component: several mocks draw these parts,
+   and a copy per component is a copy that drifts. Every value is the app's
+   own - see the site CLAUDE.md on wearing the app's skin. */
+
+/* what is left where a shared item used to be: a dashed placeholder saying
+   who took it out, so the item does not just vanish from everyone's feed */
+
+.sp-removed-row {
+break-inside: avoid;
+display: flex;
+align-items: center;
+gap: 8px;
+margin-bottom: 10px;
+padding: 7px 10px;
+border: 1px dashed var(--border-light);
+border-radius: var(--radius-sm);
+background: transparent;
+color: var(--text-muted);
+}
+
+.sp-removed-icon {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+width: 20px;
+height: 20px;
+border-radius: 5px;
+background: var(--surface-hover);
+}
+
+.sp-removed-text {
+flex: 1;
+min-width: 0;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+font-size: 11.5px;
+font-style: italic;
+}
+
+.sp-removed-time {
+flex-shrink: 0;
+font-size: 10px;
+font-variant-numeric: tabular-nums;
+}
+
+/* the feed filter segment: all items, clipboard only, notes only. Three
+   buttons, so the slider is a third wide - SpacesScreen.css again. */
+
+.sp-feed-segment {
+position: relative;
+display: flex;
+align-items: center;
+border-radius: 8px;
+border: 1px solid var(--border);
+background: var(--surface);
+padding: 2px;
+box-shadow: var(--shadow-sm);
+flex-shrink: 0;
+}
+
+.sp-feed-segment-slider {
+position: absolute;
+top: 2px;
+left: 2px;
+width: calc((100% - 4px) / 3);
+height: calc(100% - 4px);
+border-radius: 6px;
+background: var(--accent);
+box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+z-index: 0;
+}
+
+.sp-feed-seg-btn {
+position: relative;
+z-index: 1;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 4px 8px;
+border-radius: 6px;
+color: var(--text-muted);
+}
+
+.sp-feed-seg-btn--active {
+color: #fff;
+}
+
+/* thread count on a shared item. Coloured when something arrived since this
+   device last opened it, plain otherwise. */
+
+.sp-cmt-chip {
+display: inline-flex;
+align-items: center;
+gap: 3px;
+flex-shrink: 0;
+height: var(--chip-h);
+padding: 0 6px;
+border: 1px solid var(--border-light);
+border-radius: var(--radius-xs);
+color: var(--text-secondary);
+font-size: 10px;
+line-height: 1.5;
+}
+
+.sp-cmt-chip--new {
+border-color: var(--accent);
+background: var(--accent-dim);
+color: var(--accent);
+}
+
+.sp-cmt-chip-n {
+font-weight: 700;
+font-variant-numeric: tabular-nums;
+}
+
+/* ---- the spaces screen, values from SpacesScreen.css ---- */
+
+.sp-screen {
+--cta: #ff5535;
+display: flex;
+flex-direction: row;
+flex: 1;
+min-height: 0;
+overflow: hidden;
+}
+
+.sp-feed-panel {
+flex: 1;
+min-width: 0;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+
+.sp-feed-scroll {
+flex: 1;
+overflow: hidden;
+padding: 10px 0 14px;
+}
+
+/* left panel, 252px, pulled ahead of the feed the way the app does */
+
+.sp-panel-right {
+order: -1;
+width: 252px;
+flex-shrink: 0;
+background: var(--sidebar-bg);
+border-right: 1px solid var(--border);
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+
+.sp-rules {
+width: 340px;
+flex-shrink: 0;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+background: var(--sidebar-bg);
+border-left: 1px solid var(--border);
+}
+
+/* panel header */
+
+.sp-panel-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 8px;
+padding: 12px 14px;
+border-bottom: 1px solid var(--border);
+flex-shrink: 0;
+}
+
+.sp-panel-title {
+font-size: 13.5px;
+font-weight: 600;
+letter-spacing: -0.1px;
+color: var(--text);
+}
+
+.sp-conn-chip {
+display: inline-flex;
+align-items: center;
+gap: 4px;
+padding: 2px 7px;
+border-radius: var(--radius-xs);
+border: 1px solid var(--border);
+font-size: 9px;
+font-weight: 600;
+color: var(--text-muted);
+letter-spacing: 0.2px;
+flex-shrink: 0;
+}
+
+.sp-conn-dot {
+width: 5px;
+height: 5px;
+border-radius: 50%;
+background: var(--text-muted);
+flex-shrink: 0;
+}
+
+.sp-conn-chip--on {
+border-color: rgba(34, 197, 94, 0.3);
+color: #22c55e;
+}
+
+.sp-conn-chip--on .sp-conn-dot {
+background: #22c55e;
+box-shadow: 0 0 5px rgba(34, 197, 94, 0.55);
+}
+
+.sp-panel-scroll {
+flex: 1;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+padding: 12px 10px;
+}
+
+.sp-space-section {
+margin-bottom: 8px;
+}
+
+.sp-space-section + .sp-space-section {
+margin-top: 6px;
+}
+
+.sp-space-group {
+display: flex;
+align-items: center;
+gap: 6px;
+padding: 6px 4px 5px;
+font-size: 9.5px;
+font-weight: 700;
+letter-spacing: 0.6px;
+text-transform: uppercase;
+color: var(--text-muted);
+}
+
+.sp-space-group-n {
+font-weight: 600;
+letter-spacing: 0;
+}
+
+.sp-space-group-rule {
+flex: 1;
+height: 1px;
+background: var(--border);
+}
+
+.sp-space-card {
+display: flex;
+align-items: center;
+gap: 10px;
+width: 100%;
+padding: 8px 10px;
+border: 1px solid var(--border);
+border-radius: 10px;
+background: var(--surface);
+text-align: left;
+position: relative;
+margin-bottom: 5px;
+}
+
+.sp-space-avatar {
+flex-shrink: 0;
+width: 32px;
+height: 32px;
+border-radius: 9px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 11px;
+font-weight: 800;
+color: #fff;
+letter-spacing: 0.3px;
+box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.sp-space-card-body {
+flex: 1;
+min-width: 0;
+display: flex;
+flex-direction: column;
+gap: 1px;
+}
+
+.sp-space-card-name {
+font-size: 12.5px;
+font-weight: 600;
+color: var(--text);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.sp-space-card-meta {
+font-size: 10.5px;
+color: var(--text-secondary);
+margin-top: 1px;
+}
+
+.sp-space-card-flags {
+display: flex;
+align-items: center;
+gap: 4px;
+flex-shrink: 0;
+}
+
+.sp-flag-dot {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 16px;
+height: 16px;
+border-radius: 50%;
+background: var(--accent-dim);
+color: var(--accent);
+}
+
+.sp-badge {
+padding: 1px 6px;
+border-radius: 5px;
+border: 1px solid var(--border);
+font-size: 8.5px;
+font-weight: 700;
+letter-spacing: 0.3px;
+text-transform: uppercase;
+color: var(--text-muted);
+flex-shrink: 0;
+}
+
+.sp-badge--owner {
+border-color: transparent;
+background: color-mix(in srgb, var(--text) 8%, transparent);
+color: var(--text-muted);
+}
+
+.sp-panel-actions {
+flex-shrink: 0;
+padding: 8px 10px 10px;
+border-top: 1px solid var(--border);
+}
+
+.sp-invites-btn {
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 6px;
+margin-bottom: 5px;
+padding: 6px 9px;
+border: 1px solid var(--border);
+border-radius: 9px;
+color: var(--text-secondary);
+font-size: 11px;
+font-weight: 550;
+}
+
+.sp-invites-count {
+font-size: 10.5px;
+font-weight: 600;
+font-variant-numeric: tabular-nums;
+color: var(--accent);
+}
+
+.sp-panel-btns {
+display: flex;
+gap: 5px;
+}
+
+.sp-action-btn {
+flex: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 5px;
+padding: 8px;
+border: 1px solid var(--border);
+border-radius: 9px;
+background: var(--surface);
+color: var(--text-secondary);
+font-size: 11.5px;
+font-weight: 600;
+}
+
+.sp-action-btn--primary {
+border-color: transparent;
+background: var(--cta, var(--accent));
+color: #fff;
+}
+
+/* the feed's timeline rail */
+
+.sp-timeline-wrap {
+min-height: 100%;
+}
+
+.sp-timeline-groups {
+display: flex;
+flex-direction: column;
+margin-left: 15px;
+}
+
+.sp-timeline-group {
+display: flex;
+flex-direction: column;
+position: relative;
+}
+
+.sp-timeline-day-row {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 10px 16px 8px 0;
+position: relative;
+width: 100%;
+}
+
+.sp-timeline-day-dot {
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background: var(--bg);
+border: 2px solid var(--accent);
+box-shadow: 0 0 0 3px var(--accent-dim);
+flex-shrink: 0;
+margin-left: -5px;
+position: relative;
+z-index: 1;
+}
+
+.sp-timeline-day-label {
+font-size: 12.5px;
+font-weight: 700;
+color: var(--accent);
+letter-spacing: -0.2px;
+white-space: nowrap;
+}
+
+.sp-timeline-day-row::after {
+content: '';
+flex: 1;
+height: 0.5px;
+background: var(--accent);
+opacity: 0.25;
+margin-left: 4px;
+}
+
+.sp-timeline-day-chevron {
+flex-shrink: 0;
+display: inline-flex;
+color: var(--accent);
+opacity: 0.5;
+margin-right: 4px;
+}
+
+.sp-feed-card-grid {
+columns: 3;
+column-gap: 10px;
+padding-top: 4px;
+padding-left: 15px;
+padding-right: 14px;
+}
+
+.sp-timeline-end {
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 18px 16px 20px;
+}
+
+.sp-timeline-end-text {
+font-size: 11px;
+font-weight: 500;
+color: var(--text-muted);
+letter-spacing: 0.4px;
+opacity: 0.6;
+}
+
+/* source and owner chips on a shared item */
+
+.sp-source-chip--clip {
+background: rgba(99, 102, 241, 0.12) !important;
+color: #6366f1 !important;
+}
+
+.sp-source-chip--note {
+background: rgba(244, 63, 94, 0.12) !important;
+color: #f43f5e !important;
+}
+
+.sp-owner {
+flex-shrink: 0;
+display: inline-flex;
+align-items: center;
+gap: 5px;
+max-width: 130px;
+height: var(--chip-h);
+padding: 0 7px 0 2px;
+line-height: 1.4;
+border: 1px solid var(--border);
+border-radius: var(--radius-xs);
+background: var(--surface-hover);
+font-size: 10px;
+font-weight: 600;
+color: var(--text-secondary);
+}
+
+.sp-owner-avatar {
+width: 14px;
+height: 14px;
+flex-shrink: 0;
+border-radius: 6px;
+}
+
+.sp-owner-avatar--initials {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+background: var(--accent-dim-strong);
+color: var(--accent);
+font-size: 8.5px;
+font-weight: 700;
+line-height: 1;
+}
+
+.sp-owner--self {
+padding: 0 8px;
+color: var(--text-muted);
+background: transparent;
+}
+
+/* the rules rail */
+
+.sp-rules-head {
+display: flex;
+align-items: center;
+gap: 9px;
+flex-shrink: 0;
+padding: 12px;
+border-bottom: 1px solid var(--border);
+}
+
+.sp-rules-avatar {
+display: grid;
+place-items: center;
+width: 26px;
+height: 26px;
+flex-shrink: 0;
+border-radius: var(--radius-xs);
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 0.4px;
+color: #fff;
+}
+
+.sp-rules-head-text {
+display: flex;
+flex-direction: column;
+gap: 2px;
+min-width: 0;
+}
+
+.sp-rules-name {
+font-size: 12.5px;
+font-weight: 600;
+color: var(--text);
+}
+
+.sp-rules-sub {
+font-size: 10.5px;
+color: var(--text-muted);
+}
+
+.sp-rules-body {
+flex: 1;
+min-height: 0;
+display: flex;
+flex-direction: column;
+gap: 14px;
+padding: 12px;
+overflow: hidden;
+}
+
+.sp-settings-block {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.sp-settings-label {
+display: flex;
+align-items: center;
+gap: 6px;
+font-size: 9.5px;
+font-weight: 700;
+letter-spacing: 0.6px;
+text-transform: uppercase;
+color: var(--text-muted);
+}
+
+.sp-settings-count {
+padding: 1px 6px;
+border-radius: 5px;
+background: var(--accent-dim);
+color: var(--accent);
+font-size: 9px;
+font-weight: 700;
+letter-spacing: 0.2px;
+text-transform: none;
+}
+
+.sp-toggle-row {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+padding: 9px 11px;
+border: 1px solid var(--border);
+border-radius: 9px;
+background: var(--surface);
+}
+
+.sp-toggle-text {
+display: flex;
+flex-direction: column;
+gap: 2px;
+flex: 1;
+min-width: 0;
+}
+
+.sp-toggle-title {
+font-size: 12px;
+font-weight: 600;
+color: var(--text);
+}
+
+.sp-toggle-desc {
+font-size: 10.5px;
+line-height: 1.4;
+color: var(--text-muted);
+}
+
+/* the app's switch: 30x17 track, 11px knob, 13px travel */
+
+.sp-switch {
+position: relative;
+flex-shrink: 0;
+width: 30px;
+height: 17px;
+margin-top: 1px;
+border-radius: 99px;
+border: 1px solid var(--border);
+background: var(--bg);
+}
+
+.sp-switch::after {
+content: '';
+position: absolute;
+top: 2px;
+left: 2px;
+width: 11px;
+height: 11px;
+border-radius: 50%;
+background: var(--text-muted);
+}
+
+.sp-switch--on {
+background: var(--cta, var(--accent));
+border-color: transparent;
+}
+
+.sp-switch--on::after {
+transform: translateX(13px);
+background: #fff;
+}
+
+.sp-member-list {
+display: flex;
+flex-direction: column;
+gap: 2px;
+}
+
+.sp-member-row {
+display: flex;
+align-items: center;
+gap: 7px;
+padding: 6px 9px;
+border-radius: 8px;
+background: var(--surface);
+flex-wrap: wrap;
+}
+
+.sp-member-pic {
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 18px;
+height: 18px;
+border-radius: 50%;
+font-size: 8px;
+font-weight: 650;
+color: var(--accent);
+background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.sp-member-name {
+font-size: 11.5px;
+font-weight: 600;
+color: var(--text);
+flex: 1;
+min-width: 0;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.sp-member-dot {
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 8px;
+}
+
+.sp-dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #6b7280;
+}
+
+.sp-dot--on {
+background: #22c55e;
+}
+
+.sp-invite-box {
+display: flex;
+flex-direction: column;
+gap: 6px;
+margin-top: 8px;
+padding-top: 10px;
+border-top: 1px solid var(--border);
+}
+
+.sp-invite-row {
+display: flex;
+align-items: center;
+gap: 6px;
+flex-wrap: nowrap;
+}
+
+.sp-invite-code {
+flex: 1;
+min-width: 0;
+padding: 4px 9px;
+border: 1px dashed var(--border);
+border-radius: 7px;
+background: var(--surface);
+font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+font-size: 11.5px;
+letter-spacing: 1px;
+color: var(--text);
+}
+
+.sp-inline-input {
+flex: 1;
+min-width: 0;
+padding: 5px 8px;
+border: 1px solid var(--border);
+border-radius: var(--radius-xs);
+background: var(--surface);
+color: var(--text-muted);
+font-size: 12px;
+}
+
+.sp-btn {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+padding: 5px 10px;
+border: 1px solid var(--border);
+border-radius: 7px;
+background: var(--surface);
+color: var(--text-secondary);
+font-size: 10.5px;
+font-weight: 600;
+flex-shrink: 0;
+}
+
+/* icon-only until the rail is dragged past 336px, which it is not here */
+
+.sp-btn--icon {
+padding: 5px 7px;
+}
+
+.sp-btn--danger {
+color: var(--danger);
+border-color: color-mix(in srgb, var(--danger) 34%, transparent);
+}
+
+/* Icon-only until the rail is dragged past 336px, which is the app's own
+   rule - this shot is drawn at 340, so the labels are in. */
+
+.sp-btn-label {
+display: none;
+}
+
+.sp-rules--wide .sp-btn-label {
+display: inline;
+}
+
+.sp-rules--wide .sp-btn--icon {
+padding: 5px 9px;
+}
+
+.sp-member-remove {
+padding: 3px 8px;
+border-radius: 6px;
+font-size: 10px;
+}
+
+/* the invite-by-email field, drawn as static text since nothing is typed */
+
+.sp-inline-input {
+flex: 1;
+min-width: 0;
+padding: 5px 8px;
+border: 1px solid var(--border);
+border-radius: var(--radius-xs);
+background: var(--surface);
+color: var(--text-muted);
+font-size: 12px;
+box-sizing: border-box;
+}
+
+.sp-rules-foot {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+gap: 6px;
+flex-shrink: 0;
+padding: 10px 12px;
+border-top: 1px solid var(--border);
+}
+
+.sp-danger-note {
+font-size: 10px;
+font-weight: 500;
+color: var(--text-muted);
+line-height: 1.4;
+}
+
+/* ---- rows layout, values from .sp-list-* in SpacesScreen.css ---- */
+
+.sp-feed-card-list {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.sp-list-card {
+display: flex;
+align-items: center;
+gap: 8px;
+height: 38px;
+padding: 0 10px;
+border: 1px solid var(--border);
+border-radius: var(--radius-xs);
+background: var(--surface);
+overflow: hidden;
+}
+
+.sp-list-card--note {
+height: 46px;
+}
+
+/* Accent is reserved for what this account sent: if a row is orange, you
+   put it there. */
+
+.sp-list-dir {
+flex-shrink: 0;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 22px;
+height: 22px;
+border: 1px solid transparent;
+border-radius: var(--radius-xs);
+}
+
+.sp-list-dir--in {
+background: var(--surface-hover);
+border-color: var(--border-light);
+color: var(--text-secondary);
+}
+
+.sp-list-dir--out {
+background: var(--accent-dim);
+color: var(--accent);
+}
+
+.sp-list-type-wrap {
+flex-shrink: 0;
+display: flex;
+align-items: center;
+}
+
+.sp-list-note-badge {
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 22px;
+height: 22px;
+border-radius: var(--radius-xs);
+background: var(--accent-dim);
+color: var(--accent);
+}
+
+.sp-list-note-content {
+flex: 1;
+min-width: 0;
+display: flex;
+flex-direction: column;
+gap: 1px;
+}
+
+.sp-list-title {
+font-size: 12px;
+font-weight: 500;
+color: var(--text);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.sp-list-text {
+flex: 1;
+min-width: 0;
+font-size: 11.5px;
+color: var(--text-secondary);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.sp-list-preview {
+font-size: 10.5px;
+color: var(--text-muted);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.sp-list-time {
+flex-shrink: 0;
+font-size: 10.5px;
+color: var(--text-muted);
+white-space: nowrap;
+}
+
+.sp-badge--warn {
+border-color: rgba(245, 158, 11, 0.4);
+color: #f59e0b;
+text-transform: none;
+letter-spacing: 0;
+}
+
+/* Moved out of Showcase.astro when its mocks became components: these
+   rules style markup that now lives in those components. */
+
+.sp-feed-card-grid .oc-card,
+.sp-feed-card-grid .ns-card {
+	break-inside: avoid;
+	margin-bottom: 10px;
+}
+
+.sp-space-card.active {
+	background: var(--accent-dim);
+	border-color: var(--accent-dim-strong);
+}
+
+.sp-space-card.active::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 9px;
+	bottom: 9px;
+	width: 3px;
+	border-radius: 0 3px 3px 0;
+	background: var(--accent);
+}
+
+.sp-space-card.active .sp-space-card-name {
+	color: var(--accent);
+}

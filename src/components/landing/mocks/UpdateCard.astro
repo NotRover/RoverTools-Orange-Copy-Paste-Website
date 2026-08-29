@@ -1,0 +1,250 @@
+---
+/**
+ * The update card on the settings screen, from SettingsScreen.css.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { SRC_ICONS } from '../app-parts';
+---
+
+<div class="set-section">
+	<div class="set-section-head">
+		<span class="set-section-icon" set:html={SRC_ICONS.download15} />
+		<h3 class="set-section-title">Updates</h3>
+	</div>
+	<div class="set-group">
+		<div class="set-row set-row--stack">
+			<div class="set-row-header">
+				<div class="set-row-info">
+					<span class="set-row-label">App version 0.1.15</span>
+					<span class="set-row-desc">Version 0.1.16 is available.</span>
+				</div>
+				<span class="settings-action-btn"><Fragment set:html={SRC_ICONS.download14} />Download</span>
+			</div>
+		</div>
+		<div class="set-row">
+			<div class="set-row-info">
+				<span class="set-row-label">Check for updates automatically</span>
+				<span class="set-row-desc">Look for a newer version shortly after the app starts. Updates are never installed without asking.</span>
+			</div>
+			<span class="settings-toggle active"><span class="settings-toggle-knob"></span></span>
+		</div>
+	</div>
+</div>
+
+<style>
+	/* ---- settings screen: the update card, from SettingsScreen.css ---- */
+
+	.set-section {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.set-section-head {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.set-section-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border-radius: 6px;
+		color: var(--accent);
+		background: var(--accent-dim);
+		flex-shrink: 0;
+	}
+
+	.set-section-title {
+		margin: 0;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: -0.1px;
+		color: var(--text-secondary);
+	}
+
+	.set-group {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+	}
+
+	.set-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 11px 14px;
+		border-top: 1px solid var(--border);
+	}
+
+	.set-group > .set-row:first-child {
+		border-top: none;
+	}
+
+	.set-row--stack {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0;
+	}
+
+	.set-row-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+	}
+
+	.set-row-info {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		min-width: 0;
+	}
+
+	.set-row-label {
+		font-size: 12.5px;
+		font-weight: 500;
+		color: var(--text);
+	}
+
+	.set-row-desc {
+		font-size: 11px;
+		color: var(--text-muted);
+		line-height: 1.4;
+	}
+
+	.settings-action-btn {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		flex-shrink: 0;
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--text);
+		background: var(--surface-hover);
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		padding: 6px 12px;
+	}
+
+	.settings-action-btn svg {
+		color: var(--text-muted);
+	}
+
+	/* 37x21 track, 15px knob, 16px travel */
+
+	.settings-toggle {
+		position: relative;
+		flex-shrink: 0;
+		width: 37px;
+		height: 21px;
+		border-radius: 11px;
+		border: 1px solid var(--border);
+		background: var(--surface-hover);
+	}
+
+	.settings-toggle-knob {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 15px;
+		height: 15px;
+		border-radius: 50%;
+		background: var(--text-muted);
+	}
+
+	.settings-checkbox {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 16px;
+		height: 16px;
+		border-radius: 4px;
+		border: 1.5px solid var(--border-light);
+		background: var(--surface-hover);
+		flex-shrink: 0;
+	}
+
+	.settings-checkbox--on {
+		border-color: var(--accent);
+		background: var(--accent);
+		color: #fff;
+	}
+
+	.settings-checkbox--on::after {
+		content: '';
+		width: 4px;
+		height: 7px;
+		margin-top: -2px;
+		border: 2px solid #fff;
+		border-top: none;
+		border-left: none;
+		transform: rotate(40deg);
+	}
+
+	.set-update-notes {
+		margin: 10px 0 0;
+		padding: 10px 12px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+	}
+
+	.set-update-lead {
+		margin: 0 0 9px;
+		font-size: 11.5px;
+		line-height: 1.6;
+		color: var(--text-secondary);
+	}
+
+	.set-update-section {
+		display: block;
+		margin-bottom: 3px;
+		font-size: 9.5px;
+		font-weight: 600;
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.set-update-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.set-update-list li {
+		position: relative;
+		padding-left: 13px;
+		font-size: 11.5px;
+		line-height: 1.7;
+		color: var(--text-secondary);
+	}
+
+	.set-update-list li::before {
+		content: '';
+		position: absolute;
+		left: 1px;
+		top: 9px;
+		width: 4px;
+		height: 1px;
+		background: var(--text-muted);
+	}
+
+	.settings-toggle.active {
+		background: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.settings-toggle.active .settings-toggle-knob {
+		transform: translateX(16px);
+		background: #fff;
+	}
+</style>

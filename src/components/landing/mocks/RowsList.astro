@@ -1,0 +1,91 @@
+---
+/**
+ * The history in rows layout, from SpacesScreen.css's sp-list-* parts.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { CHIP_ICONS, KIND_COLORS, TB_ICONS, SRC_ICONS } from '../app-parts';
+---
+
+<div class="rows-head">
+	<div class="oc-seg oc-seg--2">
+		<span class="oc-seg-slider oc-seg-slider--right"></span>
+		<span class="oc-seg-btn" set:html={TB_ICONS.tiles} />
+		<span class="oc-seg-btn oc-seg-btn--active" set:html={SRC_ICONS.rows12} />
+	</div>
+	<span class="rows-head-label">Rows</span>
+</div>
+<div class="sp-feed-card-list">
+		<div class="sp-list-card">
+			<span class="sp-list-dir sp-list-dir--out" set:html={SRC_ICONS.arrowUp10} />
+			<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span></span>
+			<span class="sp-owner sp-owner--self">You</span>
+			<span class="sp-list-text">#ff3e1c on #0e0e0e reads 4.6:1</span>
+			<span class="sp-list-time">4m</span>
+		</div>
+		<div class="sp-list-card">
+			<span class="sp-list-dir sp-list-dir--in" set:html={SRC_ICONS.arrowDown10} />
+			<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span></span>
+			<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+			<span class="sp-list-text">brand-assets (3 files)</span>
+			<span class="sp-list-time">26m</span>
+		</div>
+		<div class="sp-list-card">
+			<span class="sp-list-dir sp-list-dir--out" set:html={SRC_ICONS.arrowUp10} />
+			<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span></span>
+			<span class="sp-owner sp-owner--self">You</span>
+			<span class="sp-list-text">staging.rovertools.app/preview</span>
+			<span class="sp-list-time">1h</span>
+		</div>
+		<div class="sp-list-card">
+			<span class="sp-list-dir sp-list-dir--in" set:html={SRC_ICONS.arrowDown10} />
+			<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span></span>
+			<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+			<span class="sp-list-text">#7f31c0ab Image Aug 21</span>
+			<span class="sp-list-time">18m</span>
+		</div>
+		<div class="sp-list-card">
+			<span class="sp-list-dir sp-list-dir--in" set:html={SRC_ICONS.arrowDown10} />
+			<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span></span>
+			<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+			<span class="sp-list-text">press-kit-aug.pdf</span>
+			<span class="sp-list-time">5h</span>
+		</div>
+		<div class="sp-list-card">
+			<span class="sp-list-dir sp-list-dir--out" set:html={SRC_ICONS.arrowUp10} />
+			<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.folder}`}><Fragment set:html={CHIP_ICONS.folder} /><span class="oc-chip-label">Folder</span></span></span>
+			<span class="sp-owner sp-owner--self">You</span>
+			<span class="sp-list-text">/home/rio/projects/orangecp</span>
+			<span class="sp-list-time">6h</span>
+		</div>
+		<div class="sp-list-card">
+			<span class="sp-list-dir sp-list-dir--in" set:html={SRC_ICONS.arrowDown10} />
+			<span class="sp-list-type-wrap"><span class="oc-chip" style={`--cc:${KIND_COLORS.html}`}><Fragment set:html={CHIP_ICONS.html} /><span class="oc-chip-label">Rich Text</span></span></span>
+			<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+			<span class="sp-list-text">Release checklist, three items left</span>
+			<span class="sp-list-time">8h</span>
+		</div>
+</div>
+
+<style>
+	.rows-head {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.rows-head-label {
+		font-size: 10.5px;
+		font-weight: 700;
+		letter-spacing: 0.3px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	/* the layout segment with the right half selected */
+
+	.oc-seg-slider--right {
+		left: auto;
+		right: 2px;
+	}
+</style>
