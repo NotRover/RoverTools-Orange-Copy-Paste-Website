@@ -10,16 +10,22 @@
  */
 import AppShell from './AppShell.astro';
 import BulkBar from './BulkBar.astro';
+import CardMenu from './CardMenu.astro';
 import FilterCard from './FilterCard.astro';
+import GroupManager from './GroupManager.astro';
 import HistoryScreen from './HistoryScreen.astro';
+import SettingsMock from './SettingsMock.astro';
 import { SORT_ICONS } from './app-parts';
 
 const scenes = [
+	{ title: 'Copy', note: 'Click an entry to put it back on the clipboard' },
 	{ title: 'Search', note: 'Type a word, the history narrows to it' },
 	{ title: 'Filter', note: 'By type, cloud state, space or group' },
 	{ title: 'Sort', note: 'Newest, oldest, A to Z or by type' },
+	{ title: 'Groups', note: 'Tag entries, and make groups of your own' },
 	{ title: 'Sync', note: 'Copies from your other devices arrive here' },
 	{ title: 'Share', note: 'Send a selection to a space' },
+	{ title: 'Settings', note: 'Change how the app behaves' },
 ];
 
 const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
@@ -55,7 +61,12 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			<div class="demo-frame">
 				<div class="demo-window" aria-hidden="true">
 					<AppShell nav="clipboard" class="demo-shell">
-						<HistoryScreen count={9} groups={3} gridId="demo-grid" />
+						<div class="demo-screen" id="demo-history">
+							<HistoryScreen count={9} groups={3} gridId="demo-grid" />
+						</div>
+						<div class="demo-screen is-off" id="demo-settings">
+							<SettingsMock />
+						</div>
 						<div class="demo-pop demo-pop--sort" id="demo-sort" slot="overlay">
 							<div class="oc-sort-menu">
 								{
@@ -71,6 +82,10 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 						<div class="demo-pop demo-pop--filter" id="demo-filter" slot="overlay">
 							<FilterCard />
 						</div>
+						<div class="demo-pop demo-pop--gm" id="demo-gm" slot="overlay">
+							<GroupManager />
+						</div>
+						<CardMenu slot="overlay" spaces={2} />
 						<div class="demo-pop demo-pop--bulk" id="demo-bulk" slot="overlay">
 							<BulkBar count={0} flyout={false} picked={false} />
 						</div>
@@ -98,7 +113,7 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 </section>
 
 <script>
-	import { CHIP_ICONS, NAV_ICONS } from './app-parts';
+	import { CHIP_ICONS, GROUP_COLORS, NAV_ICONS } from './app-parts';
 	import { makeCard, type MockEntry } from './mock-cards';
 
 	/* The history the demo works on. Small enough that every count on screen is
@@ -133,6 +148,11 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	const sortPop = document.getElementById('demo-sort');
 	const filterPop = document.getElementById('demo-filter');
 	const bulkPop = document.getElementById('demo-bulk');
+	const gmPop = document.getElementById('demo-gm');
+	const menu = win?.querySelector<HTMLElement>('.oc-menu') ?? null;
+	const menuGroups = menu?.querySelector<HTMLElement>('.oc-menu-groups-flyout') ?? null;
+	const historyScreen = document.getElementById('demo-history');
+	const settingsScreen = document.getElementById('demo-settings');
 	const shownCount = document.getElementById('demo-shown');
 	const stage = document.querySelector<HTMLElement>('.demo-stage');
 	const caption = document.getElementById('demo-caption');
@@ -148,7 +168,12 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	const sortBtn = leftBtns?.[0] ?? null;
 	const filterBtn = leftBtns?.[1] ?? null;
 	const searchField = win?.querySelector<HTMLElement>('.oc-search-field') ?? null;
-	const selectBtn = toolbar?.querySelectorAll<HTMLElement>('.oc-tb-group:last-child .oc-tb-btn')[0] ?? null;
+	const rightBtns = toolbar?.querySelectorAll<HTMLElement>('.oc-tb-group:last-child .oc-tb-btn');
+	const selectBtn = rightBtns?.[0] ?? null;
+	const groupsBtn = rightBtns?.[1] ?? null;
+	/* the sidebar: the clipboard nav button and the gear at the foot of it */
+	const clipboardNav = win?.querySelector<HTMLElement>('.oc-side-nav .oc-navbtn') ?? null;
+	const gearBtn = win?.querySelectorAll<HTMLElement>('.oc-side-bottom .oc-navbtn')[3] ?? null;
 
 	const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -238,7 +263,16 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	}
 
 	function closePops() {
-		[sortPop, filterPop, bulkPop].forEach((p) => p?.classList.remove('is-open'));
+		[sortPop, filterPop, bulkPop, gmPop].forEach((p) => p?.classList.remove('is-open'));
+		menu?.classList.remove('open');
+	}
+
+	/** the app draws one screen at a time, and the sidebar says which */
+	function showScreen(which: 'history' | 'settings') {
+		historyScreen?.classList.toggle('is-off', which !== 'history');
+		settingsScreen?.classList.toggle('is-off', which !== 'settings');
+		clipboardNav?.classList.toggle('active', which === 'history');
+		gearBtn?.classList.toggle('active', which === 'settings');
 	}
 
 	/* ---- the grid ---------------------------------------------------------- */
@@ -297,6 +331,38 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			if (box) box.innerHTML = '';
 		});
 
+		if (menuGroups) menuGroups.hidden = true;
+		menu
+			?.querySelectorAll('.oc-menu-group-chip')
+			.forEach((c) => c.classList.remove('oc-menu-group-chip--on'));
+
+		// the group the manager scene added, and the counts it moved
+		gmPop?.querySelectorAll('[data-demo-added]').forEach((c) => c.remove());
+		const gmCount = gmPop?.querySelector('[data-gm-count]');
+		if (gmCount) gmCount.textContent = '3';
+		const gmInput = gmPop?.querySelector('[data-gm-input]');
+		if (gmInput) {
+			gmInput.textContent = 'New group name...';
+			gmInput.classList.remove('is-typed');
+		}
+		gmPop?.querySelector('[data-gm-add]')?.classList.remove('is-on');
+		const groupsBadge = groupsBtn?.querySelector('.oc-tb-badge');
+		if (groupsBadge) groupsBadge.textContent = '3';
+
+		showScreen('history');
+		settingsScreen?.querySelectorAll<HTMLElement>('.set-toggle').forEach((t) => {
+			t.classList.toggle('is-on', t.dataset.on === '1');
+		});
+		const slots = document.getElementById('demo-slots');
+		slots?.classList.remove('is-open');
+		const slotList = slots?.querySelector<HTMLElement>('.set-select-list');
+		if (slotList) slotList.hidden = true;
+		const slotValue = slots?.querySelector('[data-slot-value]');
+		if (slotValue) slotValue.textContent = '5';
+		slots?.querySelectorAll('.set-select-option').forEach((o) => {
+			o.classList.toggle('is-on', (o as HTMLElement).dataset.slot === '5');
+		});
+
 		sortPop?.querySelectorAll('.oc-sort-item').forEach((i, k) => i.classList.toggle('oc-sort-item--active', k === 0));
 		filterPop?.querySelectorAll('.cs-type-option').forEach((r) => {
 			r.classList.remove('cs-type-option--on');
@@ -318,7 +384,160 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		moveTo(920 - 60, 560 - 74);
 	}
 
+	/* every toggle remembers how it was drawn, so a reset can put it back */
+	settingsScreen?.querySelectorAll<HTMLElement>('.set-toggle').forEach((t) => {
+		t.dataset.on = t.classList.contains('is-on') ? '1' : '0';
+	});
+
 	/* ---- scenes ------------------------------------------------------------ */
+
+	/** the app swaps the card's time for a green "Copied" for a moment */
+	async function flashCopied(card: HTMLElement) {
+		const time = card.querySelector('.oc-time');
+		const prev = time?.innerHTML ?? '';
+		if (time) {
+			time.innerHTML = `${CHIP_ICONS.check}Copied`;
+			time.classList.add('oc-time--copied');
+		}
+		await hold(1000);
+		if (time) {
+			time.innerHTML = prev;
+			time.classList.remove('oc-time--copied');
+		}
+	}
+
+	async function sceneCopy() {
+		say('Click an entry and it goes straight back on the clipboard.');
+		const at = 2;
+		const card = grid?.children[at] as HTMLElement | undefined;
+		if (!card) return;
+		await clickOn(card, 0.5, 0.32, 780);
+		await flashCopied(card);
+		// a copy is a capture like any other, so it comes back as the newest entry
+		const id = order[at]!;
+		order = [id, ...order.filter((k) => k !== id)];
+		render();
+		say('It comes back as the newest entry, ready to paste anywhere.');
+		await hold(1900);
+	}
+
+	/** put the card menu where the pointer is, kept inside the window */
+	function openMenuAt(x: number, y: number) {
+		if (!menu) return;
+		menu.classList.add('open');
+		const r = menu.getBoundingClientRect();
+		const z = zoom();
+		menu.style.left = `${Math.min(x, 920 - 8 - r.width / z)}px`;
+		menu.style.top = `${Math.min(y, 560 - 8 - r.height / z)}px`;
+	}
+
+	async function sceneGroups() {
+		say('Right-click an entry to open its menu.');
+		const card = grid?.children[1] as HTMLElement | undefined;
+		if (!card || !menu || !menuGroups) return;
+		const p = aim(card, 0.55, 0.3);
+		await moveToEl(card, 0.55, 0.3, 780);
+		await click(300);
+		openMenuAt(p.x, p.y);
+		await hold(1000);
+
+		say('Groups lists what this entry can be tagged with.');
+		const groupsRow = menu.querySelector<HTMLElement>('.oc-menu-groups-wrap .oc-menu-item');
+		if (groupsRow) await clickOn(groupsRow, 0.5, 0.5);
+		menuGroups.hidden = false;
+		await hold(1000);
+
+		const chip = menuGroups.querySelector<HTMLElement>('[data-group="work"]');
+		if (chip) {
+			await clickOn(chip, 0.5, 0.5);
+			chip.classList.add('oc-menu-group-chip--on');
+		}
+		await hold(700);
+		menuGroups.hidden = true;
+		menu.classList.remove('open');
+		ENTRIES[order[1]!]!.group = ['work', 'teal'];
+		render();
+		say('The chip shows on the card, and the group can be filtered on.');
+		await hold(1800);
+
+		say('New groups come from the toolbar.');
+		await clickOn(groupsBtn!, 0.5, 0.5, 780);
+		openPop(gmPop, groupsBtn, 6);
+		await hold(900);
+
+		const input = gmPop?.querySelector<HTMLElement>('[data-gm-input]');
+		const addBtn = gmPop?.querySelector<HTMLElement>('[data-gm-add]');
+		if (input && addBtn) {
+			await clickOn(input, 0.25, 0.5);
+			input.textContent = '';
+			input.classList.add('is-typed');
+			const name = 'receipts';
+			for (let i = 1; i <= name.length; i++) {
+				input.textContent = name.slice(0, i);
+				await hold(130);
+			}
+			say('Name it, add it, and it is ready to tag with.');
+			await hold(500);
+			await clickOn(addBtn, 0.5, 0.5);
+			addBtn.classList.add('is-on');
+			const chips = gmPop?.querySelector('[data-gm-chips]');
+			chips?.insertAdjacentHTML(
+				'beforeend',
+				`<span class="gm-chip" data-demo-added style="--cc:${GROUP_COLORS.purple}"><span class="gm-chip-dot"></span><span class="gm-chip-name">receipts</span><span class="gm-chip-count">0</span></span>`,
+			);
+			const gmCount = gmPop?.querySelector('[data-gm-count]');
+			if (gmCount) gmCount.textContent = '4';
+			const badge = groupsBtn?.querySelector('.oc-tb-badge');
+			if (badge) badge.textContent = '4';
+			input.textContent = 'New group name...';
+			input.classList.remove('is-typed');
+		}
+		await hold(2000);
+	}
+
+	async function sceneSettings() {
+		say('The gear at the foot of the sidebar opens Settings.');
+		await clickOn(gearBtn!, 0.5, 0.5, 800);
+		showScreen('settings');
+		await hold(1400);
+
+		const row = settingsScreen?.querySelector<HTMLElement>(
+			'[data-set-row="Click a card to view it"] .set-toggle',
+		);
+		if (row) {
+			say('Off, a click copies an entry. On, a click opens it instead.');
+			await clickOn(row, 0.5, 0.5);
+			row.classList.add('is-on');
+		}
+		await hold(1600);
+
+		const slots = document.getElementById('demo-slots');
+		const trigger = slots?.querySelector<HTMLElement>('.set-select-trigger');
+		const list = slots?.querySelector<HTMLElement>('.set-select-list');
+		if (slots && trigger && list) {
+			say('Quick paste can hold more slots.');
+			await clickOn(trigger, 0.5, 0.5);
+			slots.classList.add('is-open');
+			list.hidden = false;
+			await hold(900);
+			const nine = list.querySelector<HTMLElement>('[data-slot="9"]');
+			if (nine) {
+				await clickOn(nine, 0.5, 0.5);
+				list.querySelectorAll('.set-select-option').forEach((o) => o.classList.remove('is-on'));
+				nine.classList.add('is-on');
+				const value = trigger.querySelector('[data-slot-value]');
+				if (value) value.textContent = '9';
+			}
+			list.hidden = true;
+			slots.classList.remove('is-open');
+		}
+		await hold(1700);
+
+		say('Back to the history.');
+		await clickOn(clipboardNav!, 0.5, 0.5, 800);
+		showScreen('history');
+		await hold(1500);
+	}
 
 	async function sceneSearch() {
 		say('Click the search box and type. Every keystroke narrows the history.');
@@ -525,7 +744,16 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		selectBtn?.classList.remove('is-on');
 	}
 
-	const SCENES = [sceneSearch, sceneFilter, sceneSort, sceneSync, sceneShare];
+	const SCENES = [
+		sceneCopy,
+		sceneSearch,
+		sceneFilter,
+		sceneSort,
+		sceneGroups,
+		sceneSync,
+		sceneShare,
+		sceneSettings,
+	];
 
 	/* ---- the runner -------------------------------------------------------- */
 	/* One scene at a time, each starting from the same window. `token` is what
@@ -819,6 +1047,32 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		50% {
 			opacity: 0;
 		}
+	}
+
+	/* one screen at a time inside the window shell */
+	.demo-screen {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.demo-screen.is-off {
+		display: none;
+	}
+
+	/* the card menu fades the way the hero's does */
+	.demo-window :global(.oc-menu) {
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 0.13s ease,
+			visibility 0.13s;
+	}
+
+	.demo-window :global(.oc-menu.open) {
+		opacity: 1;
+		visibility: visible;
 	}
 
 	/* fake cursor, the hero's */

@@ -163,6 +163,26 @@ export const NAV_ICONS = {
 };
 
 /* ---- window buttons: 8px glyphs on a 10 unit grid ---- */
+/* Settings section marks, at the 15px the app draws them. The app uses Phosphor
+   here; these are the same shapes in the stroke set the rest of the mock uses. */
+export const SET_ICONS = {
+	sliders: stroke(
+		15,
+		2,
+		'<line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/><circle cx="9" cy="8" r="2.6"/><circle cx="16" cy="16" r="2.6"/>',
+	),
+	clipboardText: stroke(
+		15,
+		2,
+		'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4V2.8h5V4"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="13.5" y2="15"/>',
+	),
+	clock: stroke(
+		15,
+		2,
+		'<circle cx="12" cy="12" r="8.5"/><polyline points="12 7.2 12 12 15.4 14"/>',
+	),
+};
+
 export const WIN_ICONS = {
 	min: svg(
 		'width="8" height="8" viewBox="0 0 10 10" fill="none"',
