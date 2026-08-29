@@ -1,0 +1,246 @@
+---
+/*
+ * Landing page for the password-reset link Supabase emails:
+ * https://<site>/reset?code=<pkce code>
+ *
+ * This lives on the static site rather than the API host on purpose. The page
+ * needs nothing from a server, and putting it here means a password reset does
+ * not depend on the API keeping its hostname or being up - which is exactly
+ * what broke it once already, when the backend moved and the old redirect was
+ * left behind in Supabase's allow-list.
+ *
+ * The code in the query is a one-time PKCE authorization code. It is useless on
+ * its own: exchanging it needs the verifier, which never left the machine that
+ * asked for the reset. That is why the reset finishes in the app and not here -
+ * the new password has to re-wrap the encryption key, which only the app holds.
+ *
+ * The API host still answers /reset, now with a 302 to here. Installs from before
+ * this page existed have that URL compiled in and no later release can change
+ * what they ask for, so that forward stays until they have aged out.
+ */
+import '../styles/landing.css';
+import SiteNav from '../components/landing/SiteNav.astro';
+
+const title = 'Set a new password - Orange Copy Paste';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		<meta name="robots" content="noindex" />
+		<meta name="color-scheme" content="dark" />
+		<link rel="icon" type="image/png" href="/favicon-32.png" />
+		<link rel="apple-touch-icon" href="/app-icon.png" />
+		<script is:inline>
+			document.documentElement.classList.add('js');
+		</script>
+	</head>
+	<body class="landing">
+		<SiteNav />
+		<main class="rs">
+			<div class="wrap rs-inner">
+				{/*
+				  Three states, not two. The page is prerendered, so it cannot know
+				  at build time whether a code is present - only the script below
+				  can, once it has the address bar. Until then the card says
+				  nothing, and with no JavaScript at all it says so plainly rather
+				  than showing one of the two answers at random.
+				*/}
+				<div class="rs-card" id="card">
+					<div class="rs-badge">
+						<svg
+							class="on-ok"
+							width="21"
+							height="21"
+							viewBox="0 0 20 20"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M6 9V6.5a4 4 0 0 1 8 0V9" />
+							<rect x="4.5" y="9" width="11" height="7.5" rx="1.8" />
+						</svg>
+						<svg
+							class="on-fail on-nojs"
+							width="21"
+							height="21"
+							viewBox="0 0 20 20"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M10 5.5v6M10 14.5v.01" />
+						</svg>
+					</div>
+
+					<h1 class="on-ok">Set a new password</h1>
+					<h1 class="on-fail">This link is not usable</h1>
+					<h1 class="on-nojs">Turn on JavaScript to continue</h1>
+
+					<p class="rs-sub on-ok">
+						Orange Copy Paste will ask for the new password, so it can unlock your synced
+						items with it. Open the app to finish.
+					</p>
+					<p class="rs-sub on-fail">
+						It is missing its one-time code, which usually means it has already been used
+						or it expired. Ask for a new reset link from the app.
+					</p>
+					<p class="rs-sub on-nojs">
+						This page hands a one-time code to the app, and it needs JavaScript to read
+						that code out of the link. Turn it on and reload this page, or ask for a new
+						reset link from the app.
+					</p>
+
+					<a class="btn btn-primary rs-cta on-ok" id="open" href="#">
+						Open in Orange Copy Paste
+					</a>
+
+					<p class="rs-fine on-ok">
+						Nothing happened? Open Orange Copy Paste and use this link again, or
+						<a href="https://github.com/Spectrewolf8/RoverTools-Releases/releases/latest">
+							download it first</a
+						>.
+					</p>
+				</div>
+			</div>
+		</main>
+
+		<style>
+			.rs {
+				display: flex;
+				align-items: center;
+				min-height: calc(100vh - 62px);
+			}
+
+			.rs-inner {
+				padding: 3.5rem 1.25rem 5rem;
+				display: flex;
+				justify-content: center;
+			}
+
+			.rs-card {
+				width: 100%;
+				max-width: 30rem;
+				padding: 2.25rem 2rem 2rem;
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				background: var(--surface);
+				box-shadow: var(--shadow);
+				text-align: center;
+			}
+
+			.rs-badge {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 44px;
+				height: 44px;
+				margin-bottom: 1.1rem;
+				border-radius: 50%;
+				background: var(--accent-dim);
+				color: var(--accent);
+			}
+
+			h1 {
+				font-family: var(--font-display);
+				font-size: clamp(1.35rem, 3vw, 1.7rem);
+				line-height: 1.2;
+				margin: 0 0 0.6rem;
+				color: var(--text);
+			}
+
+			.rs-sub {
+				margin: 0 auto;
+				max-width: 26rem;
+				color: var(--text-secondary);
+				line-height: 1.6;
+			}
+
+			.rs-cta {
+				margin-top: 1.5rem;
+			}
+
+			.rs-fine {
+				margin: 1.1rem 0 0;
+				font-size: 0.85rem;
+				color: var(--text-muted);
+			}
+
+			.rs-fine a {
+				color: var(--text-secondary);
+				text-decoration: underline;
+			}
+
+			/* Nothing is shown until a state is known. The prerendered card carries
+			   no state class; the script adds ok or fail once it has read the
+			   address bar, and a browser with no JavaScript never adds `js` to
+			   <html> and so gets the nojs branch instead.
+
+			   Every reveal names its display value outright. `revert` would be the
+			   tidier way to undo the `none` above, but it rolls the property back
+			   past the whole author origin - taking `.btn`'s own `inline-flex`
+			   with it and leaving the button an inline anchor. */
+			.on-ok,
+			.on-fail,
+			.on-nojs {
+				display: none;
+			}
+
+			.rs-card.ok h1.on-ok,
+			.rs-card.ok p.on-ok,
+			.rs-card.fail h1.on-fail,
+			.rs-card.fail p.on-fail,
+			html:not(.js) .rs-card h1.on-nojs,
+			html:not(.js) .rs-card p.on-nojs {
+				display: block;
+			}
+
+			.rs-card.ok .rs-badge .on-ok,
+			.rs-card.fail .rs-badge .on-fail,
+			html:not(.js) .rs-card .rs-badge .on-nojs {
+				display: block;
+			}
+
+			.rs-card.ok a.rs-cta {
+				display: inline-flex;
+			}
+		</style>
+
+		<script is:inline>
+			// The code is read here rather than templated in, because this page is
+			// prerendered and a one-time code must never be baked into a file on a
+			// CDN. Same handoff the API-hosted copy does: one silent attempt at the
+			// deep link, with the button left in place for when the scheme is not
+			// registered and nothing happens.
+			(function () {
+				var card = document.getElementById('card');
+				var open = document.getElementById('open');
+				var code = '';
+				try {
+					code = new URLSearchParams(window.location.search).get('code') || '';
+				} catch (e) {
+					code = '';
+				}
+				// classList.add, never `className =`: Astro scopes this page's CSS
+				// with a generated class on the element itself, so overwriting the
+				// class list strips the scope and every rule below stops matching.
+				if (!code) {
+					card.classList.add('fail');
+					return;
+				}
+				card.classList.add('ok');
+				open.href = 'orange://reset?code=' + encodeURIComponent(code);
+				try {
+					location.replace(open.href);
+				} catch (e) {}
+			})();
+		</script>
+	</body>
+</html>
