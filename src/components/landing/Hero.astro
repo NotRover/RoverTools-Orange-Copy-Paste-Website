@@ -81,7 +81,7 @@ const earlier = [
 							</div>
 						))
 					}
-					<CardMenu slot="menu" x={241} y={152} spaces={2} />
+					<CardMenu slot="menu" spaces={2} />
 				</HistoryScreen>
 				<div class="oc-pill-row">
 					<div class="oc-stat-pill">
@@ -123,38 +123,83 @@ const earlier = [
 	const keys = document.querySelectorAll<HTMLElement>('[data-key]');
 	const cursor = document.getElementById('fcur');
 	const win = cursor?.parentElement ?? null;
+	const menu = win?.querySelector<HTMLElement>('.oc-menu') ?? null;
 	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	function moveCursor(x: number, y: number) {
 		if (cursor) cursor.style.transform = `translate(${x}px, ${y}px)`;
 	}
 
-	async function cursorClick(card: HTMLElement, wait: (ms: number) => Promise<unknown>) {
-		if (!cursor || !win) return;
-		const w = win.getBoundingClientRect();
+	/* where on a card the cursor comes to rest, in the window's own pixels */
+	function pointOn(card: HTMLElement) {
+		const w = win!.getBoundingClientRect();
 		const c = card.getBoundingClientRect();
 		// the mock is zoomed as a whole, so screen deltas need dividing by it
 		const z = w.width / 920 || 1;
-		cursor.classList.add('on');
-		moveCursor(
-			(c.left - w.left) / z + c.width / z * 0.72,
-			(c.top - w.top) / z + c.height / z * 0.55,
-		);
-		await wait(620);
-		cursor.classList.add('clicking');
+		return {
+			z,
+			x: (c.left - w.left) / z + (c.width / z) * 0.72,
+			y: (c.top - w.top) / z + (c.height / z) * 0.55,
+		};
+	}
+
+	async function flashCopied(card: HTMLElement, wait: (ms: number) => Promise<unknown>) {
 		const time = card.querySelector('.oc-time');
 		const prev = time?.innerHTML ?? '';
 		if (time) {
 			time.innerHTML = `${CHIP_ICONS.check}Copied`;
 			time.classList.add('oc-time--copied');
 		}
-		await wait(420);
-		cursor.classList.remove('clicking');
-		await wait(900);
+		await wait(1100);
 		if (time) {
 			time.innerHTML = prev;
 			time.classList.remove('oc-time--copied');
 		}
+	}
+
+	async function cursorClick(card: HTMLElement, wait: (ms: number) => Promise<unknown>) {
+		if (!cursor || !win) return;
+		const p = pointOn(card);
+		cursor.classList.add('on');
+		moveCursor(p.x, p.y);
+		await wait(620);
+		cursor.classList.add('clicking');
+		const copied = flashCopied(card, wait);
+		await wait(420);
+		cursor.classList.remove('clicking');
+		await copied;
+		moveCursor(920 - 60, 560 - 70);
+	}
+
+	/* The other half of the demo: right-click, the menu opens under the pointer,
+	   the pointer picks Copy, the menu goes away again. The app opens it at the
+	   click point and nudges it back inside when it would run off the window, so
+	   the mock does the same. */
+	async function cursorRightClick(card: HTMLElement, wait: (ms: number) => Promise<unknown>) {
+		if (!cursor || !win || !menu) return;
+		const p = pointOn(card);
+		cursor.classList.add('on');
+		moveCursor(p.x, p.y);
+		await wait(620);
+		cursor.classList.add('clicking');
+		await wait(280);
+		cursor.classList.remove('clicking');
+
+		const m = menu.getBoundingClientRect();
+		const mx = Math.max(8, Math.min(p.x, 920 - 8 - m.width / p.z));
+		const my = Math.max(8, Math.min(p.y, 560 - 8 - m.height / p.z));
+		menu.style.left = `${mx}px`;
+		menu.style.top = `${my}px`;
+		menu.classList.add('open');
+
+		await wait(560);
+		moveCursor(mx + 46, my + 17); // the Copy row
+		await wait(820);
+		cursor.classList.add('clicking');
+		await wait(300);
+		cursor.classList.remove('clicking');
+		menu.classList.remove('open');
+		await flashCopied(card, wait);
 		moveCursor(920 - 60, 560 - 70);
 	}
 
@@ -228,6 +273,7 @@ const earlier = [
 
 		async function loop() {
 			let cycles = 0;
+			let visits = 0;
 			for (;;) {
 				const s = snippets[i % snippets.length]!;
 				i++;
@@ -242,10 +288,13 @@ const earlier = [
 				await wait(140);
 				pushCard(s);
 				cycles++;
-				// every other capture, the cursor comes over and clicks the new card
+				// every other capture, the cursor comes over to the new card - and
+				// every other visit is a right-click rather than a plain copy
 				if (cycles % 2 === 0 && stack!.firstElementChild) {
+					const card = stack!.firstElementChild as HTMLElement;
 					await wait(700);
-					await cursorClick(stack!.firstElementChild as HTMLElement, wait);
+					visits++;
+					await (visits % 2 === 0 ? cursorRightClick : cursorClick)(card, wait);
 					await wait(1100);
 				} else {
 					await wait(2600);
@@ -380,6 +429,20 @@ const earlier = [
 	.hero-demo :global(.oc-card.leave) {
 		transform: translateY(10px);
 		opacity: 0;
+	}
+
+	/* The right-click menu is part of the loop, not furniture: it stays shut
+	   until the cursor opens it, and closes when the row is picked. No transform
+	   here on purpose - the script measures it while it is hidden. */
+	.hero-demo :global(.oc-menu) {
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.13s ease, visibility 0.13s;
+	}
+
+	.hero-demo :global(.oc-menu.open) {
+		opacity: 1;
+		visibility: visible;
 	}
 
 	/* fake cursor */
