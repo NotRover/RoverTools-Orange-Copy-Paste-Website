@@ -1,0 +1,44 @@
+---
+/**
+ * The notifications popout, from NotificationsPopout.css.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { SRC_ICONS } from '../app-parts';
+---
+
+<div class="ntf-panel">
+	<div class="ntf-head">
+		<span class="ntf-title">Notifications</span>
+		<div class="ntf-head-actions">
+			<span class="ntf-link">Mark all read</span>
+			<span class="ntf-link">Clear read</span>
+		</div>
+	</div>
+	<div class="ntf-chips">
+		<span class="ntf-chip active">All</span>
+		<span class="ntf-chip">Invites<span class="ntf-chip-count">1</span></span>
+		<span class="ntf-chip">Sync<span class="ntf-chip-count">1</span></span>
+	</div>
+	<div class="ntf-list">
+		<div class="ntf-day">Today</div>
+		<div class="ntf-row unread">
+			<span class="ntf-glyph ntf-glyph--accent" set:html={SRC_ICONS.usersThree15} />
+			<div class="ntf-body">
+				<p class="ntf-row-title">rio invited you to Design</p>
+				<p class="ntf-row-meta">4 min ago</p>
+				<div class="ntf-actions">
+					<span class="ntf-btn ntf-btn--primary">Join</span>
+					<span class="ntf-btn">Decline</span>
+				</div>
+			</div>
+		</div>
+		<div class="ntf-row">
+			<span class="ntf-glyph ntf-glyph--warn" set:html={SRC_ICONS.warningCircle15} />
+			<div class="ntf-body">
+				<p class="ntf-row-title">3 items are waiting to upload</p>
+				<p class="ntf-row-meta">2 hr ago</p>
+			</div>
+		</div>
+	</div>
+</div>

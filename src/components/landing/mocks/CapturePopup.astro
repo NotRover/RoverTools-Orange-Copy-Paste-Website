@@ -1,0 +1,121 @@
+---
+/**
+ * The capture popup that Ctrl+Shift+C shows.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
+---
+
+<div class="cp">
+	<div class="cp-head">
+		<div class="cp-head-left">
+			<span class="cp-title">Copied</span>
+			<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+		</div>
+		<span class="cp-close" set:html={SRC_ICONS.close10} />
+	</div>
+	<div class="cp-preview"><p class="cp-preview-text">The quarterly numbers land Thursday</p></div>
+	<div class="cp-actions">
+		<span class="cp-item"><Fragment set:html={MENU_ICONS.pin} />Pin</span>
+		<span class="cp-item"><Fragment set:html={MENU_ICONS.star} />Save</span>
+		<span class="cp-sep"></span>
+		<span class="cp-item cp-item--danger"><Fragment set:html={MENU_ICONS.trash} />Delete</span>
+	</div>
+</div>
+
+<style>
+	/* ---- capture popup ---- */
+
+	.cp {
+		width: 340px;
+		height: 248px;
+		background: var(--bg);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+		line-height: normal;
+	}
+
+	.cp-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 2px;
+	}
+
+	.cp-head-left {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.cp-title {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--accent);
+	}
+
+	.cp-close {
+		width: 22px;
+		height: 22px;
+		border: 1px solid var(--border);
+		background: var(--surface);
+		color: var(--text-muted);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6px;
+		flex-shrink: 0;
+	}
+
+	.cp-preview {
+		flex: 1;
+		min-height: 0;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		padding: 8px 10px;
+	}
+
+	.cp-preview-text {
+		margin: 0;
+		font-size: 11.5px;
+		line-height: 1.5;
+		color: var(--text-secondary);
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+	}
+
+	.cp-actions {
+		display: flex;
+		gap: 1px;
+	}
+
+	.cp-item {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		padding: 6px 9px;
+		border-radius: var(--radius-xs);
+		color: var(--text);
+		font-size: 12px;
+	}
+
+	.cp-item--danger {
+		color: var(--text);
+	}
+
+	.cp-sep {
+		width: 1px;
+		align-self: stretch;
+		background: var(--border);
+		margin: 3px 2px;
+	}
+</style>

@@ -1,0 +1,49 @@
+---
+/**
+ * The cloud sync mode and device list, from AccountScreen.css.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { SRC_ICONS } from '../app-parts';
+---
+
+<div class="acct-mode">
+	<div class="acct-mode-head">
+		<span class="set-row-label">Automatic syncing</span>
+		<div class="acct-seg">
+			<span class="acct-seg-pill active">Realtime</span>
+			<span class="acct-seg-pill">Passive</span>
+			<span class="acct-seg-pill">Manual</span>
+		</div>
+	</div>
+	<p class="acct-card-desc">
+		Items from your other devices arrive the moment they are copied, and what you
+		copy here uploads right away.
+	</p>
+</div>
+
+<div class="acct-zone">
+	<div class="acct-zone-head">
+		<span class="acct-zone-icon" set:html={SRC_ICONS.desktop13} />
+		<span class="acct-zone-label">Devices</span>
+	</div>
+	<div class="acct-card acct-card--rows">
+		<div class="acct-row">
+			<span class="acct-row-icon" set:html={SRC_ICONS.desktop15} />
+			<div class="acct-row-main">
+				<span class="acct-row-name">studio-desktop<span class="acct-badge acct-badge--owner">this device</span></span>
+				<span class="acct-row-meta">windows - online</span>
+			</div>
+			<span class="acct-dot online"></span>
+		</div>
+		<div class="acct-row">
+			<span class="acct-row-icon" set:html={SRC_ICONS.laptop15} />
+			<div class="acct-row-main">
+				<span class="acct-row-name">rio-macbook</span>
+				<span class="acct-row-meta">macos - online</span>
+			</div>
+			<span class="acct-dot online"></span>
+			<div class="acct-row-actions"><span class="acct-btn acct-btn--sm acct-btn--danger">Remove</span></div>
+		</div>
+	</div>
+</div>

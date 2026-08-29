@@ -1,0 +1,236 @@
+/* The notifications and invites popouts, which share a shell:
+   NotificationsPopout.css.
+
+   Global rather than scoped to one component: several mocks draw these parts,
+   and a copy per component is a copy that drifts. Every value is the app's
+   own - see the site CLAUDE.md on wearing the app's skin. */
+
+.inv-pop,
+.ntf-panel {
+display: flex;
+flex-direction: column;
+background: var(--bg);
+border: 1px solid var(--border-light);
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+overflow: hidden;
+font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.inv-pop {
+width: 300px;
+}
+
+.ntf-panel {
+width: 336px;
+}
+
+.inv-head,
+.ntf-head {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 8px;
+padding: 10px 12px;
+border-bottom: 1px solid var(--border);
+}
+
+.inv-title,
+.ntf-title {
+font-size: 13px;
+font-weight: 600;
+color: var(--text);
+}
+
+.ntf-head-actions {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.ntf-link {
+font-size: 11px;
+color: var(--text-secondary);
+}
+
+.inv-tabs,
+.ntf-chips {
+display: flex;
+gap: 4px;
+padding: 7px 12px;
+border-bottom: 1px solid var(--border);
+}
+
+.inv-tab,
+.ntf-chip {
+display: flex;
+align-items: center;
+gap: 4px;
+padding: 3px 8px;
+border: 1px solid var(--border);
+border-radius: var(--radius-xs);
+color: var(--text-secondary);
+font-size: 10px;
+}
+
+.inv-tab-count,
+.ntf-chip-count {
+font-size: 9px;
+font-weight: 700;
+font-variant-numeric: tabular-nums;
+}
+
+.inv-row {
+padding: 9px 12px 10px;
+border-bottom: 1px solid var(--border);
+}
+
+.inv-row:last-child {
+border-bottom: none;
+}
+
+.inv-row-space {
+margin: 0;
+font-size: 12px;
+font-weight: 600;
+line-height: 1.45;
+color: var(--text);
+}
+
+.inv-row-sub {
+margin: 1px 0 0;
+font-size: 11px;
+line-height: 1.4;
+color: var(--text-secondary);
+}
+
+.inv-row-meta {
+font-size: 10px;
+color: var(--text-muted);
+}
+
+.inv-row-actions,
+.ntf-actions {
+display: flex;
+gap: 6px;
+margin-top: 7px;
+}
+
+.inv-btn,
+.ntf-btn {
+padding: 3px 10px;
+border: 1px solid var(--border-light);
+border-radius: var(--radius-xs);
+color: var(--text-secondary);
+font-size: 11px;
+}
+
+.inv-btn--primary,
+.ntf-btn--primary {
+background: var(--accent);
+border-color: var(--accent);
+color: #fff;
+}
+
+/* the day header sticks to the top of the feed in the app; here it is just
+   the label that starts a group */
+
+.ntf-day {
+padding: 9px 12px 7px;
+font-size: 10px;
+font-weight: 600;
+letter-spacing: 0.4px;
+text-transform: uppercase;
+color: var(--accent);
+}
+
+.ntf-row {
+position: relative;
+display: flex;
+gap: 10px;
+padding: 11px 12px;
+border-bottom: 1px solid var(--border);
+}
+
+.ntf-row:last-child {
+border-bottom: none;
+}
+
+.ntf-glyph {
+width: 26px;
+height: 26px;
+flex-shrink: 0;
+border-radius: var(--radius-xs);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.ntf-glyph--accent {
+background: var(--accent-dim-strong);
+color: var(--accent);
+}
+
+.ntf-glyph--good {
+background: rgba(34, 197, 94, 0.13);
+color: var(--success);
+}
+
+.ntf-glyph--warn {
+background: rgba(245, 158, 11, 0.15);
+color: #f59e0b;
+}
+
+.ntf-body {
+flex: 1;
+min-width: 0;
+padding-right: 18px;
+}
+
+.ntf-row-title {
+margin: 0;
+font-size: 12px;
+line-height: 1.45;
+color: var(--text);
+}
+
+.ntf-row-sub {
+margin: 2px 0 0;
+font-size: 11px;
+line-height: 1.45;
+color: var(--text-secondary);
+}
+
+.ntf-row-meta {
+margin: 3px 0 0;
+font-size: 10px;
+color: var(--text-muted);
+}
+
+.inv-tab.active,
+.ntf-chip.active {
+	background: var(--accent-dim-strong);
+	border-color: transparent;
+	color: var(--accent);
+}
+
+/* unread: a tinted ground and an accent rail, so the state reads in a
+   screenshot as well as under a cursor */
+
+.ntf-row.unread {
+	background: var(--accent-dim);
+}
+
+.ntf-row.unread::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: var(--accent);
+}
+
+.ntf-row.unread .ntf-row-title {
+	font-weight: 600;
+}

@@ -1,0 +1,160 @@
+---
+/**
+ * The note editor, from notes-screen/note-editor/note-editor.css.
+ *
+ * Drawn at the app's own size: the page that places it does the scaling.
+ */
+import { CHIP_ICONS, MENU_ICONS, SRC_ICONS } from '../app-parts';
+---
+
+<div class="ns-editor">
+	<div class="ns-format-bar">
+		<div class="ns-fmt-group">
+			<span class="ns-fmt-btn ns-fmt-btn--active" set:html={SRC_ICONS.bold13} />
+			<span class="ns-fmt-btn" set:html={SRC_ICONS.italic13} />
+			<span class="ns-fmt-btn" set:html={SRC_ICONS.strike13} />
+			<span class="ns-fmt-btn" set:html={SRC_ICONS.code13} />
+		</div>
+		<div class="ns-fmt-group">
+			<span class="ns-fmt-btn ns-fmt-btn--dropdown">H1<Fragment set:html={MENU_ICONS.caret} /></span>
+			<span class="ns-fmt-btn" set:html={SRC_ICONS.alignLeft13} />
+		</div>
+		<div class="ns-fmt-group">
+			<span class="ns-fmt-btn" set:html={SRC_ICONS.bullets13} />
+			<span class="ns-fmt-btn ns-fmt-btn--active" set:html={SRC_ICONS.checks13} />
+			<span class="ns-fmt-btn" set:html={SRC_ICONS.link13} />
+		</div>
+	</div>
+	<div class="ns-editor-content">
+		<p class="ed-h">Before the tag</p>
+		<ul class="ns-tasks">
+			<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Draft the notes</li>
+			<li class="ns-task"><span class="ns-task-box"></span>Check both update channels</li>
+		</ul>
+		<p class="ns-p">The tag is here:</p>
+		<span class="ee-clip-embed ee-clip-embed--open">
+			<span class="ee-clip-embed-inner ee-clip-embed-inner--url">
+				<span class="ee-clip-embed-icon" set:html={CHIP_ICONS.url} />
+				<span class="ee-clip-embed-label">RoverTools-Releases/tag/v0.1.16</span>
+			</span>
+			<span class="ee-embed-panel">
+				<span class="ee-embed-panel-meta">
+					<span class="ee-embed-panel-type"><Fragment set:html={CHIP_ICONS.url} />URL</span>
+					<span class="ee-embed-panel-time">32m ago</span>
+				</span>
+				<span class="ee-embed-panel-body">github.com/Spectrewolf8/RoverTools-Releases</span>
+			</span>
+		</span>
+	</div>
+</div>
+
+<style>
+	.ed-h {
+		margin: 0 0 0.4em;
+		color: var(--text);
+		font-size: 15px;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	}
+
+	/* an entry pulled into a note: a coloured pill that opens a panel under
+	   itself, from notes-screen/editor-engine. Type tints mirror the entry chips. */
+
+	.ee-clip-embed {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: stretch;
+		max-width: 100%;
+		margin: 2px 2px 0;
+		vertical-align: middle;
+	}
+
+	.ee-clip-embed-inner {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 3px 5px 3px 7px;
+		border-radius: 7px;
+		font-size: 0.82em;
+		font-weight: 600;
+		line-height: 1.4;
+		white-space: nowrap;
+	}
+
+	.ee-clip-embed-inner--url {
+		background: rgba(16, 185, 129, 0.12);
+		color: #10b981;
+	}
+
+	/* open: the pill and the panel become one shape */
+
+	.ee-clip-embed--open .ee-clip-embed-inner {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	.ee-clip-embed-icon {
+		display: inline-flex;
+		align-items: center;
+		flex-shrink: 0;
+		opacity: 0.85;
+	}
+
+	.ee-clip-embed-label {
+		max-width: 220px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		letter-spacing: 0.01em;
+	}
+
+	.ee-embed-panel {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		min-width: 320px;
+		max-width: 340px;
+		border: 1px solid var(--border);
+		border-top: none;
+		border-radius: 0 0 8px 8px;
+		background: var(--surface);
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+		overflow: hidden;
+	}
+
+	.ee-embed-panel-meta {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 5px 10px 4px;
+		border-bottom: 1px solid var(--border);
+		background: #1c1c1c;
+	}
+
+	.ee-embed-panel-type {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		color: #10b981;
+		font-size: 10px;
+		font-weight: 650;
+		letter-spacing: 0.3px;
+		text-transform: uppercase;
+	}
+
+	.ee-embed-panel-time {
+		margin-left: auto;
+		font-size: 10px;
+		color: var(--text-muted);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.ee-embed-panel-body {
+		padding: 9px 10px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		line-height: 1.45;
+		color: var(--text-secondary);
+		word-break: break-all;
+	}
+</style>
