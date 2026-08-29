@@ -8,7 +8,7 @@
  * whichever card it is meant to belong to. Pass `anchor` instead of x/y to hang
  * it off a positioned parent - a bento tile rather than the window shell.
  */
-import { MENU_ICONS } from './app-parts';
+import { GROUP_COLORS, MENU_ICONS } from './app-parts';
 
 interface Props {
 	/** left offset inside the window, in the window's own pixels */
@@ -17,9 +17,18 @@ interface Props {
 	y?: number;
 	/** how many spaces this item is already in, shown beside "Share to space" */
 	spaces?: number;
+	/** draw the Groups submenu hanging open off its row */
+	groups?: boolean;
 }
 
-const { x, y, spaces = 2 } = Astro.props;
+const { x, y, spaces = 2, groups = false } = Astro.props;
+
+/* the groups the mock history uses, with the colour key each chip draws in */
+const groupNames = [
+	['work', 'teal'],
+	['release', 'amber'],
+	['invoices', 'blue'],
+] as const;
 const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
 ---
 
@@ -42,10 +51,25 @@ const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
 		<span class="oc-menu-count">{spaces}</span>
 		<span class="oc-menu-caret" set:html={MENU_ICONS.caret} />
 	</span>
-	<span class="oc-menu-item oc-menu-item--sub">
-		<Fragment set:html={MENU_ICONS.tag} />
-		<span class="oc-menu-label">Groups</span>
-		<span class="oc-menu-caret" set:html={MENU_ICONS.caret} />
+	<span class="oc-menu-groups-wrap">
+		<span class="oc-menu-item oc-menu-item--sub">
+			<Fragment set:html={MENU_ICONS.tag} />
+			<span class="oc-menu-label">Groups</span>
+			<span class="oc-menu-caret" set:html={MENU_ICONS.caret} />
+		</span>
+		<span class="oc-menu-groups-flyout" hidden={!groups}>
+			<span class="oc-menu-groups-head">Groups</span>
+			<span class="oc-menu-groups-body">
+				{
+					groupNames.map(([name, color]) => (
+						<span class="oc-menu-group-chip" data-group={name} style={`--cc:${GROUP_COLORS[color as keyof typeof GROUP_COLORS]}`}>
+							<span class="oc-menu-group-dot" />
+							<span class="oc-menu-group-chip-name">{name}</span>
+						</span>
+					))
+				}
+			</span>
+		</span>
 	</span>
 	<span class="oc-menu-item oc-menu-item--expand">
 		<Fragment set:html={MENU_ICONS.expand} />Expand

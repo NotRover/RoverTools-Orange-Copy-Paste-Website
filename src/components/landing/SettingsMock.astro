@@ -1,0 +1,80 @@
+---
+/**
+ * The Settings screen, from settings-screen/SettingsScreen.tsx. Two of the
+ * app's sections with their real labels and descriptions, as many as the 560px
+ * window holds without scrolling; metrics (620px
+ * column, 22px section gap, 11/14px rows, the 37x21 toggle) come from
+ * SettingsScreen.css. Styles are the global `set-*` parts in landing.css.
+ */
+import { SET_ICONS, TB_ICONS } from './app-parts';
+
+const history = [
+	['Keep history across app restarts', 'Clipboard history is preserved when the app restarts.', true],
+	['Click a card to view it', 'A double click copies instead. Off, a click copies and a double click opens it too.', false],
+	['Auto-save copied entries', 'Automatically add every new clipboard entry to the Saved group.', false],
+] as const;
+
+const slotOptions = [5, 7, 9];
+---
+
+<div class="set-screen">
+	<div class="set-inner">
+		<div class="scr-head">
+			<span class="scr-eyebrow">Preferences</span>
+			<h2 class="scr-title">Settings</h2>
+			<p class="scr-subtitle">How the app behaves on this device.</p>
+		</div>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.clipboardText} />
+				<h3 class="set-section-title">Quick Paste</h3>
+			</div>
+			<div class="set-group">
+				<div class="set-row">
+					<span class="set-row-info">
+						<span class="set-row-label">Paste slots</span>
+						<span class="set-row-desc">Number of entries shown in the quick paste popup.</span>
+					</span>
+					<span class="set-select" id="demo-slots">
+						<span class="set-select-trigger">
+							<span data-slot-value>5</span>
+							<span class="set-select-chevron" set:html={TB_ICONS.chevron} />
+						</span>
+						<span class="set-select-list" hidden>
+							{
+								slotOptions.map((n) => (
+									<span class:list={['set-select-option', n === 5 && 'is-on']} data-slot={n}>
+										{n}
+									</span>
+								))
+							}
+						</span>
+					</span>
+				</div>
+			</div>
+		</section>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.clock} />
+				<h3 class="set-section-title">History</h3>
+			</div>
+			<div class="set-group">
+				{
+					history.map(([label, desc, on]) => (
+						<div class="set-row" data-set-row={label}>
+							<span class="set-row-info">
+								<span class="set-row-label">{label}</span>
+								<span class="set-row-desc">{desc}</span>
+							</span>
+							<span class:list={['set-toggle', on && 'is-on']}>
+								<span class="set-toggle-knob" />
+							</span>
+						</div>
+					))
+				}
+			</div>
+		</section>
+	</div>
+</div>

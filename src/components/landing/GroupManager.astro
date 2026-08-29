@@ -1,0 +1,62 @@
+---
+/**
+ * The Manage Groups card the toolbar's groups button opens, from
+ * clipboard-screen/group-manager/GroupManagerCard.tsx. Metrics (250px wide,
+ * 10px padding, the 10.5px uppercase title, the 28px add button) come from
+ * GroupManagerCard.css. Styles are the global `gm-*` parts in landing.css.
+ */
+import { CHIP_ICONS, GROUP_COLORS, MENU_ICONS } from './app-parts';
+
+interface Props {
+	/** the groups in the list, as [name, colour key, count] */
+	groups?: readonly (readonly [string, string, number])[];
+}
+
+const { groups = [
+	['work', 'teal', 4],
+	['release', 'amber', 3],
+	['invoices', 'blue', 2],
+] } = Astro.props;
+---
+
+<div class="gm-card">
+	<div class="gm-header">
+		<Fragment set:html={MENU_ICONS.tag} />
+		<span class="gm-title">Manage Groups</span>
+		<span class="gm-count" data-gm-count>{groups.length}</span>
+	</div>
+
+	<div class="gm-group-list">
+		<div class="gm-group-row gm-group-row--system">
+			<span class="gm-group-icon gm-group-icon--pinned" set:html={CHIP_ICONS.pin} />
+			<span class="gm-row-name">Pinned</span>
+			<span class="gm-group-badge">System</span>
+			<span class="gm-row-count">2</span>
+		</div>
+		<div class="gm-group-row gm-group-row--system">
+			<span class="gm-group-icon gm-group-icon--saved" set:html={CHIP_ICONS.saved} />
+			<span class="gm-row-name">Saved</span>
+			<span class="gm-group-badge">System</span>
+			<span class="gm-row-count">6</span>
+		</div>
+
+		<div class="gm-chip-list" data-gm-chips>
+			{
+				groups.map(([name, color, count]) => (
+					<span class="gm-chip" style={`--cc:${GROUP_COLORS[color as keyof typeof GROUP_COLORS]}`}>
+						<span class="gm-chip-dot" />
+						<span class="gm-chip-name">{name}</span>
+						<span class="gm-chip-count">{count}</span>
+					</span>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="gm-divider"></div>
+
+	<div class="gm-add-row">
+		<span class="gm-add-input" data-gm-input>New group name...</span>
+		<span class="gm-add-btn" data-gm-add>Add</span>
+	</div>
+</div>
