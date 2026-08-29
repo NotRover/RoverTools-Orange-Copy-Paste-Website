@@ -1,0 +1,114 @@
+---
+/**
+ * The clipboard screen's filter card, from the app's SearchFilter.css and
+ * FilterParts.tsx. The app widens the card rather than scrolling it, so this is
+ * the two-column 604px shell with every option on screen. Styles are the global
+ * `cs-*` parts in landing.css.
+ *
+ * Drawn at the app's own size: the caller scales the whole block.
+ */
+import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, NAV_ICONS, SRC_ICONS, TYPE_LABELS } from './app-parts';
+---
+
+<div class="cs-filter-card">
+<div class="cs-card-head">
+	<span class="cs-card-head-icon"><Fragment set:html={SRC_ICONS.funnel12} /></span>
+	<span class="cs-card-title">Filters</span>
+	<span class="cs-card-result"><b>42</b> of 128</span>
+	<span class="cs-card-head-clear">Clear</span>
+</div>
+<div class="cs-card-body">
+<div class="cs-card-col">
+	<div class="cs-card-section">
+		<div class="cs-section-label">Quick<span class="cs-count">1</span></div>
+		<div class="cs-chip-row">
+			<span class="cs-chip"><Fragment set:html={MENU_ICONS.pin} />Pinned<span class="cs-chip-count">12</span></span>
+			<span class="cs-chip cs-chip--on" style="background:rgba(34,197,94,0.16);color:#22c55e"><Fragment set:html={MENU_ICONS.star} />Saved<span class="cs-chip-count">34</span></span>
+			<span class="cs-chip"><Fragment set:html={SRC_ICONS.arrowDown10} />From others<span class="cs-chip-count">15</span></span>
+		</div>
+	</div>
+	<div class="cs-card-divider"></div>
+	<div class="cs-card-section">
+		<div class="cs-section-label">Type<span class="cs-section-hint">all types</span></div>
+		<div class="cs-type-grid">
+			{
+				[
+					['text', 41, true],
+					['url', 17, true],
+					['html', 2, true],
+					['image', 52, false],
+					['video', 0, false],
+					['document', 4, true],
+					['file', 6, false],
+					['folder', 3, false],
+				].map(([kind, n, on]) => (
+					<label
+	class:list={['cs-type-option', on && 'cs-type-option--on', n === 0 && 'cs-type-option--dead']}
+	data-kind={kind}
+>
+						<span class:list={['cs-type-cb', on && 'cs-type-cb--on']} />
+						<span class="cs-type-icon" style={`--cc:${KIND_COLORS[kind as string]}`}>
+							<Fragment set:html={CHIP_ICONS[kind as string]} />
+						</span>
+						<span class="cs-type-name">{TYPE_LABELS[kind as string]}</span>
+						<span class="cs-option-count">{n}</span>
+					</label>
+				))
+			}
+		</div>
+	</div>
+	<div class="cs-card-divider"></div>
+	<div class="cs-card-section">
+		<div class="cs-section-label">Date<span class="cs-section-hint">any time</span></div>
+		<div class="cs-seg">
+			<span class="cs-seg-btn cs-seg-btn--on">Any time</span>
+			<span class="cs-seg-btn">Today</span>
+			<span class="cs-seg-btn">7 days</span>
+			<span class="cs-seg-btn">Range</span>
+		</div>
+	</div>
+</div>
+<div class="cs-card-col">
+	<div class="cs-card-section">
+		<div class="cs-section-label">Cloud<span class="cs-count">1</span></div>
+		<div class="cs-seg">
+			<span class="cs-seg-btn">Any</span>
+			<span class="cs-seg-btn cs-seg-btn--on"><Fragment set:html={NAV_ICONS.cloudCheck11} />In cloud<span class="cs-seg-count">96</span></span>
+			<span class="cs-seg-btn"><Fragment set:html={SRC_ICONS.cloudSlash11} />Local<span class="cs-seg-count">32</span></span>
+		</div>
+		<div class="cs-seg">
+			<span class="cs-seg-btn cs-seg-btn--on">Any</span>
+			<span class="cs-seg-btn"><Fragment set:html={SRC_ICONS.shareNetwork11} />In a space<span class="cs-seg-count">24</span></span>
+			<span class="cs-seg-btn">Not shared<span class="cs-seg-count">104</span></span>
+		</div>
+		<div class="cs-chip-row">
+			<span class="cs-chip"><Fragment set:html={SRC_ICONS.shareNetwork11} />Design<span class="cs-chip-count">12</span></span>
+			<span class="cs-chip"><Fragment set:html={SRC_ICONS.shareNetwork11} />Ops<span class="cs-chip-count">1</span></span>
+			<span class="cs-chip"><Fragment set:html={SRC_ICONS.shareNetwork11} />Family<span class="cs-chip-count">4</span></span>
+		</div>
+	</div>
+	<div class="cs-card-divider"></div>
+	<div class="cs-card-section">
+		<div class="cs-section-label">Groups<span class="cs-section-hint">any group</span></div>
+		<div class="cs-chip-row">
+			{
+				[
+					['work', '#14b8a6', 21],
+					['release', '#f59e0b', 9],
+					['ideas', '#6366f1', 6],
+					['crypto', '#a855f7', 4],
+					['support', '#10b981', 3],
+					['family', '#a78bfa', 2],
+				].map(([name, c, n]) => (
+					<span class="cs-chip">
+						<span class="cs-chip-dot" style={`background:${c}`} />
+						{name}
+						<span class="cs-chip-count">{n}</span>
+					</span>
+				))
+			}
+		</div>
+	</div>
+</div>
+</div>
+</div>

@@ -369,6 +369,8 @@ body.landing {
 
 /* entry card: radius 12, body 10/12/8, 12px mono text, footer 10.5px time */
 .oc-card {
+	/* the select-mode checkbox hangs off the card */
+	position: relative;
 	border-radius: var(--radius);
 	background: var(--surface);
 	border: 1px solid var(--border);
@@ -777,9 +779,17 @@ body.landing {
 .oc-search-icon {
 	position: absolute;
 	left: 7px;
+	/* An absolutely positioned flex child falls back to the container's
+	   content-box corner, not the centre line it would have sat on as a flex
+	   item, so the icon has to be centred by hand - the app's own .search-icon
+	   does the same. */
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
 	color: var(--text-muted);
 	width: 11px;
 	height: 11px;
+	pointer-events: none;
 }
 
 .oc-search-field {
@@ -1033,4 +1043,615 @@ html.js .reveal.in {
 	.kbd {
 		transition: none;
 	}
+}
+
+/* ---- the filter card, from the app's SearchFilter.css. Global rather than
+   scoped to one section: it is an app-mock part, and both the showcase tile
+   and the demo section draw the same card. ---- */
+.cs-filter-card {
+	/* the app widens the card rather than scrolling it: two columns, so every
+	   option stays on screen */
+	width: 604px;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--surface);
+	overflow: hidden;
+	font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.cs-card-head {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	flex-shrink: 0;
+	padding: 8px 9px;
+	border-bottom: 0.5px solid var(--border);
+}
+
+.cs-card-head-icon {
+	display: flex;
+	color: var(--accent);
+	flex-shrink: 0;
+}
+
+.cs-card-title {
+	font-size: 11.5px;
+	font-weight: 700;
+	color: var(--text);
+}
+
+.cs-card-result {
+	margin-left: auto;
+	font-size: 10px;
+	color: var(--text-muted);
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.cs-card-result b {
+	color: var(--accent);
+	font-weight: 700;
+}
+
+.cs-card-head-clear {
+	flex-shrink: 0;
+	padding: 2px 6px;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	color: var(--text-muted);
+	font-size: 10px;
+	font-weight: 600;
+	opacity: 0.32;
+}
+
+.cs-card-body {
+	display: flex;
+	align-items: stretch;
+	padding: 10px;
+	gap: 10px;
+}
+
+.cs-card-col {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+/* the first column carries the widest content - three switches on one line
+   and the two-across type grid - so it gets the larger share */
+.cs-card-col:first-child {
+	flex: 1.18;
+}
+
+.cs-card-col + .cs-card-col {
+	border-left: 0.5px solid var(--border);
+	padding-left: 10px;
+}
+
+.cs-card-section {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+/* for a section whose neutral state needs saying out loud rather than a
+   count: "all types", "any time" */
+.cs-section-hint {
+	margin-left: auto;
+	font-size: 9.5px;
+	font-weight: 500;
+	color: var(--text-muted);
+	opacity: 0.8;
+}
+
+.cs-chip-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	padding: 1px 2px 0;
+}
+
+.cs-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 3.5px 8px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-xs);
+	background: var(--bg);
+	color: var(--text-secondary);
+	font-size: 10.5px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.cs-chip--on {
+	border-color: transparent;
+}
+
+.cs-chip-count {
+	font-size: 9px;
+	font-weight: 700;
+	opacity: 0.62;
+	font-variant-numeric: tabular-nums;
+}
+
+.cs-chip-dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+/* nothing to find down this branch. Dimmed rather than hidden, because a
+   vanishing option reflows every option after it. */
+.cs-type-option--dead {
+	opacity: 0.34;
+}
+
+.cs-card-divider {
+	height: 0.5px;
+	background: var(--border);
+	margin: 6px 0;
+}
+
+.cs-section-label {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.15px;
+	color: var(--text-muted);
+	padding: 0 2px;
+	font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.cs-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 13px;
+	height: 13px;
+	padding: 0 3px;
+	font-size: 8.5px;
+	font-weight: 700;
+	border-radius: 99px;
+	background: var(--accent-dim-strong);
+	color: var(--accent);
+	line-height: 1;
+}
+
+.cs-seg {
+	display: flex;
+	gap: 2px;
+	margin: 4px 2px 6px;
+	padding: 2px;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	background: var(--bg);
+	font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.cs-seg-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	flex: 1;
+	min-width: 0;
+	white-space: nowrap;
+	padding: 4px 5px;
+	border-radius: 5px;
+	color: var(--text-muted);
+	font-size: 10px;
+	font-weight: 600;
+}
+
+.cs-seg-btn--on {
+	color: var(--accent);
+	background: var(--accent-dim-strong);
+}
+
+.cs-seg-count {
+	font-size: 9px;
+	font-weight: 700;
+	opacity: 0.6;
+	font-variant-numeric: tabular-nums;
+}
+
+/* the filter dropdown's type grid, from SearchFilter.css */
+.cs-type-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0;
+	font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.cs-type-option {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 6px;
+	border-radius: 6px;
+}
+
+.cs-type-cb {
+	width: 13px;
+	height: 13px;
+	flex-shrink: 0;
+	border: 1px solid var(--border-light);
+	border-radius: 3px;
+	background: var(--bg);
+}
+
+.cs-type-cb--on {
+	border-color: var(--accent);
+	background: var(--accent);
+	background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+	background-size: 11px 11px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.cs-type-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 5px;
+	flex-shrink: 0;
+	color: var(--cc);
+	background: color-mix(in srgb, var(--cc) 12%, transparent);
+	opacity: 0.5;
+}
+
+.cs-type-option--on .cs-type-icon {
+	opacity: 1;
+}
+
+.cs-type-name {
+	font-size: 11.5px;
+	font-weight: 500;
+	color: var(--text-secondary);
+}
+
+.cs-type-option--on .cs-type-name {
+	color: var(--text);
+	font-weight: 600;
+}
+
+.cs-option-count {
+	margin-left: auto;
+	padding-left: 4px;
+	font-size: 9.5px;
+	font-weight: 600;
+	color: var(--text-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+/* ---- the bulk actions bar, from bulk-actions/BulkActionsBar.css ---- */
+.bulk-popup {
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	padding: 4px 6px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	box-shadow: var(--shadow);
+	white-space: nowrap;
+	font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+
+.bulk-popup-count {
+	font-size: 11px;
+	font-weight: 500;
+	color: var(--text-muted);
+	padding: 0 4px;
+}
+
+.bulk-popup-count strong {
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--accent);
+	margin-right: 1px;
+}
+
+.bulk-popup-toggle {
+	font-size: 10px;
+	font-weight: 600;
+	color: var(--text-muted);
+	padding: 2px 5px;
+	border-radius: var(--radius-xs);
+}
+
+.bulk-popup-vsep {
+	width: 1px;
+	height: 16px;
+	background: var(--border);
+	flex-shrink: 0;
+	margin: 0 2px;
+}
+
+.bulk-popup-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 3px 8px 3px 6px;
+	border-radius: var(--radius-xs);
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.1px;
+	color: var(--text-muted);
+}
+
+.bulk-popup-chip--groups-active {
+	background: var(--surface-hover);
+	color: var(--text-secondary);
+}
+
+/* delete is red at rest so it never reads as one more neutral chip */
+.bulk-popup-chip--delete {
+	color: var(--danger);
+}
+
+.bulk-popup-close {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: var(--radius-xs);
+	color: var(--text-muted);
+	flex-shrink: 0;
+	margin-left: 2px;
+}
+
+.bulk-popup-groups-wrap {
+	position: relative;
+	display: inline-flex;
+}
+
+.bulk-popup-groups-flyout {
+	position: absolute;
+	top: calc(100% + 6px);
+	right: 0;
+	display: block;
+	width: 190px;
+	padding: 8px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	box-shadow: var(--shadow);
+	text-align: left;
+	white-space: normal;
+}
+
+/* The flyout is a span, so it carries its own `display` - and a class rule beats
+   the UA sheet's `[hidden] { display: none }`. Without this the panel keeps its
+   box while the attribute says it is closed, which is what left it showing
+   before anything opened it. */
+.bulk-popup-groups-flyout[hidden] {
+	display: none;
+}
+
+.bulk-popup-flyout-header {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	padding: 0 2px 6px;
+	font-size: 9.5px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	border-bottom: 0.5px solid var(--border);
+	margin-bottom: 5px;
+}
+
+/* a checklist, not chips: a space is somewhere the items go, and the check
+   means every selected item is already in it */
+.bulk-popup-flyout-spaces {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.bulk-popup-space-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	width: 100%;
+	padding: 4px 6px;
+	border-radius: 5px;
+	color: var(--text-secondary);
+	font-size: 10.5px;
+	font-weight: 600;
+}
+
+.bulk-popup-space-row--active {
+	color: var(--accent);
+}
+
+.bulk-popup-space-check {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 12px;
+	height: 12px;
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	flex-shrink: 0;
+}
+
+.bulk-popup-space-row--active .bulk-popup-space-check {
+	border-color: var(--accent);
+	background: var(--accent);
+	color: #fff;
+}
+
+.bulk-popup-row-label {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bulk-popup-space-wait {
+	flex-shrink: 0;
+	margin-left: auto;
+	font-size: 8px;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	opacity: 0.8;
+}
+
+/* ---- markers a card carries once sync and sharing are on, from the app's
+   ChipBar.tsx, OwnerChip.css and BulkActionsBar.css. The demo section turns
+   them on mid-animation; the static mocks use the same parts. ---- */
+.oc-card-check {
+	position: absolute;
+	top: 6px;
+	left: 6px;
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+	border: 1.5px solid var(--border-light);
+	background: var(--surface);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 5;
+	transition:
+		background 0.12s ease,
+		border-color 0.12s ease;
+}
+
+.oc-card-check svg {
+	width: 10px;
+	height: 10px;
+	color: #fff;
+	opacity: 0;
+	transition: opacity 0.1s ease;
+}
+
+.oc-card--picked .oc-card-check {
+	background: var(--accent);
+	border-color: var(--accent);
+}
+
+.oc-card--picked .oc-card-check svg {
+	opacity: 1;
+}
+
+.oc-card--picked {
+	border-color: var(--accent);
+}
+
+/* who sent an entry that came from another member of a space */
+.oc-owner-chip {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	max-width: 120px;
+	height: 18px;
+	padding: 0 7px 0 2px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-xs);
+	background: var(--surface-hover);
+	font-size: 10px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--text-secondary);
+}
+
+.oc-owner-avatar {
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 6px;
+	background: var(--accent-dim-strong);
+	color: var(--accent);
+	font-size: 8.5px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.oc-owner-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* the cloud tick and the share count, at the right end of the card footer */
+.oc-sync-tick {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	opacity: 0.65;
+	color: #10b981;
+}
+
+.oc-sync-tick--pending {
+	color: #f59e0b;
+}
+
+.oc-share-mark {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	flex-shrink: 0;
+	color: var(--accent);
+	opacity: 0.8;
+}
+
+.oc-share-count {
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+/* ---- the toolbar's sort menu, from topbar/Topbar.css ---- */
+.oc-sort-menu {
+	position: absolute;
+	z-index: 40;
+	min-width: 120px;
+	padding: 4px;
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--surface);
+	box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+}
+
+.oc-sort-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 10px;
+	border-radius: 7px;
+	color: var(--text-secondary);
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.2px;
+	white-space: nowrap;
+}
+
+.oc-sort-item--active {
+	background: color-mix(in srgb, var(--accent) 14%, transparent);
+	color: var(--accent);
 }

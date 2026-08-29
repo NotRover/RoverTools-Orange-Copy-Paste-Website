@@ -1,0 +1,940 @@
+---
+/**
+ * The guided demo: one app window, five scenes. Search, filter, sort, sync and
+ * share, each played out with the app's own controls rather than described.
+ *
+ * The window is drawn at the app's real 920x560 and scaled as one block, so no
+ * internal metric ever reflows. Everything on the toolbar is the shared
+ * HistoryScreen; the overlays are the app's own parts (FilterCard, BulkBar) and
+ * the script places them off the button that opens them, as the app does.
+ */
+import AppShell from './AppShell.astro';
+import BulkBar from './BulkBar.astro';
+import FilterCard from './FilterCard.astro';
+import HistoryScreen from './HistoryScreen.astro';
+import { SORT_ICONS } from './app-parts';
+
+const scenes = [
+	{ title: 'Search', note: 'Type a word, the history narrows to it' },
+	{ title: 'Filter', note: 'By type, cloud state, space or group' },
+	{ title: 'Sort', note: 'Newest, oldest, A to Z or by type' },
+	{ title: 'Sync', note: 'Copies from your other devices arrive here' },
+	{ title: 'Share', note: 'Send a selection to a space' },
+];
+
+const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
+---
+
+<section class="section demo" id="demo">
+	<div class="wrap wrap--wide">
+		<p class="eyebrow reveal demo-mid">A minute with the app</p>
+		<h2 class="section-title reveal demo-mid">Watch it work.</h2>
+		<p class="section-lead reveal demo-mid">
+			The same window, five things you will do with it. These are the app's own
+			controls, at the size it draws them.
+		</p>
+
+		<div class="demo-stage reveal">
+			<ol class="demo-steps" id="demo-steps">
+				{
+					scenes.map((s, i) => (
+						<li>
+							<button class:list={['demo-step', i === 0 && 'is-on']} data-scene={i} type="button">
+								<span class="demo-step-n">{i + 1}</span>
+								<span class="demo-step-body">
+									<span class="demo-step-title">{s.title}</span>
+									<span class="demo-step-note">{s.note}</span>
+								</span>
+								<span class="demo-step-bar"></span>
+							</button>
+						</li>
+					))
+				}
+			</ol>
+
+			<div class="demo-frame">
+				<div class="demo-window" aria-hidden="true">
+					<AppShell nav="clipboard" class="demo-shell">
+						<HistoryScreen count={9} groups={3} gridId="demo-grid" />
+						<div class="demo-pop demo-pop--sort" id="demo-sort" slot="overlay">
+							<div class="oc-sort-menu">
+								{
+									sortOptions.map((label, i) => (
+										<span class:list={['oc-sort-item', i === 0 && 'oc-sort-item--active']} data-sort={label}>
+											<Fragment set:html={SORT_ICONS[i]} />
+											<span>{label}</span>
+										</span>
+									))
+								}
+							</div>
+						</div>
+						<div class="demo-pop demo-pop--filter" id="demo-filter" slot="overlay">
+							<FilterCard />
+						</div>
+						<div class="demo-pop demo-pop--bulk" id="demo-bulk" slot="overlay">
+							<BulkBar count={0} flyout={false} picked={false} />
+						</div>
+						<div class="oc-pill-row">
+							<div class="oc-stat-pill">
+								<span class="oc-stat"><b id="demo-shown">9</b> shown</span>
+								<span class="oc-stat-sep"></span>
+								<span class="oc-stat"><b>9</b> total</span>
+							</div>
+							<div class="oc-sync-pill" id="demo-sync-pill"><span class="dot"></span>Sync connected</div>
+						</div>
+						<div class="fake-cursor" id="demo-cursor" slot="overlay">
+							<span class="click-ring"></span>
+							<svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 2l0 17 4.2-3.6 2.6 6 3-1.3-2.6-5.9 6-.6z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
+						</div>
+					</AppShell>
+				</div>
+				<p class="demo-caption">
+					<span class="demo-caption-tag" id="demo-caption-tag">{scenes[0]!.title}</span>
+					<span class="demo-caption-text" id="demo-caption">{scenes[0]!.note}</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { CHIP_ICONS, NAV_ICONS } from './app-parts';
+	import { makeCard, type MockEntry } from './mock-cards';
+
+	/* The history the demo works on. Small enough that every count on screen is
+	   a number you could check by eye. */
+	const ENTRIES: (MockEntry & { age: string })[] = [
+		{ kind: 'text', content: 'Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.', age: '2m ago' },
+		{ kind: 'url', content: 'github.com/Spectrewolf8/RoverTools-Releases', age: '9m ago' },
+		{ kind: 'image', content: '#a1b2c3d4 Image Aug 21, 2:45 PM', thumb: 'photo', age: '14m ago' },
+		{
+			kind: 'html',
+			content: '<h4>Release checklist</h4><ul><li>Bump the version and tag it</li><li>Sign both bundles</li></ul>',
+			group: ['release', 'amber'],
+			age: '26m ago',
+		},
+		{ kind: 'document', content: 'quarterly-report.pdf', age: '41m ago' },
+		{ kind: 'text', content: 'Invoice INV-20417 was paid on Aug 12, no action needed.', age: '1h ago' },
+		{ kind: 'video', content: 'popup-placement-bug.mp4', thumb: 'ui', age: '2h ago' },
+		{ kind: 'folder', content: '/home/rio/projects/orangecp/assets', group: ['work', 'teal'], age: '3h ago' },
+		{ kind: 'document', content: 'press-kit-aug.pdf', age: '5h ago' },
+	];
+
+	/* the history as every scene finds it: sceneSync pushes an entry onto this
+	   list, so a reset has to put the list back rather than only clear flags */
+	const BASE_ENTRIES = ENTRIES.map((e) => ({ ...e }));
+
+	const grid = document.getElementById('demo-grid');
+	const cursor = document.getElementById('demo-cursor');
+	/* the window itself: everything is measured and placed in the 920x560 the
+	   mock is drawn at, and that is the box the overlays sit in */
+	const win = document.querySelector<HTMLElement>('.demo-window .oc-window');
+	const steps = [...document.querySelectorAll<HTMLElement>('.demo-step')];
+	const sortPop = document.getElementById('demo-sort');
+	const filterPop = document.getElementById('demo-filter');
+	const bulkPop = document.getElementById('demo-bulk');
+	const shownCount = document.getElementById('demo-shown');
+	const stage = document.querySelector<HTMLElement>('.demo-stage');
+	const caption = document.getElementById('demo-caption');
+	const captionTag = document.getElementById('demo-caption-tag');
+	/* the sidebar cloud is the app's own sync indicator: green check when the
+	   device matches the account, blue arrow pulsing while a pull is running */
+	const syncNav = win?.querySelector<HTMLElement>('.oc-nav-sync') ?? null;
+	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	/* toolbar controls, in the order HistoryScreen draws them */
+	const toolbar = win?.querySelector('.oc-toolbar') ?? null;
+	const leftBtns = toolbar?.querySelectorAll<HTMLElement>('.oc-tb-group:first-child .oc-tb-btn');
+	const sortBtn = leftBtns?.[0] ?? null;
+	const filterBtn = leftBtns?.[1] ?? null;
+	const searchField = win?.querySelector<HTMLElement>('.oc-search-field') ?? null;
+	const selectBtn = toolbar?.querySelectorAll<HTMLElement>('.oc-tb-group:last-child .oc-tb-btn')[0] ?? null;
+
+	const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+	/* A scene is a long chain of awaits, and the rail or a scroll can start the
+	   next one while it is still mid-chain. Every pause a scene takes goes
+	   through `hold`, which throws once the run it belongs to has been
+	   superseded - without it a stale scene keeps typing into the search field
+	   and moving the cursor underneath the scene now on screen. */
+	const CANCEL = Symbol('superseded');
+	/* Every pause in the demo is scaled by this, so the whole thing can be slowed
+	   down or sped up from one place rather than from forty numbers. */
+	const PACE = 1.55;
+	async function hold(ms: number) {
+		const mine = token;
+		await wait(ms * PACE);
+		if (mine !== token) throw CANCEL;
+	}
+
+	/* ---- the window's own coordinate space --------------------------------- */
+	/* Everything is placed in the app's 920x560, never in screen pixels, so the
+	   choreography survives the zoom the whole block is drawn at. */
+	function zoom() {
+		const w = win?.getBoundingClientRect();
+		return w && w.width ? w.width / 920 : 1;
+	}
+
+	function boxOf(el: Element) {
+		const w = win!.getBoundingClientRect();
+		const b = el.getBoundingClientRect();
+		const z = zoom();
+		return { x: (b.left - w.left) / z, y: (b.top - w.top) / z, w: b.width / z, h: b.height / z };
+	}
+
+	function moveTo(x: number, y: number) {
+		if (cursor) cursor.style.transform = `translate(${x}px, ${y}px)`;
+	}
+
+	function aim(el: Element, fx: number, fy: number) {
+		const b = boxOf(el);
+		return { x: b.x + b.w * fx, y: b.y + b.h * fy };
+	}
+
+	async function moveToEl(el: Element, fx = 0.5, fy = 0.5, settle = 520) {
+		const p = aim(el, fx, fy);
+		cursor?.classList.add('on');
+		moveTo(p.x, p.y);
+		await hold(settle);
+	}
+
+	/* The cursor glides, and the grid under it can reflow while it is gliding.
+	   Both mean the point it set off for is not always the point it is over when
+	   the click would land, so the click waits for it to arrive and re-aims at
+	   whatever the target's box is by then. */
+	async function settleOn(el: Element, fx: number, fy: number) {
+		for (let i = 0; i < 8; i++) {
+			const want = aim(el, fx, fy);
+			const at = boxOf(cursor!);
+			if (Math.hypot(want.x - at.x, want.y - at.y) < 2) return;
+			moveTo(want.x, want.y);
+			await hold(110);
+		}
+	}
+
+	async function click(settle = 300) {
+		cursor?.classList.add('clicking');
+		await hold(settle);
+		cursor?.classList.remove('clicking');
+	}
+
+	/** move onto a target, wait until the cursor is really on it, then click */
+	async function clickOn(el: Element, fx = 0.5, fy = 0.5, settle = 560) {
+		await moveToEl(el, fx, fy, settle);
+		await settleOn(el, fx, fy);
+		await click(260);
+	}
+
+	/** hang a popup off the control that opens it, the way the app does */
+	function openPop(pop: HTMLElement | null, anchor: Element | null, dy = 4) {
+		if (!pop || !anchor) return;
+		const a = boxOf(anchor);
+		const inner = pop.firstElementChild as HTMLElement;
+		const r = inner.getBoundingClientRect();
+		const z = zoom();
+		pop.style.left = `${Math.max(8, Math.min(a.x, 920 - 8 - r.width / z))}px`;
+		pop.style.top = `${Math.max(8, Math.min(a.y + a.h + dy, 560 - 8 - r.height / z))}px`;
+		pop.classList.add('is-open');
+	}
+
+	function closePops() {
+		[sortPop, filterPop, bulkPop].forEach((p) => p?.classList.remove('is-open'));
+	}
+
+	/* ---- the grid ---------------------------------------------------------- */
+	let order = ENTRIES.map((_, i) => i);
+
+	function render(opts: { select?: boolean; picked?: number[]; only?: number[] } = {}) {
+		if (!grid) return;
+		grid.textContent = '';
+		const visible = order.filter((i) => !opts.only || opts.only.includes(i));
+		visible.forEach((i) => {
+			const e = ENTRIES[i]!;
+			grid.appendChild(
+				makeCard(e, {
+					age: e.age,
+					active: i === 0 && !opts.select,
+					select: opts.select,
+					picked: opts.picked?.includes(i),
+				}),
+			);
+		});
+		if (shownCount) shownCount.textContent = String(visible.length);
+	}
+
+	function setStep(n: number) {
+		steps.forEach((s, i) => s.classList.toggle('is-on', i === n));
+	}
+
+	/** the line under the window - the demo's own voice, not app chrome */
+	function say(text: string) {
+		if (caption) caption.textContent = text;
+	}
+
+	function setSync(state: 'idle' | 'working') {
+		if (!syncNav) return;
+		syncNav.innerHTML = state === 'working' ? NAV_ICONS.cloudArrowUp : NAV_ICONS.cloudCheck;
+		syncNav.style.color = state === 'working' ? '#3b82f6' : '#22c55e';
+		syncNav.classList.toggle('is-syncing', state === 'working');
+	}
+
+	/** every surface a scene opened or toggled, put back the way it was drawn */
+	function resetSurfaces() {
+		closePops();
+		setSync('idle');
+		if (selectBtn) selectBtn.querySelector('.oc-tb-badge')?.remove();
+
+		const count = bulkPop?.querySelector('.bulk-popup-count strong');
+		if (count) count.textContent = '0';
+		const flyout = bulkPop?.querySelector<HTMLElement>('.bulk-popup-groups-flyout');
+		if (flyout) flyout.hidden = true;
+		bulkPop?.querySelector('.bulk-popup-groups-wrap .bulk-popup-chip')?.classList.remove('bulk-popup-chip--groups-active');
+		bulkPop?.querySelectorAll('.bulk-popup-space-row').forEach((r) => {
+			r.classList.remove('bulk-popup-space-row--active');
+			// the app draws the check only on a space the selection is in, so the
+			// glyph itself has to go, not just the class
+			const box = r.querySelector('.bulk-popup-space-check');
+			if (box) box.innerHTML = '';
+		});
+
+		sortPop?.querySelectorAll('.oc-sort-item').forEach((i, k) => i.classList.toggle('oc-sort-item--active', k === 0));
+		filterPop?.querySelectorAll('.cs-type-option').forEach((r) => {
+			r.classList.remove('cs-type-option--on');
+			r.querySelector('.cs-type-cb')?.classList.remove('cs-type-cb--on');
+		});
+	}
+
+	/** back to a known state before every scene */
+	function reset() {
+		resetSurfaces();
+		ENTRIES.splice(0, ENTRIES.length, ...BASE_ENTRIES.map((e) => ({ ...e })));
+		order = ENTRIES.map((_, i) => i);
+		render();
+		if (searchField) {
+			searchField.textContent = 'Search...';
+			searchField.classList.remove('is-typed');
+		}
+		[sortBtn, filterBtn, selectBtn].forEach((b) => b?.classList.remove('is-on'));
+		moveTo(920 - 60, 560 - 74);
+	}
+
+	/* ---- scenes ------------------------------------------------------------ */
+
+	async function sceneSearch() {
+		say('Click the search box and type. Every keystroke narrows the history.');
+		await clickOn(searchField!, 0.12, 0.5, 640);
+		if (searchField) {
+			searchField.textContent = '';
+			searchField.classList.add('is-typed');
+		}
+		const term = 'invoice';
+		for (let i = 1; i <= term.length; i++) {
+			const typed = term.slice(0, i);
+			if (searchField) searchField.textContent = typed;
+			// the app filters on every keystroke, so the grid narrows as you type
+			const hit = ENTRIES.map((e, k) => (e.content.toLowerCase().includes(typed) ? k : -1)).filter((k) => k >= 0);
+			render({ only: hit });
+			await hold(160);
+		}
+		say('Two entries mention invoice, so two are left.');
+		await hold(2000);
+	}
+
+	/** rewrite the card's numbers from the demo's own history, so what it counts
+	    is what you can see in the grid */
+	function countFilters(shown = ENTRIES.length) {
+		const result = filterPop?.querySelector('.cs-card-result');
+		if (result) result.innerHTML = `<b>${shown}</b> of ${ENTRIES.length}`;
+		filterPop?.querySelectorAll<HTMLElement>('.cs-type-option').forEach((row) => {
+			const kind = row.dataset.kind;
+			const n = ENTRIES.filter((e) => e.kind === kind).length;
+			const count = row.querySelector('.cs-option-count');
+			if (count) count.textContent = String(n);
+			row.classList.toggle('cs-type-option--dead', n === 0);
+		});
+	}
+
+	async function sceneFilter() {
+		say('Filters cover type, cloud state, space and group.');
+		await clickOn(filterBtn!, 0.5, 0.5, 640);
+		filterBtn?.classList.add('is-on');
+		openPop(filterPop, filterBtn, 6);
+		countFilters();
+		await hold(950);
+
+		const imageRow = filterPop?.querySelector<HTMLElement>('.cs-type-option[data-kind="image"]');
+		if (imageRow) {
+			await clickOn(imageRow, 0.3, 0.5);
+			// one type ticked: every other comes off, as it reads in the app
+			filterPop?.querySelectorAll<HTMLElement>('.cs-type-option').forEach((r) => {
+				const on = r === imageRow;
+				r.classList.toggle('cs-type-option--on', on);
+				r.querySelector('.cs-type-cb')?.classList.toggle('cs-type-cb--on', on);
+			});
+			const hit = ENTRIES.map((e, k) => (e.kind === 'image' ? k : -1)).filter((k) => k >= 0);
+			render({ only: hit });
+			countFilters(hit.length);
+			say('Images only. Every count on the card comes from the history itself.');
+		}
+		await hold(2200);
+	}
+
+	async function sceneSort() {
+		say('Sort the history: newest, oldest, A to Z, Z to A or by type.');
+		await clickOn(sortBtn!, 0.5, 0.5, 640);
+		sortBtn?.classList.add('is-on');
+		openPop(sortPop, sortBtn, 6);
+		await hold(780);
+
+		const oldest = sortPop?.querySelector<HTMLElement>('[data-sort="Oldest"]');
+		if (oldest) {
+			await clickOn(oldest, 0.35, 0.5);
+			sortPop?.querySelectorAll('.oc-sort-item').forEach((i) => i.classList.remove('oc-sort-item--active'));
+			oldest.classList.add('oc-sort-item--active');
+			closePops();
+			sortBtn?.classList.remove('is-on');
+			order = [...order].reverse();
+			render();
+			say('Oldest first: what was at the bottom is now at the top.');
+		}
+		await hold(2100);
+	}
+
+	async function sceneSync() {
+		say('Each device signs in to the same account. The cloud in the sidebar is the sync state.');
+		if (syncNav) await moveToEl(syncNav, 0.5, 0.5, 620);
+		await hold(700);
+
+		setSync('working');
+		say('Blue and pulsing: this device is pulling what changed.');
+		await hold(1100);
+
+		// a copy made on the other device lands at the top, already decrypted
+		ENTRIES.unshift({
+			kind: 'text',
+			content: 'Rotate the space key before the beta, then re-wrap for everyone.',
+			owner: 'rio',
+			sync: 'synced',
+			age: 'Just now',
+		});
+		order = ENTRIES.map((_, i) => i);
+		render();
+		const first = grid?.firstElementChild as HTMLElement | null;
+		first?.classList.add('demo-arrive');
+		requestAnimationFrame(() => requestAnimationFrame(() => first?.classList.remove('demo-arrive')));
+		say('A copy made on the other device lands here, decrypted on this one.');
+		await hold(1900);
+
+		// and what was already here gets its cloud tick
+		ENTRIES.slice(1, 4).forEach((e) => (e.sync = 'synced'));
+		render();
+		say('The tick on a card means the account holds an encrypted copy of it.');
+		await hold(1800);
+
+		setSync('idle');
+		say('Back to green: this device matches the account.');
+		await hold(1700);
+		ENTRIES.shift();
+		order = ENTRIES.map((_, i) => i);
+	}
+
+	/** the bar the app floats under the select toggle, counting what is ticked */
+	function showBulk(n: number) {
+		if (!bulkPop) return;
+		const count = bulkPop.querySelector('.bulk-popup-count strong');
+		if (count) count.textContent = String(n);
+		if (!selectBtn) return;
+		/* the toolbar button wears the count while select mode is on, and wears
+		   nothing at zero - the app draws the badge only above zero */
+		let badge = selectBtn.querySelector('.oc-tb-badge');
+		if (n > 0 && !badge) {
+			badge = document.createElement('span');
+			badge.className = 'oc-tb-badge';
+			selectBtn.appendChild(badge);
+		}
+		if (badge) {
+			if (n > 0) badge.textContent = String(n);
+			else badge.remove();
+		}
+		/* The app anchors the bar under the select toggle, right edges flush, and
+		   the share flyout drops out of the bar from there. Floating the bar at
+		   the foot of the window instead left the flyout no room and it fell out
+		   of the bottom of the screen. */
+		const inner = bulkPop.firstElementChild as HTMLElement;
+		const iw = inner.getBoundingClientRect().width / zoom();
+		const a = boxOf(selectBtn);
+		bulkPop.style.left = `${Math.max(8, a.x + a.w - iw)}px`;
+		bulkPop.style.top = `${a.y + a.h + 6}px`;
+		bulkPop.classList.add('is-open');
+	}
+
+	async function sceneShare() {
+		say('Select mode turns the cards into a selection, and opens the bulk bar.');
+		await clickOn(selectBtn!, 0.5, 0.5, 640);
+		selectBtn?.classList.add('is-on');
+		render({ select: true });
+		// the app opens the bar the moment select mode is on, at zero selected
+		showBulk(0);
+		await hold(900);
+
+		say('Tick what you want to send. The count follows on the toolbar.');
+		const picked: number[] = [];
+		for (const i of [0, 2, 4]) {
+			const card = grid?.children[order.indexOf(i)] as HTMLElement | undefined;
+			if (!card) continue;
+			await clickOn(card, 0.5, 0.3, 480);
+			picked.push(i);
+			// tick it in place: a full re-render would pull the grid out from under
+			// the cursor between one click and the next
+			card.classList.add('oc-card--picked');
+			showBulk(picked.length);
+			await hold(260);
+		}
+		await hold(800);
+
+		const shareChip = bulkPop?.querySelector<HTMLElement>('.bulk-popup-groups-wrap .bulk-popup-chip');
+		const flyout = bulkPop?.querySelector<HTMLElement>('.bulk-popup-groups-flyout');
+		if (shareChip && flyout) {
+			say('Share to space lists the spaces this account is in.');
+			await clickOn(shareChip, 0.5, 0.5);
+			// the list opens on the click, never before it
+			shareChip.classList.add('bulk-popup-chip--groups-active');
+			flyout.hidden = false;
+			await hold(900);
+
+			const design = flyout.querySelector<HTMLElement>('.bulk-popup-space-row');
+			if (design) {
+				await clickOn(design, 0.3, 0.5);
+				design.classList.add('bulk-popup-space-row--active');
+				const box = design.querySelector('.bulk-popup-space-check');
+				if (box) box.innerHTML = CHIP_ICONS.check;
+				say('Design ticked: those three go to that space, encrypted before they leave.');
+			}
+			await hold(1000);
+			flyout.hidden = true;
+			shareChip.classList.remove('bulk-popup-chip--groups-active');
+		}
+		picked.forEach((i) => {
+			ENTRIES[i]!.spaces = 1;
+			ENTRIES[i]!.sync = 'synced';
+		});
+		render({ select: true, picked });
+		say('Everyone in the space gets them on their own devices.');
+		await hold(2300);
+		closePops();
+		selectBtn?.classList.remove('is-on');
+	}
+
+	const SCENES = [sceneSearch, sceneFilter, sceneSort, sceneSync, sceneShare];
+
+	/* ---- the runner -------------------------------------------------------- */
+	/* One scene at a time, each starting from the same window. `token` is what
+	   stops a scene that is still awaiting from writing over the next one after
+	   a click on the rail or a scroll away. */
+	let current = 0;
+	let token = 0;
+	let onScreen = false;
+
+	async function play(n: number) {
+		const mine = ++token;
+		current = n;
+		setStep(n);
+		reset();
+		if (captionTag) captionTag.textContent = steps[n]?.querySelector('.demo-step-title')?.textContent ?? '';
+		say(steps[n]?.querySelector('.demo-step-note')?.textContent ?? '');
+		try {
+			await hold(420);
+			await SCENES[n]!();
+		} catch (err) {
+			if (err !== CANCEL) throw err;
+			return;
+		}
+		if (mine !== token || !onScreen) return;
+		play((n + 1) % SCENES.length);
+	}
+
+	steps.forEach((s, i) =>
+		s.addEventListener('click', () => {
+			onScreen = true;
+			play(i);
+		}),
+	);
+
+	render();
+	setStep(0);
+
+	if (!reduced) {
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) {
+					const was = onScreen;
+					onScreen = e.isIntersecting;
+					if (onScreen && !was) play(current);
+					if (!onScreen) token++;
+				}
+			},
+			{ threshold: 0.3 },
+		);
+		if (stage) io.observe(stage);
+	}
+</script>
+
+<style>
+	/* The demo's own voice, under the window rather than inside it: what is on
+	   screen is the app, and this line is not. It runs to the width of the
+	   window it belongs to, and holds two lines' height so nothing under it
+	   moves when the line changes. */
+	.demo-caption {
+		display: flex;
+		align-items: baseline;
+		gap: 0.7rem;
+		width: min(100%, calc(920px * var(--dz, 1)));
+		margin: 1rem 0 0;
+		/* two lines' worth, so the section below never moves when the line does */
+		min-height: 3rem;
+	}
+
+	/* which of the five steps is talking */
+	.demo-caption-tag {
+		flex: none;
+		color: var(--accent);
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 500;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.demo-caption-text {
+		font-size: 0.98rem;
+		line-height: 1.5;
+		color: var(--text-secondary);
+	}
+
+	.demo-window :global(.oc-nav-sync.is-syncing) {
+		animation: demo-sync-pulse 1.1s ease-in-out infinite;
+	}
+
+	@keyframes demo-sync-pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.45;
+		}
+	}
+
+	.demo-stage {
+		display: grid;
+		grid-template-columns: 15.5rem minmax(0, auto);
+		gap: 1.6rem;
+		align-items: start;
+		/* the rail and the window are both their own width, so the pair is centred
+		   rather than pinned to the left edge of the wrap */
+		justify-content: center;
+	}
+
+	/* the heading block sits over the middle of the stage, not the left margin */
+	.demo-mid {
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.demo-mid.section-lead {
+		max-width: 44rem;
+	}
+
+	/* ---- the step rail ---- */
+	.demo-steps {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.demo-step {
+		position: relative;
+		width: 100%;
+		display: flex;
+		align-items: flex-start;
+		gap: 0.7rem;
+		padding: 0.7rem 0.8rem;
+		border: 1px solid transparent;
+		border-radius: var(--radius-sm);
+		background: transparent;
+		color: var(--text-secondary);
+		font-family: inherit;
+		text-align: left;
+		cursor: pointer;
+		transition:
+			background 0.18s ease,
+			border-color 0.18s ease,
+			color 0.18s ease;
+	}
+
+	.demo-step:hover {
+		background: var(--surface);
+		color: var(--text);
+	}
+
+	.demo-step.is-on {
+		background: var(--surface);
+		border-color: var(--border);
+		color: var(--text);
+	}
+
+	.demo-step-n {
+		flex-shrink: 0;
+		width: 1.35rem;
+		height: 1.35rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		border: 1px solid var(--border);
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		color: var(--text-muted);
+	}
+
+	.demo-step.is-on .demo-step-n {
+		border-color: var(--accent);
+		background: var(--accent-dim);
+		color: var(--accent);
+	}
+
+	.demo-step-body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		min-width: 0;
+	}
+
+	.demo-step-title {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 0.92rem;
+	}
+
+	.demo-step-note {
+		font-size: 0.76rem;
+		color: var(--text-muted);
+		line-height: 1.35;
+	}
+
+	/* the accent edge on the step that is playing */
+	.demo-step-bar {
+		position: absolute;
+		left: -1px;
+		top: 0.7rem;
+		bottom: 0.7rem;
+		width: 2px;
+		border-radius: 2px;
+		background: var(--accent);
+		opacity: 0;
+		transition: opacity 0.18s ease;
+	}
+
+	.demo-step.is-on .demo-step-bar {
+		opacity: 1;
+	}
+
+	/* ---- the window ---- */
+	/* Drawn at the app's own 920x560 and scaled as one block, so nothing inside
+	   reflows at any breakpoint. */
+	.demo-frame {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-width: 0;
+	}
+
+	.demo-window {
+		width: 920px;
+		zoom: var(--dz, 1);
+	}
+
+	.demo-window :global(.demo-shell) {
+		width: 920px;
+		height: 560px;
+	}
+
+	.demo-window :global(.oc-card) {
+		transition:
+			transform 0.3s ease,
+			opacity 0.3s ease,
+			border-color 0.2s ease;
+	}
+
+	.demo-window :global(.oc-card.demo-arrive) {
+		transform: translateY(-12px);
+		opacity: 0;
+	}
+
+	/* the popups the toolbar opens: placed by the script, in the window's own
+	   pixels, and shut until it opens them */
+	.demo-pop {
+		position: absolute;
+		z-index: 40;
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 0.14s ease,
+			visibility 0.14s;
+	}
+
+	.demo-pop.is-open {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	/* a toolbar button reads as held down while its popup is open */
+	.demo-window :global(.oc-tb-btn.is-on) {
+		background: var(--accent-dim);
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+
+	/* the search field, once there is a query in it rather than the placeholder */
+	.demo-window :global(.oc-search-field.is-typed) {
+		color: var(--text);
+	}
+
+	.demo-window :global(.oc-search-field.is-typed)::after {
+		content: '';
+		display: inline-block;
+		width: 1px;
+		height: 11px;
+		margin-left: 1px;
+		vertical-align: -2px;
+		background: var(--accent);
+		animation: demoCaret 1s steps(1, end) infinite;
+	}
+
+	@keyframes demoCaret {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	/* fake cursor, the hero's */
+	.demo-window :global(.fake-cursor) {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 60;
+		opacity: 0;
+		transform: translate(85%, 80%);
+		transition:
+			transform 0.72s cubic-bezier(0.25, 0.7, 0.3, 1),
+			opacity 0.3s ease;
+		pointer-events: none;
+	}
+
+	.demo-window :global(.fake-cursor.on) {
+		opacity: 1;
+	}
+
+	.demo-window :global(.fake-cursor.clicking svg) {
+		transform: scale(0.82);
+	}
+
+	.demo-window :global(.fake-cursor svg) {
+		transition: transform 0.12s ease;
+		filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+	}
+
+	.demo-window :global(.click-ring) {
+		position: absolute;
+		top: -4px;
+		left: -4px;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		border: 2px solid var(--accent);
+		opacity: 0;
+		transform: scale(0.4);
+	}
+
+	.demo-window :global(.fake-cursor.clicking .click-ring) {
+		animation: demoRing 0.45s ease-out;
+	}
+
+	@keyframes demoRing {
+		0% {
+			opacity: 0.9;
+			transform: scale(0.4);
+		}
+		100% {
+			opacity: 0;
+			transform: scale(1.5);
+		}
+	}
+
+	/* One knob per breakpoint, so the window only ever gets smaller as a whole.
+	   The rail drops under the window before the window has to shrink hard. */
+	@media (max-width: 1400px) {
+		.demo-frame {
+			--dz: 0.82;
+		}
+	}
+
+	@media (max-width: 1180px) {
+		.demo-frame {
+			--dz: 0.68;
+		}
+	}
+
+	@media (max-width: 1023px) {
+		.demo-stage {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 1.2rem;
+		}
+		.demo-steps {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+		.demo-step {
+			width: auto;
+			flex: 1 1 12rem;
+		}
+		.demo-frame {
+			--dz: 0.78;
+		}
+	}
+
+	@media (max-width: 820px) {
+		.demo-frame {
+			--dz: 0.62;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.demo-step-note {
+			display: none;
+		}
+		.demo-step {
+			flex: 1 1 8rem;
+			align-items: center;
+		}
+		.demo-frame {
+			--dz: 0.5;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.demo-frame {
+			--dz: 0.4;
+		}
+	}
+
+	@media (max-width: 420px) {
+		.demo-frame {
+			--dz: 0.34;
+		}
+	}
+</style>
