@@ -111,7 +111,12 @@ body.landing {
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: 40;
+	/* Above the cards, under everything that opens over them. A real scrollbar is
+	   chrome rather than content and nothing in the surface can cover it, but
+	   this one is a div in the same window as the menus and popups - left level
+	   with them at 40 it won on document order alone and drew straight across a
+	   menu. The cards themselves reach 5. */
+	z-index: 6;
 	pointer-events: none;
 }
 

@@ -1,5 +1,15 @@
 ---
-const releases = 'https://github.com/Spectrewolf8/RoverTools-Releases/releases';
+/**
+ * The installers, linked directly.
+ *
+ * The links are baked in at build time and refreshed in the browser, so a
+ * release published since the last site build still lands on the right file.
+ * `data-dl` is what the script updates; if GitHub cannot be reached at either
+ * point, every button falls back to the releases page.
+ */
+import { fetchBuild, RELEASES_PAGE } from '../../lib/releases';
+
+const build = await fetchBuild();
 ---
 
 <section class="section dl" id="download">
@@ -14,17 +24,27 @@ const releases = 'https://github.com/Spectrewolf8/RoverTools-Releases/releases';
 			<div class="dl-card reveal">
 				<h3>Windows</h3>
 				<p>Installer for Windows 10 and 11. Installs per user, no admin needed.</p>
-				<a class="btn btn-primary" href={`${releases}/latest`}>Download for Windows</a>
+				<a class="btn btn-primary" data-dl="windows" href={build?.windows ?? RELEASES_PAGE}>
+					Download the installer
+				</a>
 			</div>
 			<div class="dl-card reveal">
 				<h3>Linux</h3>
-				<p>deb, rpm and AppImage builds. X11 is the smoothest ride, and Wayland works with a small setup step.</p>
+				<p>AppImage to run it as it comes, or a deb to install it. X11 is the smoothest ride, and Wayland works with a small setup step.</p>
 				<div class="dl-row">
-					<a class="btn btn-ghost" href={`${releases}/latest`}>Get a Linux build</a>
+					<a class="btn btn-ghost" data-dl="appImage" href={build?.appImage ?? RELEASES_PAGE}>
+						AppImage
+					</a>
+					<a class="btn btn-ghost" data-dl="deb" href={build?.deb ?? RELEASES_PAGE}>.deb</a>
 					<a class="dl-note-link" href="/docs/linux/">Linux notes</a>
 				</div>
 			</div>
 		</div>
+		<p class="dl-version reveal">
+			<span data-dl-version>{build ? `Version ${build.version}` : 'Latest build'}</span>
+			<span class="dl-sep">-</span>
+			<a data-dl="page" href={build?.page ?? RELEASES_PAGE}>every build and its notes</a>
+		</p>
 		<p class="dl-note reveal">
 			Updates arrive inside the app, signature-checked, and never install without
 			asking. A beta channel is one switch away in Settings.
@@ -86,6 +106,21 @@ const releases = 'https://github.com/Spectrewolf8/RoverTools-Releases/releases';
 		color: var(--accent);
 	}
 
+	.dl-version {
+		margin: 1.4rem 0 0;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+	}
+
+	.dl-version a {
+		color: var(--text-secondary);
+	}
+
+	.dl-sep {
+		margin: 0 0.5rem;
+		opacity: 0.6;
+	}
+
 	.dl-note {
 		margin: 2.2rem auto 0;
 		max-width: 34rem;
@@ -99,3 +134,22 @@ const releases = 'https://github.com/Spectrewolf8/RoverTools-Releases/releases';
 		}
 	}
 </style>
+
+<script>
+	/* The baked-in links are only as fresh as the last site build, and a release
+	   lands without one. This asks GitHub for the current build and repoints the
+	   buttons if it has moved on. It is allowed to fail - unauthenticated calls
+	   are rate limited per address, and the links it would replace already work. */
+	import { fetchBuild } from '../../lib/releases';
+
+	const build = await fetchBuild();
+	if (build) {
+		for (const el of document.querySelectorAll<HTMLAnchorElement>('a[data-dl]')) {
+			const href = build[el.dataset.dl as 'windows' | 'appImage' | 'deb' | 'page'];
+			if (href) el.href = href;
+		}
+		for (const el of document.querySelectorAll('[data-dl-version]')) {
+			el.textContent = `Version ${build.version}`;
+		}
+	}
+</script>

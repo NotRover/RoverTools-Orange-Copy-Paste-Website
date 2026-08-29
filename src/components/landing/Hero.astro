@@ -17,6 +17,13 @@ const earlier = [
 	{ kind: 'url', text: 'staging.rovertools.app/preview/920x560' },
 	{ kind: 'folder', text: '/home/rio/projects/orangecp/assets/press' },
 ] as const;
+
+import { fetchBuild, RELEASES_PAGE } from '../../lib/releases';
+
+/* Straight at the installer rather than at the download section: the section is
+   still there for anyone who wants Linux or the version. DownloadSection's
+   script refreshes every `data-dl` link on the page, this one included. */
+const build = await fetchBuild();
 ---
 
 <section class="hero">
@@ -30,11 +37,13 @@ const earlier = [
 				usable offline.
 			</p>
 			<div class="ctas">
-				<a class="btn btn-primary" href="#download">Download for Windows</a>
+				<a class="btn btn-primary" data-dl="windows" href={build?.windows ?? RELEASES_PAGE}>
+					Download for Windows
+				</a>
 				<a class="btn btn-ghost" href="/docs/">Read the docs</a>
 			</div>
 			<p class="meta">
-				Free. No account needed. Linux builds: deb, rpm, AppImage.
+				Free. No account needed. Linux builds: deb and AppImage.
 			</p>
 		</div>
 
