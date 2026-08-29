@@ -832,12 +832,18 @@ body.landing {
 	white-space: nowrap;
 }
 
+/* One whole device pixel, with the alpha baked into the colour rather than a
+   0.5px box at 25%. Same ink, but a sub-pixel line blinks out mid-animation:
+   the group below moves to a fractional offset every time a card enters or
+   leaves the grid above it, and at some of those offsets a half-pixel box falls
+   between device pixels and rasterises to nothing. The mock is zoomed as a
+   whole, so the height is written in pre-zoom units - 1px at --mz 0.86 would
+   land back under a device pixel. */
 .oc-day-row::after {
 	content: '';
 	flex: 1;
-	height: 0.5px;
-	background: var(--accent);
-	opacity: 0.25;
+	height: calc(1px / var(--mz, 1));
+	background: rgba(255, 62, 28, 0.13);
 	margin-left: 4px;
 }
 
