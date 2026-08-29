@@ -59,3 +59,11 @@ const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
 	     placing in the other puts everything a sidebar's width out. -->
 	<slot name="overlay" />
 </div>
+
+<script>
+	/* Hoisted and deduplicated by Astro, so this runs once for the page however
+	   many windows are on it. */
+	import { mountMockScrollbars } from './mock-scrollbars';
+
+	mountMockScrollbars();
+</script>
