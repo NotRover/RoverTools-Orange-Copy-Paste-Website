@@ -53,50 +53,74 @@ html {
 	scroll-behavior: smooth;
 }
 
-/* The scrollbar is part of the theme, not the browser's business: the app
-   styles its own the same way (App.css), and a default light scrollbar down the
-   side of a #0e0e0e page is the one piece of chrome that gives it away.
-   Firefox takes the two-value form; Chromium and Safari take the pseudos. */
-/* Firefox takes the two standard properties; Chromium honours them too, and
-   when it does it ignores the pseudo-elements below - so these stay on the page
-   itself, and the app mock keeps the pseudos, which is what the app draws. */
+/* The page scrolls with the browser's own scrollbar - it belongs to the browser,
+   and a drawn one would have to hijack page scrolling to earn its keep. These
+   two properties are the only handle both engines honour, so they are how it
+   gets the page's colours: no radius and no width past `thin`, but the same bar
+   in Firefox and in Chromium, which the pseudo-elements could never manage.
+
+   They are safe to set now only because nothing below depends on the
+   pseudo-elements any more. `scrollbar-color` inherits, and in Chromium 121 and
+   later it switches whatever it reaches to standard scrollbars - which is what
+   used to reach into the mocks and replace the app's bar with a grey box. */
 html:has(body.landing),
 body.landing {
 	scrollbar-width: thin;
 	scrollbar-color: var(--border-light) transparent;
 }
 
-body.landing::-webkit-scrollbar,
-.landing ::-webkit-scrollbar {
-	width: 12px;
-	height: 12px;
+/* The window mocks are the opposite case: they are pictures of an application,
+   so they draw their own (mock-scrollbars.ts) and the real one is taken out of
+   the way here.
+
+   It has to go in both engines' terms. `scrollbar-width` covers Firefox and
+   Chromium 121 and later; the pseudo-element covers Safari and older Chromium.
+   Setting both is safe only because neither is trying to style anything: the
+   moment a colour or a width is asked for, the two engines disagree about which
+   of them wins, which is what made this unfixable in CSS to begin with. */
+.oc-window .oc-viewport,
+.oc-window .sp-feed-scroll,
+.oc-window .sp-panel-scroll,
+.oc-window .sp-rules-body,
+.oc-window .set-screen {
+	scrollbar-width: none;
 }
 
-body.landing::-webkit-scrollbar-track,
-body.landing::-webkit-scrollbar-corner,
-.landing ::-webkit-scrollbar-track,
-.landing ::-webkit-scrollbar-corner {
-	background: transparent;
-}
-
-/* `background-color`, never the `background` shorthand: the shorthand resets
-   `background-clip` to border-box and the thumb paints over its own inset. */
-body.landing::-webkit-scrollbar-thumb,
-.landing ::-webkit-scrollbar-thumb {
-	background-color: var(--border-light);
-	border-radius: 999px;
-	border: 3px solid transparent;
-	background-clip: padding-box;
-}
-
-body.landing::-webkit-scrollbar-thumb:hover,
-.landing ::-webkit-scrollbar-thumb:hover {
-	background-color: var(--text-muted);
-}
-
-body.landing::-webkit-scrollbar-button,
-.landing ::-webkit-scrollbar-button {
+.oc-window .oc-viewport::-webkit-scrollbar,
+.oc-window .sp-feed-scroll::-webkit-scrollbar,
+.oc-window .sp-panel-scroll::-webkit-scrollbar,
+.oc-window .sp-rules-body::-webkit-scrollbar,
+.oc-window .set-screen::-webkit-scrollbar {
 	display: none;
+}
+
+/* The drawn bar. Sizes come from the script, since they depend on how far the
+   window it is drawn over has been scaled; what is here is everything that does
+   not: the app's thumb colour, its 999px radius, and its inset, which is a
+   transparent border rather than a narrower thumb so that the thumb keeps its
+   full hit area. `background-color` and never the shorthand - the shorthand
+   resets `background-clip` and the thumb paints over its own inset.
+
+   Nothing here takes a pointer. The bar reports where the surface is and is not
+   a control, so it stays out of the way of the cards underneath it. */
+.oc-sb {
+	/* hidden until the script has measured a surface that really overflows: an
+	   undrawn bar has no size and no position, and paints as a stray line down
+	   whatever it happens to be sitting over */
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 40;
+	pointer-events: none;
+}
+
+.oc-sb-thumb {
+	width: 100%;
+	border: 2px solid transparent;
+	border-radius: 999px;
+	background-color: var(--border-light);
+	background-clip: padding-box;
 }
 
 body.landing {
@@ -1994,41 +2018,13 @@ html.js .reveal.in {
 	display: flex;
 	flex-direction: column;
 	margin: 0 8px;
-	padding: 26px 8px 32px;
+	/* 8px of the app's own padding, plus the 12px its `scrollbar-gutter: stable
+	   both-edges` reserved. The gutter itself cannot be used here: it reserves
+	   space for a scrollbar, and this window's is drawn rather than reserved. */
+	padding: 26px 20px 32px;
 	/* the app's screen scrolls, and so does this one - the demo scrolls it to
 	   whatever it is about to touch */
 	overflow: hidden auto;
-	scrollbar-gutter: stable both-edges;
-}
-
-/* `scrollbar-color` inherits, and where Chromium honours it the pseudo-elements
-   below are ignored - which would give the mock a scrollbar the app does not
-   have. Inside the window shell the standard properties go back to auto so the
-   app's own 12px pseudo scrollbar is what draws. */
-.oc-window,
-.oc-window * {
-	scrollbar-width: auto;
-	scrollbar-color: auto;
-}
-
-/* the app's own scrollbar, from App.css: 12px with a 2px inset on the thumb */
-.set-screen::-webkit-scrollbar {
-	width: 12px;
-}
-
-.set-screen::-webkit-scrollbar-track {
-	background: transparent;
-}
-
-.set-screen::-webkit-scrollbar-thumb {
-	background-color: var(--border-light);
-	border-radius: 999px;
-	border: 2px solid transparent;
-	background-clip: padding-box;
-}
-
-.set-screen::-webkit-scrollbar-thumb:hover {
-	background-color: var(--text-muted);
 }
 
 .set-inner {
