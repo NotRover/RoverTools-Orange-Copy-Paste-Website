@@ -272,3 +272,108 @@ gap: 3px;
 color: var(--accent);
 font-weight: 600;
 }
+
+/* ---- the notes screen layout, from NotesScreen.css ----
+
+   The grid pane and the editor share the window. With no note open the editor
+   is folded away to nothing rather than removed, so opening one is a width
+   animating rather than a panel appearing out of nowhere. ---- */
+
+.ns-main {
+flex: 1;
+min-height: 0;
+display: flex;
+overflow: hidden;
+}
+
+.ns-viewport {
+flex: 1;
+display: flex;
+flex-direction: column;
+min-height: 0;
+min-width: 0;
+overflow: hidden auto;
+/* the app insets the whole scroll area from the window edge instead of
+   letting it touch */
+margin: 0 8px;
+}
+
+.ns-grid {
+padding: 14px;
+columns: 3;
+column-gap: 10px;
+}
+
+/* the app drops to two columns while a note is open, because the pane is
+   half the width it was */
+
+.ns-main--editing .ns-grid {
+columns: 2;
+}
+
+.ns-main--editing .ns-viewport {
+flex: 0 0 46%;
+}
+
+.ns-section-label {
+column-span: all;
+display: flex;
+align-items: center;
+gap: 6px;
+padding: 6px 0 4px;
+margin: 0 0 6px;
+color: var(--accent);
+font-size: 12.5px;
+font-weight: 700;
+letter-spacing: -0.2px;
+}
+
+.ns-section-label::after {
+content: "";
+flex: 1;
+height: 0.5px;
+background: color-mix(in srgb, var(--accent) 38%, transparent);
+}
+
+/* the drag handle between the two panes: 16px of nothing with a 4px accent
+   bar down the middle of it */
+
+.ns-splitter {
+display: none;
+width: 16px;
+min-width: 16px;
+align-items: center;
+justify-content: center;
+}
+
+.ns-splitter-handle {
+width: 4px;
+height: 60px;
+border-radius: 999px;
+background: var(--accent);
+box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.ns-editor-dock {
+flex: 1;
+min-width: 0;
+display: none;
+overflow: hidden;
+padding: 14px 14px 14px 0;
+}
+
+.ns-main--editing .ns-splitter {
+display: flex;
+}
+
+.ns-main--editing .ns-editor-dock {
+display: flex;
+}
+
+/* docked, the editor is the pane rather than a panel sitting on one: it fills
+   the width it is given and keeps only its top and left rules */
+
+.ns-editor-dock .ns-editor {
+width: 100%;
+height: 100%;
+}

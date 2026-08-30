@@ -1,8 +1,9 @@
 ---
 /**
- * The guided demo: one app window, eight scenes. Search, filter, sort, groups,
- * spaces, share and settings, each played out with the app's own controls
- * rather than described.
+ * The guided demo: one app window, one chapter per screen. Each chapter opens
+ * by reading its screen top to bottom, so what is below the fold gets seen
+ * whether or not anything is clicked in it, then plays out whatever that screen
+ * is for with the app's own controls rather than describing it.
  *
  * The window is drawn at 1440x830 - the size the app has to be for the spaces
  * screen to fit all three of its panels - and scaled as one block, so no
@@ -15,21 +16,26 @@ import BulkBar from './BulkBar.astro';
 import CardMenu from './CardMenu.astro';
 import FilterCard from './FilterCard.astro';
 import GroupManager from './GroupManager.astro';
+import AccountScreen from './AccountScreen.astro';
 import HistoryScreen from './HistoryScreen.astro';
+import NotesScreen from './NotesScreen.astro';
 import SettingsMock from './SettingsMock.astro';
+import ShortcutsScreen from './ShortcutsScreen.astro';
 import SpacesScreen from './SpacesScreen.astro';
 import { SORT_ICONS } from './app-parts';
+import '../../styles/mocks/account.css';
+import '../../styles/mocks/notes.css';
 import '../../styles/mocks/spaces.css';
 
+/* One per screen, in the order the sidebar lists them. The rail is the app's
+   own navigation, not a list of verbs. */
 const scenes = [
-	{ title: 'Copy', note: 'Click an entry to put it back on the clipboard' },
-	{ title: 'Search', note: 'Type a word, the history narrows to it' },
-	{ title: 'Filter', note: 'By type, cloud state, space or group' },
-	{ title: 'Sort', note: 'Newest, oldest, A to Z or by type' },
-	{ title: 'Groups', note: 'Tag entries, and make groups of your own' },
+	{ title: 'Clipboard', note: 'Everything you copied, and what you can do to it' },
+	{ title: 'Notes', note: 'Write things down without leaving the window' },
 	{ title: 'Spaces', note: 'A live feed shared with the people in it' },
-	{ title: 'Share', note: 'Send a selection to a space' },
+	{ title: 'Account', note: 'Devices, sync mode and what you are storing' },
 	{ title: 'Settings', note: 'Change how the app behaves' },
+	{ title: 'Shortcuts', note: 'Every key the app answers to' },
 ];
 
 const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
@@ -37,10 +43,10 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 
 <section class="section demo" id="demo">
 	<div class="wrap wrap--wide">
-		<p class="eyebrow reveal demo-mid">A minute with the app</p>
+		<p class="eyebrow reveal demo-mid">Every screen, in order</p>
 		<h2 class="section-title reveal demo-mid">Watch it work.</h2>
 		<p class="section-lead reveal demo-mid">
-			The same window, five things you will do with it. These are the app's own
+			Six screens, one window, read top to bottom. These are the app's own
 			controls, at the size it draws them.
 		</p>
 
@@ -68,13 +74,22 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 						<div class="demo-screen" id="demo-history">
 							<HistoryScreen count={18} groups={3} gridId="demo-grid" />
 						</div>
+						<div class="demo-screen is-off" id="demo-notes">
+							<NotesScreen scrollId="demo-ns-scroll" />
+						</div>
 						<div class="demo-screen is-off" id="demo-settings">
 							<SettingsMock />
+						</div>
+						<div class="demo-screen is-off" id="demo-account">
+							<AccountScreen scrollId="demo-acct-scroll" />
+						</div>
+						<div class="demo-screen is-off" id="demo-shortcuts">
+							<ShortcutsScreen scrollId="demo-sc-scroll" />
 						</div>
 						<!-- all three panels at the widths the wide shot uses, which is
 						     what a 1440 window has room for -->
 						<div class="demo-screen is-off" id="demo-spaces">
-							<SpacesScreen rulesWidth={340} gridId="demo-sp-grid" arrival />
+							<SpacesScreen rulesWidth={340} gridId="demo-sp-grid" arrival feedExtra />
 						</div>
 						<div class="demo-pop demo-pop--sort" id="demo-sort" slot="overlay">
 							<div class="oc-sort-menu">
@@ -184,8 +199,14 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	const menu = win?.querySelector<HTMLElement>('.oc-menu') ?? null;
 	const menuGroups = menu?.querySelector<HTMLElement>('.oc-menu-groups-flyout') ?? null;
 	const historyScreen = document.getElementById('demo-history');
+	const notesScreen = document.getElementById('demo-notes');
 	const settingsScreen = document.getElementById('demo-settings');
 	const spacesScreen = document.getElementById('demo-spaces');
+	const accountScreen = document.getElementById('demo-account');
+	const shortcutsScreen = document.getElementById('demo-shortcuts');
+	/* the notes grid and the pane it lives in: opening a note is a class on the
+	   pane, exactly as it is in the app */
+	const notesMain = notesScreen?.querySelector<HTMLElement>('.ns-main') ?? null;
 	/* the one card the spaces scene brings in, drawn with the rest of the feed
 	   and hidden until then, so a scene never has to build a card by hand */
 	const spArrival = spacesScreen?.querySelector<HTMLElement>('[data-demo-arrival]') ?? null;
@@ -234,8 +255,24 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	const selectBtn = rightBtns?.[0] ?? null;
 	const groupsBtn = rightBtns?.[1] ?? null;
 	/* the sidebar: the clipboard nav button and the gear at the foot of it */
-	const clipboardNav = win?.querySelector<HTMLElement>('.oc-side-nav .oc-navbtn') ?? null;
-	const gearBtn = win?.querySelectorAll<HTMLElement>('.oc-side-bottom .oc-navbtn')[3] ?? null;
+	const sideNav = win?.querySelectorAll<HTMLElement>('.oc-side-nav .oc-navbtn');
+	const clipboardNav = sideNav?.[0] ?? null;
+	const notesNav = sideNav?.[1] ?? null;
+	const shortcutsNav = sideNav?.[3] ?? null;
+	const sideBottom = win?.querySelectorAll<HTMLElement>('.oc-side-bottom .oc-navbtn');
+	const userBtn = sideBottom?.[2] ?? null;
+	const gearBtn = sideBottom?.[3] ?? null;
+
+	/* the scrolling box on each screen - what a chapter reads top to bottom, and
+	   what a reset puts back to the top */
+	const historyScroll = historyScreen?.querySelector<HTMLElement>('.oc-viewport') ?? null;
+	const notesScroll = document.getElementById('demo-ns-scroll');
+	const acctScroll = document.getElementById('demo-acct-scroll');
+	const setScroll = document.getElementById('demo-set-scroll');
+	const shortcutsScroll = document.getElementById('demo-sc-scroll');
+	const spacesFeed = spacesScreen?.querySelector<HTMLElement>('.sp-feed-scroll') ?? null;
+	const spacesRules = spacesScreen?.querySelector<HTMLElement>('.sp-rules-body') ?? null;
+	const scrollers = [historyScroll, notesScroll, acctScroll, setScroll, shortcutsScroll, spacesFeed, spacesRules];
 
 	const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -383,17 +420,105 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		menu?.classList.remove('open');
 	}
 
+	type Screen = 'history' | 'notes' | 'settings' | 'spaces' | 'account' | 'shortcuts';
+
 	/** the app draws one screen at a time, and the sidebar says which */
-	function showScreen(which: 'history' | 'settings' | 'spaces') {
+	function showScreen(which: Screen) {
 		historyScreen?.classList.toggle('is-off', which !== 'history');
+		notesScreen?.classList.toggle('is-off', which !== 'notes');
 		settingsScreen?.classList.toggle('is-off', which !== 'settings');
 		spacesScreen?.classList.toggle('is-off', which !== 'spaces');
+		accountScreen?.classList.toggle('is-off', which !== 'account');
+		shortcutsScreen?.classList.toggle('is-off', which !== 'shortcuts');
 		clipboardNav?.classList.toggle('active', which === 'history');
+		notesNav?.classList.toggle('active', which === 'notes');
+		shortcutsNav?.classList.toggle('active', which === 'shortcuts');
+		userBtn?.classList.toggle('active', which === 'account');
 		gearBtn?.classList.toggle('active', which === 'settings');
 		/* the sidebar cloud is the spaces button. It wears the sync colour while
 		   the clipboard is up and the active highlight while spaces is. */
 		syncNav?.classList.toggle('active', which === 'spaces');
 		if (syncNav) syncNav.style.color = which === 'spaces' ? '' : '#22c55e';
+		/* A pane on a screen that was hidden measured as having no height, so its
+		   bar hid itself. Now that it has one, ask again - otherwise the screen
+		   arrives without a scrollbar and only grows one once something scrolls. */
+		refreshMockScrollbars();
+	}
+
+	/* ---- reading a screen -------------------------------------------------- */
+	/* The panes are `overflow: hidden`, so nothing else can move them and nothing
+	   reports it when the demo does. Both halves of that are wanted: a wheel over
+	   the demo carries on down the page, and the drawn scrollbar is told the
+	   content moved rather than listening for an event that never fires. */
+
+	function easeInOut(t: number) {
+		return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+	}
+
+	/** scroll a pane to a position over `ms`, or jump there if motion is off */
+	function glide(el: HTMLElement, to: number, ms: number) {
+		if (reduced) {
+			el.scrollTop = to;
+			refreshMockScrollbars();
+			return Promise.resolve();
+		}
+		return new Promise<void>((done) => {
+			const mine = token;
+			const from = el.scrollTop;
+			const delta = to - from;
+			if (Math.abs(delta) < 1) {
+				done();
+				return;
+			}
+			const start = performance.now();
+			const tick = (now: number) => {
+				/* a chapter the rail has moved on from must not keep dragging a pane
+				   the screen now on show is sitting in */
+				if (mine !== token) {
+					done();
+					return;
+				}
+				const p = Math.min(1, (now - start) / ms);
+				el.scrollTop = from + delta * easeInOut(p);
+				refreshMockScrollbars();
+				if (p < 1) requestAnimationFrame(tick);
+				else done();
+			};
+			requestAnimationFrame(tick);
+		});
+	}
+
+	/**
+	 * Read a screen the way a person would: down to the bottom slowly enough to
+	 * take in, a beat there, then back to the top for whatever the chapter does
+	 * next. A pane with nothing below the fold is left alone.
+	 *
+	 * The trip is timed from how far it is rather than fixed, so a screen with
+	 * a hand's worth below the fold does not crawl and one with six of them does
+	 * not race. `MS_PER_PX` is the reading speed; the clamp keeps the shortest
+	 * pass long enough to follow and the longest short enough to sit through.
+	 */
+	const MS_PER_PX = 7;
+
+	async function readThrough(el: HTMLElement | null) {
+		if (!el) return;
+		const room = el.scrollHeight - el.clientHeight;
+		if (room <= 2) return;
+		const down = Math.min(11000, Math.max(1800, room * MS_PER_PX));
+		await hold(420);
+		await glide(el, room, down * PACE);
+		await hold(900);
+		/* back up faster than down: nobody re-reads on the way home */
+		await glide(el, 0, Math.max(700, down * 0.28) * PACE);
+		await hold(320);
+	}
+
+	/** bring one row into view, the way a person scrolls to the thing they want */
+	async function bringIntoView(el: HTMLElement | null, target: Element | null, pad = 120) {
+		if (!el || !target) return;
+		const top = (target.getBoundingClientRect().top - el.getBoundingClientRect().top) / zoom();
+		await glide(el, el.scrollTop + top - pad, 620 * PACE);
+		await hold(260);
 	}
 
 	/* ---- the grid ---------------------------------------------------------- */
@@ -472,15 +597,17 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 
 		if (spArrival) spArrival.hidden = true;
 		if (spMeta) spMeta.textContent = spMetaText;
-		showScreen('history');
-		const scroller = document.getElementById('demo-set-scroll');
-		if (scroller) {
-			scroller.scrollTop = 0;
-			/* the panes are `overflow: hidden` so a viewer cannot drag them around
-			   mid-scene, and a surface set that way fires no scroll event - the
-			   drawn bar has to be told the content moved */
-			refreshMockScrollbars();
+		notesMain?.classList.remove('ns-main--editing');
+		if (acctSeg) {
+			acctSeg.querySelectorAll('.acct-seg-pill').forEach((p, i) => p.classList.toggle('active', i === 0));
+			if (acctModeDesc) acctModeDesc.textContent = acctModeText;
 		}
+		showScreen('history');
+		/* every pane back to the top. These are `overflow: hidden` so a viewer
+		   cannot drag them around mid-chapter, and a surface set that way fires no
+		   scroll event - the drawn bar has to be told the content moved. */
+		for (const el of scrollers) if (el) el.scrollTop = 0;
+		refreshMockScrollbars();
 		settingsScreen?.querySelectorAll<HTMLElement>('.set-toggle').forEach((t) => {
 			t.classList.toggle('is-on', t.dataset.on === '1');
 		});
@@ -501,8 +628,8 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		});
 	}
 
-	/** back to a known state before every scene */
-	function reset() {
+	/** back to a known state before every chapter, and between its beats */
+	function reset(park = true) {
 		resetSurfaces();
 		ENTRIES.splice(0, ENTRIES.length, ...BASE_ENTRIES.map((e) => ({ ...e })));
 		order = ENTRIES.map((_, i) => i);
@@ -512,8 +639,14 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			searchField.classList.remove('is-typed');
 		}
 		[sortBtn, filterBtn, selectBtn].forEach((b) => b?.classList.remove('is-on'));
-		moveTo(1440 - 60, 830 - 74, true);
+		if (park) moveTo(1440 - 60, 830 - 74, true);
 	}
+
+	/* the sync-mode segment and the line under it: the account chapter moves both,
+	   so both have to be remembered the way the toggles below are */
+	const acctSeg = accountScreen?.querySelector<HTMLElement>('.acct-mode .acct-seg') ?? null;
+	const acctModeDesc = accountScreen?.querySelector<HTMLElement>('.acct-mode .acct-card-desc') ?? null;
+	const acctModeText = acctModeDesc?.textContent ?? '';
 
 	/* every toggle remembers how it was drawn, so a reset can put it back */
 	settingsScreen?.querySelectorAll<HTMLElement>('.set-toggle').forEach((t) => {
@@ -626,29 +759,21 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		await hold(2000);
 	}
 
-	/** bring a settings row into view the way a person would scroll to it */
-	async function scrollSettingsTo(el: Element | null, pad = 120) {
-		const scroller = document.getElementById('demo-set-scroll');
-		if (!scroller || !el) return;
-		const top = (el.getBoundingClientRect().top - scroller.getBoundingClientRect().top) / zoom();
-		scroller.scrollTop += top - pad;
-		refreshMockScrollbars();
-		await hold(600);
-	}
-
 	async function sceneSettings() {
 		say('The gear at the foot of the sidebar opens Settings.');
 		await clickOn(gearBtn!, 0.5, 0.5, 800);
 		showScreen('settings');
-		await hold(1500);
+		await hold(1200);
+
+		say('Notifications, sounds, quick paste, history, updates, data.');
+		await readThrough(setScroll);
 
 		const slots = document.getElementById('demo-slots');
 		const trigger = slots?.querySelector<HTMLElement>('.set-select-trigger');
 		const list = slots?.querySelector<HTMLElement>('.set-select-list');
 		if (slots && trigger && list) {
-			say('Notifications, sounds, quick paste, history, updates - all on one page.');
-			await scrollSettingsTo(slots.closest('.set-section'), 60);
 			say('Quick paste can hold more slots.');
+			await bringIntoView(setScroll, slots.closest('.set-section'), 60);
 			await clickOn(trigger, 0.5, 0.5);
 			slots.classList.add('is-open');
 			list.hidden = false;
@@ -670,17 +795,12 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			'[data-set-row="Click a card to view it"] .set-toggle',
 		);
 		if (row) {
-			await scrollSettingsTo(row.closest('.set-row'), 150);
+			await bringIntoView(setScroll, row.closest('.set-row'), 150);
 			say('Off, a click copies an entry. On, a click opens it instead.');
 			await clickOn(row, 0.5, 0.5);
 			row.classList.add('is-on');
 		}
 		await hold(1800);
-
-		say('Back to the history.');
-		await clickOn(clipboardNav!, 0.5, 0.5, 800);
-		showScreen('history');
-		await hold(1500);
 	}
 
 	async function sceneSearch() {
@@ -777,7 +897,10 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		}
 
 		say('The feed beside it is what the four of you have shared, newest first.');
-		await hold(1700);
+		await readThrough(spacesFeed);
+
+		say('The panel on the right is what this space is allowed to do on this machine.');
+		await readThrough(spacesRules);
 
 		/* the card is already in the feed, drawn with the rest of it and hidden
 		   until now: a scene should never have to hand-build a card that the
@@ -793,11 +916,6 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 
 		say('Copy new items in is on for this space, so it is on your clipboard too.');
 		await hold(1900);
-
-		say('Back to the history.');
-		await clickOn(clipboardNav!, 0.5, 0.5, 800);
-		showScreen('history');
-		await hold(1400);
 	}
 
 	/** the bar the app floats under the select toggle, counting what is ticked */
@@ -887,15 +1005,113 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		selectBtn?.classList.remove('is-on');
 	}
 
+	/* ---- the new screens -------------------------------------------------- */
+
+	async function sceneNotes() {
+		say('The second button in the sidebar is Notes.');
+		await clickOn(notesNav!, 0.5, 0.5, 800);
+		showScreen('notes');
+		await hold(1300);
+
+		say('Notes sit in the same window, pinned first, tagged with the same groups.');
+		await readThrough(notesScroll);
+
+		const card = notesScroll?.querySelector<HTMLElement>('.ns-card') ?? null;
+		if (card) {
+			say('Click one and it opens beside the list.');
+			await clickOn(card, 0.5, 0.22, 700);
+			notesMain?.classList.add('ns-main--editing');
+			await hold(1600);
+			say('Headings, checklists, tables, code and quotes - a real editor, not a text box.');
+			await hold(2200);
+			say('A copied item dropped into the text stays linked, and opens in place.');
+			await hold(2400);
+			notesMain?.classList.remove('ns-main--editing');
+			await hold(900);
+		}
+	}
+
+	async function sceneAccount() {
+		say('The person at the foot of the sidebar is the account.');
+		await clickOn(userBtn!, 0.5, 0.5, 800);
+		showScreen('account');
+		await hold(1300);
+
+		say('Who is signed in, the devices on the account, and what it is storing.');
+		await readThrough(acctScroll);
+
+		const mode = accountScreen?.querySelector<HTMLElement>('.acct-mode') ?? null;
+		const passive = acctSeg?.querySelectorAll<HTMLElement>('.acct-seg-pill')[1] ?? null;
+		if (mode && passive) {
+			say('Syncing is set per device, not per account.');
+			await bringIntoView(acctScroll, mode, 120);
+			await clickOn(passive, 0.5, 0.5);
+			acctSeg?.querySelectorAll('.acct-seg-pill').forEach((p) => p.classList.remove('active'));
+			passive.classList.add('active');
+			if (acctModeDesc) {
+				acctModeDesc.textContent =
+					'This device uploads what you copy, and picks up the rest when you open the app.';
+			}
+			say('Passive here, realtime on the laptop. Neither device decides for the other.');
+			await hold(2400);
+		}
+	}
+
+	async function sceneShortcuts() {
+		say('The keyboard icon lists every key the app answers to.');
+		await clickOn(shortcutsNav!, 0.5, 0.5, 800);
+		showScreen('shortcuts');
+		await hold(1300);
+
+		say('Global capture and paste, the popup, cards, pins, groups, search.');
+		await readThrough(shortcutsScroll);
+
+		say('Nothing on this page is a binding the app does not have.');
+		await hold(1900);
+	}
+
+	/* ---- chapters ---------------------------------------------------------- */
+	/* One per screen. Each opens by reading its screen top to bottom, so what is
+	   below the fold is seen whether or not anything gets clicked in it, then
+	   plays out what that screen is for. `reset(false)` clears the board between
+	   beats without parking the pointer back in the corner every time. */
+
+	async function chapClipboard() {
+		say('Everything you copied, newest first, grouped by the day it landed.');
+		await readThrough(historyScroll);
+		await sceneCopy();
+		reset(false);
+		await hold(700);
+		await sceneSearch();
+		reset(false);
+		await hold(700);
+		await sceneFilter();
+		reset(false);
+		await hold(700);
+		await sceneSort();
+		reset(false);
+		await hold(700);
+		await sceneGroups();
+	}
+
+	async function chapSpaces() {
+		/* sharing starts on the clipboard, so the chapter does too: pick three,
+		   send them, then go and watch them land */
+		say('A space is a shared feed. Things get into one from the history.');
+		await hold(1400);
+		await sceneShare();
+		reset(false);
+		await hold(700);
+		await sceneSpaces();
+	}
+
 	const SCENES = [
-		sceneCopy,
-		sceneSearch,
-		sceneFilter,
-		sceneSort,
-		sceneGroups,
-		sceneSpaces,
-		sceneShare,
+		chapClipboard,
+		sceneNotes,
+		chapSpaces,
+		sceneAccount,
 		sceneSettings,
+		sceneShortcuts,
 	];
 
 	/* ---- the runner -------------------------------------------------------- */
@@ -1150,6 +1366,7 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	   scrollable from script, which is the half that is wanted: `scrollTop` moves
 	   it, a pointer does not. */
 	.demo-window :global(.oc-viewport),
+	.demo-window :global(.ns-viewport),
 	.demo-window :global(.sp-feed-scroll),
 	.demo-window :global(.sp-panel-scroll),
 	.demo-window :global(.sp-rules-body),
@@ -1163,6 +1380,7 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	   not have - these draw their own (mock-scrollbars.ts) - so the same width is
 	   simply padded instead. */
 	.demo-window :global(.oc-viewport),
+	.demo-window :global(.ns-viewport),
 	.demo-window :global(.sp-feed-scroll) {
 		padding-inline: 12px;
 	}

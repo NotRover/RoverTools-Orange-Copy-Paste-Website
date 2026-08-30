@@ -10,6 +10,8 @@
  * dragging the sides in is what a person running it that size does.
  *
  * `arrival` adds one card that starts hidden, for the demo to bring in.
+ * `feedExtra` lengthens the feed past the window, so the demo has something to
+ * scroll: the static shot is clipped either way and does not want the weight.
  */
 import { CHIP_ICONS, KIND_COLORS, TB_ICONS, SRC_ICONS, THUMBS } from './app-parts';
 
@@ -18,9 +20,21 @@ interface Props {
 	rulesWidth?: number;
 	gridId?: string;
 	arrival?: boolean;
+	feedExtra?: boolean;
 }
 
-const { listWidth = 252, rulesWidth = 272, gridId, arrival = false } = Astro.props;
+const { listWidth = 252, rulesWidth = 272, gridId, arrival = false, feedExtra = false } = Astro.props;
+
+/* more of the same feed, further down it. Same shapes as the cards above, so
+   they are written as data rather than another dozen copies of the markup. */
+const FEED_EXTRA = [
+	{ text: 'The rail needs ends. A line that stops dead reads as a bug.', kind: 'text', label: 'Text', who: 'rio', age: '11h ago' },
+	{ text: 'docs.rovertools.app/spaces/invites', kind: 'url', label: 'URL', who: 'mei', age: '13h ago' },
+	{ text: 'space-key-handover.pdf', kind: 'document', label: 'Doc', who: 'You', age: '15h ago' },
+	{ text: 'Members panel: show who is online before who joined first.', kind: 'text', label: 'Text', who: 'Ada Lovelace', age: '17h ago' },
+	{ text: 'invite-flow-v3 (5 files)', kind: 'file', label: 'File', who: 'rio', age: '19h ago' },
+	{ text: 'figma.com/file/orangecp/members-rail', kind: 'url', label: 'URL', who: 'You', age: '21h ago' },
+];
 
 /* the app's own RULES_LABEL_WIDTH: above it the rail has room to spell its
    invite buttons out, below it they fall back to icons */
@@ -306,6 +320,38 @@ const rulesWide = rulesWidth >= 336;
 									</div>
 								</div>
 							</div>
+
+							{
+								feedExtra &&
+									FEED_EXTRA.map((c) => (
+										<div class="oc-card">
+											<div class="oc-card-body">
+												<p class="oc-card-text oc-card-text--clamp">{c.text}</p>
+												<div class="oc-card-footer">
+													<span class="oc-chips">
+														<span class="oc-chip sp-source-chip--clip">
+															<Fragment set:html={SRC_ICONS.clipboard} />
+															<span class="oc-chip-label">Clipboard</span>
+														</span>
+														<span class="oc-chip" style={`--cc:${KIND_COLORS[c.kind]}`}>
+															<Fragment set:html={CHIP_ICONS[c.kind]} />
+															<span class="oc-chip-label">{c.label}</span>
+														</span>
+														{c.who === 'You' ? (
+															<span class="sp-owner sp-owner--self">You</span>
+														) : (
+															<span class="sp-owner">
+																<span class="sp-owner-avatar sp-owner-avatar--initials">{c.who[0]}</span>
+																<span class="sp-owner-name">{c.who}</span>
+															</span>
+														)}
+													</span>
+													<span class="oc-time">{c.age}</span>
+												</div>
+											</div>
+										</div>
+									))
+							}
 						</div>
 					</div>
 				</div>

@@ -1,0 +1,349 @@
+---
+/**
+ * The notes screen as the app draws it: the shared toolbar with a compose
+ * button in front of sort and filter, then the masonry grid. When a note is
+ * open the grid narrows, a splitter appears, and the editor takes the rest of
+ * the window - the app's own `ns-main--editing` layout, driven by a class the
+ * demo puts on.
+ *
+ * Cards are the showcase's, plus enough more for the grid to be worth
+ * scrolling. Everything comes from notes-screen/NotesScreen.css.
+ */
+import { CHIP_ICONS, SRC_ICONS, TB_ICONS } from './app-parts';
+import NoteCards from './mocks/NoteCards.astro';
+import NoteEditor from './mocks/NoteEditor.astro';
+
+interface Props {
+	/** number of groups on the groups badge */
+	groups?: number;
+	/** id put on the scrolling viewport, so the demo can scroll it */
+	scrollId?: string;
+}
+
+const { groups = 3, scrollId } = Astro.props;
+
+/* the tail of the grid: same card, one paragraph each, written as data rather
+   than another six copies of the markup */
+const MORE = [
+	['Ask the beta group', 'Whether anyone actually uses the single-column layout.', 'ideas', '#6366f1', '2w ago'],
+	['Wayland', 'Global capture works, popup placement does not. Say so in the docs.', 'work', '#14b8a6', '2w ago'],
+	['Icon sizes', 'Sidebar 18, toolbar 13, chips 11. Nothing in between.', 'work', '#14b8a6', '3w ago'],
+	['Podcast notes', 'The bit about defaults being the product, around 34 minutes.', '', '', '3w ago'],
+	['Reply drafted', 'Yes, deleting an entry deletes it everywhere. It travels as a tombstone.', 'support', '#10b981', '3w ago'],
+	['Names to avoid', 'Workspace, project, channel. All of them mean something else already.', 'ideas', '#6366f1', '1mo ago'],
+];
+---
+
+<div class="oc-screen">
+	<div class="oc-toolbar">
+		<div class="oc-tb-group">
+			<span class="oc-tb-btn" set:html={SRC_ICONS.plus11} />
+			<span class="oc-tb-sep"></span>
+			<span class="oc-tb-btn">
+				<Fragment set:html={TB_ICONS.sortArrow} />
+				<Fragment set:html={TB_ICONS.chevron} />
+			</span>
+			<span class="oc-tb-btn" set:html={TB_ICONS.filter} />
+		</div>
+
+		<div class="oc-search">
+			<span class="oc-search-icon" set:html={TB_ICONS.search} />
+			<span class="oc-search-field">Search notes...</span>
+		</div>
+
+		<div class="oc-tb-group">
+			<div class="oc-seg">
+				<span class="oc-seg-slider"></span>
+				<span class="oc-seg-btn oc-seg-btn--active" set:html={TB_ICONS.tiles} />
+				<span class="oc-seg-btn" set:html={TB_ICONS.columns} />
+				<span class="oc-seg-btn" set:html={TB_ICONS.single} />
+			</div>
+			<span class="oc-tb-sep"></span>
+			<span class="oc-tb-btn" set:html={TB_ICONS.select} />
+			<span class="oc-tb-btn">
+				<Fragment set:html={TB_ICONS.groups} />
+				<span class="oc-tb-badge">{groups}</span>
+			</span>
+		</div>
+	</div>
+
+	<div class="ns-main">
+		<div class="ns-viewport" id={scrollId}>
+			<div class="ns-grid">
+				<span class="ns-section-label">
+					<Fragment set:html={CHIP_ICONS.pin} />Pinned
+				</span>
+				<NoteCards />
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Backend notes</div>
+						<div class="ns-card-preview">
+							<p class="ns-p">
+								The server stores ciphertext and fans it out. It never holds a key that
+								opens any of it.
+							</p>
+							<pre class="ns-code">uv run pytest</pre>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(20,184,166,0.12);color:#14b8a6"><span class="ns-chip-dot"></span><span class="ns-chip-label">work</span></span>
+							</div>
+							<span class="ns-card-time">3h ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Things to try on the popup</div>
+						<div class="ns-card-preview">
+							<ul class="ns-tasks">
+								<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Clamp it to the monitor it opens on</li>
+								<li class="ns-task"><span class="ns-task-box"></span>Keep the slot digits when Pinned is empty</li>
+								<li class="ns-task"><span class="ns-task-box"></span>Esc twice should not reopen it</li>
+							</ul>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(99,102,241,0.12);color:#6366f1"><span class="ns-chip-dot"></span><span class="ns-chip-label">ideas</span></span>
+							</div>
+							<span class="ns-card-time">Yesterday</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Quota answers</div>
+						<div class="ns-card-preview">
+							<table class="ns-table">
+								<tr><th>Limit</th><th>Value</th></tr>
+								<tr><td>Entry size</td><td>512 KB</td></tr>
+								<tr><td>Image storage</td><td>50 MB</td></tr>
+								<tr><td>Synced rows</td><td>3,000</td></tr>
+							</table>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(16,185,129,0.12);color:#10b981"><span class="ns-chip-dot"></span><span class="ns-chip-label">support</span></span>
+							</div>
+							<span class="ns-card-time">2d ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Space key handover</div>
+						<div class="ns-card-preview">
+							<blockquote class="ns-quote">Rotate first, re-wrap second. Never the other way round.</blockquote>
+							<p class="ns-p">The old key stays in the keyring so older items still open.</p>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(245,158,11,0.12);color:#f59e0b"><span class="ns-chip-dot"></span><span class="ns-chip-label">release</span></span>
+							</div>
+							<span class="ns-card-time"><span class="ns-card-sync ns-card-sync--shared"><Fragment set:html={SRC_ICONS.shareNetwork11} /><span class="ns-card-sync-count">2</span></span>3d ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Groceries</div>
+						<div class="ns-card-preview">
+							<ul class="ns-tasks">
+								<li class="ns-task"><span class="ns-task-box"></span>Coffee</li>
+								<li class="ns-task"><span class="ns-task-box"></span>Oat milk</li>
+								<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>Bread</li>
+							</ul>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips"></div>
+							<span class="ns-card-time">4d ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Wording for the empty history</div>
+						<div class="ns-card-preview">
+							<p class="ns-p">
+								"Nothing here yet. Copy something and it lands here." Short, says what
+								to do, no exclamation mark.
+							</p>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(99,102,241,0.12);color:#6366f1"><span class="ns-chip-dot"></span><span class="ns-chip-label">ideas</span></span>
+							</div>
+							<span class="ns-card-time">5d ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Onboarding copy</div>
+						<div class="ns-card-preview">
+							<p class="ns-p">
+								First run should say what the app does in one line and then get out of
+								the way. No tour.
+							</p>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(99,102,241,0.12);color:#6366f1"><span class="ns-chip-dot"></span><span class="ns-chip-label">ideas</span></span>
+							</div>
+							<span class="ns-card-time">6d ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Linux checklist</div>
+						<div class="ns-card-preview">
+							<ul class="ns-tasks">
+								<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>AppImage on a clean box</li>
+								<li class="ns-task ns-task--done"><span class="ns-task-box"><Fragment set:html={CHIP_ICONS.check} /></span>deb on Ubuntu 24.04</li>
+								<li class="ns-task"><span class="ns-task-box"></span>Wayland: say what does not work yet</li>
+							</ul>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(245,158,11,0.12);color:#f59e0b"><span class="ns-chip-dot"></span><span class="ns-chip-label">release</span></span>
+							</div>
+							<span class="ns-card-time">6d ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Support answers worth keeping</div>
+						<div class="ns-card-preview">
+							<p class="ns-p">
+								"Where does my history live?" On disk, in the app's data folder, and
+								nowhere else until you sign in.
+							</p>
+							<p class="ns-p">"Can you read it?" No. The key never leaves the machine.</p>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(16,185,129,0.12);color:#10b981"><span class="ns-chip-dot"></span><span class="ns-chip-label">support</span></span>
+							</div>
+							<span class="ns-card-time">1w ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Colours to check in light theme</div>
+						<div class="ns-card-preview">
+							<table class="ns-table">
+								<tr><th>Token</th><th>Note</th></tr>
+								<tr><td>--accent</td><td>Too hot on filled buttons</td></tr>
+								<tr><td>--border-light</td><td>Invisible on white</td></tr>
+							</table>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(20,184,166,0.12);color:#14b8a6"><span class="ns-chip-dot"></span><span class="ns-chip-label">work</span></span>
+							</div>
+							<span class="ns-card-time">1w ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Read later</div>
+						<div class="ns-card-preview">
+							<p class="ns-p">Two papers on key rotation in group messaging, and one on masonry reflow.</p>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips"></div>
+							<span class="ns-card-time">1w ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Refund policy, verbatim</div>
+						<div class="ns-card-preview">
+							<blockquote class="ns-quote">Fourteen days, no questions, whatever the reason.</blockquote>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(16,185,129,0.12);color:#10b981"><span class="ns-chip-dot"></span><span class="ns-chip-label">support</span></span>
+							</div>
+							<span class="ns-card-time"><span class="ns-card-sync ns-card-sync--shared"><Fragment set:html={SRC_ICONS.shareNetwork11} /><span class="ns-card-sync-count">2</span></span>2w ago</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="ns-card">
+					<div class="ns-card-body">
+						<div class="ns-card-title">Build one-liners</div>
+						<div class="ns-card-preview">
+							<pre class="ns-code">bun run build
+cargo check
+uv run pytest</pre>
+						</div>
+						<div class="ns-card-footer">
+							<div class="ns-card-chips">
+								<span class="ns-chip" style="background:rgba(20,184,166,0.12);color:#14b8a6"><span class="ns-chip-dot"></span><span class="ns-chip-label">work</span></span>
+							</div>
+							<span class="ns-card-time">2w ago</span>
+						</div>
+					</div>
+				</div>
+
+				{
+					MORE.map(([title, body, tag, hue, age]) => (
+						<div class="ns-card">
+							<div class="ns-card-body">
+								<div class="ns-card-title">{title}</div>
+								<div class="ns-card-preview">
+									<p class="ns-p">{body}</p>
+								</div>
+								<div class="ns-card-footer">
+									<div class="ns-card-chips">
+										{tag && (
+											<span class="ns-chip" style={`background:color-mix(in srgb, ${hue} 12%, transparent);color:${hue}`}>
+												<span class="ns-chip-dot" />
+												<span class="ns-chip-label">{tag}</span>
+											</span>
+										)}
+									</div>
+									<span class="ns-card-time">{age}</span>
+								</div>
+							</div>
+						</div>
+					))
+				}
+			</div>
+		</div>
+
+		<div class="ns-splitter"><span class="ns-splitter-handle"></span></div>
+		<div class="ns-editor-dock"><NoteEditor /></div>
+	</div>
+</div>
+
+<style>
+	/* The window shell fills the screen and stacks toolbar over content. Same
+	   rule HistoryScreen carries, and scoped there too, so each screen owns the
+	   shell it draws. */
+	.oc-screen {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+</style>

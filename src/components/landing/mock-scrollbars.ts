@@ -28,6 +28,7 @@
    quieter than the bar it stands in for. */
 const SIZES: Record<string, number> = {
 	'oc-viewport': 8,
+	'ns-viewport': 8,
 	'sp-feed-scroll': 8,
 	'sp-rules-body': 8,
 	'set-screen': 8,
