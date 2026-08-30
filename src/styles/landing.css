@@ -690,6 +690,7 @@ body.landing {
 	align-items: center;
 	gap: 3px;
 	color: var(--success);
+	font-weight: 600;
 }
 
 /* type chip: 18px tall, radius 7, 10px/600, 9px icon, tinted background */
@@ -879,6 +880,48 @@ body.landing {
 	font-size: 10.5px;
 	line-height: normal;
 	box-shadow: var(--shadow-sm);
+	transition: all 0.16s ease;
+}
+
+/* Focus, from .cs-inline-search-input:focus in Topbar.css. A real input gets
+   this from the browser; a drawn one has to be told when it has the caret, so
+   the demo puts `is-focus` on the box. */
+
+.oc-search.is-focus .oc-search-field {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 2px var(--accent-dim);
+}
+
+.oc-search.is-focus .oc-search-icon {
+	color: var(--accent);
+}
+
+/* The clear button only exists while there is a query, so it is hidden until
+   the field says there is one. */
+
+.oc-search-clear {
+	position: absolute;
+	right: 4px;
+	top: 50%;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	width: 15px;
+	height: 15px;
+	transform: translateY(-50%);
+	border-radius: 50%;
+	background: var(--border);
+	color: var(--text-secondary);
+	transition: all 0.14s ease;
+}
+
+.oc-search:has(.oc-search-field.is-typed) .oc-search-clear {
+	display: flex;
+}
+
+.oc-window .oc-search-clear.demo-hot {
+	background: var(--accent);
+	color: #fff;
 }
 
 /* ---- day group header: dot on the rail, accent label, hairline ---- */
@@ -1118,6 +1161,12 @@ html.js .reveal.in {
 		transition: none;
 	}
 	.kbd {
+		transition: none;
+	}
+	.set-select-list,
+	.oc-search-field,
+	.oc-search-clear {
+		animation: none;
 		transition: none;
 	}
 }
@@ -2264,6 +2313,20 @@ html.js .reveal.in {
 	transition:
 		background 0.18s ease,
 		border-color 0.18s ease;
+	/* The app pins the knob with `top: 2px` on an absolute box, which it can do
+	   because it draws at 1:1. This mock is scaled with `zoom`, which re-runs
+	   layout at the scaled size: the pill's height and border round one way and
+	   a scaled `top: 2px` rounds another, so the leftover all lands underneath
+	   and the knob sits low. Measured at the demo's own 0.6528 it is 2.30 above
+	   the knob and 1.63 below.
+
+	   Centring it with flex instead makes the engine split that difference, and
+	   the knob keeps its own size so the proportion the app draws - a 15px knob
+	   in a 21px pill - survives the scaling. The 2px inset is the same inset,
+	   just held as real space. */
+	display: flex;
+	align-items: center;
+	padding: 0 2px;
 }
 
 .set-toggle.is-on {
@@ -2272,9 +2335,7 @@ html.js .reveal.in {
 }
 
 .set-toggle-knob {
-	position: absolute;
-	top: 2px;
-	left: 2px;
+	flex: 0 0 15px;
 	width: 15px;
 	height: 15px;
 	border-radius: 50%;
@@ -2338,6 +2399,22 @@ html.js .reveal.in {
 	background: var(--surface);
 	box-shadow: var(--shadow);
 	z-index: 100;
+	/* `selectFadeIn` from SettingsScreen.css. Going from `display: none` back to
+	   a flex box restarts a CSS animation, so opening the list a second time
+	   plays it again without anyone re-creating the element. */
+	animation: ocSelectFadeIn 0.1s ease;
+}
+
+@keyframes ocSelectFadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .set-select-list[hidden] {

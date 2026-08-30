@@ -3,10 +3,24 @@
  * Note cards, from the app's note-card.css.
  *
  * Drawn at the app's own size: the page that places it does the scaling.
+ *
+ * `only` splits the set where the app splits it. The notes grid runs pinned
+ * notes first under a Pinned heading and the rest under a Notes heading, so a
+ * screen that draws both headings has to be able to ask for one side at a time.
+ * Left off, the whole set comes back, which is what a tile wants.
  */
 import { CHIP_ICONS, SRC_ICONS } from '../app-parts';
+
+interface Props {
+	only?: 'pinned' | 'rest';
+}
+
+const { only } = Astro.props;
+const pinned = only !== 'rest';
+const rest = only !== 'pinned';
 ---
 
+{pinned && (
 <div class="ns-card">
 	<div class="ns-card-body">
 		<div class="ns-card-title">Release checklist</div>
@@ -27,6 +41,9 @@ import { CHIP_ICONS, SRC_ICONS } from '../app-parts';
 		</div>
 	</div>
 </div>
+)}
+{rest && (
+<Fragment>
 
 <div class="ns-card">
 	<div class="ns-card-body">
@@ -78,3 +95,5 @@ import { CHIP_ICONS, SRC_ICONS } from '../app-parts';
 		</div>
 	</div>
 </div>
+</Fragment>
+)}

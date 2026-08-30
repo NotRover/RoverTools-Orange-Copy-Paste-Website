@@ -1,0 +1,214 @@
+/* What the pointer does to what it touches.
+
+   The demo drives a drawn cursor, so no real pointer is ever over the controls
+   it clicks and `:hover` can never fire on any of them. Without this the demo
+   is a film of a dead window: the cursor lands on a button, the ring flashes,
+   and the button does not so much as change colour.
+
+   So the cursor marks its target `.demo-hot` on arrival and `.demo-press` for
+   the length of the click, and every rule below is the app's own hover, copied
+   from the stylesheet named beside it. Two classes, no invented states: if the
+   app does not react to a pointer on something, neither does this.
+
+   The base transitions are here for the same reason. A mock that never hovers
+   never needed one, so the parts were drawn without them; now that they move,
+   they have to move at the app's speed rather than instantly.
+
+   Every selector is under `.oc-window`. Not decoration: the mock parts in
+   landing.css are written as `.oc-window .oc-tb-btn`, and the popups carry
+   Astro's scoping class, so a bare `.oc-tb-btn.demo-hot` ties with both on
+   specificity and loses on source order. It is also true - a hover state
+   outside a window mock has nothing to be a hover state of. */
+
+/* ---- transitions, so a state arrives rather than appears ---- */
+
+/* EntryCard.css and note-card.css: the same four properties at the same speed */
+.oc-window .oc-card,
+.oc-window .ns-card {
+	transition:
+		transform 0.15s ease,
+		box-shadow 0.15s ease,
+		border-color 0.15s ease,
+		background 0.15s ease;
+}
+
+/* Topbar.css */
+.oc-window .oc-tb-btn {
+	transition:
+		color 0.16s ease,
+		background 0.16s ease,
+		border-color 0.16s ease,
+		box-shadow 0.16s ease,
+		transform 0.1s ease;
+}
+
+/* Sidebar.css */
+.oc-window .oc-navbtn {
+	transition: all 0.14s ease;
+}
+
+/* Topbar.css: the sort menu's rows */
+.oc-window .oc-sort-item {
+	transition:
+		background 0.1s ease,
+		color 0.1s ease;
+}
+
+/* SettingsScreen.css */
+.oc-window .set-toggle,
+.oc-window .set-select-trigger {
+	transition:
+		background 0.18s ease,
+		border-color 0.18s ease;
+}
+
+.oc-window .set-select-option,
+.oc-window .cs-type-option,
+.oc-window .oc-menu-item,
+.oc-window .bulk-popup-chip,
+.oc-window .bulk-popup-space-row,
+.oc-window .sp-space-card,
+.oc-window .acct-seg-pill,
+.oc-window .acct-btn,
+.oc-window .acct-link,
+.oc-window .gm-chip {
+	transition:
+		background 0.14s ease,
+		border-color 0.14s ease,
+		color 0.14s ease,
+		filter 0.14s ease;
+}
+
+/* ---- hover ---- */
+
+/* EntryCard.css, note-card.css */
+.oc-window .oc-card.demo-hot,
+.oc-window .ns-card.demo-hot {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow);
+	border-color: var(--border-light);
+}
+
+/* the entry holding the clipboard keeps its accent border under the pointer */
+.oc-window .oc-card--in-clipboard.demo-hot {
+	border-color: var(--accent);
+}
+
+/* Topbar.css */
+.oc-window .oc-tb-btn.demo-hot {
+	color: var(--text);
+	border-color: var(--border-light);
+	background: var(--surface-hover);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar.css */
+.oc-window .oc-navbtn.demo-hot {
+	background: var(--accent-dim);
+	color: var(--accent);
+}
+
+/* Topbar.css: a row already chosen deepens rather than greys */
+.oc-window .oc-sort-item.demo-hot {
+	background: var(--accent-dim);
+	color: var(--text);
+}
+
+.oc-window .oc-sort-item--active.demo-hot {
+	background: color-mix(in srgb, var(--accent) 20%, transparent);
+	color: var(--accent);
+}
+
+/* SearchFilter.css */
+.oc-window .cs-type-option.demo-hot {
+	background: var(--surface-hover);
+}
+
+/* card-menu.css */
+.oc-window .oc-menu-item.demo-hot {
+	background: var(--surface-hover);
+}
+
+/* GroupManager.css: a coloured chip lifts its own colour rather than taking a
+   grey wash that would fight it */
+.oc-window .gm-chip.demo-hot,
+.oc-window .oc-menu-group-chip.demo-hot {
+	filter: brightness(1.08);
+}
+
+.oc-window .gm-add-btn.demo-hot {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: #fff;
+}
+
+/* BulkActionsBar.css */
+.oc-window .bulk-popup-chip.demo-hot {
+	background: var(--surface-hover);
+	color: var(--text-secondary);
+}
+
+.oc-window .bulk-popup-space-row.demo-hot {
+	background: var(--surface-hover);
+}
+
+/* SettingsScreen.css */
+.oc-window .set-toggle.demo-hot,
+.oc-window .set-select-trigger.demo-hot {
+	border-color: var(--border-light);
+}
+
+.oc-window .set-select-option.demo-hot {
+	background: var(--surface-hover);
+	color: var(--text);
+}
+
+/* SpacesScreen.css */
+.oc-window .sp-space-card.demo-hot {
+	background: var(--surface-hover);
+	border-color: var(--border-light);
+}
+
+/* AccountScreen.css: the segment only reacts on a pill that is not already on */
+.oc-window .acct-seg-pill.demo-hot:not(.active) {
+	color: var(--text);
+}
+
+.oc-window .acct-btn.demo-hot {
+	border-color: color-mix(in srgb, var(--text) 24%, transparent);
+}
+
+.oc-window .acct-link.demo-hot {
+	color: var(--accent);
+	text-decoration: underline;
+}
+
+/* ---- pressed ----
+   Only where the app has an `:active`. Everywhere else the click reads from
+   the cursor's own ring, and inventing a press would be inventing a control. */
+
+/* Topbar.css */
+.oc-window .oc-tb-btn.demo-press,
+.oc-window .oc-navbtn.demo-press {
+	transform: scale(0.93);
+	box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.oc-window .oc-card,
+	.oc-window .ns-card,
+	.oc-window .oc-tb-btn,
+	.oc-window .oc-navbtn,
+	.oc-window .oc-sort-item,
+	.oc-window .set-toggle,
+	.oc-window .set-select-trigger {
+		transition: none;
+	}
+
+	.oc-window .oc-card.demo-hot,
+	.oc-window .ns-card.demo-hot,
+	.oc-window .oc-tb-btn.demo-press,
+	.oc-window .oc-navbtn.demo-press {
+		transform: none;
+	}
+}

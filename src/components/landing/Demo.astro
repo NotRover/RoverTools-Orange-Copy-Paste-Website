@@ -25,6 +25,7 @@ import SpacesScreen from './SpacesScreen.astro';
 import { SORT_ICONS } from './app-parts';
 import '../../styles/mocks/account.css';
 import '../../styles/mocks/notes.css';
+import '../../styles/mocks/pointer.css';
 import '../../styles/mocks/spaces.css';
 
 /* One per screen, in the order the sidebar lists them. The rail is the app's
@@ -250,7 +251,8 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	const leftBtns = toolbar?.querySelectorAll<HTMLElement>('.oc-tb-group:first-child .oc-tb-btn');
 	const sortBtn = leftBtns?.[0] ?? null;
 	const filterBtn = leftBtns?.[1] ?? null;
-	const searchField = win?.querySelector<HTMLElement>('.oc-search-field') ?? null;
+	const searchBox = win?.querySelector<HTMLElement>('.oc-search') ?? null;
+	const searchField = searchBox?.querySelector<HTMLElement>('.oc-search-field') ?? null;
 	const rightBtns = toolbar?.querySelectorAll<HTMLElement>('.oc-tb-group:last-child .oc-tb-btn');
 	const selectBtn = rightBtns?.[0] ?? null;
 	const groupsBtn = rightBtns?.[1] ?? null;
@@ -369,11 +371,28 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		return { x: b.x + b.w * fx, y: b.y + b.h * fy };
 	}
 
+	/* ---- what the pointer is over ------------------------------------------ */
+	/* No real pointer is ever over these controls, so `:hover` cannot fire on
+	   any of them. The cursor says what it is on instead, and the app's own
+	   hover rules hang off that class (styles/mocks/pointer.css). Without it a
+	   click lands on a button that never acknowledges it. */
+	let hot: Element | null = null;
+
+	function setHot(el: Element | null) {
+		if (hot === el) return;
+		hot?.classList.remove('demo-hot', 'demo-press');
+		hot = el;
+		hot?.classList.add('demo-hot');
+	}
+
 	async function moveToEl(el: Element, fx = 0.5, fy = 0.5, settle = 520) {
 		const p = aim(el, fx, fy);
 		cursor?.classList.add('on');
 		moveTo(p.x, p.y);
 		await hold(settle);
+		/* on arrival, not on setting off: the app lights up under the pointer,
+		   not in front of it */
+		setHot(el);
 	}
 
 	/* The cursor glides, and the grid under it can reflow while it is gliding.
@@ -392,7 +411,9 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 
 	async function click(settle = 300) {
 		cursor?.classList.add('clicking');
+		hot?.classList.add('demo-press');
 		await hold(settle);
+		hot?.classList.remove('demo-press');
 		cursor?.classList.remove('clicking');
 	}
 
@@ -422,6 +443,30 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 
 	type Screen = 'history' | 'notes' | 'settings' | 'spaces' | 'account' | 'shortcuts';
 
+	const SCREEN_EL: Record<Screen, HTMLElement | null> = {
+		history: historyScreen,
+		notes: notesScreen,
+		settings: settingsScreen,
+		spaces: spacesScreen,
+		account: accountScreen,
+		shortcuts: shortcutsScreen,
+	};
+
+	/**
+	 * Play a screen's sections in, the way the app does when one mounts.
+	 *
+	 * Swapping a class is not a mount, so the animation has already run - on the
+	 * first paint, while the screen was hidden and nobody saw it. Taking the
+	 * class off, forcing a reflow and putting it back is what restarts it; the
+	 * reflow read is the whole point and cannot be dropped.
+	 */
+	function replayIntro(el: HTMLElement | null) {
+		if (!el || reduced) return;
+		el.classList.remove('demo-intro');
+		void el.offsetWidth;
+		el.classList.add('demo-intro');
+	}
+
 	/** the app draws one screen at a time, and the sidebar says which */
 	function showScreen(which: Screen) {
 		historyScreen?.classList.toggle('is-off', which !== 'history');
@@ -443,6 +488,7 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		   bar hid itself. Now that it has one, ask again - otherwise the screen
 		   arrives without a scrollbar and only grows one once something scrolls. */
 		refreshMockScrollbars();
+		replayIntro(SCREEN_EL[which]);
 	}
 
 	/* ---- reading a screen -------------------------------------------------- */
@@ -523,6 +569,9 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 
 	/* ---- the grid ---------------------------------------------------------- */
 	let order = ENTRIES.map((_, i) => i);
+	/* the entry whose content is on the clipboard right now - the app draws that
+	   one with an accent border and keeps it there until something else is copied */
+	let onClipboard = 0;
 
 	function render(opts: { select?: boolean; picked?: number[]; only?: number[] } = {}) {
 		if (!grid) return;
@@ -533,7 +582,7 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			grid.appendChild(
 				makeCard(e, {
 					age: e.age,
-					active: i === 0 && !opts.select,
+					active: i === onClipboard && !opts.select,
 					select: opts.select,
 					picked: opts.picked?.includes(i),
 				}),
@@ -633,12 +682,15 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		resetSurfaces();
 		ENTRIES.splice(0, ENTRIES.length, ...BASE_ENTRIES.map((e) => ({ ...e })));
 		order = ENTRIES.map((_, i) => i);
+		onClipboard = 0;
 		render();
+		searchBox?.classList.remove('is-focus');
 		if (searchField) {
 			searchField.textContent = 'Search...';
 			searchField.classList.remove('is-typed');
 		}
 		[sortBtn, filterBtn, selectBtn].forEach((b) => b?.classList.remove('is-on'));
+		setHot(null);
 		if (park) moveTo(1440 - 60, 830 - 74, true);
 	}
 
@@ -676,9 +728,13 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		const card = grid?.children[at] as HTMLElement | undefined;
 		if (!card) return;
 		await clickOn(card, 0.5, 0.32, 780);
+		// the border turns accent the moment the click lands, and stays there
+		const id = order[at]!;
+		onClipboard = id;
+		grid?.querySelectorAll('.oc-card--in-clipboard').forEach((c) => c.classList.remove('oc-card--in-clipboard'));
+		card.classList.add('oc-card--in-clipboard');
 		await flashCopied(card);
 		// a copy is a capture like any other, so it comes back as the newest entry
-		const id = order[at]!;
 		order = [id, ...order.filter((k) => k !== id)];
 		render();
 		say('It comes back as the newest entry, ready to paste anywhere.');
@@ -806,6 +862,9 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	async function sceneSearch() {
 		say('Click the search box and type. Every keystroke narrows the history.');
 		await clickOn(searchField!, 0.12, 0.5, 640);
+		/* the app rings the box in accent and turns its icon while it has the
+		   caret, and the clear button appears the moment there is a query */
+		searchBox?.classList.add('is-focus');
 		if (searchField) {
 			searchField.textContent = '';
 			searchField.classList.add('is-typed');
@@ -1397,14 +1456,17 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		padding-right: 24px;
 	}
 
-	.demo-window :global(.oc-card) {
+	/* Only the card that arrives gets the long transition - it has to be slow
+	   enough to read as something landing. Every other card keeps the app's own
+	   0.15s from pointer.css, which is what its hover needs. */
+	.demo-window :global(.sp-arrival) {
 		transition:
 			transform 0.3s ease,
 			opacity 0.3s ease,
 			border-color 0.2s ease;
 	}
 
-	.demo-window :global(.oc-card.demo-arrive) {
+	.demo-window :global(.sp-arrival.demo-arrive) {
 		transform: translateY(-12px);
 		opacity: 0;
 	}
@@ -1415,21 +1477,29 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		display: none;
 	}
 
-	/* the popups the toolbar opens: placed by the script, in the window's own
-	   pixels, and shut until it opens them */
+	/* The popups the toolbar opens: placed by the script, in the window's own
+	   pixels, and shut until it opens them.
+
+	   The app drops them in rather than fading them - `sortDropIn` in
+	   Topbar.css, 0.12s from four pixels up, on the sort menu, the filter card
+	   and the card menu alike. A popup that only fades has no direction, and
+	   reads as appearing rather than opening. */
 	.demo-pop {
 		position: absolute;
 		z-index: 40;
 		opacity: 0;
 		visibility: hidden;
+		transform: translateY(-4px);
 		transition:
-			opacity 0.14s ease,
-			visibility 0.14s;
+			opacity 0.12s ease-out,
+			transform 0.12s ease-out,
+			visibility 0.12s;
 	}
 
 	.demo-pop.is-open {
 		opacity: 1;
 		visibility: visible;
+		transform: translateY(0);
 	}
 
 	/* a toolbar button reads as held down while its popup is open */
@@ -1444,7 +1514,11 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		color: var(--text);
 	}
 
-	.demo-window :global(.oc-search-field.is-typed)::after {
+	/* Both drawn text fields get a caret while the demo is typing into them.
+	   They are spans, so there is no real one, and a field filling with
+	   characters and no caret reads as text arriving by itself. */
+	.demo-window :global(.oc-search-field.is-typed)::after,
+	.demo-window :global(.gm-add-input.is-typed)::after {
 		content: '';
 		display: inline-block;
 		width: 1px;
@@ -1473,18 +1547,120 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		display: none;
 	}
 
-	/* the card menu fades the way the hero's does */
+	/* the card menu drops in the same way the toolbar's popups do */
 	.demo-window :global(.oc-menu) {
 		opacity: 0;
 		visibility: hidden;
+		transform: translateY(-4px);
 		transition:
-			opacity 0.13s ease,
-			visibility 0.13s;
+			opacity 0.12s ease-out,
+			transform 0.12s ease-out,
+			visibility 0.12s;
 	}
 
 	.demo-window :global(.oc-menu.open) {
 		opacity: 1;
 		visibility: visible;
+		transform: translateY(0);
+	}
+
+	/* ---- a screen arriving ----
+	   The app animates a screen's sections in when it mounts (`setSectionIn`,
+	   SettingsScreen.css) and its cards in as they are drawn (`cardFadeIn`,
+	   EntryCard.css). The demo swaps screens with a class, which is not a mount,
+	   so the animation is replayed by hand - see `replayIntro`. Without it every
+	   screen after the first snaps into place fully formed, which is the one
+	   thing the app never does. */
+	@keyframes demoSectionIn {
+		from {
+			opacity: 0;
+			transform: translateY(5px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes demoCardIn {
+		from {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.demo-screen.demo-intro :global(.set-section) {
+		animation: demoSectionIn 0.26s ease both;
+	}
+
+	/* the app's own stagger, by section: three hundredths between one and the
+	   next. It counts by nth-child there because the heading is the first child;
+	   here the sections are the only <section>s, so nth-of-type says the same. */
+	.demo-screen.demo-intro :global(.set-section:nth-of-type(2)) {
+		animation-delay: 0.03s;
+	}
+
+	.demo-screen.demo-intro :global(.set-section:nth-of-type(3)) {
+		animation-delay: 0.06s;
+	}
+
+	.demo-screen.demo-intro :global(.set-section:nth-of-type(4)) {
+		animation-delay: 0.09s;
+	}
+
+	.demo-screen.demo-intro :global(.set-section:nth-of-type(5)) {
+		animation-delay: 0.12s;
+	}
+
+	.demo-screen.demo-intro :global(.set-section:nth-of-type(6)) {
+		animation-delay: 0.15s;
+	}
+
+	.demo-screen.demo-intro :global(.set-section:nth-of-type(n + 7)) {
+		animation-delay: 0.18s;
+	}
+
+	/* The account screen is deliberately unstaggered in the app: a delay keyed to
+	   position shifts the moment a conditional block mounts, and every card below
+	   it re-runs. One quiet fade for the whole column instead. */
+	.demo-screen.demo-intro :global(.acct-card) {
+		animation: demoCardIn 0.28s ease both;
+	}
+
+	/* cards are drawn, not sectioned: they come in together at the app's own
+	   0.18s rather than in a staggered line */
+	.demo-screen.demo-intro :global(.ns-card) {
+		animation: demoCardIn 0.18s ease-out both;
+	}
+
+	/* Every card the grid redraws - a search narrowing, a sort reordering - is a
+	   new node, so this replays itself without being asked, exactly as it does
+	   in the app. */
+	.demo-window :global(.oc-grid > .oc-card) {
+		animation: demoCardIn 0.18s ease-out;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.demo-pop,
+		.demo-window :global(.oc-menu) {
+			transform: none;
+			transition:
+				opacity 0.12s ease-out,
+				visibility 0.12s;
+		}
+
+		.demo-screen.demo-intro :global(.set-section),
+		.demo-screen.demo-intro :global(.acct-card),
+		.demo-screen.demo-intro :global(.acct-mode),
+		.demo-screen.demo-intro :global(.acct-zone),
+		.demo-screen.demo-intro :global(.ns-card),
+		.demo-window :global(.oc-grid > .oc-card) {
+			animation: none;
+		}
 	}
 
 	/* fake cursor, the hero's */

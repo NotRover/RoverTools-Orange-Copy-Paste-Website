@@ -31,41 +31,39 @@ const { scrollId } = Astro.props;
 			</p>
 		</div>
 
-		<div class="acct-card">
-			<div class="acct-idband">
-				<div class="acct-id-main">
-					<span class="acct-avatar">R</span>
-					<div class="acct-id-text">
-						<span class="acct-id-email">rio@studio.example</span>
-						<span class="acct-id-status acct-id-status--connected">
-							<span class="acct-id-dot"></span>Connected, realtime
-						</span>
-					</div>
-					<div class="acct-id-actions">
-						<span class="acct-btn">Sync now</span>
-						<span class="acct-btn">Sign out</span>
-					</div>
-				</div>
-				<div class="acct-id-meta">
-					<span class="acct-id-fact">2 devices</span>
-					<span class="acct-id-fact">Last sync 12s ago</span>
-					<span class="acct-id-fact">Nothing queued</span>
-					<div class="acct-id-meta-actions">
-						<span class="acct-link">Reset sync</span>
-					</div>
-				</div>
-				<div class="acct-id-recovery">
-					<span class="acct-id-recovery-icon" set:html={SRC_ICONS.key11} />
-					<span class="acct-id-recovery-text">
-						Your recovery code is the only way back into this account's data if you
-						forget the password. Nobody else holds a copy, this app included.
+		<div class="acct-card acct-idband">
+			<div class="acct-id-main">
+				<span class="acct-avatar">R</span>
+				<div class="acct-id-text">
+					<span class="acct-id-email">rio@studio.example</span>
+					<span class="acct-id-status acct-id-status--connected">
+						<span class="acct-id-dot"></span>Connected, realtime
 					</span>
-					<span class="acct-link">Show code</span>
 				</div>
+				<div class="acct-id-actions">
+					<span class="acct-btn">Sync now</span>
+					<span class="acct-btn acct-btn--quiet acct-btn--danger">Sign out</span>
+				</div>
+			</div>
+			<div class="acct-id-meta">
+				<span class="acct-id-fact">2 devices</span>
+				<span class="acct-id-fact">Last sync 12s ago</span>
+				<span class="acct-id-fact">Nothing queued</span>
+				<div class="acct-id-meta-actions">
+					<span class="acct-link">Reset sync</span>
+				</div>
+			</div>
+			<div class="acct-id-recovery">
+				<span class="acct-id-recovery-icon" set:html={SRC_ICONS.key11} />
+				<span class="acct-id-recovery-text">
+					Your recovery code is the only way back into this account's data if you
+					forget the password. Nobody else holds a copy, this app included.
+				</span>
+				<span class="acct-btn acct-btn--sm acct-btn--quiet">Show code</span>
 			</div>
 		</div>
 
-		<DevicesPanel />
+		<DevicesPanel cloudZone />
 		<StorageZone />
 	</div>
 </div>

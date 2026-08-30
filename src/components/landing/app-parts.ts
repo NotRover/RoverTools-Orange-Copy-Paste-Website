@@ -268,6 +268,11 @@ export const TB_ICONS = {
 		'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
 	),
 	dayChevron: stroke(10, 2.5, '<polyline points="6 9 12 15 18 9"/>'),
+	/* the notes screen's section headings: drawn pointing right and turned a
+	   quarter when the section is open, which is how the app draws it */
+	chevronRight: stroke(10, 2.5, '<polyline points="9 6 15 12 9 18"/>'),
+	/* the search box's clear button */
+	close: stroke(9, 3, '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'),
 };
 
 /* ---- Spaces glyphs: Phosphor paths lifted from @phosphor-icons/react, at the

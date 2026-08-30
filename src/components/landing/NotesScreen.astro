@@ -9,7 +9,7 @@
  * Cards are the showcase's, plus enough more for the grid to be worth
  * scrolling. Everything comes from notes-screen/NotesScreen.css.
  */
-import { CHIP_ICONS, SRC_ICONS, TB_ICONS } from './app-parts';
+import { CHIP_ICONS, NAV_ICONS, SRC_ICONS, TB_ICONS } from './app-parts';
 import NoteCards from './mocks/NoteCards.astro';
 import NoteEditor from './mocks/NoteEditor.astro';
 
@@ -49,6 +49,9 @@ const MORE = [
 		<div class="oc-search">
 			<span class="oc-search-icon" set:html={TB_ICONS.search} />
 			<span class="oc-search-field">Search notes...</span>
+			<!-- the app puts a clear button in the box the moment there is
+			     something to clear; with the placeholder showing there is not -->
+			<span class="oc-search-clear" set:html={TB_ICONS.close} />
 		</div>
 
 		<div class="oc-tb-group">
@@ -70,10 +73,20 @@ const MORE = [
 	<div class="ns-main">
 		<div class="ns-viewport" id={scrollId}>
 			<div class="ns-grid">
+				<!-- the app runs pinned notes first under their own heading, then
+				     everything else under a second one; both are collapsible, and
+				     the chevron says which way -->
 				<span class="ns-section-label">
 					<Fragment set:html={CHIP_ICONS.pin} />Pinned
+					<span class="ns-section-chevron ns-section-chevron--open" set:html={TB_ICONS.chevronRight} />
 				</span>
-				<NoteCards />
+				<NoteCards only="pinned" />
+
+				<span class="ns-section-label">
+					<Fragment set:html={NAV_ICONS.notes} />Notes
+					<span class="ns-section-chevron ns-section-chevron--open" set:html={TB_ICONS.chevronRight} />
+				</span>
+				<NoteCards only="rest" />
 
 				<div class="ns-card">
 					<div class="ns-card-body">
