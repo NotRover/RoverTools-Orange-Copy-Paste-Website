@@ -79,6 +79,7 @@ body.landing {
    moment a colour or a width is asked for, the two engines disagree about which
    of them wins, which is what made this unfixable in CSS to begin with. */
 .oc-window .oc-viewport,
+.oc-window .ns-viewport,
 .oc-window .sp-feed-scroll,
 .oc-window .sp-panel-scroll,
 .oc-window .sp-rules-body,
@@ -87,6 +88,7 @@ body.landing {
 }
 
 .oc-window .oc-viewport::-webkit-scrollbar,
+.oc-window .ns-viewport::-webkit-scrollbar,
 .oc-window .sp-feed-scroll::-webkit-scrollbar,
 .oc-window .sp-panel-scroll::-webkit-scrollbar,
 .oc-window .sp-rules-body::-webkit-scrollbar,

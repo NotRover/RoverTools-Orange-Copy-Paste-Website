@@ -406,3 +406,161 @@ padding: 7px 12px;
 .acct-dot.online {
 	background: #22c55e;
 }
+
+/* ---- the flat surface box the shortcut rows sit in, from ShortcutsScreen.css.
+   Same surface, border and radius as .acct-card and .set-group: the app draws
+   one box per section and lets the rows rule themselves apart. ---- */
+
+.shortcuts-list {
+display: flex;
+flex-direction: column;
+background: var(--surface);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+overflow: hidden;
+}
+
+.shortcuts-list .shortcut-row:first-child {
+border-top: none;
+}
+
+.shortcut-plus {
+font-size: 10px;
+color: var(--text-muted);
+}
+
+/* ---- the identity band, from AccountScreen.css. Three rows on one card:
+   who is signed in, the facts about the account, and what the recovery code
+   is for. ---- */
+
+.acct-idband {
+display: flex;
+flex-direction: column;
+}
+
+.acct-id-main {
+display: flex;
+align-items: center;
+gap: 12px;
+flex-wrap: wrap;
+row-gap: 10px;
+}
+
+.acct-avatar {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 42px;
+height: 42px;
+border-radius: 50%;
+font-size: 16px;
+font-weight: 600;
+color: var(--accent);
+background: color-mix(in srgb, var(--accent) 14%, transparent);
+flex: 0 0 auto;
+}
+
+.acct-id-text {
+display: flex;
+flex-direction: column;
+gap: 4px;
+min-width: 0;
+flex: 1 1 260px;
+}
+
+.acct-id-email {
+font-size: 14px;
+font-weight: 500;
+color: var(--text);
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.acct-id-status {
+display: flex;
+align-items: center;
+gap: 6px;
+font-size: 12px;
+color: var(--text-muted);
+}
+
+.acct-id-dot {
+flex: 0 0 auto;
+width: 7px;
+height: 7px;
+border-radius: 50%;
+background: var(--text-muted);
+}
+
+.acct-id-status--connected .acct-id-dot {
+background: #22c55e;
+}
+
+.acct-id-actions {
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 6px;
+row-gap: 6px;
+flex-wrap: wrap;
+margin-left: auto;
+flex: 0 0 auto;
+}
+
+/* The rows below the identity are separated by a rule rather than punctuation
+   in the copy, so a missing fact never leaves a stray divider behind. */
+
+.acct-id-meta {
+display: flex;
+align-items: center;
+flex-wrap: wrap;
+gap: 7px 10px;
+margin-top: 12px;
+padding-top: 11px;
+border-top: 1px solid var(--border);
+font-size: 11.5px;
+color: var(--text-muted);
+}
+
+.acct-id-fact + .acct-id-fact::before {
+content: "|";
+margin-right: 10px;
+color: var(--border-light);
+}
+
+.acct-id-meta-actions {
+display: flex;
+align-items: center;
+gap: 14px;
+margin-left: auto;
+}
+
+.acct-link {
+font-size: 11.5px;
+color: color-mix(in srgb, var(--accent) 55%, var(--text-secondary));
+white-space: nowrap;
+}
+
+.acct-id-recovery {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-top: 11px;
+padding-top: 10px;
+border-top: 1px solid var(--border);
+}
+
+.acct-id-recovery-icon {
+display: flex;
+flex: 0 0 auto;
+color: var(--text-muted);
+}
+
+.acct-id-recovery-text {
+flex: 1;
+min-width: 0;
+font-size: 11.5px;
+line-height: 1.4;
+color: var(--text-muted);
+}

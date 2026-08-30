@@ -1,0 +1,130 @@
+---
+/**
+ * The shortcuts screen as the app draws it: the shared scr-* page header, then
+ * one flat surface box per section. Sections, wording and key captions are the
+ * app's own, from shortcuts-screen/ShortcutsScreen.tsx - a shortcut listed here
+ * that the app does not bind would be a lie told in the app's own typeface.
+ *
+ * The scroll shell is `set-screen`, which is what the app does too: the
+ * shortcuts screen and the account screen both borrow the settings screen's.
+ */
+import { CHIP_ICONS, SET_ICONS, SRC_ICONS, TB_ICONS } from './app-parts';
+
+interface Props {
+	/** id put on the scrolling box, so the demo can scroll it */
+	scrollId?: string;
+}
+
+const { scrollId } = Astro.props;
+
+const SECTIONS = [
+	{
+		title: 'Global Shortcuts',
+		icon: SRC_ICONS.keyboard13,
+		entries: [
+			{ keys: ['Ctrl', 'C'], description: 'Capture (copy) selection to clipboard history without popup' },
+			{ keys: ['Ctrl', 'Shift', 'C'], description: 'Capture (copy) selection to clipboard history' },
+			{ keys: ['Ctrl', 'Shift', 'V'], description: 'Open quick-paste popup' },
+		],
+	},
+	{
+		title: 'Paste Popup',
+		icon: SET_ICONS.clipboardText,
+		entries: [
+			{ keys: ['1-9, 0'], description: 'Paste entry by slot number' },
+			{ keys: ['Up', 'Down'], description: 'Navigate entries' },
+			{ keys: ['Enter'], description: 'Paste selected entry' },
+			{ keys: ['Left', 'Right'], description: 'Switch between Recent / Pinned' },
+			{ keys: ['Tab'], description: 'Toggle Recent / Pinned' },
+			{ keys: ['Esc'], description: 'Close popup' },
+		],
+	},
+	{
+		title: 'Clipboard Cards',
+		icon: SRC_ICONS.clipboard11,
+		entries: [
+			{ keys: ['Click'], description: 'Copy entry to clipboard' },
+			{ keys: ['Right-click'], description: 'Open context menu (Copy, Pin, Save, Groups, Delete)' },
+			{ keys: ['Type chip'], description: 'Expand / collapse multiple-file list' },
+			{ keys: ['+N chip'], description: 'Show overflow group tags' },
+		],
+	},
+	{
+		title: 'Pin & Save',
+		icon: CHIP_ICONS.pin,
+		entries: [
+			{ keys: ['Pin'], description: 'Pin entry. Shows in quick-paste popup (max 10)' },
+			{ keys: ['Save'], description: 'Save entry. Survives app restarts independently of pin' },
+			{ keys: ['Unsave'], description: 'Remove save (entry may be evicted from history)' },
+			{ keys: ['Max 10'], description: 'Pin limit reached. A toast notification appears' },
+		],
+	},
+	{
+		title: 'Groups',
+		icon: TB_ICONS.groups,
+		entries: [
+			{ keys: ['Groups menu'], description: 'Assign or remove group tags from an entry (right-click)' },
+			{ keys: ['Groups btn'], description: 'Open Group Manager to add, rename or delete groups' },
+			{ keys: ['Click chip'], description: 'Select a group. Input switches to rename mode' },
+			{ keys: ['Click chip again'], description: 'Deselect group / return to add mode' },
+			{ keys: ['Click outside'], description: 'Deselect group without changes' },
+			{ keys: ['Enter'], description: 'Confirm add or rename' },
+			{ keys: ['Delete button'], description: 'Delete group. Undo available for 5 seconds via toast' },
+			{ keys: ['Color swatches'], description: 'Change the color of a selected group' },
+		],
+	},
+	{
+		title: 'System Groups',
+		icon: SRC_ICONS.squares12,
+		entries: [
+			{ keys: ['Pinned'], description: 'System group. Shows entries currently pinned to the popup' },
+			{ keys: ['Saved'], description: 'System group. Shows entries saved to survive restarts' },
+			{ keys: ['Reserved'], description: '"pinned" and "saved" cannot be used as custom group names' },
+		],
+	},
+	{
+		title: 'Search & Filter',
+		icon: TB_ICONS.search,
+		entries: [
+			{ keys: ['Type'], description: 'Filter entries by content' },
+			{ keys: ['Esc / clear btn'], description: 'Clear search' },
+		],
+	},
+];
+---
+
+<div class="set-screen" id={scrollId}>
+	<div class="set-inner">
+		<div class="scr-head">
+			<span class="scr-eyebrow">Reference</span>
+			<h2 class="scr-title">Shortcuts</h2>
+			<p class="scr-subtitle">Every keyboard shortcut and interaction, at a glance.</p>
+		</div>
+
+		{
+			SECTIONS.map((section) => (
+				<section class="set-section">
+					<div class="set-section-head">
+						<span class="set-section-icon" set:html={section.icon} />
+						<h3 class="set-section-title">{section.title}</h3>
+					</div>
+					<div class="shortcuts-list">
+						{section.entries.map((entry) => (
+							<div class="shortcut-row">
+								<span class="shortcut-desc">{entry.description}</span>
+								<span class="shortcut-keys">
+									{entry.keys.map((k, i) => (
+										<Fragment>
+											{i > 0 && <span class="shortcut-plus">+</span>}
+											<kbd class="shortcut-key">{k}</kbd>
+										</Fragment>
+									))}
+								</span>
+							</div>
+						))}
+					</div>
+				</section>
+			))
+		}
+	</div>
+</div>

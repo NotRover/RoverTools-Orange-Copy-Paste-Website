@@ -10,7 +10,7 @@ import logo from '../../assets/app-logo-dark.svg?raw';
 import { NAV_ICONS, WIN_ICONS } from './app-parts';
 
 interface Props {
-	nav?: 'clipboard' | 'notes' | 'spaces' | 'shortcuts';
+	nav?: 'clipboard' | 'notes' | 'spaces' | 'shortcuts' | 'account' | 'settings';
 	class?: string;
 }
 
@@ -35,8 +35,8 @@ const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
 		<div class="oc-side-bottom">
 			<span class="oc-navbtn" set:html={NAV_ICONS.sun} />
 			<span class="oc-navbtn" set:html={NAV_ICONS.bell} />
-			<span class="oc-navbtn" set:html={NAV_ICONS.user} />
-			<span class="oc-navbtn" set:html={NAV_ICONS.gear} />
+			<span class:list={['oc-navbtn', nav === 'account' && 'active']} set:html={NAV_ICONS.user} />
+			<span class:list={['oc-navbtn', nav === 'settings' && 'active']} set:html={NAV_ICONS.gear} />
 		</div>
 	</div>
 
