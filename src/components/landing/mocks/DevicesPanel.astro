@@ -5,22 +5,55 @@
  * Drawn at the app's own size: the page that places it does the scaling.
  */
 import { SRC_ICONS } from '../app-parts';
+
+interface Props {
+	/** wrap the sync mode in the app's own "Cloud sync" zone. The showcase tile
+	 *  is a crop of the panel and does not want the heading; the full screen does. */
+	cloudZone?: boolean;
+}
+
+const { cloudZone = false } = Astro.props;
 ---
 
-<div class="acct-mode">
-	<div class="acct-mode-head">
-		<span class="set-row-label">Automatic syncing</span>
-		<div class="acct-seg">
-			<span class="acct-seg-pill active">Realtime</span>
-			<span class="acct-seg-pill">Passive</span>
-			<span class="acct-seg-pill">Manual</span>
+{cloudZone && (
+	<section class="acct-zone">
+		<div class="acct-zone-head">
+			<span class="acct-zone-icon" set:html={SRC_ICONS.cloud13} />
+			<span class="acct-zone-label">Cloud sync</span>
 		</div>
+		<div class="acct-card acct-mode">
+			<div class="acct-mode-head">
+				<span class="acct-row-name">Automatic syncing</span>
+				<div class="acct-seg">
+					<span class="acct-seg-pill active">Realtime</span>
+					<span class="acct-seg-pill">Passive</span>
+					<span class="acct-seg-pill">Manual</span>
+				</div>
+			</div>
+			<p class="acct-card-desc">
+				Items from your other devices arrive the moment they are copied, and what
+				you copy here uploads right away.
+			</p>
+		</div>
+	</section>
+)}
+
+{!cloudZone && (
+	<div class="acct-card acct-mode">
+		<div class="acct-mode-head">
+			<span class="acct-row-name">Automatic syncing</span>
+			<div class="acct-seg">
+				<span class="acct-seg-pill active">Realtime</span>
+				<span class="acct-seg-pill">Passive</span>
+				<span class="acct-seg-pill">Manual</span>
+			</div>
+		</div>
+		<p class="acct-card-desc">
+			Items from your other devices arrive the moment they are copied, and what you
+			copy here uploads right away.
+		</p>
 	</div>
-	<p class="acct-card-desc">
-		Items from your other devices arrive the moment they are copied, and what you
-		copy here uploads right away.
-	</p>
-</div>
+)}
 
 <div class="acct-zone">
 	<div class="acct-zone-head">

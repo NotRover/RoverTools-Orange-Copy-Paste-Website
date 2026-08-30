@@ -224,6 +224,7 @@ overflow: hidden;
 height: 100%;
 border-radius: 3px;
 background: var(--accent);
+transition: width 0.24s ease;
 }
 
 .acct-quota-note {
@@ -234,7 +235,7 @@ color: var(--text-muted);
 opacity: 0.75;
 }
 
-/* ---- the Devices zone, from AccountScreen.css ---- */
+/* ---- a zone: a labelled run of cards, from AccountScreen.css ---- */
 
 .acct-zone {
 display: flex;
@@ -273,6 +274,7 @@ border: 1px solid var(--border);
 border-radius: var(--radius);
 background: var(--surface);
 padding: 14px;
+box-shadow: var(--shadow-sm);
 }
 
 /* a grouped-rows card puts the padding on the rows, not the card */
@@ -361,8 +363,23 @@ flex: 0 0 auto;
 /* destructive at rest, so it reads as different before it is hovered */
 
 .acct-btn--sm {
-padding: 4px 9px;
+padding: 5px 10px;
 font-size: 11.5px;
+}
+
+/* recessive: for an action that has to stay reachable without competing with
+   the one beside it (Sign out next to Sync now) */
+
+.acct-btn--quiet {
+color: var(--text-muted);
+background: transparent;
+border-color: transparent;
+}
+
+.acct-btn--quiet.acct-btn--danger {
+color: color-mix(in srgb, var(--danger) 78%, var(--text-muted));
+border-color: transparent;
+background: transparent;
 }
 
 .acct-btn--danger {
@@ -371,10 +388,20 @@ border-color: rgba(239, 68, 68, 0.34);
 }
 
 .acct-card-desc {
-margin: 0;
+margin: -4px 0 10px;
 font-size: 12px;
 line-height: 1.45;
 color: var(--text-muted);
+}
+
+.acct-mode .acct-card-desc {
+margin: 0;
+}
+
+/* tighter than the card's own 14px: the head row already carries its height */
+
+.acct-card.acct-mode {
+padding: 11px 14px 12px;
 }
 
 .acct-mode-note {

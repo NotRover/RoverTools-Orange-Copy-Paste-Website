@@ -52,6 +52,9 @@ const hasEarlier = Astro.slots.has('earlier');
 		<div class="oc-search">
 			<span class="oc-search-icon" set:html={TB_ICONS.search} />
 			<span class="oc-search-field">Search...</span>
+			<!-- the app puts a clear button in the box the moment there is
+			     something to clear; with the placeholder showing there is not -->
+			<span class="oc-search-clear" set:html={TB_ICONS.close} />
 		</div>
 
 		<div class="oc-tb-group">
