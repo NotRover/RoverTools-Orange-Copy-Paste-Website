@@ -55,7 +55,7 @@ const build = await fetchBuild();
 				</div>
 				<div class="capture-keys">
 					<span class="kbd" data-key>Ctrl</span>
-					<span class="kbd" data-key>Shift</span>
+					<span class="kbd" data-key data-shift>Shift</span>
 					<span class="kbd" data-key>C</span>
 				</div>
 			</div>
@@ -131,6 +131,7 @@ const build = await fetchBuild();
 	const stack = document.getElementById('stack');
 	const sweep = document.getElementById('sweep');
 	const keys = document.querySelectorAll<HTMLElement>('[data-key]');
+	const shiftKey = document.querySelector<HTMLElement>('[data-shift]');
 	const cursor = document.getElementById('fcur');
 	/* the window itself, not the cursor's parent: the coordinate space has to be
 	   the 920x560 the mock is drawn at, and the same box the menu is positioned
@@ -251,15 +252,21 @@ const build = await fetchBuild();
 			let visits = 0;
 			for (;;) {
 				const s = snippets[i % snippets.length]!;
+				// alternate the shortcut: a plain Ctrl+C the watcher grabs silently,
+				// then a Ctrl+Shift+C capture - both land the copy in history. Start
+				// on the plain copy, since that is the everyday one.
+				const withShift = i % 2 === 1;
 				i++;
+				shiftKey?.classList.toggle('is-hidden', !withShift);
 				sweep!.textContent = s.content;
 				sweep!.style.backgroundSize = '0% 100%';
 				await wait(500);
 				sweep!.style.backgroundSize = '100% 100%';
 				await wait(650);
-				keys.forEach((k) => k.classList.add('pressed'));
+				const pressing = Array.from(keys).filter((k) => withShift || k !== shiftKey);
+				pressing.forEach((k) => k.classList.add('pressed'));
 				await wait(260);
-				keys.forEach((k) => k.classList.remove('pressed'));
+				pressing.forEach((k) => k.classList.remove('pressed'));
 				await wait(140);
 				pushCard(s);
 				cycles++;
@@ -384,6 +391,11 @@ const build = await fetchBuild();
 		display: flex;
 		gap: 0.3rem;
 		flex-shrink: 0;
+	}
+
+	/* dropped for a plain Ctrl+C cycle; the flex gap collapses with it */
+	.capture-keys .kbd.is-hidden {
+		display: none;
 	}
 
 	/* ---- hero window: the app's real 920x560 ---- */
