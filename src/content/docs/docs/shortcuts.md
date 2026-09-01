@@ -26,6 +26,8 @@ Both popup hotkeys are toggles: pressing the combination again while the popup i
 
 ## On clipboard cards
 
+![A clipboard card with its right-click menu open, listing Copy, Pin, Save, Groups and Delete.](/screenshots/card-menu.png)
+
 | Input | Action |
 |---|---|
 | Click | Copy the entry back to the clipboard. |

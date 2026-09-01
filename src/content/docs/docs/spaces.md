@@ -5,6 +5,8 @@ description: Live shared clipboards between people, end-to-end encrypted.
 
 A **Space** is a live feed shared between any number of people. Share a clipboard entry or a note into it and every member sees it in seconds. You can be in several spaces at once, and one item can be in several spaces at once. Everything stays end-to-end encrypted; the server relays ciphertext it cannot read.
 
+![A space's shared feed, with the space list on one side and shared cards in the feed.](/screenshots/spaces-feed.png)
+
 ## Creating and joining
 
 - **Create** a space with a name. You become its owner.
@@ -27,6 +29,8 @@ New members can read the space's existing history: everyone in a space can see w
 - **Comments:** discuss any shared item in a popover thread, with mentions.
 
 ## Members and keys
+
+![The members panel listing who is in the space, who is online, and the owner.](/screenshots/spaces-members.png)
 
 The members list shows who is in the space, who is online, and who owns it. Each space has its own key, individually wrapped for every member, so the server never holds a usable key. Any member who has the key can hand it to a newcomer, so you are not stuck waiting for the owner to come online; in the usual case the key arrives with the invite.
 

@@ -5,6 +5,8 @@ description: How the in-app updater works, and where releases live.
 
 ## The updater
 
+![The updates section in Settings, showing the current version with Check now, Download and Restart and install, and release notes inline.](/screenshots/updates.png)
+
 The app checks for updates shortly after launch and periodically while it runs, since it usually lives in the tray for weeks. A check is one small request that downloads nothing.
 
 From there, everything is user-driven:

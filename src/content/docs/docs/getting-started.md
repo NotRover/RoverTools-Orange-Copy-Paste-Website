@@ -9,6 +9,8 @@ description: Get Orange Copy Paste running on Windows or Linux.
 2. Run it. It installs per user, so no admin rights are needed.
 3. Launch the app. It appears in the system tray; left-click the tray icon to open the window.
 
+![The Orange Copy Paste tray icon with its right-click menu open, showing Open and Quit.](/screenshots/tray-menu.png)
+
 Windows 10 and 11 are supported, and Windows is the primary, fully featured target.
 
 ## Linux

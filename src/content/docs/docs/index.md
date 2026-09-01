@@ -5,6 +5,8 @@ description: A smart clipboard for Windows and Linux with history, notes, quick 
 
 Orange Copy Paste captures the text, images and files you copy, keeps a searchable history alongside your notes, and syncs them across your devices. Sync is end-to-end encrypted: every key stays on your machines and the server only ever stores ciphertext. Cloud sync is optional. The app is fully usable offline.
 
+![The Orange Copy Paste window showing clipboard history, with an entry selected and the sidebar of screens down the left.](/screenshots/app-window.png)
+
 ## The pieces
 
 | Piece | What it does |
