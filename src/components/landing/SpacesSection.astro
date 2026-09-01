@@ -1,4 +1,35 @@
 ---
+import { CHIP_ICONS, GROUP_COLORS, KIND_COLORS, TYPE_LABELS, THUMBS } from './app-parts';
+
+/* The right-hand mock is a space feed drawn from the app's own entry cards, so it
+   reads as the same product as every other mockup on the page: the kind chip, the
+   "shared by" owner chip, a real image thumbnail, and the accent border the app
+   puts on the entry that just landed on the clipboard - which is what auto-copy
+   does the moment a teammate shares. Newest first, like the app. */
+const space = { name: 'design-team', members: 4 };
+const feed = [
+	{
+		owner: 'sam',
+		kind: 'url',
+		text: 'staging.rovertools.app/preview',
+		age: 'now',
+		active: true,
+	},
+	{
+		owner: 'rio',
+		kind: 'text',
+		text: '#ff3e1c on #0e0e0e, ratio 4.6:1',
+		group: ['brand', 'amber'],
+		age: '2m',
+	},
+	{
+		owner: 'mei',
+		kind: 'image',
+		text: 'home-redesign-v4.png',
+		thumb: 'ui',
+		age: '9m',
+	},
+] as const;
 ---
 
 <section class="section spaces" id="spaces">
@@ -34,23 +65,45 @@
 		<div class="sp-demo reveal" aria-hidden="true">
 			<div class="feed">
 				<div class="feed-head">
-					<span class="feed-name">design-team</span>
-					<span class="feed-count">4 members</span>
+					<span class="feed-name">{space.name}</span>
+					<span class="feed-count">{space.members} members</span>
 				</div>
-				<div class="feed-item">
-					<div class="fi-top"><span class="who" style="--ac:#a855f7">R</span><span class="fi-name">rio</span><span class="fi-time">2m</span></div>
-					<div class="fi-body mono">#ff3e1c on #0e0e0e, ratio 4.6:1</div>
-					<div class="fi-foot"><span class="oc-chip" style="--cc:var(--kind-text)">Text</span><span class="fi-cmt">2 comments</span></div>
-				</div>
-				<div class="feed-item">
-					<div class="fi-top"><span class="who" style="--ac:#14b8a6">M</span><span class="fi-name">mei</span><span class="fi-time">9m</span></div>
-					<div class="fi-thumb"></div>
-					<div class="fi-foot"><span class="oc-chip" style="--cc:var(--kind-image)">Image</span></div>
-				</div>
-				<div class="feed-item ghost">
-					<div class="fi-top"><span class="who" style="--ac:#3b82f6">S</span><span class="fi-name">sam</span><span class="fi-time">now</span></div>
-					<div class="fi-body mono">staging.rovertools.app/preview</div>
-					<div class="fi-foot"><span class="oc-chip" style="--cc:var(--kind-url)">URL</span><span class="fi-new">arrived</span></div>
+				<div class="sp-feed">
+					{
+						feed.map((e) => (
+							<div class={`oc-card${e.active ? ' oc-card--in-clipboard' : ''}`}>
+								{e.kind === 'image' && (
+									<div class="oc-card-media">
+										<img class="oc-card-media-img" src={THUMBS[e.thumb as keyof typeof THUMBS]} alt="" />
+									</div>
+								)}
+								<div class="oc-card-body">
+									<p class={`oc-card-text${e.kind === 'image' ? ' oc-card-text--imgname' : e.kind === 'text' ? '' : ' oc-card-text--clamp'}`}>
+										{e.text}
+									</p>
+									<div class="oc-card-footer">
+										<span class="oc-chips">
+											<span class="oc-chip" style={`--cc:${KIND_COLORS[e.kind]}`}>
+												<Fragment set:html={CHIP_ICONS[e.kind]} />
+												<span class="oc-chip-label">{TYPE_LABELS[e.kind]}</span>
+											</span>
+											{'group' in e && e.group && (
+												<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS[e.group[1]]}`}>
+													<span class="oc-chip-dot" />
+													<span class="oc-chip-label">{e.group[0]}</span>
+												</span>
+											)}
+											<span class="oc-owner-chip">
+												<span class="oc-owner-avatar">{e.owner[0].toUpperCase()}</span>
+												<span class="oc-owner-name">{e.owner}</span>
+											</span>
+										</span>
+										<span class="oc-time">{e.age}</span>
+									</div>
+								</div>
+							</div>
+						))
+					}
 				</div>
 			</div>
 		</div>
@@ -63,7 +116,7 @@
 
 	.sp-grid {
 		display: grid;
-		grid-template-columns: minmax(0,1.05fr) minmax(0,1fr);
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
 		gap: 4rem;
 		align-items: center;
 	}
@@ -99,6 +152,7 @@
 		color: var(--text);
 	}
 
+	/* the panel that holds the feed, drawn like the app's side panels */
 	.feed {
 		background: var(--sidebar-bg);
 		border: 1px solid var(--border);
@@ -126,89 +180,14 @@
 		color: var(--text-muted);
 	}
 
-	.feed-item {
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-sm);
-		padding: 0.65rem 0.75rem;
-		margin-bottom: 0.55rem;
-	}
-
-	.feed-item.ghost {
-		border-color: var(--accent);
-	}
-
-	.fi-top {
+	/* the app card carries all its own styling from landing.css; the feed only has
+	   to stack the cards. The app separates entry cards by a 10px card margin-bottom
+	   (`.oc-grid .oc-card` and the spaces `.sp-feed-card-grid .oc-card`), so the feed
+	   matches that exact rhythm - the grid's own margin rule does not reach here. */
+	.sp-feed {
 		display: flex;
-		align-items: center;
-		gap: 0.45rem;
-		margin-bottom: 0.4rem;
-	}
-
-	.who {
-		width: 18px;
-		height: 18px;
-		border-radius: 50%;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 0.58rem;
-		font-weight: 600;
-		color: #fff;
-		background: color-mix(in srgb, var(--ac) 75%, #000);
-	}
-
-	.fi-name {
-		font-size: 0.74rem;
-		font-weight: 600;
-	}
-
-	.fi-time {
-		margin-left: auto;
-		font-size: 0.66rem;
-		color: var(--text-muted);
-	}
-
-	.fi-body {
-		font-size: 0.76rem;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.mono {
-		font-family: var(--font-mono);
-	}
-
-	.fi-thumb {
-		height: 54px;
-		border-radius: var(--radius-xs);
-		background:
-			linear-gradient(135deg, rgba(20, 184, 166, 0.45), rgba(59, 130, 246, 0.3)),
-			var(--surface-hover);
-		border: 1px solid var(--border-light);
-	}
-
-	.fi-foot {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		margin-top: 0.45rem;
-	}
-
-	.fi-cmt {
-		font-size: 0.66rem;
-		color: var(--text-muted);
-	}
-
-	.fi-new {
-		margin-left: auto;
-		font-family: var(--font-mono);
-		font-size: 0.6rem;
-		color: var(--accent);
-		background: var(--accent-dim);
-		padding: 0.12rem 0.5rem;
-		border-radius: 9px;
+		flex-direction: column;
+		gap: 10px;
 	}
 
 	@media (max-width: 900px) {
