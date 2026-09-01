@@ -3,6 +3,8 @@ title: Clipboard history
 description: Capture, pin, save, group, search and filter everything you copy.
 ---
 
+![The clipboard history screen with entries of several types, the in-clipboard entry outlined in accent, grouped under day headers.](/screenshots/history-main.png)
+
 ## What gets captured
 
 A background watcher checks the clipboard a few times a second and records every new copy: plain text, links, rich HTML (with a plain-text fallback kept alongside), images, files and folders. Copies made by the app itself are never re-captured, and a copy identical to the newest entry is skipped, so the history stays duplicate-free.
@@ -27,11 +29,15 @@ These are two different promises:
 
 ## Groups
 
+![The Group Manager, listing colored groups with rename, recolor and delete controls.](/screenshots/history-groups.png)
+
 Groups are colored tags you define. Create, rename, recolor and delete them from the Group Manager, or assign them from an entry's right-click menu. A group keeps the same color everywhere (you can override it with the color swatches), and deleting a group gives you a 5 second undo toast.
 
 `Pinned` and `Saved` are system groups; those names are reserved.
 
 ## Search and filters
+
+![The filter panel open, with quick, type, cloud, sharing, group and date sections, each option showing a count.](/screenshots/history-filters.png)
 
 Search matches entry content and group names. Filters stack on top:
 
@@ -44,6 +50,8 @@ Search matches entry content and group names. Filters stack on top:
 Every filter option shows the number of items it would leave you *before* you apply it. Your last 8 searches are remembered.
 
 ## Bulk actions
+
+![Selection mode with several cards checked and the bulk action bar along the bottom.](/screenshots/history-bulk.png)
 
 Select multiple entries (with range select) to pin, save, assign groups, share with a space, upload to or remove from your account, remove from a space, or delete, all in one action. <kbd>Esc</kbd> exits selection mode.
 

@@ -5,6 +5,8 @@ description: Optional, end-to-end encrypted sync of your history and notes acros
 
 Keep your clipboard history and notes in sync on every device. End-to-end encrypted, so only you can read them.
 
+![The Account screen: signed-in identity, sync mode, device list with presence, and storage use.](/screenshots/account-screen.png)
+
 ## Setting up
 
 1. Open the **Account** screen and sign up with email and password, or with Google.
@@ -16,6 +18,8 @@ Your password does double duty: it logs you in *and* it derives the key that unl
 ## Sync modes
 
 The mode is per device, so a laptop can sync live while a desktop stays manual.
+
+![The sync mode selector with Realtime, Passive and Manual options.](/screenshots/sync-modes.png)
 
 | Mode | Behavior |
 |---|---|

@@ -5,6 +5,8 @@ description: Every preference in Orange Copy Paste, section by section.
 
 Settings apply to this device. A subset of preferences (theme, layout, sort, groups, and similar) syncs with your account when [cloud sync](/docs/cloud-sync/) is on; anything about how this machine behaves stays local.
 
+![The Settings screen with its sectioned preferences and toggle switches.](/screenshots/settings-screen.png)
+
 ## General
 
 - **Close to system tray:** closing the window minimizes the app instead of quitting.

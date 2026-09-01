@@ -24,6 +24,8 @@ Ciphertexts are also bound to their own item identity, so a ciphertext cannot be
 
 ## Recovery
 
+![The recovery-code screen shown once at setup, with the code and a copy control.](/screenshots/recovery-code.png)
+
 Your **recovery code** is 150 bits of randomness, generated on your device, shown once, and stored nowhere. What the server holds is your UMK wrapped under a key derived from that code, which is useless without it. A password reset re-wraps the same UMK, so your data survives the reset. Regenerating the code revokes the old one.
 
 If you lose both the password and the code and have no signed-in device, your encrypted cloud data is unrecoverable. That is the honest cost of the model.

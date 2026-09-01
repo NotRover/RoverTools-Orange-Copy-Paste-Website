@@ -10,13 +10,17 @@ Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> anywhere. A small popup open
 - **Recent:** your latest 10 entries.
 - **Pinned:** up to 10 pinned entries.
 
+![The quick-paste popup open at the cursor, with the Recent and Pinned tabs and numbered slots.](/screenshots/quick-paste-popup.png)
+
 Each row has a slot number. Press <kbd>1</kbd> through <kbd>9</kbd> (then <kbd>0</kbd>) and that entry is written to the clipboard and pasted into the app you came from. You can also arrow through the list and press <kbd>Enter</kbd>, or click a row.
 
 The number of slots shown is configurable from 3 to 10 (default 3) in [Settings](/docs/settings/). If an entry points at files that no longer exist on disk, the app tells you instead of pasting a broken path.
 
 ## The capture popup
 
-Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> with something selected in any app. The selection is captured to history and a small receipt appears at your cursor showing what was grabbed: the type, a preview, and **Pin** and **Delete** buttons for immediate triage. It dismisses on <kbd>Esc</kbd>, on losing focus, or with the close button.
+Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> with something selected in any app. The selection is captured to history and a small receipt appears at your cursor showing what was grabbed: the type, a preview, and **Pin** and **Delete** buttons for immediate triage.
+
+![The capture receipt popup showing a preview of the grabbed item with Pin and Delete buttons.](/screenshots/capture-receipt.png) It dismisses on <kbd>Esc</kbd>, on losing focus, or with the close button.
 
 Plain <kbd>Ctrl</kbd>+<kbd>C</kbd> still captures to history too, just without the receipt.
 

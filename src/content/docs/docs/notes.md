@@ -5,6 +5,8 @@ description: A full editor next to your clipboard - task lists, tables, code blo
 
 Notes live one click from your clipboard history and share its organizing model: the same pinning, groups, search, filters and bulk actions.
 
+![The notes screen, a masonry of note cards with titles, previews and group tags.](/screenshots/notes-screen.png)
+
 ## The editor
 
 A block-style editor with:
@@ -16,6 +18,8 @@ A block-style editor with:
 - Tables with per-cell backgrounds.
 - Links with autolinking, images, horizontal rules.
 - Text color, multicolor highlight, text alignment, and <kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> indenting.
+
+![A note open in the editor, showing a heading, a task list with checkboxes, a table and a code block.](/screenshots/notes-editor.png)
 
 Notes auto-save while you type; there is no save button to forget.
 
