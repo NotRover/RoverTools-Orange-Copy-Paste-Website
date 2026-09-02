@@ -20,7 +20,6 @@ import SpaceMembers from './mocks/SpaceMembers.astro';
 import SpaceRules from './mocks/SpaceRules.astro';
 import SpacesShot from './mocks/SpacesShot.astro';
 import StorageZone from './mocks/StorageZone.astro';
-import UpdateCard from './mocks/UpdateCard.astro';
 import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 
 
@@ -42,6 +41,40 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 				<strong>The history screen</strong>
 				Sort, filters, search and a three-way layout switch across the top; day groups
 				on a timeline; the entry sitting on your clipboard outlined in orange.
+			</figcaption>
+		</figure>
+
+		<!-- the two popups, shown at the size the app opens them -->
+		<div class="popups reveal">
+			<figure class="popup-shot">
+				<div class="popup-stage">
+					<CapturePopup />
+				</div>
+				<figcaption>
+					<strong>The copy popup</strong>
+					Ctrl+Shift+C shows what the app just captured. Pin it, add it to a group, share it
+					to a space, or delete it, without opening the window.
+				</figcaption>
+			</figure>
+			<figure class="popup-shot">
+				<div class="popup-stage">
+					<QuickPastePopup />
+				</div>
+				<figcaption>
+					<strong>Quick Paste</strong>
+					Ctrl+Shift+V opens it at your cursor. Press a number to paste that entry, arrow
+					through the list, or type to search; the side panel previews whatever is selected.
+				</figcaption>
+			</figure>
+		</div>
+
+		<!-- wide shot: the spaces screen -->
+		<figure class="wide wide--spaces reveal">
+			<SpacesShot />
+			<figcaption>
+				<strong>The Spaces screen</strong>
+				Your spaces on the left, the shared feed in the middle, and the rules and people
+				for that space on the right. Both side panels resize and stay where you put them.
 			</figcaption>
 		</figure>
 
@@ -86,14 +119,24 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 					and it stays linked, openable in place.
 				</figcaption>
 			</figure>
-			<figure class="tile tile--c7 reveal">
-				<div class="mock mock--panel mock--account">
+			<figure class="tile tile--c5 reveal">
+				<div class="mock mock--panel mock--account mock--shrink-sc">
 					<ShortcutsPanel />
 				</div>
 				<figcaption>
 					<strong>Everything has a key</strong>
 					Capture and paste without opening the window. The popup answers to digits,
 					arrows and Esc, and the app lists every binding it uses.
+				</figcaption>
+			</figure>
+			<figure class="tile tile--c7 reveal">
+				<div class="mock mock--bulk">
+					<BulkBar />
+				</div>
+				<figcaption>
+					<strong>Do it to a hundred at once</strong>
+					Tick the items and pin, save, tag, upload or share the lot. The space list
+					checks the ones every selected item is already in.
 				</figcaption>
 			</figure>
 			<figure class="tile tile--c5 reveal">
@@ -118,44 +161,14 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 					without leaving the list.
 				</figcaption>
 			</figure>
-			<figure class="tile tile--c7 tile--full reveal">
-				<div class="mock mock--bulk">
-					<BulkBar />
+			<figure class="tile tile--c7 reveal">
+				<div class="mock mock--panel mock--account mock--shrink-st">
+					<StorageZone />
 				</div>
 				<figcaption>
-					<strong>Do it to a hundred at once</strong>
-					Tick the items and pin, save, tag, upload or share the lot. The space list
-					checks the ones every selected item is already in.
-				</figcaption>
-			</figure>
-			<figure class="tile tile--c5 reveal">
-				<div class="mock mock--panel">
-					<UpdateCard />
-				</div>
-				<figcaption>
-					<strong>Signed updates</strong>
-					A bundle installs only if its signature matches the key baked into the app, and
-					nothing installs until you say so.
-				</figcaption>
-			</figure>
-			<figure class="tile tile--c4 reveal">
-				<div class="mock mock--popup">
-					<QuickPastePopup />
-				</div>
-				<figcaption>
-					<strong>Quick Paste</strong>
-					Ctrl+Shift+V opens it at your cursor. Press a digit and that item pastes into
-					whatever you were typing in.
-				</figcaption>
-			</figure>
-			<figure class="tile tile--c4 reveal">
-				<div class="mock mock--popup">
-					<CapturePopup />
-				</div>
-				<figcaption>
-					<strong>The copy popup</strong>
-					Ctrl+Shift+C shows what the app just captured, so you can pin, save or drop it
-					without opening the window.
+					<strong>You can see what you use</strong>
+					The quota sits in the open, per account, and every byte of it was encrypted
+					before it left the machine.
 				</figcaption>
 			</figure>
 			<figure class="tile tile--c4 reveal">
@@ -187,7 +200,7 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 					while your desktop only syncs when you ask.
 				</figcaption>
 			</figure>
-			<figure class="tile tile--c4 reveal">
+			<figure class="tile tile--c6 reveal">
 				<div class="mock mock--panel mock--pop">
 					<InvitesPopout />
 				</div>
@@ -197,7 +210,7 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 					invites you sent out all wait in one panel.
 				</figcaption>
 			</figure>
-			<figure class="tile tile--c4 tile--hug reveal">
+			<figure class="tile tile--c6 reveal">
 				<div class="mock mock--panel mock--pop">
 					<NotificationsPopout />
 				</div>
@@ -207,27 +220,7 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 					it arrived on, or filter down to the kind you came for.
 				</figcaption>
 			</figure>
-			<figure class="tile tile--c8 reveal">
-				<div class="mock mock--panel mock--account">
-					<StorageZone />
-				</div>
-				<figcaption>
-					<strong>You can see what you use</strong>
-					The quota sits in the open, per account, and every byte of it was encrypted
-					before it left the machine.
-				</figcaption>
-			</figure>
 		</div>
-
-		<!-- wide shot: the spaces screen -->
-		<figure class="wide wide--spaces reveal">
-			<SpacesShot />
-			<figcaption>
-				<strong>The Spaces screen</strong>
-				Your spaces on the left, the shared feed in the middle, and the rules and people
-				for that space on the right. Both side panels resize and stay where you put them.
-			</figcaption>
-		</figure>
 	</div>
 </section>
 
@@ -335,6 +328,10 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 
 .tile--c5 {
 		grid-column: span 5;
+	}
+
+.tile--c6 {
+		grid-column: span 6;
 	}
 
 .tile--c7 {
@@ -459,19 +456,52 @@ figcaption {
 		min-height: 186px;
 	}
 
-/* ---- Quick Paste popup: 340px wide, the app's own metrics ---- */
+/* ---- the copy and paste popups, drawn at the app's own window sizes ---- */
 
-.mock--popup {
+/* Out of the bento and shown as their own pair. Each renders at native app px
+	   (copy 328, paste 528) and the whole stage scales by `--pz` together, so the
+	   two keep their real size relationship; the captions sit outside the zoom and
+	   stay full size. They sit side by side, wrapping to a stack when the pair no
+	   longer fits, and `--pz` only drops once the wide one alone outgrows the
+	   column. */
+
+.popups {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 		align-items: center;
-		padding: 0.9rem 0;
+		gap: 1.8rem 3rem;
+		margin: 0 0 1.8rem;
+		--pz: 1;
 	}
 
-@media (prefers-reduced-motion: reduce) {
-		.pp-cursor,
-		.pp-ring {
-			animation: none;
-			opacity: 0;
-		}
+.popup-shot {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 0;
+	}
+
+.popup-stage {
+		display: inline-flex;
+		zoom: var(--pz, 1);
+	}
+
+.popup-shot figcaption {
+		padding: 0.9rem 0.2rem 0;
+		max-width: 30rem;
+		font-size: 0.85rem;
+		text-align: center;
+		color: var(--text-secondary);
+	}
+
+.popup-shot figcaption strong {
+		display: block;
+		margin-bottom: 0.25rem;
+		font-family: var(--font-display);
+		font-size: 0.95rem;
+		letter-spacing: -0.01em;
+		color: var(--text);
 	}
 
 /* the account screen stacks its zones down one column at a 14px rhythm */
@@ -521,6 +551,7 @@ figcaption {
 		.tile--c3,
 		.tile--c4,
 		.tile--c5,
+		.tile--c6,
 		.tile--c7,
 		.tile--c8 {
 			grid-column: span 1;
@@ -668,6 +699,27 @@ figcaption {
 		zoom: var(--z, 1);
 	}
 
+/* The shortcut list (391) and the storage panel (578) each pair with a shorter
+	   neighbour - the bulk bar (283) and the right-click menu (389) - that cannot
+	   grow to meet them. Rather than leave a hole beside the shorter one, the tall
+	   mock is scaled down to its partner's height while they share a row. Below
+	   600 every tile is its own full-width row, so the scaling lifts and each mock
+	   draws at full size. */
+.mock--shrink-sc {
+		--z: 0.66;
+	}
+
+.mock--shrink-st {
+		--z: 0.62;
+	}
+
+@media (max-width: 600px) {
+		.mock--shrink-sc,
+		.mock--shrink-st {
+			--z: 1;
+		}
+	}
+
 /* A stretch panel has no fixed width, but its head does have a floor - a
 	   label beside a three-way switch. Scaled just enough to keep that on one
 	   line in a narrow two-column tile, which is what the app's wide pane gives
@@ -685,15 +737,33 @@ figcaption {
 		}
 	}
 
-@media (min-width: 601px) and (max-width: 830px) {
-		.mock--popup {
-			--z: 0.82;
+@media (max-width: 620px) {
+		.popups {
+			--pz: 0.82;
 		}
 	}
 
-@media (min-width: 601px) and (max-width: 723px) {
-		.mock--popup {
-			--z: 0.72;
+@media (max-width: 540px) {
+		.popups {
+			--pz: 0.7;
+		}
+	}
+
+@media (max-width: 460px) {
+		.popups {
+			--pz: 0.6;
+		}
+	}
+
+@media (max-width: 400px) {
+		.popups {
+			--pz: 0.52;
+		}
+	}
+
+@media (max-width: 350px) {
+		.popups {
+			--pz: 0.45;
 		}
 	}
 
@@ -865,21 +935,4 @@ figcaption {
 		}
 	}
 
-@media (max-width: 430px) {
-		.mock--popup {
-			--z: 0.86;
-		}
-	}
-
-@media (max-width: 390px) {
-		.mock--popup {
-			--z: 0.78;
-		}
-	}
-
-@media (max-width: 360px) {
-		.mock--popup {
-			--z: 0.7;
-		}
-	}
 </style>

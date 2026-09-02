@@ -1,35 +1,44 @@
 ---
 /**
- * The capture popup that Ctrl+Shift+C shows.
- *
- * Drawn at the app's own size: the page that places it does the scaling.
+ * The copy popup that Ctrl+Shift+C shows, matching the app's redesigned
+ * copy-popup (copyPopup.css / CopyPopup.tsx): "Copied" title with the type
+ * pill, a mono preview that fills the middle, and a CardMenu-style action row
+ * (Pin, Groups, Share, then Delete past a divider) with the label ahead of the
+ * icon. Drawn at the app's visible container size, 328x248 - the 340x260 window
+ * less its 6px transparent margin. The page that places it does the scaling.
  */
 import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 ---
 
 <div class="cp">
-	<div class="cp-head">
+	<div class="cp-header">
 		<div class="cp-head-left">
 			<span class="cp-title">Copied</span>
-			<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+			<div class="cp-chips">
+				<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+			</div>
 		</div>
-		<span class="cp-close" set:html={SRC_ICONS.close10} />
+		<button class="cp-close" set:html={SRC_ICONS.close10} />
 	</div>
-	<div class="cp-preview"><p class="cp-preview-text">The quarterly numbers land Thursday</p></div>
+	<div class="cp-preview">
+		<p class="cp-preview-text">The quarterly numbers land Thursday. Loop finance in before the board call and confirm the travel line.</p>
+	</div>
 	<div class="cp-actions">
-		<span class="cp-item"><Fragment set:html={MENU_ICONS.pin} />Pin</span>
-		<span class="cp-item"><Fragment set:html={MENU_ICONS.star} />Save</span>
-		<span class="cp-sep"></span>
-		<span class="cp-item cp-item--danger"><Fragment set:html={MENU_ICONS.trash} />Delete</span>
+		<button class="cp-item cp-item--pin"><span>Pin</span><Fragment set:html={MENU_ICONS.pin} /></button>
+		<button class="cp-item cp-item--groups"><span>Groups</span><Fragment set:html={MENU_ICONS.tag} /></button>
+		<button class="cp-item cp-item--share"><span>Share</span><Fragment set:html={MENU_ICONS.share} /></button>
+		<span class="cp-divider"></span>
+		<button class="cp-item cp-item--danger"><span>Delete</span><Fragment set:html={MENU_ICONS.trash} /></button>
 	</div>
 </div>
 
 <style>
-	/* ---- capture popup ---- */
+	/* ---- copy popup: the app's copyPopup.css, at the visible container size ---- */
 
 	.cp {
-		width: 340px;
+		width: 328px;
 		height: 248px;
+		box-sizing: border-box;
 		background: var(--bg);
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
@@ -42,10 +51,10 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		line-height: normal;
 	}
 
-	.cp-head {
+	.cp-header {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		gap: 8px;
 		padding: 2px;
 	}
 
@@ -53,12 +62,24 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		display: flex;
 		align-items: center;
 		gap: 8px;
+		flex: 1;
+		min-width: 0;
 	}
 
 	.cp-title {
 		font-size: 12.5px;
 		font-weight: 600;
 		color: var(--accent);
+		flex-shrink: 0;
+	}
+
+	.cp-chips {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
 	}
 
 	.cp-close {
@@ -72,8 +93,11 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		justify-content: center;
 		border-radius: 6px;
 		flex-shrink: 0;
+		padding: 0;
 	}
 
+	/* fills the room between the chips and the actions, the way flex:1 does in
+	   the app - a slightly-off height shrinks the preview, never the chrome */
 	.cp-preview {
 		flex: 1;
 		min-height: 0;
@@ -81,6 +105,7 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		border: 1px solid var(--border);
 		border-radius: var(--radius-xs);
 		padding: 8px 10px;
+		overflow: hidden;
 	}
 
 	.cp-preview-text {
@@ -91,9 +116,12 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
 	}
 
+	/* CardMenu-style actions: borderless, neutral at rest, the label before the
+	   icon; Delete reads red at rest, set off by a divider. */
 	.cp-actions {
 		display: flex;
-		gap: 1px;
+		align-items: center;
+		gap: 2px;
 	}
 
 	.cp-item {
@@ -102,20 +130,38 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		align-items: center;
 		justify-content: center;
 		gap: 6px;
-		padding: 6px 9px;
+		min-width: 0;
+		padding: 7px 6px;
+		border: none;
 		border-radius: var(--radius-xs);
-		color: var(--text);
+		background: transparent;
+		color: var(--text-secondary);
 		font-size: 12px;
+		font-weight: 500;
+		font-family: inherit;
+	}
+
+	.cp-item span {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.cp-item :global(svg) {
+		width: 13px;
+		height: 13px;
+		flex-shrink: 0;
 	}
 
 	.cp-item--danger {
-		color: var(--text);
+		color: var(--danger);
 	}
 
-	.cp-sep {
+	.cp-divider {
 		width: 1px;
 		align-self: stretch;
+		margin: 5px 3px;
 		background: var(--border);
-		margin: 3px 2px;
+		flex-shrink: 0;
 	}
 </style>
