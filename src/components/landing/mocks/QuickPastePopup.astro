@@ -1,91 +1,138 @@
 ---
 /**
- * The Quick Paste popup, 340px wide, at the app's own metrics.
+ * The Quick Paste popup, matching the app's redesigned paste-popup
+ * (pastePopup.css / PastePopup.tsx) in its default wide state: header with the
+ * count pill, Recent/Pinned tabs, preview toggle and close; a search row; the
+ * item list beside the side preview panel; and the keyboard-hint footer.
  *
- * Drawn at the app's own size: the page that places it does the scaling.
+ * Drawn at the app's visible container size for the wide window - 528x528, the
+ * 540x540 window less its 6px transparent margin - then scaled to fit the tile.
+ * Default slots is 3, so rows past the third carry an empty dashed badge.
  */
-import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
+import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS, TYPE_LABELS, THUMBS } from '../app-parts';
+
+const rows = [
+	{ n: 1, kind: 'text', text: 'Meet at the station, platform 4, 9:40. Bring the badge for the side door.', selected: true },
+	{ n: 2, kind: 'url', text: 'github.com/Spectrewolf8/RoverTools-Releases', time: '1h', pinned: true },
+	{ n: 3, kind: 'image', text: '#a1b2c3d4 Image Aug 21, 2:45 PM', thumb: 'ui', time: '4d' },
+	{ kind: 'document', text: 'quarterly-report.pdf', time: '3d' },
+	{ kind: 'folder', text: '/home/rio/projects/orangecp/assets', time: '6d' },
+	{ kind: 'html', text: 'Release checklist: bump the version, sign both bundles', time: '1w' },
+	{ kind: 'text', text: 'Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.', time: '1w' },
+	{ kind: 'file', text: 'brand-assets (3 files)', time: '2w' },
+	{ kind: 'url', text: 'staging.rovertools.app/preview/920x560', time: '2w' },
+	{ kind: 'text', text: 'sk-live placeholder token, rotate before the beta ships', time: '3w' },
+] as const;
 ---
 
 <div class="pp">
-	<div class="pp-header">
-		<div class="pp-header-left">
-			<span class="pp-title">Quick Paste</span>
-			<span class="pp-count">5</span>
+		<div class="pp-header">
+			<div class="pp-header-left">
+				<span class="pp-title">Quick Paste</span>
+				<span class="pp-count">10</span>
+			</div>
+			<div class="pp-tabs">
+				<span class="pp-tab pp-tab--active">Recent<span class="pp-tab-count">10</span></span>
+				<span class="pp-tab">Pinned<span class="pp-tab-count">2</span></span>
+			</div>
+			<span class="pp-toggle is-open" aria-hidden="true">
+				<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2" /><line x1="15" y1="4" x2="15" y2="20" /><rect x="15" y="4" width="6" height="16" fill="currentColor" opacity="0.25" stroke="none" /></svg>
+			</span>
+			<span class="pp-close" set:html={SRC_ICONS.close10} />
 		</div>
-		<div class="pp-tabs">
-			<span class="pp-tab pp-tab--active">Recent<span class="pp-tab-count">5</span></span>
-			<span class="pp-tab">Pinned<span class="pp-tab-count">2</span></span>
+
+		<div class="pp-search">
+			<svg class="pp-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+			<span class="pp-search-ph">Search 10 clips...</span>
 		</div>
-		<span class="pp-close" set:html={SRC_ICONS.close10} />
+
+		<div class="pp-body">
+			<div class="pp-list">
+				{
+					rows.map((r) => (
+						<div class={`pp-item${r.selected ? ' pp-item--selected' : ''}`}>
+							<span class={`pp-badge${r.n ? '' : ' pp-badge--none'}`}>{r.n ?? ''}</span>
+							{r.kind === 'image' ? (
+								<img class="pp-thumb" src={THUMBS[r.thumb as keyof typeof THUMBS]} alt="" />
+							) : (
+								<span class="oc-chip" style={`--cc:${KIND_COLORS[r.kind]}`}>
+									<Fragment set:html={CHIP_ICONS[r.kind]} />
+									<span class="oc-chip-label">{TYPE_LABELS[r.kind]}</span>
+								</span>
+							)}
+							<span class="pp-row-preview">{r.text}</span>
+							{r.selected ? (
+								<span class="pp-row-actions">
+									<span class="pp-ia pp-ia--pin"><Fragment set:html={MENU_ICONS.pin} /></span>
+									<span class="pp-ia pp-ia--copy"><Fragment set:html={MENU_ICONS.copy} /></span>
+									<span class="pp-ia pp-ia--danger"><Fragment set:html={MENU_ICONS.trash} /></span>
+								</span>
+							) : (
+								<span class="pp-item-meta">
+									{'pinned' in r && r.pinned && <span class="pp-pin" set:html={CHIP_ICONS.pin} />}
+									<span class="pp-time">{r.time}</span>
+								</span>
+							)}
+						</div>
+					))
+				}
+			</div>
+
+			<div class="pp-preview">
+				<div class="pp-preview-kind">Preview</div>
+				<div class="pp-preview-media">
+					<div class="pp-preview-text">Meet at the station, platform 4, 9:40. Bring the badge for the side door.</div>
+					<span class="pp-preview-measure">73 chars</span>
+				</div>
+				<div class="pp-preview-meta">
+					<span class="pp-preview-group" style={`background:${KIND_COLORS.url}1f;color:#14b8a6`}><span class="pp-preview-group-dot"></span>work</span>
+				</div>
+				<button class="pp-preview-paste">Paste <kbd>Enter</kbd></button>
+				<div class="pp-preview-actions">
+					<span class="pp-pa pp-pa--pin"><span>Pin</span><Fragment set:html={MENU_ICONS.pin} /></span>
+					<span class="pp-pa pp-pa--copy"><span>Copy</span><Fragment set:html={MENU_ICONS.copy} /></span>
+					<span class="pp-pa-divider"></span>
+					<span class="pp-pa pp-pa--danger"><span>Delete</span><Fragment set:html={MENU_ICONS.trash} /></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="pp-hints">
+			<span class="pp-hint"><kbd>1-3</kbd> paste</span>
+			<span class="pp-hint"><kbd><Fragment set:html={SRC_ICONS.arrowUp10} />Up</kbd><kbd><Fragment set:html={SRC_ICONS.arrowDown10} />Dn</kbd> move</span>
+			<span class="pp-hint"><kbd>Enter</kbd> paste</span>
+			<span class="pp-hint"><kbd>type</kbd> search</span>
+		</div>
 	</div>
-	<div class="pp-list">
-		<div class="pp-item">
-			<span class="pp-badge">1</span>
-			<div class="pp-wrap">
-				<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-				<span class="pp-filename">Meet at the station, platform 4, 9:40...</span>
-			</div>
-			<span class="pp-meta"><span class="pp-time">2m</span></span>
-		</div>
-		<div class="pp-item pp-item--selected">
-			<span class="pp-badge">2</span>
-			<div class="pp-wrap">
-				<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
-				<span class="pp-filename">github.com/Spectrewolf8/RoverTools-Rel...</span>
-			</div>
-			<span class="pp-meta"><span class="pp-pin" set:html={CHIP_ICONS.pin} /><span class="pp-time">1h</span></span>
-		</div>
-		<div class="pp-item">
-			<span class="pp-badge">3</span>
-			<div class="pp-wrap">
-				<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
-				<span class="pp-filename">quarterly-report.pdf</span>
-			</div>
-			<span class="pp-meta"><span class="pp-time">3d</span></span>
-		</div>
-		<div class="pp-item">
-			<span class="pp-badge">4</span>
-			<div class="pp-wrap">
-				<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
-				<span class="pp-filename">#a1b2c3d4 Image Aug 21, 2:45 PM</span>
-			</div>
-			<span class="pp-meta"><span class="pp-time">4d</span></span>
-		</div>
-		<div class="pp-item">
-			<span class="pp-badge">5</span>
-			<div class="pp-wrap">
-				<span class="oc-chip" style={`--cc:${KIND_COLORS.folder}`}><Fragment set:html={CHIP_ICONS.folder} /><span class="oc-chip-label">Folder</span></span>
-				<span class="pp-filename">/home/rio/projects/orangecp/assets</span>
-			</div>
-			<span class="pp-meta"><span class="pp-time">6d</span></span>
-		</div>
-	</div>
-	<span class="pp-cursor" aria-hidden="true">
-		<span class="pp-ring"></span>
-		<svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 2l0 17 4.2-3.6 2.6 6 3-1.3-2.6-5.9 6-.6z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg>
-	</span>
-</div>
 
 <style>
+	/* The paste popup's visible box is 528x528 (the 540 wide window less its 6px
+	   margin), drawn at that size; the .mock--popup-wide `--z` ladder in
+	   Showcase.astro scales the whole block down into the tile. */
 	.pp {
-		position: relative;
-		width: 340px;
+		box-sizing: border-box;
+		width: 528px;
+		height: 528px;
+		display: flex;
+		flex-direction: column;
 		background: var(--bg);
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
 		box-shadow: var(--shadow);
-		padding: 10px 10px 4px;
+		padding: 10px 10px 6px;
 		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 		font-size: 13px;
 		line-height: normal;
 	}
 
+	/* ---- header ---- */
+
 	.pp-header {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 6px;
 		padding: 2px 2px 6px;
+		flex-shrink: 0;
 	}
 
 	.pp-header-left {
@@ -98,6 +145,7 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		font-size: 12.5px;
 		font-weight: 600;
 		color: var(--accent);
+		white-space: nowrap;
 	}
 
 	.pp-count {
@@ -116,7 +164,6 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		display: flex;
 		gap: 1px;
 		margin-left: auto;
-		margin-right: 6px;
 		background: var(--surface);
 		border: 1px solid var(--border);
 		border-radius: 6px;
@@ -144,7 +191,7 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		font-size: 9px;
 		font-weight: 600;
 		color: var(--text-muted);
-		min-width: 14px;
+		min-width: 12px;
 		text-align: center;
 	}
 
@@ -152,6 +199,7 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		color: var(--accent);
 	}
 
+	.pp-toggle,
 	.pp-close {
 		width: 22px;
 		height: 22px;
@@ -165,13 +213,64 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		flex-shrink: 0;
 	}
 
+	.pp-toggle.is-open {
+		color: var(--accent);
+		border-color: var(--accent);
+		background: var(--accent-dim);
+	}
+
+	/* ---- search ---- */
+
+	.pp-search {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		padding: 0 9px;
+		height: 32px;
+		margin: 0 2px 7px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		color: var(--text-muted);
+		flex-shrink: 0;
+	}
+
+	.pp-search-icon {
+		flex-shrink: 0;
+	}
+
+	.pp-search-ph {
+		flex: 1;
+		min-width: 0;
+		font-size: 12.5px;
+		color: var(--text-muted);
+	}
+
+	/* ---- body: list + preview ---- */
+
+	.pp-body {
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		gap: 8px;
+	}
+
 	.pp-list {
 		display: flex;
 		flex-direction: column;
-		gap: 3px;
+		flex: 1;
+		min-width: 0;
+		min-height: 0;
+		overflow: hidden;
+		padding-right: 3px;
+	}
+
+	.pp-list > .pp-item + .pp-item {
+		margin-top: 3px;
 	}
 
 	.pp-item {
+		position: relative;
 		display: flex;
 		align-items: center;
 		gap: 8px;
@@ -182,16 +281,11 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		background: var(--surface);
 		color: var(--text);
 		font-size: 12px;
+		flex-shrink: 0;
 	}
-
-	/* selected row: accent border, and the badge picks up accent - no fill */
 
 	.pp-item--selected {
 		border-color: var(--accent);
-	}
-
-	.pp-item--selected .pp-badge {
-		color: var(--accent);
 	}
 
 	.pp-badge {
@@ -210,27 +304,37 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		flex-shrink: 0;
 	}
 
-	.pp-wrap {
-		flex: 1;
-		min-width: 0;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		overflow: hidden;
+	.pp-item--selected .pp-badge {
+		color: var(--accent);
 	}
 
-	.pp-filename {
-		font-size: 11px;
-		color: var(--text-secondary);
-		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-		white-space: nowrap;
+	.pp-badge--none {
+		border-style: dashed;
+		opacity: 0.4;
+	}
+
+	.pp-thumb {
+		width: 26px;
+		height: 26px;
+		border-radius: 5px;
+		object-fit: cover;
+		flex-shrink: 0;
+		border: 1px solid var(--border);
+		background: var(--surface-hover);
+	}
+
+	.pp-row-preview {
+		flex: 1;
+		min-width: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		min-width: 0;
-		flex: 1;
+		white-space: nowrap;
+		font-size: 12px;
+		line-height: 1.4;
+		color: var(--text);
 	}
 
-	.pp-meta {
+	.pp-item-meta {
 		display: flex;
 		align-items: center;
 		gap: 4px;
@@ -242,49 +346,244 @@ import { CHIP_ICONS, KIND_COLORS, SRC_ICONS } from '../app-parts';
 		display: flex;
 	}
 
+	.pp-pin :global(svg) {
+		width: 9px;
+		height: 9px;
+	}
+
 	.pp-time {
 		font-size: 10px;
 		color: var(--text-muted);
 		white-space: nowrap;
 	}
 
-	/* looping cursor that clicks slot 2 */
-
-	.pp-cursor {
-		position: absolute;
-		top: 0;
-		left: 0;
-		pointer-events: none;
-		animation: ppCursor 6.5s ease-in-out infinite;
-		filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+	/* inline row actions, shown on the selected row in place of the timestamp */
+	.pp-row-actions {
+		display: flex;
+		align-items: center;
+		gap: 2px;
+		flex-shrink: 0;
+		margin-left: 2px;
 	}
 
-	.pp-ring {
-		position: absolute;
-		top: -5px;
-		left: -5px;
+	.pp-ia {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 24px;
 		height: 24px;
+		border-radius: var(--radius-xs);
+		color: var(--text-secondary);
+	}
+
+	.pp-ia :global(svg) {
+		width: 12px;
+		height: 12px;
+	}
+
+	.pp-ia--pin {
+		color: var(--accent);
+	}
+
+	.pp-ia--danger {
+		color: var(--danger);
+	}
+
+	/* ---- side preview panel ---- */
+
+	.pp-preview {
+		width: 228px;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 7px;
+		padding: 9px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		background: var(--surface);
+		overflow: hidden;
+	}
+
+	.pp-preview-kind {
+		font-size: 9px;
+		font-weight: 700;
+		letter-spacing: 0.6px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		flex-shrink: 0;
+	}
+
+	.pp-preview-media {
+		position: relative;
+		flex: 1;
+		min-height: 0;
+		width: 100%;
+		display: flex;
+		overflow: hidden;
+		border-radius: var(--radius-xs);
+		background: var(--bg);
+		border: 1px solid var(--border);
+	}
+
+	.pp-preview-text {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		padding: 8px;
+		font-size: 11px;
+		line-height: 1.5;
+		color: var(--text-secondary);
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+	}
+
+	.pp-preview-measure {
+		position: absolute;
+		right: 8px;
+		bottom: 6px;
+		font-size: 9px;
+		font-weight: 600;
+		letter-spacing: 0.2px;
+		color: var(--text-secondary);
+		text-shadow: 0 1px 3px var(--bg);
+	}
+
+	.pp-preview-meta {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		flex-shrink: 0;
+	}
+
+	.pp-preview-group {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		height: 18px;
+		padding: 0 7px 0 6px;
+		border-radius: var(--radius-xs);
+		font-size: 10px;
+		font-weight: 600;
+		letter-spacing: 0.2px;
+	}
+
+	.pp-preview-group-dot {
+		width: 6px;
+		height: 6px;
 		border-radius: 50%;
-		border: 2px solid var(--accent);
-		opacity: 0;
-		animation: ppRing 6.5s ease-out infinite;
+		background: currentColor;
+		opacity: 0.7;
+		flex-shrink: 0;
 	}
 
-	@keyframes ppCursor {
-		0%, 12% { transform: translate(210px, 190px); opacity: 0; }
-		22% { opacity: 1; }
-		38% { transform: translate(190px, 60px); opacity: 1; }
-		52%, 60% { transform: translate(176px, 92px); opacity: 1; }
-		56% { transform: translate(176px, 92px) scale(0.85); }
-		80% { transform: translate(210px, 190px); opacity: 1; }
-		88%, 100% { transform: translate(210px, 190px); opacity: 0; }
+	.pp-preview-paste {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		height: 30px;
+		border: none;
+		border-radius: var(--radius-xs);
+		background: var(--accent);
+		color: #fff;
+		font-size: 12px;
+		font-weight: 600;
+		flex-shrink: 0;
 	}
 
-	@keyframes ppRing {
-		0%, 54% { opacity: 0; transform: scale(0.4); }
-		56% { opacity: 0.9; transform: scale(0.5); }
-		64% { opacity: 0; transform: scale(1.5); }
-		100% { opacity: 0; }
+	.pp-preview-paste kbd {
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+		font-size: 10px;
+		font-weight: 600;
+		background: rgba(255, 255, 255, 0.22);
+		border-radius: 4px;
+		padding: 1px 5px;
+	}
+
+	.pp-preview-actions {
+		display: flex;
+		align-items: center;
+		gap: 2px;
+		flex-shrink: 0;
+	}
+
+	.pp-pa {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		height: 30px;
+		border-radius: var(--radius-xs);
+		color: var(--text-secondary);
+		font-size: 12px;
+		font-weight: 500;
+	}
+
+	.pp-pa span {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.pp-pa :global(svg) {
+		width: 13px;
+		height: 13px;
+		flex-shrink: 0;
+	}
+
+	.pp-pa--pin {
+		color: var(--accent);
+	}
+
+	.pp-pa--danger {
+		color: var(--danger);
+	}
+
+	.pp-pa-divider {
+		width: 1px;
+		align-self: stretch;
+		margin: 4px 3px;
+		background: var(--border);
+		flex-shrink: 0;
+	}
+
+	/* ---- hint footer ---- */
+
+	.pp-hints {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 6px 4px 2px;
+		flex-shrink: 0;
+	}
+
+	.pp-hint {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		font-size: 10px;
+		color: var(--text-muted);
+	}
+
+	.pp-hint kbd {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 3px;
+		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+		font-size: 10px;
+		font-weight: 600;
+		color: var(--text-secondary);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		padding: 1px 5px;
+		min-width: 16px;
+		text-align: center;
+	}
+
+	.pp-hint kbd :global(svg) {
+		width: 10px;
+		height: 10px;
 	}
 </style>
