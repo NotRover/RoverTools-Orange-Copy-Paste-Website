@@ -17,21 +17,34 @@ Both popup hotkeys are toggles: pressing the combination again while the popup i
 
 | Keys | Action |
 |---|---|
-| <kbd>1</kbd>-<kbd>9</kbd>, <kbd>0</kbd> | Paste the entry in that slot. |
+| <kbd>1</kbd>-<kbd>9</kbd>, <kbd>0</kbd> | Paste the entry in that slot (while the search box is empty). |
 | <kbd>Up</kbd> / <kbd>Down</kbd> | Navigate entries. |
 | <kbd>Enter</kbd> | Paste the selected entry. |
-| <kbd>Left</kbd> / <kbd>Right</kbd> | Switch between Recent and Pinned. |
-| <kbd>Tab</kbd> | Toggle Recent / Pinned. |
+| <kbd>Alt</kbd>+<kbd>Enter</kbd> | Paste the selected entry and remove it from Recent. |
+| <kbd>Tab</kbd> | Switch between Recent and Pinned. |
+| <kbd>Space</kbd> | Toggle the preview panel (while the search box is empty). |
 | <kbd>Esc</kbd> | Close the popup. |
+
+## Inside the capture popup
+
+The receipt shown after <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> takes these keys:
+
+| Keys | Action |
+|---|---|
+| <kbd>P</kbd> | Pin the captured entry. |
+| <kbd>S</kbd> | Save it. |
+| <kbd>G</kbd> | Open the groups picker. |
+| <kbd>Del</kbd> / <kbd>Backspace</kbd> | Delete it. |
+| <kbd>Esc</kbd> | Close the popup, or the groups picker if it is open. |
 
 ## On clipboard cards
 
-![A clipboard card with its right-click menu open, listing Copy, Pin, Save, Groups and Delete.](/screenshots/card-menu.png)
+![A clipboard card with its right-click menu open.](/screenshots/card-menu.png)
 
 | Input | Action |
 |---|---|
 | Click | Copy the entry back to the clipboard. |
-| Right-click | Context menu: Copy, Pin, Save, Groups, Delete. |
+| Right-click | Context menu: Copy, Pin, Save, Groups, Share, upload to or remove from cloud, View, and Delete. |
 | Type chip | Expand or collapse a multi-file list. |
 | +N chip | Show overflowing group tags. |
 

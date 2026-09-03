@@ -23,17 +23,17 @@ The `.deb` declares `xdotool | wtype` as a dependency and recommends the rest.
 
 ## Wayland and global hotkeys
 
-Built-in global hotkeys rely on X11 grabs, so they do not fire on native Wayland. The fix is one keybinding in your compositor:
+Built-in global hotkeys rely on X11 grabs, so they do not fire on native Wayland. The fix is one keybinding in your compositor that runs the app with a `--trigger` flag:
 
 ```bash
-rovertools --trigger paste
+orange-copy-paste --trigger paste
 ```
 
 ```bash
-rovertools --trigger copy
+orange-copy-paste --trigger copy
 ```
 
-Bind those to whatever keys you like. The running app picks the trigger up and shows the same popup the hotkey would. Cursor-anchored placement, always-on-top and transparency vary by compositor; where they are unavailable, popups center on the active monitor instead.
+Use the app's own binary name in place of `orange-copy-paste`: it is whatever the `Exec=` line points at in the installed `.desktop` file (for a `.deb` or `.rpm`), or the AppImage's own filename. Bind those to whatever keys you like. The running app picks the trigger up and shows the same popup the hotkey would. Cursor-anchored placement, always-on-top and transparency vary by compositor; where they are unavailable, popups center on the active monitor instead.
 
 ## Known gaps on Linux
 

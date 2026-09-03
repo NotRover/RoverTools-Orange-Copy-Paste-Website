@@ -33,9 +33,9 @@ Spaces are not affected by the mode: what you share to a space goes out right aw
 
 Clipboard entries, notes, and your preferences (theme, layout, sort, groups and their colors, and similar). Device-local choices like the sync mode itself, per-space auto-copy, and window position deliberately stay on each machine.
 
-## Files and images
+## Files, images and folders
 
-Images and files ride along, up to **5 MB per clipboard entry** (the sum of all files in one copy). An entry over the cap is skipped and the app tells you; nothing is dropped silently. Accounts start with **50 MB** of encrypted file storage, with a heads-up when you reach 90%. Text and notes do not count against it.
+Images, files, and whole folders ride along, up to **5 MB per clipboard entry** (the sum of everything in one copy). A folder syncs as a single entry and unpacks on the other device. An entry over the cap is skipped and the app tells you; nothing is dropped silently. Accounts start with **50 MB** of encrypted file storage, with a heads-up when you reach 90%. Text and notes do not count against it.
 
 The Account screen shows your storage, synced item counts by type, and a cloud view of everything stored.
 
@@ -43,9 +43,19 @@ The Account screen shows your storage, synced item counts by type, and a cloud v
 
 Each installation registers as a device. The Account screen lists them with live online/offline presence, and you can revoke a device you no longer use.
 
+## Deleting and removing
+
+Deleting a synced entry asks you to confirm first, because the removal travels to your other devices as well. The prompt spells out what the delete affects, and a *Don't ask again* option turns it off:
+
+- **Your own items** leave all your synced devices.
+- **An item someone shared with you** leaves all your devices, but stays in the space for everyone else.
+- **An item you shared into a space** also leaves that space for everyone.
+
+*Remove from cloud* is different: it takes an item, or a whole selection, off the server and your other devices, but keeps the copy on the device you are on. Use it to free up cloud space without losing your local history.
+
 ## Offline and conflicts
 
-Offline changes queue locally and drain in order when you reconnect. Conflicts resolve to the most recent edit. Deleting an entry removes it from your other devices too, even if they were offline at the time.
+Offline changes queue locally and drain in order when you reconnect. Conflicts resolve to the most recent edit. A delete you make offline is queued like any other change and reaches your other devices once you are back online.
 
 ## Forgot your password?
 
