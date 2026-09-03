@@ -7,7 +7,7 @@ description: The two popups that make the clipboard fast - paste by number, capt
 
 Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> anywhere. A small popup opens at your cursor with two tabs:
 
-- **Recent:** your latest 10 entries.
+- **Recent:** your recent clipboard entries, newest first, as a scrollable searchable list.
 - **Pinned:** up to 10 pinned entries.
 
 ![The quick-paste popup open at the cursor, with the Recent and Pinned tabs and numbered slots.](/screenshots/quick-paste-popup.png)

@@ -20,13 +20,14 @@ New members can read the space's existing history: everyone in a space can see w
 
 - **By hand:** share any entry or selection from the clipboard or notes screen. This is the default and the only path until you opt into more.
 - **Send filters (off by default):** per space, auto-share future items matching your choice of content (clipboard, notes, or both), clipboard types, and groups. Changing a filter affects future items only; your history is never shared retroactively.
-- Only the author of a shared item can edit it. Removing an item removes it from the feed for everyone, with an undo window on your side.
+- Only the author of a shared item can edit it. Either the author or the space owner can remove it, which takes it out of the feed for everyone; whoever removes it gets a brief undo window.
 
 ## Receiving
 
 - The space feed uses the same cards, search and sorting as your clipboard screen.
 - **Auto-copy incoming**, per space and per device: anything shared into the space lands directly on your clipboard as it arrives. Only live arrivals can trigger it, never backfill, so it cannot flood you.
 - **Comments:** discuss any shared item in a popover thread, with mentions.
+- **Remove from your devices:** delete an item someone shared with you and it goes from all your own devices at once, while it stays in the space for everyone else.
 
 ## Members and keys
 

@@ -47,7 +47,7 @@ Search matches entry content and group names. Filters stack on top:
 - **Sharing:** shared, not shared, or per space.
 - **Groups** and **date** (Any time, Today, 7 days, or a custom range).
 
-Every filter option shows the number of items it would leave you *before* you apply it. Your last 8 searches are remembered.
+Every filter option shows the number of items it would leave you *before* you apply it.
 
 ## Bulk actions
 
