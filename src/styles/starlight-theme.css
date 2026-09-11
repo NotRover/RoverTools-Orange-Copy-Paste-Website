@@ -73,3 +73,44 @@
 [data-theme='light'] {
 	--sl-color-text-accent: #d92b09;
 }
+
+/* Two tweaks to the docs reading area, both only at Starlight's 72rem breakpoint,
+   where the "On this page" table of contents becomes a fixed side column (below
+   it, the contents collapse into the mobile dropdown):
+
+   1. Narrow the TOC to 13rem. Starlight sizes it by formula, not a variable -
+      `--sl-sidebar-width + (100% - --sl-content-width - --sl-sidebar-width)/2` - so
+      on a wide viewport it reserves half the leftover width, far more than these
+      short headings need. 13rem still holds the longest one ("What this means in
+      practice") on one line, and leaves the content panel where Starlight puts it.
+
+   2. Put a gutter between the content panel and the TOC. Starlight leaves none, so
+      a `wide` DocMock plate - which bleeds out to the content-panel edge by design
+      to use the full pane - has its right border land flush against the TOC column.
+      The gap gives that border breathing room. (`.lg:sl-flex` is a real Starlight
+      class; the colon is escaped.) */
+@media (min-width: 72rem) {
+	.right-sidebar-container {
+		width: 13rem;
+	}
+
+	.lg\:sl-flex {
+		gap: 6rem;
+	}
+}
+
+/* Align the hairline under the page title with the reading column. Starlight
+   draws it as a border-top on the content panel that holds the body, so it spans
+   the full panel - wider than the 45rem text column and the heading above it.
+   Move the line onto the inner container (the text column) and shift the panel's
+   top padding with it, so the divider matches the text width with no change to
+   vertical spacing. Applies to every docs page, which all share this structure. */
+.content-panel + .content-panel {
+	border-top: 0;
+	padding-top: 0;
+}
+
+.content-panel + .content-panel > .sl-container {
+	border-top: 1px solid var(--sl-color-hairline);
+	padding-top: 1.5rem;
+}
