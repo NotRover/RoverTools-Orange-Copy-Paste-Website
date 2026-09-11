@@ -33,7 +33,7 @@ No. Sharing is per item, into a space you both belong to. Auto-share filters exi
 
 ## macOS?
 
-Not today. Windows is the primary platform, Linux is supported with [notes](/docs/linux/).
+Coming soon. A Mac build is on the way, for both Apple silicon and Intel. Today, Windows is the primary platform and Linux is supported with [notes](/docs/linux/).
 
 ## Where do I report a bug or ask for a feature?
 
