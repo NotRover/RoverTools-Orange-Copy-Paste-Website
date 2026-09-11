@@ -3,9 +3,17 @@ title: Settings
 description: Every preference in Orange Copy Paste, section by section.
 ---
 
+import DocMock from '../../../components/docs/DocMock.astro';
+import AppShell from '../../../components/landing/AppShell.astro';
+import SettingsMock from '../../../components/landing/SettingsMock.astro';
+
 Settings apply to this device. A subset of preferences (theme, layout, sort, groups, and similar) syncs with your account when [cloud sync](/docs/cloud-sync/) is on; anything about how this machine behaves stays local.
 
-![The Settings screen with its sectioned preferences and toggle switches.](/screenshots/settings-screen.png)
+<DocMock scale={0.6}>
+	<AppShell nav="settings">
+		<SettingsMock />
+	</AppShell>
+</DocMock>
 
 ## General
 

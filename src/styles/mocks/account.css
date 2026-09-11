@@ -182,9 +182,13 @@ border-bottom-width: 2px;
 border-radius: 5px;
 background: var(--bg);
 color: var(--text-secondary);
-font-family: var(--font-mono);
+/* the app sets `font-family: inherit` on the keycap, so it is the UI font and
+   not a monospace - a kbd would default to monospace without this */
+font-family: inherit;
 font-size: 11px;
 font-weight: 600;
+line-height: 1.6;
+white-space: nowrap;
 }
 
 /* ---- the storage quota, from AccountScreen.css ---- */
@@ -241,6 +245,7 @@ opacity: 0.75;
 display: flex;
 flex-direction: column;
 gap: 9px;
+font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 }
 
 .acct-zone-head {
@@ -274,7 +279,10 @@ border: 1px solid var(--border);
 border-radius: var(--radius);
 background: var(--surface);
 padding: 14px;
-box-shadow: var(--shadow-sm);
+/* the app's .settings-screen sets --card-shadow: none, and .acct-card reads
+   it - the flat surface language, not the shadowed one */
+box-shadow: none;
+font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 }
 
 /* a grouped-rows card puts the padding on the rows, not the card */
@@ -349,7 +357,8 @@ white-space: nowrap;
 
 .acct-badge--owner {
 color: var(--accent);
-background: var(--accent-dim);
+/* the app mixes the accent at 12%, not the 10% --accent-dim carries */
+background: rgba(255, 62, 28, 0.12);
 }
 
 .acct-dot {
@@ -360,7 +369,23 @@ background: #9ca3af;
 flex: 0 0 auto;
 }
 
-/* destructive at rest, so it reads as different before it is hovered */
+/* the base button first, exactly as the app orders it: the modifiers below
+   carry the same specificity, so a base declared after them would win and every
+   button would come out identical */
+
+.acct-btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+font-size: 12px;
+font-weight: 600;
+color: var(--text);
+background: var(--bg);
+border: 1px solid var(--border);
+border-radius: 8px;
+padding: 7px 12px;
+}
 
 .acct-btn--sm {
 padding: 5px 10px;
@@ -411,20 +436,6 @@ line-height: 1.4;
 color: var(--text-muted);
 }
 
-.acct-btn {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-gap: 6px;
-font-size: 12px;
-font-weight: 600;
-color: var(--text);
-background: var(--bg);
-border: 1px solid var(--border);
-border-radius: 8px;
-padding: 7px 12px;
-}
-
 .acct-seg-pill.active {
 	color: var(--text);
 	background: var(--surface-hover);
@@ -441,6 +452,7 @@ padding: 7px 12px;
 .shortcuts-list {
 display: flex;
 flex-direction: column;
+font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 background: var(--surface);
 border: 1px solid var(--border);
 border-radius: var(--radius);

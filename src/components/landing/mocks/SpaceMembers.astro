@@ -7,6 +7,11 @@
 import { SRC_ICONS } from '../app-parts';
 ---
 
+<!-- Wrapped in the rules-panel surface. In the app this block lives inside
+     `.sp-rules` (solid --sidebar-bg); pulled out on its own for the docs it
+     would otherwise float transparent on the plate, so it gets that surface
+     here as a self-contained card. -->
+<div class="sp-members-panel">
 <div class="sp-settings-block">
 	<div class="sp-settings-label">People<span class="sp-settings-count">5</span></div>
 	<div class="sp-member-list">
@@ -42,11 +47,12 @@ import { SRC_ICONS } from '../app-parts';
 		<div class="sp-invite-row">
 			<code class="sp-invite-code">7K2M-9QX4</code>
 			<span class="sp-btn sp-btn--icon"><Fragment set:html={SRC_ICONS.copy12} /><span class="sp-btn-label">Copy code</span></span>
-			<span class="sp-btn sp-btn--icon"><Fragment set:html={SRC_ICONS.shareNetwork11} /><span class="sp-btn-label">Copy link</span></span>
+			<span class="sp-btn sp-btn--icon"><Fragment set:html={SRC_ICONS.shareNetwork12} /><span class="sp-btn-label">Copy link</span></span>
 		</div>
 		<div class="sp-invite-row">
 			<span class="sp-inline-input">Invite by email</span>
 			<span class="sp-btn">Send</span>
 		</div>
 	</div>
+</div>
 </div>

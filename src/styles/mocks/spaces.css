@@ -139,7 +139,12 @@ overflow: hidden;
 .sp-feed-scroll {
 flex: 1;
 overflow: hidden;
-padding: 10px 0 14px;
+/* the app is `padding: 10px 0 14px; margin: 0 8px` plus
+   `scrollbar-gutter: stable both-edges` at the default 12px bar, so the
+   content sits 8+12px in from each edge. No gutter is reserved here, so the
+   12px is folded into the padding - same as .sp-panel-scroll below. */
+padding: 10px 12px 14px;
+margin: 0 8px;
 }
 
 /* left panel, 252px, pulled ahead of the feed the way the app does */
@@ -417,6 +422,35 @@ flex-direction: column;
 position: relative;
 }
 
+/* Each day group draws the rail down its own left edge, the dot sitting on it.
+   The first starts at the dot's centre, the last fades out below its dot, and a
+   lone group gets none - the same rules as the clipboard screen's .oc-group. */
+.sp-timeline-group::before {
+content: '';
+position: absolute;
+left: 0;
+width: 1px;
+background: var(--accent);
+opacity: 0.6;
+pointer-events: none;
+top: 0;
+bottom: 0;
+}
+
+.sp-timeline-group:first-child::before {
+top: 15px;
+}
+
+.sp-timeline-group--last::before {
+bottom: 0;
+height: auto;
+background: linear-gradient(to bottom, var(--accent) 70%, transparent 100%);
+}
+
+.sp-timeline-group--only::before {
+display: none;
+}
+
 .sp-timeline-day-row {
 display: flex;
 align-items: center;
@@ -461,11 +495,13 @@ flex-shrink: 0;
 display: inline-flex;
 color: var(--accent);
 opacity: 0.5;
+margin-left: auto;
 margin-right: 4px;
 }
 
 .sp-feed-card-grid {
-columns: 3;
+/* SpacesScreen.css: the feed is always two masonry columns, at any pane width */
+columns: 2;
 column-gap: 10px;
 padding-top: 4px;
 padding-left: 15px;
@@ -590,6 +626,18 @@ flex-direction: column;
 gap: 14px;
 padding: 12px;
 overflow: hidden;
+}
+
+/* The members block as a standalone card for the docs. The app draws it inside
+   the rules panel (.sp-rules, solid --sidebar-bg with a border); on its own it
+   would float transparent on the plate, so it carries the same surface here.
+   Width is the app's default rules-pane (272px) plus the 12px body padding. */
+.sp-members-panel {
+width: 296px;
+padding: 12px;
+background: var(--sidebar-bg);
+border: 1px solid var(--border);
+border-radius: 12px;
 }
 
 .sp-settings-block {
@@ -858,7 +906,6 @@ border-top: 1px solid var(--border);
 font-size: 10px;
 font-weight: 500;
 color: var(--text-muted);
-line-height: 1.4;
 }
 
 /* ---- rows layout, values from .sp-list-* in SpacesScreen.css ---- */

@@ -28,17 +28,24 @@ const { listWidth = 252, rulesWidth = 272, gridId, arrival = false, feedExtra = 
 /* more of the same feed, further down it. Same shapes as the cards above, so
    they are written as data rather than another dozen copies of the markup. */
 const FEED_EXTRA = [
-	{ text: 'The rail needs ends. A line that stops dead reads as a bug.', kind: 'text', label: 'Text', who: 'rio', age: '11h ago' },
-	{ text: 'docs.rovertools.app/spaces/invites', kind: 'url', label: 'URL', who: 'mei', age: '13h ago' },
-	{ text: 'space-key-handover.pdf', kind: 'document', label: 'Doc', who: 'You', age: '15h ago' },
-	{ text: 'Members panel: show who is online before who joined first.', kind: 'text', label: 'Text', who: 'Ada Lovelace', age: '17h ago' },
-	{ text: 'invite-flow-v3 (5 files)', kind: 'file', label: 'File', who: 'rio', age: '19h ago' },
-	{ text: 'figma.com/file/orangecp/members-rail', kind: 'url', label: 'URL', who: 'You', age: '21h ago' },
+	{ text: 'The rail needs ends. A line that stops dead reads as a bug.', kind: 'text', label: 'Text', who: 'rio', age: '1d ago' },
+	{ text: 'docs.rovertools.app/spaces/invites', kind: 'url', label: 'URL', who: 'mei', age: '1d ago' },
+	{ text: 'space-key-handover.pdf', kind: 'document', label: 'Doc', who: 'You', age: '1d ago' },
+	{ text: 'Members panel: show who is online before who joined first.', kind: 'text', label: 'Text', who: 'Ada Lovelace', age: '1d ago' },
+	{ text: 'invite-flow-v3 (5 files)', kind: 'file', label: 'File', who: 'rio', age: '1d ago' },
+	{ text: 'figma.com/file/orangecp/members-rail', kind: 'url', label: 'URL', who: 'You', age: '1d ago' },
 ];
 
 /* the app's own RULES_LABEL_WIDTH: above it the rail has room to spell its
    invite buttons out, below it they fall back to icons */
 const rulesWide = rulesWidth >= 336;
+
+/* UserAvatar.tsx's avatarInitials: two words give their first letters, one
+   word gives its first two, always uppercase */
+const initials = (name: string) => {
+	const w = name.trim().split(/\s+/).filter(Boolean);
+	return (w.length > 1 ? w[0][0] + w[1][0] : w[0].slice(0, 2)).toUpperCase();
+};
 ---
 
 <div class="sp-screen">
@@ -80,7 +87,9 @@ const rulesWide = rulesWidth >= 336;
 		<div class="sp-feed-scroll">
 			<div class="sp-timeline-wrap">
 				<div class="sp-timeline-groups">
-					<div class="sp-timeline-group sp-timeline-group--only">
+					<!-- Two day groups, as on the clipboard screen: the rail between
+					     them is what the app hides when a feed has a single day. -->
+					<div class="sp-timeline-group">
 						<div class="sp-timeline-day-row">
 							<div class="sp-timeline-day-dot"></div>
 							<span class="sp-timeline-day-label">Today</span>
@@ -96,7 +105,7 @@ const rulesWide = rulesWidth >= 336;
 													<span class="oc-chips">
 														<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 														<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-														<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+														<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">RI</span><span class="sp-owner-name">rio</span></span>
 													</span>
 													<span class="oc-time">Just now</span>
 												</div>
@@ -111,7 +120,7 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">RI</span><span class="sp-owner-name">rio</span></span>
 															<span class="sp-cmt-chip sp-cmt-chip--new"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">3</span></span>
 										</span>
 										<span class="oc-time">4m ago</span>
@@ -149,7 +158,7 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.image}`}><Fragment set:html={CHIP_ICONS.image} /><span class="oc-chip-label">Image</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">ME</span><span class="sp-owner-name">mei</span></span>
 										</span>
 										<span class="oc-time">18m ago</span>
 									</div>
@@ -177,7 +186,7 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">A</span><span class="sp-owner-name">Ada Lovelace</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">AL</span><span class="sp-owner-name">Ada Lovelace</span></span>
 										</span>
 										<span class="oc-time">2h ago</span>
 									</div>
@@ -191,7 +200,7 @@ const rulesWide = rulesWidth >= 336;
 									<div class="ns-card-footer">
 										<div class="ns-card-chips">
 											<span class="oc-chip sp-source-chip--note"><Fragment set:html={SRC_ICONS.note} /><span class="oc-chip-label">Note</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">RI</span><span class="sp-owner-name">rio</span></span>
 										</div>
 										<span class="ns-card-time ns-card-time--pinned">1h ago</span>
 									</div>
@@ -211,7 +220,7 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.html}`}><Fragment set:html={CHIP_ICONS.html} /><span class="oc-chip-label">Rich Text</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">RI</span><span class="sp-owner-name">rio</span></span>
 										</span>
 										<span class="oc-time">3h ago</span>
 									</div>
@@ -239,27 +248,33 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.document}`}><Fragment set:html={CHIP_ICONS.document} /><span class="oc-chip-label">Doc</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">ME</span><span class="sp-owner-name">mei</span></span>
 										</span>
 										<span class="oc-time">5h ago</span>
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
 
+					<div class="sp-timeline-group sp-timeline-group--last">
+						<div class="sp-timeline-day-row">
+							<div class="sp-timeline-day-dot"></div>
+							<span class="sp-timeline-day-label">Yesterday</span>
+							<span class="sp-timeline-day-chevron" set:html={TB_ICONS.dayChevron} />
+						</div>
+						<div class="sp-feed-card-grid">
 							<div class="oc-card">
-								<div class="oc-card-media oc-card-media--video">
-									<img class="oc-card-media-img" src={THUMBS.ui} alt="" />
-									<span class="oc-card-play" set:html={CHIP_ICONS.video} />
-								</div>
+								<div class="oc-card-media"><img class="oc-card-media-img" src={THUMBS.ui} alt="" /></div>
 								<div class="oc-card-body">
 									<p class="oc-card-text oc-card-text--clamp">popup-placement-bug.mp4</p>
 									<div class="oc-card-footer">
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.video}`}><Fragment set:html={CHIP_ICONS.video} /><span class="oc-chip-label">Video</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">RI</span><span class="sp-owner-name">rio</span></span>
 										</span>
-										<span class="oc-time">7h ago</span>
+										<span class="oc-time">19h ago</span>
 									</div>
 								</div>
 							</div>
@@ -271,10 +286,10 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">A</span><span class="sp-owner-name">Ada Lovelace</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">AL</span><span class="sp-owner-name">Ada Lovelace</span></span>
 											<span class="sp-cmt-chip"><Fragment set:html={SRC_ICONS.chat10} /><span class="sp-cmt-chip-n">2</span></span>
 										</span>
-										<span class="oc-time">6h ago</span>
+										<span class="oc-time">20h ago</span>
 									</div>
 								</div>
 							</div>
@@ -288,7 +303,7 @@ const rulesWide = rulesWidth >= 336;
 											<span class="oc-chip sp-source-chip--note"><Fragment set:html={SRC_ICONS.note} /><span class="oc-chip-label">Note</span></span>
 											<span class="sp-owner sp-owner--self">You</span>
 										</div>
-										<span class="ns-card-time">6h ago</span>
+										<span class="ns-card-time">21h ago</span>
 									</div>
 								</div>
 							</div>
@@ -300,9 +315,9 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.url}`}><Fragment set:html={CHIP_ICONS.url} /><span class="oc-chip-label">URL</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">M</span><span class="sp-owner-name">mei</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">ME</span><span class="sp-owner-name">mei</span></span>
 										</span>
-										<span class="oc-time">8h ago</span>
+										<span class="oc-time">23h ago</span>
 									</div>
 								</div>
 							</div>
@@ -314,9 +329,9 @@ const rulesWide = rulesWidth >= 336;
 										<span class="oc-chips">
 											<span class="oc-chip sp-source-chip--clip"><Fragment set:html={SRC_ICONS.clipboard} /><span class="oc-chip-label">Clipboard</span></span>
 											<span class="oc-chip" style={`--cc:${KIND_COLORS.file}`}><Fragment set:html={CHIP_ICONS.file} /><span class="oc-chip-label">File</span></span>
-											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">R</span><span class="sp-owner-name">rio</span></span>
+											<span class="sp-owner"><span class="sp-owner-avatar sp-owner-avatar--initials">RI</span><span class="sp-owner-name">rio</span></span>
 										</span>
-										<span class="oc-time">9h ago</span>
+										<span class="oc-time">1d ago</span>
 									</div>
 								</div>
 							</div>
@@ -341,7 +356,7 @@ const rulesWide = rulesWidth >= 336;
 															<span class="sp-owner sp-owner--self">You</span>
 														) : (
 															<span class="sp-owner">
-																<span class="sp-owner-avatar sp-owner-avatar--initials">{c.who[0]}</span>
+																<span class="sp-owner-avatar sp-owner-avatar--initials">{initials(c.who)}</span>
 																<span class="sp-owner-name">{c.who}</span>
 															</span>
 														)}

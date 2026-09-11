@@ -48,6 +48,7 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		flex-direction: column;
 		gap: 6px;
 		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+		font-size: 13px;
 		line-height: normal;
 	}
 
@@ -106,6 +107,8 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		border-radius: var(--radius-xs);
 		padding: 8px 10px;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.cp-preview-text {
@@ -113,6 +116,8 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		font-size: 11.5px;
 		line-height: 1.5;
 		color: var(--text-secondary);
+		white-space: pre-wrap;
+		word-break: break-word;
 		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
 	}
 
@@ -131,6 +136,7 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		justify-content: center;
 		gap: 6px;
 		min-width: 0;
+		width: 100%;
 		padding: 7px 6px;
 		border: none;
 		border-radius: var(--radius-xs);
@@ -139,6 +145,7 @@ import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		font-size: 12px;
 		font-weight: 500;
 		font-family: inherit;
+		text-align: center;
 	}
 
 	.cp-item span {

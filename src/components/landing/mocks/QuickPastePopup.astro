@@ -7,7 +7,9 @@
  *
  * Drawn at the app's visible container size for the wide window - 528x528, the
  * 540x540 window less its 6px transparent margin - then scaled to fit the tile.
- * Default slots is 3, so rows past the third carry an empty dashed badge.
+ * Drawn with all ten paste slots on, as PastePopup.tsx labels them: 1-9, then
+ * 0 for the tenth, and the footer hint reads "1-0". (Below ten, rows past the
+ * last slot carry an empty dashed badge instead.)
  */
 import { CHIP_ICONS, KIND_COLORS, MENU_ICONS, SRC_ICONS, TYPE_LABELS, THUMBS } from '../app-parts';
 
@@ -15,13 +17,13 @@ const rows = [
 	{ n: 1, kind: 'text', text: 'Meet at the station, platform 4, 9:40. Bring the badge for the side door.', selected: true },
 	{ n: 2, kind: 'url', text: 'github.com/Spectrewolf8/RoverTools-Releases', time: '1h', pinned: true },
 	{ n: 3, kind: 'image', text: '#a1b2c3d4 Image Aug 21, 2:45 PM', thumb: 'ui', time: '4d' },
-	{ kind: 'document', text: 'quarterly-report.pdf', time: '3d' },
-	{ kind: 'folder', text: '/home/rio/projects/orangecp/assets', time: '6d' },
-	{ kind: 'html', text: 'Release checklist: bump the version, sign both bundles', time: '1w' },
-	{ kind: 'text', text: 'Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.', time: '1w' },
-	{ kind: 'file', text: 'brand-assets (3 files)', time: '2w' },
-	{ kind: 'url', text: 'staging.rovertools.app/preview/920x560', time: '2w' },
-	{ kind: 'text', text: 'sk-live placeholder token, rotate before the beta ships', time: '3w' },
+	{ n: 4, kind: 'document', text: 'quarterly-report.pdf', time: '3d' },
+	{ n: 5, kind: 'folder', text: '/home/rio/projects/orangecp/assets', time: '6d' },
+	{ n: 6, kind: 'html', text: 'Release checklist: bump the version, sign both bundles', time: '1w' },
+	{ n: 7, kind: 'text', text: 'Invoice INV-20418, due Sep 5. Net 30, reference PO-99812.', time: '1w' },
+	{ n: 8, kind: 'file', text: 'brand-assets (3 files)', time: '2w' },
+	{ n: 9, kind: 'url', text: 'staging.rovertools.app/preview/920x560', time: '2w' },
+	{ n: 0, kind: 'text', text: 'sk-live placeholder token, rotate before the beta ships', time: '3w' },
 ] as const;
 ---
 
@@ -51,7 +53,7 @@ const rows = [
 				{
 					rows.map((r) => (
 						<div class={`pp-item${r.selected ? ' pp-item--selected' : ''}`}>
-							<span class={`pp-badge${r.n ? '' : ' pp-badge--none'}`}>{r.n ?? ''}</span>
+							<span class={`pp-badge${'n' in r ? '' : ' pp-badge--none'}`}>{'n' in r ? r.n : ''}</span>
 							{r.kind === 'image' ? (
 								<img class="pp-thumb" src={THUMBS[r.thumb as keyof typeof THUMBS]} alt="" />
 							) : (
@@ -85,7 +87,7 @@ const rows = [
 					<span class="pp-preview-measure">73 chars</span>
 				</div>
 				<div class="pp-preview-meta">
-					<span class="pp-preview-group" style={`background:${KIND_COLORS.url}1f;color:#14b8a6`}><span class="pp-preview-group-dot"></span>work</span>
+					<span class="pp-preview-group" style="background:rgba(20, 184, 166, 0.12);color:#14b8a6"><span class="pp-preview-group-dot"></span>work</span>
 				</div>
 				<button class="pp-preview-paste">Paste <kbd>Enter</kbd></button>
 				<div class="pp-preview-actions">
@@ -98,8 +100,8 @@ const rows = [
 		</div>
 
 		<div class="pp-hints">
-			<span class="pp-hint"><kbd>1-3</kbd> paste</span>
-			<span class="pp-hint"><kbd><Fragment set:html={SRC_ICONS.arrowUp10} />Up</kbd><kbd><Fragment set:html={SRC_ICONS.arrowDown10} />Dn</kbd> move</span>
+			<span class="pp-hint"><kbd>1-0</kbd> paste</span>
+			<span class="pp-hint"><kbd><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5" /><polyline points="6 11 12 5 18 11" /></svg>Up</kbd><kbd><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><polyline points="6 13 12 19 18 13" /></svg>Dn</kbd> move</span>
 			<span class="pp-hint"><kbd>Enter</kbd> paste</span>
 			<span class="pp-hint"><kbd>type</kbd> search</span>
 		</div>
@@ -275,7 +277,11 @@ const rows = [
 		align-items: center;
 		gap: 8px;
 		padding: 7px 10px;
-		min-height: 40px;
+		/* The app's row is min-height 40 and its list scrolls: ten rows run 11px
+		   past the box. A static shot wants all ten badges in view with no
+		   scrollbar, so plain rows sit 2px shorter here; the selected row (24px
+		   actions) and the thumbnail row keep their natural 40 and 42. */
+		min-height: 38px;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-xs);
 		background: var(--surface);
@@ -382,7 +388,7 @@ const rows = [
 	}
 
 	.pp-ia--pin {
-		color: var(--accent);
+		color: var(--text-secondary);
 	}
 
 	.pp-ia--danger {
@@ -419,6 +425,8 @@ const rows = [
 		min-height: 0;
 		width: 100%;
 		display: flex;
+		align-items: center;
+		justify-content: center;
 		overflow: hidden;
 		border-radius: var(--radius-xs);
 		background: var(--bg);
@@ -433,6 +441,8 @@ const rows = [
 		font-size: 11px;
 		line-height: 1.5;
 		color: var(--text-secondary);
+		white-space: pre-wrap;
+		word-break: break-word;
 		font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
 	}
 
@@ -452,6 +462,8 @@ const rows = [
 		align-items: center;
 		gap: 5px;
 		flex-shrink: 0;
+		min-width: 0;
+		overflow: hidden;
 	}
 
 	.pp-preview-group {
@@ -464,6 +476,8 @@ const rows = [
 		font-size: 10px;
 		font-weight: 600;
 		letter-spacing: 0.2px;
+		max-width: 120px;
+		flex-shrink: 0;
 	}
 
 	.pp-preview-group-dot {
@@ -476,6 +490,7 @@ const rows = [
 	}
 
 	.pp-preview-paste {
+		margin-top: auto;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -532,7 +547,7 @@ const rows = [
 	}
 
 	.pp-pa--pin {
-		color: var(--accent);
+		color: var(--text-secondary);
 	}
 
 	.pp-pa--danger {
@@ -582,8 +597,8 @@ const rows = [
 		text-align: center;
 	}
 
-	.pp-hint kbd :global(svg) {
-		width: 10px;
-		height: 10px;
+	.pp-hint kbd svg {
+		width: 9px;
+		height: 9px;
 	}
 </style>

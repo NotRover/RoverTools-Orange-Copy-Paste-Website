@@ -65,7 +65,7 @@ import { CHIP_ICONS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		flex-direction: column;
 		align-items: stretch;
 		max-width: 100%;
-		margin: 2px 2px 0;
+		margin: 0 2px;
 		vertical-align: middle;
 	}
 
@@ -113,12 +113,14 @@ import { CHIP_ICONS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		flex-direction: column;
 		width: 100%;
 		min-width: 320px;
-		max-width: 340px;
+		max-width: 360px;
 		border: 1px solid var(--border);
 		border-top: none;
 		border-radius: 0 0 8px 8px;
 		background: var(--surface);
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+		box-shadow:
+			0 6px 20px rgba(0, 0, 0, 0.16),
+			0 1px 4px rgba(0, 0, 0, 0.08);
 		overflow: hidden;
 	}
 
@@ -128,14 +130,14 @@ import { CHIP_ICONS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		gap: 6px;
 		padding: 5px 10px 4px;
 		border-bottom: 1px solid var(--border);
-		background: #1c1c1c;
+		background: color-mix(in srgb, var(--surface) 88%, var(--bg));
 	}
 
 	.ee-embed-panel-type {
 		display: inline-flex;
 		align-items: center;
 		gap: 4px;
-		color: #10b981;
+		color: var(--accent);
 		font-size: 10px;
 		font-weight: 650;
 		letter-spacing: 0.3px;
@@ -149,12 +151,14 @@ import { CHIP_ICONS, MENU_ICONS, SRC_ICONS } from '../app-parts';
 		font-variant-numeric: tabular-nums;
 	}
 
+	/* the body holds the app's .ee-embed-panel-text, which takes the editor's
+	   own font rather than a mono one */
+
 	.ee-embed-panel-body {
 		padding: 9px 10px;
-		font-family: var(--font-mono);
-		font-size: 11px;
-		line-height: 1.45;
+		font-size: 11.5px;
+		line-height: 1.55;
 		color: var(--text-secondary);
-		word-break: break-all;
+		word-break: break-word;
 	}
 </style>

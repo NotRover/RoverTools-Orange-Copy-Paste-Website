@@ -84,10 +84,9 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS, THUMBS } from '../app-parts';
 		</div>
 
 		<div class="oc-card">
-			<div class="oc-card-media oc-card-media--video">
-				<img class="oc-card-media-img" src={THUMBS.ui} alt="" />
-				<span class="oc-card-play"><span><Fragment set:html={CHIP_ICONS.video} /></span></span>
-			</div>
+			<!-- the app's video card is a bare frame at rest: its controls bar sits at
+			     opacity 0 until hover, and it never draws a play badge -->
+			<div class="oc-card-media"><img class="oc-card-media-img" src={THUMBS.ui} alt="" /></div>
 			<div class="oc-card-body">
 				<p class="oc-card-text oc-card-text--clamp">popup-placement-bug.mp4</p>
 				<div class="oc-card-footer">

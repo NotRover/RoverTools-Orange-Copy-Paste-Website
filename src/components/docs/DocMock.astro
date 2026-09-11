@@ -1,0 +1,149 @@
+---
+/**
+ * Frame for embedding a landing-page UI mock inside a docs page, in place of a
+ * screenshot. The mocks (under src/components/landing) are drawn in the app's
+ * dark skin from the shared oc-, cs-, sp- and ns- parts in landing.css and the
+ * mock stylesheets. This frame pulls those stylesheets in so any mock renders the
+ * same on a docs page as on the landing, and sits the mock on a fixed dark
+ * plate so it reads the same in the light and dark docs themes.
+ *
+ * landing.css is safe to load here: its heavy page styles are gated behind
+ * `body.landing`, and its bare :root tokens (--bg, --accent, ...) do not collide
+ * with the Starlight theme, which uses only --sl-* names. So the tokens sit
+ * unused on the docs :root and are picked up only by the mock DOM.
+ *
+ * `scale` is the desktop zoom; shared media rungs shrink every mock
+ * proportionally on narrow columns. `width` fixes the inner box for a mock that
+ * would otherwise stretch. `menu` gives an absolutely-positioned mock (CardMenu)
+ * a sized relative host to anchor to.
+ */
+import '../../styles/landing.css';
+import '../../styles/mocks/account.css';
+import '../../styles/mocks/notes.css';
+import '../../styles/mocks/spaces.css';
+import '../../styles/mocks/popouts.css';
+
+interface Props {
+	/** Desktop zoom applied to the mock. Mocks are drawn at app px; 1 is native. */
+	scale?: number;
+	/** Fix the inner box width (px) for a mock that would otherwise stretch. */
+	width?: number;
+	/** Give an absolute-positioned mock (CardMenu) a sized relative host. */
+	menu?: boolean;
+	/** Size of the app window a shot is drawn in. The app's own window is
+	 *  920x560; the spaces shot is drawn at 1440x830 as on the landing, since
+	 *  three panels and a two-column feed need the room. */
+	windowWidth?: number;
+	windowHeight?: number;
+	/** Let the plate reach past the prose column into Starlight's side padding
+	 *  and tighten its own padding, so a dense shot gets every pixel the pane
+	 *  has. */
+	wide?: boolean;
+}
+const {
+	scale = 1,
+	width,
+	menu = false,
+	windowWidth = 920,
+	windowHeight = 560,
+	wide = false,
+} = Astro.props;
+const innerStyle = [
+	`--doc-z:${scale}`,
+	`--doc-w:${windowWidth}px`,
+	`--doc-h:${windowHeight}px`,
+	width ? `width:${width}px` : '',
+]
+	.filter(Boolean)
+	.join(';');
+---
+
+<!-- `not-content` is Starlight's opt-out: every rule in its markdown.css is
+     written `:not(:where(.not-content *))`, so without it the docs typography
+     (24px h4, 1.75 line-height, list indents, code and image styling) lands on
+     top of the app CSS inside the mock. -->
+<div class:list={['doc-mock', 'not-content', { 'doc-mock--wide': wide }]}>
+	<div class:list={['doc-mock__inner', { 'doc-mock__inner--menu': menu }]} style={innerStyle}>
+		<slot />
+	</div>
+</div>
+
+<style>
+	.doc-mock {
+		display: flex;
+		justify-content: center;
+		padding: 1.75rem 1.25rem;
+		margin: 1.25rem 0;
+		background: radial-gradient(120% 120% at 50% 0%, #1a1a1a 0%, #0b0b0b 100%);
+		border: 1px solid #262626;
+		border-radius: 14px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+		overflow-x: auto;
+	}
+
+	/* The prose column stops 1.5rem short of the pane on each side
+	   (--sl-content-pad-x); a wide plate takes that back and gives up most of
+	   its own padding, so the shot inside can be drawn larger. */
+	.doc-mock--wide {
+		padding: 1rem 0.75rem;
+	}
+
+	/* only where the pane has that padding to spare: below Starlight's 50rem
+	   breakpoint the column is the viewport, and a plate flush against both
+	   screen edges with its corners rounded reads as a mistake */
+	@media (min-width: 50rem) {
+		.doc-mock--wide {
+			margin-inline: calc(-1 * var(--sl-content-pad-x, 1.5rem));
+		}
+	}
+
+	/* zoom reflows (unlike transform:scale), so the plate hugs the scaled mock
+	   with no leftover box. Media rungs scale every doc mock proportionally, so a
+	   part at scale 1 and a 920px window shot at scale 0.6 both shrink in step. */
+	.doc-mock__inner {
+		zoom: var(--doc-z, 1);
+		/* The app's body font, from App.css `html, body`. A window shot sets this
+		   on .oc-window itself; a standalone part (group manager, filter card,
+		   bulk bar, card menu, editor) has no such ancestor and would inherit the
+		   docs font, size and 1.75 line-height from Starlight instead. */
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+		font-size: 13px;
+		line-height: normal;
+		color: var(--text);
+		-webkit-font-smoothing: antialiased;
+	}
+
+	.doc-mock__inner--menu {
+		position: relative;
+		width: 220px;
+		min-height: 320px;
+	}
+
+	@media (max-width: 720px) {
+		.doc-mock__inner {
+			zoom: calc(var(--doc-z, 1) * 0.72);
+		}
+	}
+
+	@media (max-width: 460px) {
+		.doc-mock__inner {
+			zoom: calc(var(--doc-z, 1) * 0.46);
+		}
+	}
+
+	/* the wide window shots (AppShell) are drawn at the app's native 920x560
+	   unless the page asks for another window size; the host has to give the
+	   window that size, exactly as the landing does */
+	.doc-mock :global(.oc-window) {
+		width: var(--doc-w, 920px);
+		height: var(--doc-h, 560px);
+	}
+
+	/* A docs shot is a still: nothing in it scrolls, so the bars the window
+	   draws for its scrollable surfaces (mock-scrollbars.ts) would only report a
+	   position nobody can change. The script sets display inline, hence the
+	   override. */
+	.doc-mock :global(.oc-sb) {
+		display: none !important;
+	}
+</style>

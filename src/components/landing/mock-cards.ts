@@ -9,7 +9,6 @@ import {
 	CHIP_ICONS,
 	GROUP_COLORS,
 	KIND_COLORS,
-	NAV_ICONS,
 	SRC_ICONS,
 	THUMBS,
 	TYPE_LABELS,
@@ -51,12 +50,12 @@ export function makeCard(s: MockEntry, o: CardOptions = {}): HTMLElement {
 	card.dataset.text = s.content.toLowerCase();
 
 	const thumb = s.thumb ? THUMBS[s.thumb as keyof typeof THUMBS] : '';
+	// a video card is a bare frame at rest in the app (controls show on hover
+	// only, no play badge), so it draws the same as an image card
 	const media =
-		s.kind === 'image'
+		s.kind === 'image' || s.kind === 'video'
 			? `<div class="oc-card-media"><img class="oc-card-media-img" src="${thumb}" alt="" /></div>`
-			: s.kind === 'video'
-				? `<div class="oc-card-media oc-card-media--video"><img class="oc-card-media-img" src="${thumb}" alt="" /><span class="oc-card-play"><span>${CHIP_ICONS.video}</span></span></div>`
-				: '';
+			: '';
 
 	const textCls =
 		s.kind === 'image'
@@ -78,10 +77,11 @@ export function makeCard(s: MockEntry, o: CardOptions = {}): HTMLElement {
 		? `<span class="oc-owner-chip"><span class="oc-owner-avatar">${s.owner[0]!.toUpperCase()}</span><span class="oc-owner-name">${s.owner}</span></span>`
 		: '';
 	const shared = s.spaces
-		? `<span class="oc-share-mark">${SRC_ICONS.shareNetwork11}<span class="oc-share-count">${s.spaces}</span></span>`
+		? `<span class="oc-share-mark">${SRC_ICONS.shareNetwork15}<span class="oc-share-count">${s.spaces}</span></span>`
 		: '';
+	// ChipBar.tsx: CloudCheck 15 once synced, CloudArrowUp 15 while waiting to upload
 	const sync = s.sync
-		? `<span class="oc-sync-tick${s.sync === 'pending' ? ' oc-sync-tick--pending' : ''}">${NAV_ICONS.cloudCheck11}</span>`
+		? `<span class="oc-sync-tick${s.sync === 'pending' ? ' oc-sync-tick--pending' : ''}">${s.sync === 'pending' ? SRC_ICONS.cloudArrowUp15 : SRC_ICONS.cloudCheck15}</span>`
 		: '';
 	const check = o.select ? `<span class="oc-card-check">${CHIP_ICONS.check}</span>` : '';
 
