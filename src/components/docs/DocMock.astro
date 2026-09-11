@@ -146,4 +146,14 @@ const innerStyle = [
 	.doc-mock :global(.oc-sb) {
 		display: none !important;
 	}
+
+	/* The spaces feed's timeline rail is a faithful 1px line, but this shot is
+	   drawn at 1440 and zoomed down (--doc-z, 0.44 for the spaces shot), which
+	   collapses a 1px line to under half a pixel and paints it away. Divide the
+	   width back out of the zoom so it lands at ~1px on screen, the same way the
+	   drawn scrollbars compensate. On-screen colour and 0.6 opacity are the
+	   app's; only the pre-zoom width changes. */
+	.doc-mock :global(.sp-timeline-group::before) {
+		width: calc(1px / var(--doc-z, 1));
+	}
 </style>

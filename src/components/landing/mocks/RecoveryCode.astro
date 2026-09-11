@@ -1,0 +1,50 @@
+---
+/**
+ * The "Save your recovery code" panel the app shows once, right after the first
+ * sign-in, blocking the account screen until you tick that you saved it. From
+ * AccountScreen.tsx (the recoveryStage branch) and AccountScreen.css.
+ *
+ * The code is a placeholder in the app's real format: six groups of five from
+ * the Crockford-style alphabet the app uses (no I, O, 0 or 1), which is 150
+ * bits of randomness. Continue stays disabled until the box is ticked; the mock
+ * draws that resting state.
+ */
+import { SRC_ICONS } from '../app-parts';
+---
+
+<div class="auth-card recovery-card">
+	<div class="auth-brand">
+		<span class="auth-brand-badge" set:html={SRC_ICONS.key20} />
+		<h3 class="auth-title">Save your recovery code</h3>
+		<p class="auth-subtitle">
+			If you forget your password, this code is the only thing that can unlock your synced items on
+			a new device. We cannot recover them for you.
+		</p>
+	</div>
+	<div class="auth-form">
+		<p class="acct-recovery-code">K7QM2-9XF4P-RH3TW-6NBVY-8ZDGS-J45CX</p>
+		<div class="acct-recovery-actions">
+			<span class="acct-btn">Copy</span>
+			<span class="acct-btn">Save as file</span>
+		</div>
+		<label class="acct-recovery-ack">
+			<input type="checkbox" disabled />
+			<span>I saved my recovery code</span>
+		</label>
+		<span class="auth-submit" aria-disabled="true">Continue</span>
+	</div>
+</div>
+
+<style>
+	.recovery-card {
+		/* the brighter accent the app inherits from its settings root */
+		--cta: #ff5535;
+		--cta-hover: #ff6b4d;
+	}
+
+	/* the button is a span here, so the disabled look is applied directly rather
+	   than through :disabled */
+	.recovery-card .auth-submit[aria-disabled='true'] {
+		opacity: 0.45;
+	}
+</style>
