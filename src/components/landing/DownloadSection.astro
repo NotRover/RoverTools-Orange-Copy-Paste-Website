@@ -39,6 +39,11 @@ const build = await fetchBuild();
 					<a class="dl-note-link" href="/docs/linux/">Linux notes</a>
 				</div>
 			</div>
+			<div class="dl-card dl-card--soon reveal">
+				<h3>macOS</h3>
+				<p>A Mac build is on the way. Everything here, on Apple silicon and Intel.</p>
+				<span class="btn btn-ghost dl-soon-cta" aria-disabled="true">Coming soon...</span>
+			</div>
 		</div>
 		<p class="dl-version reveal">
 			<span data-dl-version>{build ? `Version ${build.version}` : 'Latest build'}</span>
@@ -70,7 +75,7 @@ const build = await fetchBuild();
 
 	.dl-cards {
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 24rem));
+		grid-template-columns: repeat(3, minmax(0, 20rem));
 		justify-content: center;
 		gap: 1.2rem;
 		text-align: left;
@@ -87,6 +92,16 @@ const build = await fetchBuild();
 		font-family: var(--font-display);
 		font-size: 1.2rem;
 		margin: 0 0 0.4rem;
+	}
+
+	.dl-card--soon {
+		border-style: dashed;
+		background: color-mix(in srgb, var(--surface) 60%, transparent);
+	}
+
+	.dl-soon-cta {
+		pointer-events: none;
+		opacity: 0.5;
 	}
 
 	.dl-card p {
@@ -126,6 +141,12 @@ const build = await fetchBuild();
 		max-width: 34rem;
 		font-size: 0.85rem;
 		color: var(--text-muted);
+	}
+
+	@media (max-width: 1024px) {
+		.dl-cards {
+			grid-template-columns: repeat(2, minmax(0, 22rem));
+		}
 	}
 
 	@media (max-width: 760px) {
