@@ -64,5 +64,113 @@ const description =
 			);
 			document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 		</script>
+
+		<script>
+			// Eased inertia scrolling for the landing page: the wheel nudges a target
+			// and the page glides toward it, so scrolling reads slow and smooth instead
+			// of stepping. Progressive enhancement - it only runs with a fine pointer and
+			// motion allowed. Touch keeps its own native momentum; reduced motion and
+			// no-JS both fall back to the plain scroll (and CSS handles anchor jumps).
+			(() => {
+				const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+				const coarse = matchMedia('(pointer: coarse)');
+				if (reduce.matches || coarse.matches) return;
+
+				const doc = document.documentElement;
+				// take anchor animation off the browser so it can't fight the loop below
+				doc.style.scrollBehavior = 'auto';
+
+				const EASE = 0.085; // lower glides longer and feels slower to settle
+				const WHEEL = 0.9; // slightly shorter travel per notch
+				const maxY = () => doc.scrollHeight - window.innerHeight;
+				const clamp = (v) => Math.max(0, Math.min(v, maxY()));
+
+				let target = window.scrollY;
+				let current = target;
+				let raf = null;
+
+				const tick = () => {
+					current += (target - current) * EASE;
+					if (Math.abs(target - current) < 0.5) {
+						current = target;
+						window.scrollTo(0, current);
+						raf = null;
+						return;
+					}
+					window.scrollTo(0, current);
+					raf = requestAnimationFrame(tick);
+				};
+				const start = () => {
+					if (raf == null) raf = requestAnimationFrame(tick);
+				};
+
+				// let a scrollable region under the pointer (code block, inner list) keep
+				// its own scroll instead of moving the page
+				const scrollableUnder = (node, dy) => {
+					while (node && node !== document.body && node !== doc) {
+						if (node.nodeType === 1) {
+							const s = getComputedStyle(node);
+							if (
+								/(auto|scroll)/.test(s.overflowY) &&
+								node.scrollHeight > node.clientHeight
+							) {
+								const atTop = node.scrollTop <= 0;
+								const atBottom =
+									node.scrollTop + node.clientHeight >= node.scrollHeight - 1;
+								if ((dy < 0 && !atTop) || (dy > 0 && !atBottom)) return true;
+							}
+						}
+						node = node.parentNode;
+					}
+					return false;
+				};
+
+				window.addEventListener(
+					'wheel',
+					(e) => {
+						if (e.ctrlKey) return; // pinch-zoom
+						if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // horizontal intent
+						let dy = e.deltaY;
+						if (e.deltaMode === 1) dy *= 16; // lines -> approx px
+						else if (e.deltaMode === 2) dy *= window.innerHeight; // pages
+						if (scrollableUnder(e.target, dy)) return;
+						e.preventDefault();
+						target = clamp(target + dy * WHEEL);
+						start();
+					},
+					{ passive: false }
+				);
+
+				// resync when something other than the loop moved the page (keyboard,
+				// scrollbar drag, focus, browser restore)
+				window.addEventListener(
+					'scroll',
+					() => {
+						if (raf == null) {
+							target = window.scrollY;
+							current = target;
+						}
+					},
+					{ passive: true }
+				);
+				window.addEventListener('resize', () => {
+					target = clamp(target);
+				});
+
+				// glide to in-page anchors with the same easing
+				document.addEventListener('click', (e) => {
+					const a = e.target.closest && e.target.closest('a[href*="#"]');
+					if (!a) return;
+					const url = new URL(a.href, location.href);
+					if (url.pathname !== location.pathname || !url.hash) return;
+					const el = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+					if (!el) return;
+					e.preventDefault();
+					history.pushState(null, '', url.hash);
+					target = clamp(el.getBoundingClientRect().top + window.scrollY);
+					start();
+				});
+			})();
+		</script>
 	</body>
 </html>
