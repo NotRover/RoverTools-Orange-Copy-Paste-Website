@@ -17,12 +17,14 @@ A **Space** is a live feed shared between any number of people. Share a clipboar
 
 ## Creating and joining
 
-- **Create** a space with a name. You become its owner.
-- **Join** with an invite code or link. Links work in a browser, so you can send one to someone who does not have the app yet.
-- **Invite** members by code, link, or email, and revoke invites you sent.
-- **Request to join:** anyone with the code or link can knock, and any member may let them in.
+- **Create** a space with a name. You become its owner. A checkbox, *New members can read earlier items*, is on by default and decides whether people who join later see what was shared before them.
+- **Join** with an invite code or link. Both raise a **request to join**, not an instant membership, so a forwarded code only lets someone knock. Someone already inside has to let them in. Links open in a browser, so you can send one to a person who does not have the app yet.
+- **Invite by email** (owner only) is the exception: the person accepts and joins right away, because naming their address is itself the approval. They need an existing account so a key can be prepared for them.
+- **Who can approve** a code or link request is the owner by default. Turn on *Members can approve requests* in the space settings to let any member let people in.
 
-New members can read the space's existing history: everyone in a space can see what was shared before they joined.
+Invite codes are short, expire after **72 hours**, and are minted once when the space is created. You can copy the code or a link, and revoke email invites you sent.
+
+New members can read the space's existing history when the space allows it, fixed at the moment they join, so changing the setting later never widens an existing member's view backward.
 
 ## Sharing into a space
 
@@ -36,6 +38,7 @@ New members can read the space's existing history: everyone in a space can see w
 - **Auto-copy incoming**, per space and per device: anything shared into the space lands directly on your clipboard as it arrives. Only live arrivals can trigger it, never backfill, so it cannot flood you.
 - **Comments:** discuss any shared item in a popover thread, with mentions.
 - **Remove from your devices:** delete an item someone shared with you and it goes from all your own devices at once, while it stays in the space for everyone else.
+- **Show removed items**, per device and on by default: when someone takes an item out of the space, a placeholder marks where it was and who removed it. Turn it off and removed items simply vanish; a *Clear placeholders* button tidies the markers either way.
 
 ## Members and keys
 

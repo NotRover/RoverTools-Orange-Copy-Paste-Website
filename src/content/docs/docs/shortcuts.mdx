@@ -14,7 +14,7 @@ import CardMenu from '../../../components/landing/CardMenu.astro';
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> | Capture the current selection to history and show the capture receipt popup. |
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> | Open the quick-paste popup at your cursor. |
 
-Both popup hotkeys are toggles: pressing the combination again while the popup is open closes it.
+Both popup hotkeys are toggles: pressing the combination again while the popup is open closes it. These three combinations are fixed and cannot be remapped. On native Wayland, where the app cannot grab global keys, bind the same two actions in your compositor instead. See the [Linux notes](/docs/linux/).
 
 ## Inside the paste popup
 
@@ -48,7 +48,8 @@ The receipt shown after <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> takes thes
 
 | Input | Action |
 |---|---|
-| Click | Copy the entry back to the clipboard. |
+| Click | Copy the entry back to the clipboard. Turn on *Click a card to view it* in Settings to open it on a single click instead. |
+| Double-click | Open the entry in the full viewer (or copy it, if the setting above is on). |
 | Right-click | Context menu: Copy, Pin, Save, Groups, Share, upload to or remove from cloud, View, and Delete. |
 | Type chip | Expand or collapse a multi-file list. |
 | +N chip | Show overflowing group tags. |

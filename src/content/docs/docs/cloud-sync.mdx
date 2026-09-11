@@ -26,7 +26,7 @@ Your password does double duty: it logs you in *and* it derives the key that unl
 
 ## Sync modes
 
-The mode is per device, so a laptop can sync live while a desktop stays manual.
+The mode is per device, so a laptop can sync live while a desktop stays manual. New devices start in **Realtime**.
 
 <DocMock>
 	<SyncModes />
@@ -46,13 +46,20 @@ Clipboard entries, notes, and your preferences (theme, layout, sort, groups and 
 
 ## Files, images and folders
 
-Images, files, and whole folders ride along, up to **5 MB per clipboard entry** (the sum of everything in one copy). A folder syncs as a single entry and unpacks on the other device. An entry over the cap is skipped and the app tells you; nothing is dropped silently. Accounts start with **50 MB** of encrypted file storage, with a heads-up when you reach 90%. Text and notes do not count against it.
+Images and files ride along, up to **5 MB each**. A folder syncs as a single entry and unpacks on the other device. Anything over the cap is skipped and the app tells you; nothing is dropped silently. Accounts start with **50 MB** of encrypted file storage, with a heads-up around 85% full. Only images and files you upload count against it; text and notes take no file storage.
 
-The Account screen shows your storage, synced item counts by type, and a cloud view of everything stored.
+Two more ceilings keep an account bounded, and the app leaves anything past them on the device rather than failing:
+
+- A single entry's text is capped near **512 KB**. A larger clip stays local.
+- Up to **3,000 items** sync per account. Beyond that, new items stay local until you make room.
+
+The Account screen shows your storage, a separate synced-item count, per-type breakdowns, and a cloud view of everything stored. When something will not fit, it lands in a *not synced* list grouped by reason, with **Try again** once you have space.
 
 ## Devices
 
-Each installation registers as a device. The Account screen lists them with live online/offline presence, and you can revoke a device you no longer use.
+Each installation registers as a device, named automatically from its platform. The Account screen lists them with live online/offline presence, and you can revoke a device you no longer use. You cannot revoke the device you are signed in on; sign out on that one instead. A revoked device has to sign in again before it syncs.
+
+To stop syncing without signing out, switch this device to **Manual**. To change your password without losing access, use **Change password** on a signed-in device: the key that unlocks your data stays the same, only what wraps it changes.
 
 ## Deleting and removing
 
