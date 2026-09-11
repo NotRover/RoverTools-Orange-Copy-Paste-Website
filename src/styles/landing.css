@@ -16,8 +16,8 @@
 	--text-muted: #606060;
 	--accent: #ff3e1c;
 	--accent-hover: #ff5535;
-	--accent-dim: rgba(255, 62, 28, 0.1);
-	--accent-dim-strong: rgba(255, 62, 28, 0.18);
+	--accent-dim: #ff3e1c1a;
+	--accent-dim-strong: #ff3e1c2e;
 	--success: #22c55e;
 
 	/* entry-kind hues, same as the app */
@@ -421,10 +421,10 @@ body.landing {
 	flex-shrink: 0;
 }
 
-.oc-navbtn svg {
-	width: 18px;
-	height: 18px;
-}
+/* No size here on purpose. The app draws each sidebar glyph at its own size -
+   18 for clipboard, notes, keyboard and gear, 17 for the sun, 20 for the cloud,
+   21 for the bell, 22 for the account circle - and every icon in app-parts.ts
+   carries that size on its own svg. A rule here would flatten all seven to one. */
 
 .oc-navbtn.active {
 	background: var(--accent-dim-strong);
@@ -474,29 +474,6 @@ body.landing {
 }
 
 /* a video entry gets the same strip with a play badge over it */
-.oc-card-media--video {
-	position: relative;
-}
-
-.oc-card-play {
-	position: absolute;
-	inset: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #fff;
-}
-
-.oc-card-play span {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 28px;
-	height: 28px;
-	border-radius: 50%;
-	background: rgba(0, 0, 0, 0.55);
-}
-
 /* multi-image entries show a square thumbnail strip, the last one counting the rest */
 .oc-card-media--multi {
 	display: flex;
@@ -553,13 +530,17 @@ body.landing {
 }
 
 .oc-card-html ul {
-	padding-left: 14px;
+	/* the app resets padding to 0 on every block element inside the preview,
+	   lists included, so the markers sit outside the box the same way */
+	padding-left: 0;
 }
 
 .oc-card-html code {
 	font-family: inherit;
 	font-size: 11px;
-	background: var(--surface-hover);
+	/* The app asks for `var(--card-hover)`, which no theme defines, so the
+	   declaration is dropped and inline code keeps the card's own ground. */
+	background: transparent;
 	border-radius: 3px;
 	padding: 1px 3px;
 }
@@ -577,6 +558,7 @@ body.landing {
 	gap: 5px;
 	min-width: 0;
 	color: var(--text-secondary);
+	flex-shrink: 0;
 }
 
 .oc-card-file svg {
@@ -599,14 +581,11 @@ body.landing {
 	padding-left: 14px;
 }
 
-/* a file that is gone from disk is struck through, with the app's own hint word */
-.oc-card-text--missing {
-	opacity: 0.7;
-	text-decoration: line-through;
-}
+/* A file that is gone from disk keeps its ordinary name on the card and says so
+   with one word beside it. The app sets no style at all on .card-text--missing -
+   the class is only a hook - so neither does this. */
 
-/* the hint opts out of the strike-through the file name carries, the same way
-   the app's own .card-missing-hint does - the word is a label, not struck text */
+/* Values from the app's .card-missing-hint. */
 .oc-card-missing {
 	font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
 	font-size: 12px;
@@ -646,10 +625,13 @@ body.landing {
 	text-overflow: ellipsis;
 }
 
-/* image entries name themselves, in the UI font at 11px/500 */
+/* image entries name themselves, in the card's code face at 11px/500 */
 .oc-imgname,
 .oc-card-text--imgname {
-	font-family: inherit;
+	/* The app's name line carries .card-text as well, and .card-text--image-name
+	   overrides only the size, weight and colour - so the face stays the code
+	   one. */
+	font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
 	font-size: 11px;
 	font-weight: 500;
 	color: var(--text-secondary);
@@ -765,6 +747,9 @@ body.landing {
 	border: 1px solid var(--border);
 	background: var(--surface);
 	color: var(--text-secondary);
+	/* the app zeroes it so an icon-only button collapses to its glyph; the count
+	   beside the trash sets its own */
+	font-size: 0;
 	box-shadow: var(--shadow-sm);
 	position: relative;
 	flex-shrink: 0;
@@ -991,6 +976,11 @@ body.landing {
 	flex: 1;
 	min-height: 0;
 	margin: 0 8px;
+	/* The app's .layout-viewport reserves a 12px scrollbar gutter on both edges
+	   (`scrollbar-gutter: stable both-edges`), so the timeline sits 12px in from
+	   each side on top of the 8px margin. A drawn bar reserves nothing, so the
+	   same inset is written out. */
+	padding: 0 12px;
 	overflow: hidden;
 }
 
@@ -1185,6 +1175,7 @@ html.js .reveal.in {
 	border: 1px solid var(--border);
 	border-radius: 10px;
 	background: var(--surface);
+	box-shadow: var(--shadow);
 	overflow: hidden;
 	font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 }
@@ -1231,7 +1222,6 @@ html.js .reveal.in {
 	color: var(--text-muted);
 	font-size: 10px;
 	font-weight: 600;
-	opacity: 0.32;
 }
 
 .cs-card-body {
@@ -1535,6 +1525,13 @@ html.js .reveal.in {
 	color: var(--text-secondary);
 }
 
+/* the chevron on a chip that opens a flyout, from .bulk-popup-chevron. Reached
+   by shape rather than a class: it is the trailing glyph after the label, and
+   the chips without a flyout have no second svg to match. */
+.bulk-popup-chip > svg + span + svg {
+	opacity: 0.55;
+}
+
 /* delete is red at rest so it never reads as one more neutral chip */
 .bulk-popup-chip--delete {
 	color: var(--danger);
@@ -1649,7 +1646,9 @@ html.js .reveal.in {
 	font-size: 8px;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
-	color: var(--text-muted);
+	/* the app asks for --text-dim, which it never defines, so the label falls
+	   back to the row's own colour - matched here rather than corrected */
+	color: inherit;
 	opacity: 0.8;
 }
 
@@ -1691,9 +1690,8 @@ html.js .reveal.in {
 	opacity: 1;
 }
 
-.oc-card--picked {
-	border-color: var(--accent);
-}
+/* The app marks a picked card with the filled checkbox and nothing else - its
+   .entry-card--selected sets no border of its own - so neither does this. */
 
 /* who sent an entry that came from another member of a space */
 .oc-owner-chip {
@@ -1739,6 +1737,8 @@ html.js .reveal.in {
 	display: flex;
 	align-items: center;
 	flex-shrink: 0;
+	/* the same 3px the time label takes, so both sit level with the chip row */
+	padding-top: 3px;
 	opacity: 0.65;
 	color: #10b981;
 }
@@ -1752,6 +1752,7 @@ html.js .reveal.in {
 	align-items: center;
 	gap: 2px;
 	flex-shrink: 0;
+	padding-top: 3px;
 	color: var(--accent);
 	opacity: 0.8;
 }
@@ -2060,12 +2061,15 @@ html.js .reveal.in {
 	font-size: 10px;
 	font-weight: 600;
 	letter-spacing: 0.3px;
+	/* nothing typed yet, so the app's button is disabled */
+	opacity: 0.4;
 }
 
 .gm-add-btn.is-on {
 	background: var(--accent);
 	border-color: var(--accent);
 	color: #fff;
+	opacity: 1;
 }
 
 /* ---- settings screen, from settings-screen/SettingsScreen.css ---- */
@@ -2261,7 +2265,10 @@ html.js .reveal.in {
 	gap: 5px;
 	padding: 4px 10px;
 	border: 1px solid var(--border-light);
+	/* the app's squircle: a large radius reads as a pill at this height, and
+	   `corner-shape` is ignored where unsupported so the radius stands in */
 	border-radius: 11px;
+	corner-shape: squircle;
 	background: var(--surface-hover);
 	color: var(--text-secondary);
 	font-size: 11px;
@@ -2281,6 +2288,10 @@ html.js .reveal.in {
 	font-size: 12px;
 	font-weight: 500;
 	white-space: nowrap;
+}
+
+.set-action-btn svg {
+	color: var(--text-muted);
 }
 
 .set-row-info {
@@ -2399,6 +2410,8 @@ html.js .reveal.in {
 	background: var(--surface);
 	box-shadow: var(--shadow);
 	z-index: 100;
+	max-height: 230px;
+	overflow-y: auto;
 	/* `selectFadeIn` from SettingsScreen.css. Going from `display: none` back to
 	   a flex box restarts a CSS animation, so opening the list a second time
 	   plays it again without anyone re-creating the element. */
@@ -2422,6 +2435,11 @@ html.js .reveal.in {
 }
 
 .set-select-option {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	text-align: left;
 	padding: 5px 9px;
 	border-radius: 5px;
 	font-size: 12px;

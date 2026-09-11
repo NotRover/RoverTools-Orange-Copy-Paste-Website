@@ -3,9 +3,18 @@ title: Notes
 description: A full editor next to your clipboard - task lists, tables, code blocks, attachments, Markdown export.
 ---
 
+import DocMock from '../../../components/docs/DocMock.astro';
+import AppShell from '../../../components/landing/AppShell.astro';
+import NotesScreen from '../../../components/landing/NotesScreen.astro';
+import NoteEditor from '../../../components/landing/mocks/NoteEditor.astro';
+
 Notes live one click from your clipboard history and share its organizing model: the same pinning, groups, search, filters and bulk actions.
 
-![The notes screen, a masonry of note cards with titles, previews and group tags.](/screenshots/notes-screen.png)
+<DocMock scale={0.6}>
+	<AppShell nav="notes">
+		<NotesScreen />
+	</AppShell>
+</DocMock>
 
 ## The editor
 
@@ -19,7 +28,9 @@ A block-style editor with:
 - Links with autolinking, images, horizontal rules.
 - Text color, multicolor highlight, text alignment, and <kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> indenting.
 
-![A note open in the editor, showing a heading, a task list with checkboxes, a table and a code block.](/screenshots/notes-editor.png)
+<DocMock scale={1.15}>
+	<NoteEditor />
+</DocMock>
 
 Notes auto-save while you type; there is no save button to forget.
 

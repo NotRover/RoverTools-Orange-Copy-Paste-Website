@@ -4,7 +4,7 @@
  * the select toggle once entries are ticked. Styles are the global
  * `bulk-popup-*` parts in landing.css.
  */
-import { CHIP_ICONS, MENU_ICONS, SRC_ICONS } from './app-parts';
+import { CHIP_ICONS, MENU_ICONS, SRC_ICONS, TB_ICONS } from './app-parts';
 
 interface Props {
 	/** how many entries are ticked */
@@ -17,9 +17,9 @@ interface Props {
 
 const { count = 7, flyout = true, picked = true } = Astro.props;
 
-/* close glyph the popups use: CloseIcon at 10px, stroke 2.5 */
+/* close glyph the bar uses: CloseIcon size 9, stroke 2.5 */
 const CLOSE_ICON =
-	'<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+	'<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 ---
 
 <div class="bulk-popup">
@@ -28,9 +28,9 @@ const CLOSE_ICON =
 	<span class="bulk-popup-vsep"></span>
 	<span class="bulk-popup-chip bulk-popup-chip--pin"><Fragment set:html={MENU_ICONS.pin} /><span>Pin</span></span>
 	<span class="bulk-popup-chip bulk-popup-chip--save"><Fragment set:html={MENU_ICONS.star} /><span>Save</span></span>
-	<span class="bulk-popup-chip"><Fragment set:html={MENU_ICONS.tag} /><span>Groups</span><Fragment set:html={MENU_ICONS.caret} /></span>
+	<span class="bulk-popup-chip"><Fragment set:html={MENU_ICONS.tag} /><span>Groups</span><Fragment set:html={TB_ICONS.chevron} /></span>
 	<span class="bulk-popup-groups-wrap">
-		<span class:list={['bulk-popup-chip', flyout && 'bulk-popup-chip--groups-active']}><Fragment set:html={MENU_ICONS.share} /><span>Share</span><Fragment set:html={MENU_ICONS.caret} /></span>
+		<span class:list={['bulk-popup-chip', flyout && 'bulk-popup-chip--groups-active']}><Fragment set:html={MENU_ICONS.share} /><span>Share</span><Fragment set:html={TB_ICONS.chevron} /></span>
 		<span class="bulk-popup-groups-flyout" hidden={!flyout}>
 			<span class="bulk-popup-flyout-header"><Fragment set:html={MENU_ICONS.share} /><span>Share to space</span></span>
 			<span class="bulk-popup-flyout-spaces">
@@ -40,7 +40,7 @@ const CLOSE_ICON =
 			</span>
 		</span>
 	</span>
-	<span class="bulk-popup-chip"><Fragment set:html={SRC_ICONS.cloud13} /><span>Cloud</span><Fragment set:html={MENU_ICONS.caret} /></span>
+	<span class="bulk-popup-chip"><Fragment set:html={SRC_ICONS.cloud13} /><span>Cloud</span><Fragment set:html={TB_ICONS.chevron} /></span>
 	<span class="bulk-popup-vsep"></span>
 	<span class="bulk-popup-chip bulk-popup-chip--delete"><Fragment set:html={MENU_ICONS.trash} /><span>Delete</span></span>
 	<span class="bulk-popup-close" set:html={CLOSE_ICON} />

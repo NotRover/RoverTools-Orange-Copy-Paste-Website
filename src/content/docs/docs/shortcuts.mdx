@@ -3,6 +3,9 @@ title: Shortcuts reference
 description: Every global hotkey and popup key in Orange Copy Paste.
 ---
 
+import DocMock from '../../../components/docs/DocMock.astro';
+import CardMenu from '../../../components/landing/CardMenu.astro';
+
 ## Global shortcuts
 
 | Keys | Action |
@@ -39,7 +42,9 @@ The receipt shown after <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> takes thes
 
 ## On clipboard cards
 
-![A clipboard card with its right-click menu open.](/screenshots/card-menu.png)
+<DocMock scale={1.1} menu>
+	<CardMenu spaces={2} x={12} y={12} />
+</DocMock>
 
 | Input | Action |
 |---|---|

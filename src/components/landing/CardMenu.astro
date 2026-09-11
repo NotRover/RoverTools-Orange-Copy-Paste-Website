@@ -8,7 +8,7 @@
  * whichever card it is meant to belong to. Pass `anchor` instead of x/y to hang
  * it off a positioned parent - a bento tile rather than the window shell.
  */
-import { GROUP_COLORS, MENU_ICONS } from './app-parts';
+import { GROUP_COLORS, MENU_ICONS, TB_ICONS } from './app-parts';
 
 interface Props {
 	/** left offset inside the window, in the window's own pixels */
@@ -49,13 +49,13 @@ const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
 		<Fragment set:html={MENU_ICONS.share} />
 		<span class="oc-menu-label">Share to space</span>
 		<span class="oc-menu-count">{spaces}</span>
-		<span class="oc-menu-caret" set:html={MENU_ICONS.caret} />
+		<span class="oc-menu-caret" set:html={TB_ICONS.chevronRight} />
 	</span>
 	<span class="oc-menu-groups-wrap">
 		<span class="oc-menu-item oc-menu-item--sub">
 			<Fragment set:html={MENU_ICONS.tag} />
 			<span class="oc-menu-label">Groups</span>
-			<span class="oc-menu-caret" set:html={MENU_ICONS.caret} />
+			<span class="oc-menu-caret" set:html={TB_ICONS.chevronRight} />
 		</span>
 		<span class="oc-menu-groups-flyout" hidden={!groups}>
 			<span class="oc-menu-groups-head">Groups</span>
@@ -92,7 +92,9 @@ const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-sm);
 		background: var(--surface);
-		box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+		box-shadow: var(--shadow);
+		/* the app's UI font, since the menu is also drawn outside a window shell */
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 	}
 
 	.oc-menu-item {
@@ -118,15 +120,25 @@ const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
 		color: var(--danger, #ef4444);
 	}
 
+	/* a row that opens a submenu, from .card-menu-item--groups-toggle */
+	.oc-menu-item--sub {
+		font-weight: 500;
+		color: var(--text-secondary);
+	}
+
 	.oc-menu-label {
 		flex: 1;
 	}
 
 	.oc-menu-count {
+		display: inline-flex;
+		align-items: center;
+		margin-right: 3px;
 		color: var(--accent);
 		font-size: 12px;
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
+		line-height: normal;
 	}
 
 	.oc-menu-caret {

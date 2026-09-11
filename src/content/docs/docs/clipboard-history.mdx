@@ -3,7 +3,15 @@ title: Clipboard history
 description: Capture, pin, save, group, search and filter everything you copy.
 ---
 
-![The clipboard history screen with entries of several types, the in-clipboard entry outlined in accent, grouped under day headers.](/screenshots/history-main.png)
+import DocMock from '../../../components/docs/DocMock.astro';
+import HistoryShot from '../../../components/landing/mocks/HistoryShot.astro';
+import GroupManager from '../../../components/landing/GroupManager.astro';
+import FilterCard from '../../../components/landing/FilterCard.astro';
+import BulkBar from '../../../components/landing/BulkBar.astro';
+
+<DocMock scale={0.6}>
+	<HistoryShot />
+</DocMock>
 
 ## What gets captured
 
@@ -29,7 +37,9 @@ These are two different promises:
 
 ## Groups
 
-![The Group Manager, listing colored groups with rename, recolor and delete controls.](/screenshots/history-groups.png)
+<DocMock scale={1.25}>
+	<GroupManager />
+</DocMock>
 
 Groups are colored tags you define. Create, rename, recolor and delete them from the Group Manager, or assign them from an entry's right-click menu. A group keeps the same color everywhere (you can override it with the color swatches), and deleting a group gives you a 5 second undo toast.
 
@@ -37,7 +47,9 @@ Groups are colored tags you define. Create, rename, recolor and delete them from
 
 ## Search and filters
 
-![The filter panel open, with quick, type, cloud, sharing, group and date sections, each option showing a count.](/screenshots/history-filters.png)
+<DocMock scale={0.8}>
+	<FilterCard />
+</DocMock>
 
 Search matches entry content and group names. Filters stack on top:
 
@@ -51,7 +63,9 @@ Every filter option shows the number of items it would leave you *before* you ap
 
 ## Bulk actions
 
-![Selection mode with several cards checked and the bulk action bar along the bottom.](/screenshots/history-bulk.png)
+<DocMock scale={0.9}>
+	<BulkBar flyout={false} />
+</DocMock>
 
 Select multiple entries (with range select) to pin, save, assign groups, share with a space, upload to or remove from your account, remove from a space, or delete, all in one action. <kbd>Esc</kbd> exits selection mode.
 

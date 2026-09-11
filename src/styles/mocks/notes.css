@@ -52,7 +52,7 @@ flex-shrink: 0;
 
 .ns-fmt-btn--active {
 color: var(--accent);
-background: rgba(255, 62, 28, 0.12);
+background: color-mix(in srgb, var(--accent) 12%, var(--surface));
 }
 
 .ns-fmt-btn--dropdown {
@@ -63,11 +63,14 @@ font-size: 11.5px;
 font-weight: 700;
 }
 
+/* the app's editor surface: --ee-editor-size / --ee-editor-line from
+   editor-engine/markdown.css, on the app's own text colour */
+
 .ns-editor-content {
 padding: 12px;
-font-size: 12px;
-line-height: 1.5;
-color: var(--text-secondary);
+font-size: 14.25px;
+line-height: 1.6;
+color: var(--text);
 }
 
 /* note previews carry real markdown: a table, a quote, a paragraph */
@@ -84,12 +87,13 @@ padding: 2px 5px;
 line-height: 1.3;
 border: 1px solid var(--border);
 text-align: left;
+vertical-align: top;
 }
 
 .ns-table th {
-color: var(--text);
+color: var(--text-secondary);
 font-weight: 600;
-background: var(--surface-hover);
+background: color-mix(in srgb, var(--accent) 7%, transparent);
 }
 
 .ns-table td {
@@ -99,8 +103,10 @@ color: var(--text-secondary);
 .ns-quote {
 margin: 0 0 0.3em;
 padding: 0.1em 0.6em;
-border-left: 2px solid var(--accent);
-color: var(--text-secondary);
+border-left: 2px solid color-mix(in srgb, var(--accent) 65%, transparent);
+border-radius: 0 4px 4px 0;
+background: color-mix(in srgb, var(--accent) 4%, transparent);
+color: var(--text-muted);
 }
 
 .ns-p {
@@ -116,7 +122,9 @@ gap: 2px;
 flex-shrink: 0;
 color: var(--accent);
 opacity: 0.8;
-margin-right: 5px;
+/* the app puts this badge beside the time rather than inside it, where the
+   footer's own 6px gap does the spacing; nested here, it pays for itself */
+margin-right: 6px;
 }
 
 .ns-card-sync-count {
@@ -151,27 +159,39 @@ font-weight: 750;
 color: var(--text);
 line-height: 1.35;
 letter-spacing: -0.01em;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
 }
+
+/* the app caps the preview and fades its last lines out under a mask, so a
+   long note stops rather than being cut off square */
 
 .ns-card-preview {
 font-size: 12px;
 line-height: 1.4;
 color: var(--text-secondary);
+word-break: break-word;
+display: block;
+max-height: 220px;
+overflow: hidden;
+-webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 84%, transparent 100%);
+mask-image: linear-gradient(to bottom, #000 0%, #000 84%, transparent 100%);
 }
 
 .ns-tasks {
-margin: 0;
-padding: 0;
+margin: 0.2em 0 0.3em;
+padding-left: 0.2em;
 list-style: none;
 display: flex;
 flex-direction: column;
-gap: 4px;
+gap: 0.1em;
 }
 
 .ns-task {
 display: flex;
 align-items: center;
-gap: 7px;
+gap: 0.5em;
 }
 
 .ns-task-box {
@@ -197,13 +217,14 @@ text-decoration: line-through;
 }
 
 .ns-code {
-margin: 8px 0 0;
-padding: 7px 9px;
-border-radius: var(--radius-xs);
-background: var(--bg);
+margin: 0 0 0.3em;
+padding: 6px 8px;
+border-radius: 6px;
+background: rgba(255, 255, 255, 0.04);
 border: 1px solid var(--border);
-font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+font-family: ui-monospace, 'Cascadia Code', 'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 font-size: 11px;
+line-height: 1.4;
 color: var(--text-secondary);
 overflow: hidden;
 }
@@ -229,8 +250,8 @@ display: inline-flex;
 align-items: center;
 gap: 4px;
 height: var(--chip-h);
-padding: 0 7px 0 5px;
-border-radius: var(--radius-xs);
+padding: 3px 7px 3px 5px;
+border-radius: 5px;
 font-size: 10px;
 font-weight: 600;
 letter-spacing: 0.2px;

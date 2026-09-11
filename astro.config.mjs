@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import mdx from '@astrojs/mdx';
 
 // Canonical origin, used for canonical links and the sitemap. Set SITE_URL in the
 // Cloudflare project once a custom domain is attached; until then Pages hands the
@@ -66,5 +67,6 @@ export default defineConfig({
 				},
 			],
 		}),
+		mdx(),
 	],
 });

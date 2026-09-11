@@ -399,15 +399,44 @@ export const SRC_ICONS = {
 		15,
 		'M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24h72v16H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V200h72a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40ZM48,56H208a8,8,0,0,1,8,8v80H40V64A8,8,0,0,1,48,56ZM208,184H48a8,8,0,0,1-8-8V160H216v16A8,8,0,0,1,208,184Z',
 	),
-	/** shared out from this account: ArrowUpRight size 11, weight bold */
-	arrowUp10: phos(
+	/** the Spaces rows direction badge, shared out from this account:
+	 *  ArrowUpRight size 11, weight bold (SpacesScreen.tsx DirectionBadge) */
+	arrowUpRight11: phos(
 		11,
 		'M204,64V168a12,12,0,0,1-24,0V93L72.49,200.49a12,12,0,0,1-17-17L163,76H88a12,12,0,0,1,0-24H192A12,12,0,0,1,204,64Z',
 	),
-	/** shared in by a member: ArrowDownLeft size 11, weight bold */
-	arrowDown10: phos(
+	/** the Spaces rows direction badge, shared in by a member:
+	 *  ArrowDownLeft size 11, weight bold */
+	arrowDownLeft11: phos(
 		11,
 		'M200.49,72.48,93,180h75a12,12,0,0,1,0,24H64a12,12,0,0,1-12-12V88a12,12,0,0,1,24,0v75L183.51,55.51a12,12,0,0,1,17,17Z',
+	),
+	/** the share mark on a clipboard or note card (ChipBar.tsx, NoteCard.tsx):
+	 *  ShareNetwork size 15, regular */
+	shareNetwork15: phos(
+		15,
+		'M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z',
+	),
+	/** the synced tick on a card: CloudCheck size 15, regular */
+	cloudCheck15: phos(
+		15,
+		'M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L144,148.69l42.34-42.35A8,8,0,0,1,197.66,106.34Z',
+	),
+	/** the waiting-to-upload mark on a card: CloudArrowUp size 15, regular */
+	cloudArrowUp15: phos(
+		15,
+		'M178.34,165.66,160,147.31V208a8,8,0,0,1-16,0V147.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0l32,32a8,8,0,0,1-11.32,11.32ZM160,40A88.08,88.08,0,0,0,81.29,88.68,64,64,0,1,0,72,216h40a8,8,0,0,0,0-16H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.12A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,100.8,66,8,8,0,0,0,3.2,15.34,7.9,7.9,0,0,0,3.2-.68A88,88,0,0,0,160,40Z',
+	),
+	/** the filter card's Mine chip: ArrowUp size 10, weight bold
+	 *  (FilterParts.tsx OwnerChips) - straight, not the diagonal badge arrow */
+	arrowUp10: phos(
+		10,
+		'M208.49,120.49a12,12,0,0,1-17,0L140,69V216a12,12,0,0,1-24,0V69L64.49,120.49a12,12,0,0,1-17-17l72-72a12,12,0,0,1,17,0l72,72A12,12,0,0,1,208.49,120.49Z',
+	),
+	/** the filter card's From others chip: ArrowDown size 10, weight bold */
+	arrowDown10: phos(
+		10,
+		'M208.49,152.49l-72,72a12,12,0,0,1-17,0l-72-72a12,12,0,0,1,17-17L116,187V40a12,12,0,0,1,24,0V187l51.51-51.52a12,12,0,0,1,17,17Z',
 	),
 	/** the removed-item placeholder's mark: Prohibit size 11, weight bold */
 	prohibit11: phos(

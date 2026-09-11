@@ -907,31 +907,64 @@ figcaption {
 		}
 	}
 
-/* The bar is 577 wide, in a full-row tile that gives it the viewport less
-	   50px. Same rule as the filter card: each rung is sized for the narrowest
-	   viewport it covers, which is the breakpoint below it. */
+/* The bar is 568 wide. Below 1220 the bento is two columns and the bar's tile
+	   is a half, which gives the mock vw/2 less 66.8px of room (section padding,
+	   the grid gap, tile border and mock padding); below 600 the grid is one
+	   column and the room is vw less 78.8px. Same rule as the filter card: each
+	   rung is sized for the narrowest viewport it covers, which is the
+	   breakpoint below it, so 568 * z stays under the room at that width. */
 
-@media (max-width: 640px) {
+@media (max-width: 1220px) {
 		.mock--bulk {
-			--z: 0.88;
+			--z: 0.84;
+		}
+	}
+
+@media (max-width: 1100px) {
+		.mock--bulk {
+			--z: 0.67;
+		}
+	}
+
+@media (max-width: 900px) {
+		.mock--bulk {
+			--z: 0.55;
+		}
+	}
+
+@media (max-width: 760px) {
+		.mock--bulk {
+			--z: 0.41;
+		}
+	}
+
+@media (max-width: 600px) {
+		.mock--bulk {
+			--z: 0.84;
 		}
 	}
 
 @media (max-width: 560px) {
 		.mock--bulk {
-			--z: 0.74;
+			--z: 0.7;
 		}
 	}
 
 @media (max-width: 480px) {
 		.mock--bulk {
-			--z: 0.6;
+			--z: 0.56;
 		}
 	}
 
 @media (max-width: 400px) {
 		.mock--bulk {
 			--z: 0.46;
+		}
+	}
+
+@media (max-width: 360px) {
+		.mock--bulk {
+			--z: 0.42;
 		}
 	}
 
