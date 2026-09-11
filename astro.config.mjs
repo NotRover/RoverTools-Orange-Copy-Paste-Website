@@ -37,7 +37,6 @@ export default defineConfig({
 					items: [
 						{ label: 'What is Orange Copy Paste?', link: '/docs/' },
 						{ label: 'Install and first run', slug: 'docs/getting-started' },
-						{ label: 'Shortcuts reference', slug: 'docs/shortcuts' },
 					],
 				},
 				{
@@ -47,10 +46,11 @@ export default defineConfig({
 						{ label: 'Quick paste and capture', slug: 'docs/quick-paste' },
 						{ label: 'Notes', slug: 'docs/notes' },
 						{ label: 'Settings', slug: 'docs/settings' },
+						{ label: 'Shortcuts reference', slug: 'docs/shortcuts' },
 					],
 				},
 				{
-					label: 'Cloud',
+					label: 'Sync and sharing',
 					items: [
 						{ label: 'Cloud sync', slug: 'docs/cloud-sync' },
 						{ label: 'Spaces and sharing', slug: 'docs/spaces' },

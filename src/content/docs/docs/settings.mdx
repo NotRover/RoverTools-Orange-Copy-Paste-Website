@@ -23,6 +23,15 @@ Settings apply to this device. A subset of preferences (theme, layout, sort, gro
 - **Show splash screen on startup.**
 - **Show sync badges on cards:** the cloud icon that marks whether an entry has reached the server. Turning it off changes nothing about what syncs.
 
+## Confirmations
+
+Both are on by default, because each action reaches beyond the device you are on.
+
+- **Confirm before deleting synced items:** ask first when you delete an item that has a cloud copy, since the delete also removes it from your other devices.
+- **Confirm before removing from a space:** ask first when you take an item out of a space, since it leaves the space for everyone in it.
+
+Each confirmation dialog has its own *Don't ask again*, so you can silence one without the other.
+
 ## Notifications
 
 - **Desktop notifications:** Windows notifications while the app is in the background.
@@ -34,11 +43,12 @@ Short cues for shared items arriving, join requests, a space opening up, and ref
 
 ## Quick paste
 
-- **Paste slots:** how many numbered rows the paste popup shows, 3 to 10 (default 3).
+- **Number-key paste slots:** how many entries the quick-paste popup numbers 1 through 0 for one-key paste, 3 to 10 (default 3).
 
 ## History
 
 - **Keep history across app restarts:** off by default. Until enabled, unpinned history is memory-only.
+- **Click a card to view it:** off by default. With it off, a single click copies the entry and a double click also opens it. Turn it on and a single click opens the entry while a double click copies.
 - **Auto-save copied entries:** automatically add every capture to the Saved group.
 
 ## Data
@@ -48,12 +58,13 @@ Short cues for shared items arriving, join requests, a space opening up, and ref
 ## Updates
 
 - Your current version, with **Check now**, **Download**, and **Restart and install**, plus the release notes inline.
-- **Check for updates automatically:** looks shortly after start and periodically after. Updates are never installed without asking.
+- **Check for updates automatically:** looks shortly after start and periodically after. On its own, this only checks; it never installs without asking.
+- **Install updates automatically:** off by default. When on, a newer version found at startup is downloaded and installed on the spot, then the app reopens. It only runs at startup, never while you are working, and it needs automatic checks turned on.
 - **Get beta versions:** receive new features early alongside every normal release. Turning it off stops future betas; it cannot move you back to an older version.
 
 ## Theme
 
-The app follows your OS light/dark setting until you pick a theme by hand; after that, your choice wins.
+The light/dark toggle lives in the app's title bar, not in Settings. The app follows your OS light/dark setting until you pick a theme by hand; after that, your choice wins and syncs with your account.
 
 ## Account and sync
 

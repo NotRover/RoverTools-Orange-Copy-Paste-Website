@@ -25,6 +25,7 @@ The entry currently held by the operating system clipboard is marked with an acc
 
 - History rolls at **100 entries**. Pinned and saved entries do not count against the trim.
 - Up to **10 entries can be pinned**. The 11th pin shows a toast instead.
+- A single copy larger than about **4 MB** of text, rich text, or file paths is refused with a toast rather than truncated, and your ordinary paste still works. Images are exempt, since they are stored as files on disk. This is separate from the [cloud sync](/docs/cloud-sync/) size caps.
 
 ## Pin vs Save
 
@@ -69,6 +70,10 @@ Every filter option shows the number of items it would leave you *before* you ap
 
 Select multiple entries (with range select) to pin, save, assign groups, share with a space, upload to or remove from your account, remove from a space, or delete, all in one action. <kbd>Esc</kbd> exits selection mode.
 
+## Opening an entry
+
+A single click copies the entry straight back to the clipboard; a double click opens it in a full viewer. You can swap those with *Click a card to view it* in [Settings](/docs/settings/), so a single click opens and a double click copies. The viewer shows the entry at full size, and images can zoom to their original resolution.
+
 ## Sorting and layout
 
-Sort by Newest, Oldest, A to Z, Z to A, or Type. View as tiles or a list. Entries group under collapsible day headers (Today, Yesterday, then dates), and long histories render progressively so scrolling stays smooth.
+Sort by Newest, Oldest, A to Z, Z to A, or Type. View as tiles, a list, or a single column. Entries group under collapsible day headers (Today, Yesterday, then dates), and long histories render progressively so scrolling stays smooth.

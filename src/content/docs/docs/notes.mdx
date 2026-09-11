@@ -8,7 +8,7 @@ import AppShell from '../../../components/landing/AppShell.astro';
 import NotesScreen from '../../../components/landing/NotesScreen.astro';
 import NoteEditor from '../../../components/landing/mocks/NoteEditor.astro';
 
-Notes live one click from your clipboard history and share its organizing model: the same pinning, groups, search, filters and bulk actions.
+Notes live one click from your clipboard history and share its organizing model: the same pinning, groups, search, filters and bulk actions. Pinned notes rise to the top under their own header, and the list can show as tiles, a list, or a single column. Drag the divider to resize the list against the editor, or expand the editor to fill the window.
 
 <DocMock scale={0.6}>
 	<AppShell nav="notes">
@@ -32,7 +32,7 @@ A block-style editor with:
 	<NoteEditor />
 </DocMock>
 
-Notes auto-save while you type; there is no save button to forget.
+Notes auto-save while you type; there is no save button to forget, though <kbd>Ctrl</kbd>+<kbd>S</kbd> flushes the save immediately. A note you open and leave without a title or any content is discarded, so you never collect blank notes. The toolbar keeps a live word and character count and the time since the last edit, and <kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>Ctrl</kbd>+<kbd>-</kbd> / <kbd>Ctrl</kbd>+<kbd>0</kbd> adjust the reading zoom.
 
 ## Clips inside notes
 
@@ -48,4 +48,4 @@ Any note exports as a `.md` file, or copies to the clipboard as Markdown. Export
 
 ## Syncing
 
-With [cloud sync](/docs/cloud-sync/) on, notes sync end-to-end encrypted exactly like clipboard entries, and can be shared into [Spaces](/docs/spaces/).
+With [cloud sync](/docs/cloud-sync/) on, notes sync end-to-end encrypted exactly like clipboard entries, and can be shared into [Spaces](/docs/spaces/). A note you share into a space stays yours: other members see it read-only, with a bar saying only you can edit it.
