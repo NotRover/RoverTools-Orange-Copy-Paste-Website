@@ -1,0 +1,44 @@
+---
+/**
+ * The "Automatic syncing" card from the account screen: the Realtime / Passive
+ * / Manual segmented control with the active mode's description below it. From
+ * AccountScreen.tsx (the acct-mode card) and AccountScreen.css. The three
+ * option labels and the descriptions are the app's own copy.
+ *
+ * Drawn on its own for the cloud-sync docs page, so `--cta` (which the app
+ * inherits from its settings root) is set here on the card.
+ */
+const MODES = ['Realtime', 'Passive', 'Manual'];
+---
+
+<div class="acct-card acct-mode sync-modes-card">
+	<div class="acct-mode-head">
+		<span class="acct-row-name">Automatic syncing</span>
+		<div class="acct-seg">
+			{
+				MODES.map((label) => (
+					<span class:list={['acct-seg-pill', label === 'Realtime' && 'active']}>{label}</span>
+				))
+			}
+		</div>
+	</div>
+	<p class="acct-card-desc">
+		Items from your other devices arrive the moment they are copied, and what you copy here
+		uploads right away.
+	</p>
+	<p class="acct-mode-note">
+		Spaces are not affected. What you share to a space still goes out right away, and what other
+		people share with you always arrives live.
+	</p>
+</div>
+
+<style>
+	.sync-modes-card {
+		/* the brighter accent the app's settings root hands down to .auth-submit
+		   and the active pill's siblings; SettingsScreen.css --cta/--cta-hover */
+		--cta: #ff5535;
+		--cta-hover: #ff6b4d;
+		width: 420px;
+		max-width: 100%;
+	}
+</style>

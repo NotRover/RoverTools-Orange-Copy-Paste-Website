@@ -1,0 +1,132 @@
+---
+/**
+ * The Windows system-tray icon with its right-click menu open. This is OS
+ * chrome, not app UI, so it has no source in the app's stylesheets: the menu
+ * items are the only part the app owns, and they come from the tray setup in
+ * src-tauri/src/runtime/tray.rs - "Show Orange Copy Paste", a separator, then
+ * "Quit". The surrounding menu is drawn in a neutral Windows 11 style so the
+ * shot reads as the tray, on the app's dark plate.
+ */
+import logo from '../../../assets/app-logo-dark.svg?raw';
+const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
+---
+
+<div class="tray-mock">
+	<div class="tray-menu">
+		<div class="tray-item">
+			<span class="tray-item-ico"><img src={logoUrl} width="16" height="16" alt="" /></span>
+			<span class="tray-item-label">Show Orange Copy Paste</span>
+		</div>
+		<div class="tray-sep"></div>
+		<div class="tray-item">
+			<span class="tray-item-ico"></span>
+			<span class="tray-item-label">Quit</span>
+		</div>
+	</div>
+
+	<div class="tray-bar">
+		<span class="tray-icon tray-icon--app"><img src={logoUrl} width="18" height="18" alt="" /></span>
+		<span class="tray-icon tray-icon--dim"></span>
+		<span class="tray-icon tray-icon--dim"></span>
+		<span class="tray-clock">
+			<span>9:41</span>
+			<span>9/11/2026</span>
+		</span>
+	</div>
+</div>
+
+<style>
+	/* A right-click tray menu, Windows 11 style: rounded dark card, a hairline
+	   border, items about 32px tall with a leading icon slot. Sizes and colours
+	   are the OS look, not the app's - the tray is not the app's to theme. */
+	.tray-mock {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 10px;
+		width: 360px;
+		max-width: 100%;
+		font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+	}
+
+	.tray-menu {
+		width: 244px;
+		padding: 4px;
+		border: 1px solid #3a3a3a;
+		border-radius: 8px;
+		background: #2b2b2b;
+		box-shadow:
+			0 12px 28px rgba(0, 0, 0, 0.45),
+			0 2px 6px rgba(0, 0, 0, 0.35);
+	}
+
+	.tray-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		height: 32px;
+		padding: 0 10px;
+		border-radius: 5px;
+		color: #f0f0f0;
+		font-size: 13px;
+	}
+
+	/* the item the pointer is on, drawn resting on the first (primary) row */
+	.tray-item:first-child {
+		background: #383838;
+	}
+
+	.tray-item-ico {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 16px;
+		height: 16px;
+		flex: 0 0 auto;
+	}
+
+	.tray-sep {
+		height: 1px;
+		margin: 4px 8px;
+		background: #3f3f3f;
+	}
+
+	/* the taskbar corner the menu belongs to: the app icon in the notification
+	   area with the clock, so the menu reads as the tray rather than a floating
+	   list */
+	.tray-bar {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		height: 40px;
+		padding: 0 12px;
+		border-radius: 8px;
+		background: #1c1c1c;
+		border: 1px solid #2a2a2a;
+	}
+
+	.tray-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+	}
+
+	.tray-icon--dim {
+		border-radius: 4px;
+		background: #333;
+		opacity: 0.5;
+	}
+
+	.tray-clock {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 1px;
+		margin-left: 4px;
+		color: #e6e6e6;
+		font-size: 11px;
+		line-height: 1.25;
+	}
+</style>

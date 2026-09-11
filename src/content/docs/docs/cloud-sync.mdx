@@ -6,6 +6,7 @@ description: Optional, end-to-end encrypted sync of your history and notes acros
 import DocMock from '../../../components/docs/DocMock.astro';
 import AppShell from '../../../components/landing/AppShell.astro';
 import AccountScreen from '../../../components/landing/AccountScreen.astro';
+import SyncModes from '../../../components/landing/mocks/SyncModes.astro';
 
 Keep your clipboard history and notes in sync on every device. End-to-end encrypted, so only you can read them.
 
@@ -27,7 +28,9 @@ Your password does double duty: it logs you in *and* it derives the key that unl
 
 The mode is per device, so a laptop can sync live while a desktop stays manual.
 
-![The sync mode selector with Realtime, Passive and Manual options.](/screenshots/sync-modes.png)
+<DocMock>
+	<SyncModes />
+</DocMock>
 
 | Mode | Behavior |
 |---|---|

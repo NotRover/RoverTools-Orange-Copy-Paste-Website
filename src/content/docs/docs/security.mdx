@@ -3,6 +3,9 @@ title: Security model
 description: How end-to-end encryption works in Orange Copy Paste, in plain terms.
 ---
 
+import DocMock from '../../../components/docs/DocMock.astro';
+import RecoveryCode from '../../../components/landing/mocks/RecoveryCode.astro';
+
 The design goal is simple: **the server should be unable to read your data even if it wanted to.** Not policy, math.
 
 ## The shape of it
@@ -24,7 +27,9 @@ Ciphertexts are also bound to their own item identity, so a ciphertext cannot be
 
 ## Recovery
 
-![The recovery-code screen shown once at setup, with the code and a copy control.](/screenshots/recovery-code.png)
+<DocMock>
+	<RecoveryCode />
+</DocMock>
 
 Your **recovery code** is 150 bits of randomness, generated on your device, shown once, and stored nowhere. What the server holds is your UMK wrapped under a key derived from that code, which is useless without it. A password reset re-wraps the same UMK, so your data survives the reset. Regenerating the code revokes the old one.
 
