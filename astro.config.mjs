@@ -24,7 +24,7 @@ export default defineConfig({
 				{
 					icon: 'github',
 					label: 'Releases',
-					href: 'https://github.com/Spectrewolf8/RoverTools-Releases',
+					href: 'https://github.com/NotRover/RoverTools-Releases',
 				},
 			],
 			customCss: ['./src/styles/starlight-theme.css'],
