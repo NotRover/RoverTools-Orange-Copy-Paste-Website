@@ -48,7 +48,7 @@ restate them.
   cap, 50 MB quota, hotkeys). **Verify against the app/backend code when editing** - the
   app is the source of truth, and stale numbers here mislead users.
 - Download links point at the public releases repo:
-  `https://github.com/Spectrewolf8/RoverTools-Releases`.
+  `https://github.com/NotRover/RoverTools-Releases`.
 
 ## Commands
 
