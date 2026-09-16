@@ -6,9 +6,9 @@ import mdx from '@astrojs/mdx';
 // Canonical origin, used for canonical links and the sitemap. Set SITE_URL in the
 // Cloudflare project once a custom domain is attached; until then Pages hands the
 // build CF_PAGES_URL, which is the per-deploy host and the right answer for a
-// preview. The literal is the production domain, for local builds.
+// preview. The literal is the production pages.dev host, for local builds.
 const site =
-	process.env.SITE_URL ?? process.env.CF_PAGES_URL ?? 'https://rovertools.ctx.cl';
+	process.env.SITE_URL ?? process.env.CF_PAGES_URL ?? 'https://orange-copy-paste-app.pages.dev';
 
 // https://astro.build/config
 export default defineConfig({

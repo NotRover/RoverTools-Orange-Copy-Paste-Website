@@ -41,9 +41,9 @@ output directory, for the Git integration and for `wrangler pages deploy` alike.
 
 One build environment variable, once a custom domain is attached:
 
-- `SITE_URL` - the canonical origin, e.g. `https://rovertools.ctx.cl`, used for canonical
+- `SITE_URL` - the canonical origin, e.g. `https://orange-copy-paste-app.pages.dev`, used for canonical
   links and the sitemap. Without it the build falls back to `CF_PAGES_URL`, which is
-  the per-deploy host and correct for previews, and to the production domain
+  the per-deploy host and correct for previews, and to the production `pages.dev` host
   for a local build.
 
 `public/_headers` sets the security headers and caches `/_astro/*` immutably. Pages
