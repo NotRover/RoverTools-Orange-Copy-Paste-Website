@@ -1,0 +1,100 @@
+---
+title: Self-hosting
+description: Run your own Orange Copy Paste sync backend.
+---
+
+You can run your own backend and point the app at it. The server only ever stores ciphertext,
+so self-hosting does not change the security model. This page is a provider-agnostic overview;
+the full operational runbook, including one worked VPS setup, hardening, and the deploy
+pipeline, is in the backend repo's
+[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/DEPLOY.md).
+
+## What you are running
+
+Four parts. Only the first is code you ship; the other three are services it talks to.
+
+| Component | Role |
+|-----------|------|
+| **FastAPI service** | The API and the `/ws` realtime endpoint. Stateless; run one or many replicas. |
+| **Redis** | WebSocket pub/sub fan-out and device presence. Required. Holds only ephemeral state. |
+| **Postgres + Auth** | Ciphertext store and identity. Supabase provides both; the backend verifies its tokens and never signs one. |
+| **Blob storage** | Encrypted image and file blobs, via presigned URLs. Any S3-compatible store (Cloudflare R2, MinIO, AWS S3). |
+
+Redis is not optional: realtime and presence depend on it. Text and note sync work without blob
+storage; only large image and file attachments need it.
+
+## External services
+
+**Supabase** owns identity. Create a project and collect its connection string, project URL, and
+a server-only secret key. Since 2025-10-01 Supabase signs tokens with asymmetric keys verified
+via JWKS, so on a new project you leave the legacy JWT secret blank; the backend detects the
+algorithm per token. The exact env values and the pooler-vs-direct-host detail are in
+[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/DEPLOY.md).
+
+**S3-compatible blob storage.** Create a bucket and an API token. The bucket must already exist;
+the service only presigns URLs, it never creates buckets.
+
+## Configure
+
+Copy `.env.example` to `.env` and fill it in. The main groups:
+
+```bash
+# Database (Supabase connection string, asyncpg driver)
+DATABASE_URL=postgresql+asyncpg://...
+
+# Redis
+REDIS_URL=redis://redis:6379/0
+
+# Supabase Auth (verify only)
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_JWT_SECRET=          # blank on projects from 2025-10-01 onward
+SUPABASE_SERVICE_ROLE_KEY=    # server-only secret key; never ship to clients
+
+# Blob storage (S3-compatible)
+S3_ENDPOINT_URL=https://...
+S3_BUCKET=clipboard-blobs
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=auto
+
+# App
+APP_CORS_ORIGINS=tauri://localhost,http://localhost:1420
+DEFAULT_BLOB_QUOTA_BYTES=52428800   # 50 MB per user
+ADMIN_API_KEY=                      # blank disables the admin endpoints
+```
+
+`APP_CORS_ORIGINS` must include the app's origin, which is `tauri://localhost` by default. Leave
+`ADMIN_API_KEY` blank unless you need the admin endpoints; blank makes them return 503.
+
+## Run
+
+The repo ships a `Dockerfile`, a dev `docker-compose.yml` (with local Postgres, Redis, and
+MinIO), and a `docker-compose.prod.yml`. For a local stack:
+
+```bash
+docker-compose up
+```
+
+Then apply migrations:
+
+```bash
+uv run alembic upgrade head
+```
+
+Migrations are never applied automatically by the deploy: a merged migration has not reached the
+database until someone runs it. Apply them deliberately after deploying new code.
+
+## TLS and the desktop app
+
+Put a reverse proxy in front of the service for TLS (the sample setup uses Caddy for automatic
+certificates). Then point the app at your API. The endpoints are compiled into the client, so
+either build the app with your values in `src-tauri/src/sync/config.rs`, or override an existing
+install through `settings.json` (`sync_server_url`, `supabase_url`, `supabase_anon_key`). See the
+app's [cloud sync setup](/docs/cloud-sync) for the client side.
+
+## Deeper operations
+
+Migrations in detail, the build-on-box deploy pipeline, rollback, log retention, metrics, and
+troubleshooting are all in the backend
+[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/DEPLOY.md).
+That runbook documents one concrete setup; adapt the host-specific parts to wherever you run it.

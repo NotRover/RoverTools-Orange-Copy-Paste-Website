@@ -28,6 +28,24 @@ export default defineConfig({
 				},
 			],
 			customCss: ['./src/styles/starlight-theme.css'],
+			// Fira Code (the app's mono) for the AMOLED Mermaid plates (Mermaid.astro).
+			head: [
+				{
+					tag: 'link',
+					attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+				},
+				{
+					tag: 'link',
+					attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true },
+				},
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'stylesheet',
+						href: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap',
+					},
+				},
+			],
 			// src/pages/404.astro serves the whole site, docs included, so Starlight's
 			// own /404 would only collide with it.
 			disable404Route: true,
@@ -63,6 +81,23 @@ export default defineConfig({
 						{ label: 'Linux notes', slug: 'docs/linux' },
 						{ label: 'Updates and releases', slug: 'docs/updates' },
 						{ label: 'FAQ', slug: 'docs/faq' },
+					],
+				},
+				{
+					label: 'Developers',
+					items: [
+						{ label: 'Overview', slug: 'docs/developers' },
+						{ label: 'Architecture', slug: 'docs/developers/architecture' },
+						{ label: 'Security model', slug: 'docs/developers/security' },
+						{ label: 'Self-hosting', slug: 'docs/developers/self-hosting' },
+						{ label: 'Contributing', slug: 'docs/developers/contributing' },
+						{
+							label: 'Design decisions',
+							items: [
+								{ label: 'Space key handover', slug: 'docs/developers/design/space-access' },
+								{ label: 'Join approval', slug: 'docs/developers/design/space-join-approval' },
+							],
+						},
 					],
 				},
 			],

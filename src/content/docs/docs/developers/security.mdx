@@ -1,0 +1,45 @@
+---
+title: Security model (technical)
+description: The end-to-end encryption scheme, for a reader who wants the mechanism.
+---
+
+The design goal: the server cannot read your data even if it wanted to. This page is the
+technical summary. The plain-language version is on the [Security model](/docs/security) page,
+and the exact envelope, key derivation parameters, and DDL live in the
+[backend architecture doc](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/ARCHITECTURE.md),
+which is their home.
+
+## Keys
+
+- The account **password** is run through Argon2id on the device to derive a wrapping key. The
+  password is never sent to the server.
+- That wrapping key unwraps the **User Master Key (UMK)**, a random key that exists only in
+  memory. It is zeroized on drop and never written to disk, logs, or the network.
+- Every clipboard entry and note gets its **own random content key**. The item is encrypted
+  with AES-256-GCM under that key; the content key is then wrapped under the UMK, and for shared
+  items also under each target space key.
+- Devices and space members exchange keys with **X25519**. A wrapped key is usable only by its
+  intended recipient. Device private keys live in the OS credential store (Windows Credential
+  Manager, GNOME Keyring, or KWallet).
+
+## Properties
+
+- A wrong password is a failed AES-GCM decryption, not a server-side check. There is nothing
+  server-side to brute-force or to reset into plaintext.
+- Each ciphertext is bound to its own item identity as additional authenticated data, so a
+  ciphertext cannot be transplanted onto another item and still decrypt.
+- Sharing never re-encrypts content. Adding a space to an item wraps that item's content key for
+  the space; the ciphertext is untouched.
+- A **Space** holds its keys as a keyring, newest first. Removing a member re-keys the space for
+  everyone remaining; old keys are retained so already-pulled history stays readable.
+
+## What it does not defend against
+
+The client computes its shared secret against a public key the server returned, and that key is
+not pinned. An active, malicious server could substitute a key it controls. This is out of scope
+for the current design, and it bounds what the scheme can promise: the guarantee is against a
+**passive** server that stores and relays but does not tamper.
+
+The recovery flow trades one secret for another. If you set up a recovery code, it wraps a second
+copy of the UMK; losing both the password and the recovery code means the data cannot be
+recovered by anyone, including the operator. That is the point.

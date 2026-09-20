@@ -1,0 +1,33 @@
+---
+title: Developers
+description: How Orange Copy Paste is built, how to run your own backend, and how to contribute.
+---
+
+Orange Copy Paste is open source under the AGPLv3. This section is for people who want to
+read how it works, run their own sync backend, or contribute code.
+
+The product is two halves that share one contract:
+
+- **The desktop app** captures the clipboard, stores history and notes locally, holds every
+  key, and does all encryption and decryption. It works fully offline; the cloud is optional.
+- **The backend** is a stateless relay and store. It verifies Supabase-issued tokens, persists
+  ciphertext it cannot read, fans changes out over WebSocket, and brokers blob storage.
+
+## The repositories
+
+| Repo | What it holds |
+|------|---------------|
+| [Smart Clipboard App (client)](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST) | The desktop app: React 19 + TypeScript + Vite on Tauri 2 / Rust. |
+| [Backend](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend) | The cloud-sync API: Python 3.14 + FastAPI, Supabase Postgres, Redis, S3/R2. |
+| [Website](https://github.com/NotRover/RoverTools-OrangeCP-Website) | This site: Astro + Starlight. |
+
+## Where to go next
+
+- [Architecture](/docs/developers/architecture) - how the two halves fit together.
+- [Security model](/docs/developers/security) - the end-to-end encryption, for a technical reader.
+- [Self-hosting](/docs/developers/self-hosting) - run your own backend.
+- [Contributing](/docs/developers/contributing) - setup, checks, and how to open a change.
+- [Design decisions](/docs/developers/design/space-access) - why some of the harder parts were built the way they were.
+
+The authoritative specifications live in each repo, next to the code they describe. The pages
+here summarize and link to them rather than copying them, so the code stays the source of truth.
