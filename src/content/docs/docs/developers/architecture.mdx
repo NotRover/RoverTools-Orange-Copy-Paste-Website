@@ -1,0 +1,46 @@
+---
+title: Architecture
+description: How the desktop app and the sync backend fit together, and where the contract lives.
+---
+
+Orange Copy Paste is a desktop app plus an optional sync backend. The app is the source of
+truth for your data; the backend is a relay that never sees plaintext.
+
+## The two halves
+
+**The client** captures the clipboard, keeps history and notes in local files, holds all key
+material, and performs every encryption and decryption. The Rust side owns state, persistence,
+OS integration, and cryptography; React is the UI. With sync off or the server unreachable, the
+app is fully functional and queues work locally.
+
+**The backend** verifies the JWTs Supabase issues (it never signs one), stores ciphertext,
+fans changes out to a user's other devices and space members over a WebSocket, and hands out
+presigned URLs for encrypted blobs. It is stateless, so it scales to N replicas; cross-replica
+delivery goes through Redis pub/sub.
+
+## The sync flow
+
+1. The client authenticates against Supabase directly.
+2. It bootstraps the account and receives its salt and password-wrapped master key.
+3. It derives a wrapping key from the account password with Argon2id and unwraps the User
+   Master Key in memory. A wrong password is simply a failed decryption.
+4. It registers the device and publishes the device's public key.
+5. Entries are encrypted locally, pushed, and pulled. Merges are last-write-wins on `updated_at`.
+6. The WebSocket streams live changes from other devices and space members.
+
+Deletes travel as tombstones (a push carrying a deletion marker, not a delete request), and a
+tombstone wins a conflict. Sharing is one primitive, the **Space**: persistent, multi-member,
+with a random space key distributed to members by wrapping it for each member's X25519 public
+key.
+
+## Where the contract lives
+
+Each specification lives in the repo next to the code that enforces it. Read these before
+changing anything that crosses the wire.
+
+| Specification | Home |
+|---------------|------|
+| Wire contract: routes, payloads, DDL, socket events, crypto envelope | [backend `docs/ARCHITECTURE.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/ARCHITECTURE.md) |
+| Client internals: state, commands, events, persistence, sync engine | [client `docs/ARCHITECTURE.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/blob/main/orange-copy-paste-clipboard-app-rust/docs/ARCHITECTURE.md) |
+| Who may do what, and where it is enforced | [`docs/PERMISSIONS.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/blob/main/docs/PERMISSIONS.md) |
+| Cross-component map and invariants | [root `docs/ARCHITECTURE.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/blob/main/docs/ARCHITECTURE.md) |
