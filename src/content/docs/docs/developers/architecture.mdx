@@ -35,12 +35,16 @@ key.
 
 ## Where the contract lives
 
-Each specification lives in the repo next to the code that enforces it. Read these before
-changing anything that crosses the wire.
+Each specification lives in the repo next to the code that enforces it, so the code stays the
+one place it is edited. The Reference pages below mirror those files here, read-only, and each
+one links back to its home in the source repo. Read them before changing anything that crosses
+the wire.
 
-| Specification | Home |
-|---------------|------|
-| Wire contract: routes, payloads, DDL, socket events, crypto envelope | [backend `docs/ARCHITECTURE.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/ARCHITECTURE.md) |
-| Client internals: state, commands, events, persistence, sync engine | [client `docs/ARCHITECTURE.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/blob/main/orange-copy-paste-clipboard-app-rust/docs/ARCHITECTURE.md) |
-| Who may do what, and where it is enforced | [`docs/PERMISSIONS.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/blob/main/docs/PERMISSIONS.md) |
-| Cross-component map and invariants | [root `docs/ARCHITECTURE.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/blob/main/docs/ARCHITECTURE.md) |
+| Specification | Reference page |
+|---------------|----------------|
+| Wire contract: routes, payloads, DDL, socket events, crypto envelope | [Backend architecture](/docs/developers/reference/wire-contract) |
+| Client internals: state, commands, events, persistence, sync engine | [Client architecture](/docs/developers/reference/client-internals) |
+| Cross-component map and invariants | [Architecture map](/docs/developers/reference/architecture-map) |
+| Who may do what, and where it is enforced | [Permissions](/docs/developers/reference/permissions) |
+| How a release gets cut | [Releasing](/docs/developers/reference/releasing) |
+| Notable regressions and their causes | [Bug fix history](/docs/developers/reference/bugfix-history) |
