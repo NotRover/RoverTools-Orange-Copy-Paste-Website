@@ -50,12 +50,33 @@ restate them.
 - Download links point at the public releases repo:
   `https://github.com/NotRover/RoverTools-Releases`.
 
+## Developer docs mirror
+
+The Developers > Reference pages are **generated**, not written here. `scripts/pull-dev-docs.mjs`
+reads the reference docs from their homes in the code repos and writes styled Starlight pages
+to `src/content/docs/docs/developers/reference/`, which is **git-ignored**. It runs
+automatically as the first step of `dev` and `build` (see `package.json`), so the copies are a
+build artifact - never committed, nothing to drift.
+
+- **Source of truth stays in the code repos.** To change what a Reference page says, edit its
+  home (backend/client/workspace repo) and rebuild. Never edit or commit a file under
+  `reference/` - it is overwritten on every build.
+- **Where it reads from:** the local sibling repo if checked out (your machine), else the raw
+  file from GitHub `main`. So a Cloudflare build (siblings absent) needs the source repos
+  public, or a read token in the build env.
+- **Mermaid is global.** `Mermaid.astro` and the generated `.md` mirrors both emit
+  `.mermaid-figure` markup; `public/mermaid-plates.js` (CDN mermaid, fixed-dark AMOLED theme)
+  renders them and `src/styles/mermaid.css` styles the plates. There is no npm `mermaid` dep.
+- DEPLOY.md is deliberately **not** mirrored (host access + recovery detail); the public
+  self-hosting page is hand-written and sanitized.
+
 ## Commands
 
 - Install: `bun install`
-- Dev server: `bun run dev`
+- Dev server: `bun run dev` (regenerates the reference mirrors first)
 - Build (also the verification step): `bun run build`
 - Preview built output: `bun run preview`
+- Regenerate mirrors only: `bun run prep:docs`
 
 ## Verification
 
