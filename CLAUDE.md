@@ -6,8 +6,8 @@ end-user documentation. Astro + Starlight, package manager **bun**. This is its 
 workspace root `CLAUDE.md` applies here too (copy rules, git rules, doc ownership).
 
 **Owns:** end-user how-to and the marketing story.
-**Not here:** the wire contract (backend `docs/ARCHITECTURE.md`), client internals (app
-`docs/ARCHITECTURE.md`), permissions (`docs/PERMISSIONS.md`). Link to those homes, never
+**Not here:** the wire contract (backend `docs/architecture.md`), client internals (app
+`docs/architecture.md`), permissions (`docs/permissions.md`). Link to those homes, never
 restate them.
 
 ## Layout
