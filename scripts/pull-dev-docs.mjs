@@ -16,7 +16,7 @@
  * DEPLOY.md is deliberately NOT pulled (host access + recovery detail). The
  * public self-hosting page is hand-written and sanitized.
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -126,15 +126,45 @@ function escapeHtml(s) {
 
 // ```mermaid -> raw .mermaid-figure HTML (drawn by public/mermaid-plates.js).
 // Blank lines are collapsed so the raw-HTML block isn't split by Markdown.
-function mermaidToFigures(body) {
+// In MDX the diagram source can't sit in the DOM as text: braces read as JS
+// expressions and the typographer curls its quotes and fuses `--`. So MDX pages
+// carry it base64-encoded in data-src, which the renderer decodes; plain .md
+// pages keep it as escaped text.
+function mermaidToFigures(body, mdx) {
 	return body.replace(/```mermaid\n([\s\S]*?)```/g, (_whole, code) => {
-		const src = escapeHtml(code.replace(/\n{2,}/g, '\n').trim());
+		const clean = code.replace(/\n{2,}/g, '\n').trim();
+		const pre = mdx
+			? `<pre class="mermaid-src" hidden data-src="${Buffer.from(clean, 'utf8').toString('base64')}"></pre>`
+			: `<pre class="mermaid-src" hidden>${escapeHtml(clean)}</pre>`;
 		return (
 			'\n<figure class="mermaid-figure"><div class="mermaid-plate">' +
-			`<pre class="mermaid-src" hidden>${src}</pre>` +
+			pre +
 			'<div class="mermaid-out not-content" role="img" aria-label="diagram"></div>' +
 			'</div></figure>\n'
 		);
+	});
+}
+
+// ```filetree -> Starlight <FileTree> component. The source keeps an ASCII tree
+// (readable on GitHub); here it becomes a nested Markdown list the component
+// renders with folder/file icons and collapsible directories. A trailing slash
+// marks a directory; text after `#` becomes the entry's comment. Forces the
+// page to MDX, since <FileTree> is a component.
+function filetreeToComponent(body) {
+	return body.replace(/```filetree\n([\s\S]*?)```/g, (_whole, block) => {
+		const items = [];
+		for (const line of block.split('\n')) {
+			if (!line.trim()) continue;
+			const hash = line.indexOf('#');
+			const left = hash === -1 ? line : line.slice(0, hash);
+			const comment = hash === -1 ? '' : line.slice(hash + 1).trim();
+			const name = left.replace(/[│├└─]/g, ' ').replace(/\s+$/, '').replace(/^\s+/, '');
+			if (!name) continue;
+			const nameStart = left.length - left.replace(/^[│\s├└─]+/, '').length;
+			const depth = Math.floor(nameStart / 4);
+			items.push('  '.repeat(depth) + '- ' + name + (comment ? ' ' + comment : ''));
+		}
+		return '\n<FileTree>\n\n' + items.join('\n') + '\n\n</FileTree>\n';
 	});
 }
 
@@ -145,19 +175,26 @@ function yamlString(s) {
 async function generate(doc) {
 	const { text, from } = await readSource(doc);
 	const raw = text.replace(/^﻿/, '').replace(/\r\n/g, '\n');
-	const body = mermaidToFigures(rewriteLinks(stripLeadingH1(raw), doc.blob));
+	// A file tree needs the <FileTree> component, which means MDX. The braces in
+	// mermaid shapes have to be escaped in MDX, so the two decisions are linked.
+	const mdx = raw.includes('```filetree');
+	const body = filetreeToComponent(mermaidToFigures(rewriteLinks(stripLeadingH1(raw), doc.blob), mdx));
 	const frontmatter =
 		'---\n' +
 		`title: ${yamlString(doc.title)}\n` +
 		`description: ${yamlString(doc.description)}\n` +
 		'---\n\n';
+	const imports = mdx ? "import { FileTree } from '@astrojs/starlight/components';\n\n" : '';
 	const banner =
 		':::note[Generated mirror]\n' +
 		`This page mirrors [\`${doc.src}\`](${doc.blob}) in the ${doc.repo} repository, where it ` +
 		'is edited. It is read-only here.\n' +
 		':::\n\n';
-	writeFileSync(resolve(OUT_DIR, `${doc.out}.md`), frontmatter + banner + body, 'utf8');
-	return `${doc.out} (${from})`;
+	const ext = mdx ? 'mdx' : 'md';
+	const stale = resolve(OUT_DIR, `${doc.out}.${mdx ? 'md' : 'mdx'}`);
+	if (existsSync(stale)) unlinkSync(stale);
+	writeFileSync(resolve(OUT_DIR, `${doc.out}.${ext}`), frontmatter + imports + banner + body, 'utf8');
+	return `${doc.out} (${from}, ${ext})`;
 }
 
 mkdirSync(OUT_DIR, { recursive: true });
