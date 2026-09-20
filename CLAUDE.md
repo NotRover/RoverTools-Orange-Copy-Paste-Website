@@ -64,9 +64,14 @@ build artifact - never committed, nothing to drift.
 - **Where it reads from:** the local sibling repo if checked out (your machine), else the raw
   file from GitHub `main`. So a Cloudflare build (siblings absent) needs the source repos
   public, or a read token in the build env.
-- **Mermaid is global.** `Mermaid.astro` and the generated `.md` mirrors both emit
+- **Mermaid is global.** `Mermaid.astro` and the generated mirrors both emit
   `.mermaid-figure` markup; `public/mermaid-plates.js` (CDN mermaid, fixed-dark AMOLED theme)
   renders them and `src/styles/mermaid.css` styles the plates. There is no npm `mermaid` dep.
+- **File trees use Starlight's `<FileTree>`.** A source doc marks a tree with a ` ```filetree `
+  fence (still a plain code block on GitHub); the generator converts it to a `<FileTree>` and
+  emits that page as `.mdx` instead of `.md`. MDX would read `{` as JS and curl the mermaid
+  quotes, so on an MDX page the diagram source rides in a base64 `data-src` the renderer
+  decodes. All of this is automatic in `pull-dev-docs.mjs` - a source doc only needs the fence.
 - DEPLOY.md is deliberately **not** mirrored (host access + recovery detail); the public
   self-hosting page is hand-written and sanitized.
 

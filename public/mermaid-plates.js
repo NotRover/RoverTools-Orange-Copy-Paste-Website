@@ -69,7 +69,14 @@ function initMermaid() {
 async function renderAll() {
 	initMermaid();
 	for (const fig of document.querySelectorAll('.mermaid-figure')) {
-		const src = fig.querySelector('.mermaid-src')?.textContent?.trim();
+		const srcEl = fig.querySelector('.mermaid-src');
+		// MDX mirrors carry the diagram base64-encoded in data-src, out of reach
+		// of the Markdown typographer that would otherwise curl its quotes and
+		// dashes. Plain .md mirrors and inline diagrams use the text body.
+		const b64 = srcEl?.getAttribute('data-src');
+		const src = (
+			b64 ? new TextDecoder().decode(Uint8Array.from(atob(b64), (c) => c.charCodeAt(0))) : srcEl?.textContent
+		)?.trim();
 		const out = fig.querySelector('.mermaid-out');
 		if (!src || !out || out.querySelector('svg')) continue;
 		try {
