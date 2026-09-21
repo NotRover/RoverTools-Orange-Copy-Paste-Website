@@ -108,15 +108,15 @@ sanitized.
 
 ## Related repositories
 
-Orange Copy Paste is built across three code repositories, plus a public feed for
-downloads:
+Orange Copy Paste is built across three code repositories. The desktop app's downloads
+and update feed are published as
+[GitHub Releases on the App repo](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases).
 
 | Repository | What it is |
 | --- | --- |
 | [Orange-Copy-Paste-App](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App) | Desktop app — React + TypeScript + Tauri/Rust |
 | [Orange-Copy-Paste-Backend](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend) | Cloud-sync API — FastAPI + Supabase + Redis + S3/R2 |
 | **Orange-Copy-Paste-Website** | Docs + marketing site (this repo) — Astro + Starlight |
-| [Orange-Copy-Paste-Releases](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Releases) | Public release feed the in-app updater reads |
 
 ---
 
