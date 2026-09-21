@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 
 // Canonical origin, used for canonical links and the sitemap. Set SITE_URL in the
@@ -20,6 +21,12 @@ const ogImageAlt = 'Orange Copy Paste - the clipboard that remembers';
 export default defineConfig({
 	site,
 	integrations: [
+		// Starlight adds its own sitemap only when none is registered. This one is
+		// registered explicitly so the noindex pages (/reset, and /404 if it were
+		// ever listed) stay out of it; the sitemap plugin does not read robots meta.
+		sitemap({
+			filter: (page) => !page.endsWith('/reset/') && !page.endsWith('/404/'),
+		}),
 		starlight({
 			title: 'Orange Copy Paste',
 			description:
