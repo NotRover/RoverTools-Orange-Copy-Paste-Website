@@ -1,0 +1,21 @@
+---
+// Inline Mermaid for the design-record pages. Emits only the shared
+// .mermaid-figure markup; the theme, the renderer, and the plate styles are
+// global (public/mermaid-plates.js + src/styles/mermaid.css), so these
+// hand-authored diagrams and the generated .md reference mirrors render
+// identically. Author plain Mermaid source - the theme is global, so do not
+// paste a %%{init}%% line into the code.
+interface Props {
+	code: string;
+	title?: string;
+}
+const { code, title } = Astro.props;
+---
+
+<figure class="mermaid-figure">
+	<div class="mermaid-plate">
+		<pre class="mermaid-src" hidden>{code}</pre>
+		<div class="mermaid-out not-content" role="img" aria-label={title ?? 'diagram'}></div>
+	</div>
+	{title && <figcaption>{title}</figcaption>}
+</figure>

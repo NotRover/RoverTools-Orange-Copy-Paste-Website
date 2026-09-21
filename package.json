@@ -3,9 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
+    "prep:docs": "node scripts/pull-dev-docs.mjs",
+    "dev": "node scripts/pull-dev-docs.mjs && astro dev",
+    "start": "node scripts/pull-dev-docs.mjs && astro dev",
+    "build": "node scripts/pull-dev-docs.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

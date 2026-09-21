@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # editor config (local only)
 .vscode/launch.json
+
+# Generated developer-doc mirrors (build artifact; single source of truth is in the code repos).
+# Produced by scripts/pull-dev-docs.mjs on dev/build.
+src/content/docs/docs/developers/reference/
