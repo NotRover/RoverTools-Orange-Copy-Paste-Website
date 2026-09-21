@@ -24,7 +24,7 @@ export default defineConfig({
 				{
 					icon: 'github',
 					label: 'Releases',
-					href: 'https://github.com/NotRover/RoverTools-Releases',
+					href: 'https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Releases',
 				},
 			],
 			customCss: ['./src/styles/starlight-theme.css', './src/styles/mermaid.css'],

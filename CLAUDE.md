@@ -2,7 +2,7 @@
 
 Public site for the Orange Copy Paste desktop app: a marketing landing page plus the
 end-user documentation. Astro + Starlight, package manager **bun**. This is its own repo
-(`RoverTools-OrangeCP-Website`), mounted as a submodule of the RoverTools workspace; the
+(`RoverTools-Orange-Copy-Paste-Website`), mounted as a submodule of the RoverTools workspace; the
 workspace root `CLAUDE.md` applies here too (copy rules, git rules, doc ownership).
 
 **Owns:** end-user how-to and the marketing story.
@@ -44,11 +44,12 @@ restate them.
 
 ## Content rules
 
-- Docs state numbers and behavior that live in the app (100 entries, 10 pins, 5 MB entry
-  cap, 50 MB quota, hotkeys). **Verify against the app/backend code when editing** - the
+- Docs state numbers and behavior that live in the app (100 entries, 10 pins, 4 MB
+  clipboard entry cap, 5 MB synced file cap, 50 MB quota, hotkeys). **Verify against the
+  app/backend code when editing** - the
   app is the source of truth, and stale numbers here mislead users.
 - Download links point at the public releases repo:
-  `https://github.com/NotRover/RoverTools-Releases`.
+  `https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Releases`.
 
 ## Developer docs mirror
 

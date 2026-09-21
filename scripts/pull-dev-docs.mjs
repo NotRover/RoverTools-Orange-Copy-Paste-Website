@@ -24,10 +24,10 @@ const WEBSITE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const WORKSPACE_ROOT = resolve(WEBSITE_ROOT, '..');
 const OUT_DIR = resolve(WEBSITE_ROOT, 'src/content/docs/docs/developers/reference');
 
-const RUST_BLOB = 'https://github.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/blob/main/';
-const RUST_RAW = 'https://raw.githubusercontent.com/NotRover/RoverTools-Smart-Clipboard-App-RUST/main/';
-const BE_BLOB = 'https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/';
-const BE_RAW = 'https://raw.githubusercontent.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/main/';
+const RUST_BLOB = 'https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/blob/main/';
+const RUST_RAW = 'https://raw.githubusercontent.com/NotRover/RoverTools-Orange-Copy-Paste-App/main/';
+const BE_BLOB = 'https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/';
+const BE_RAW = 'https://raw.githubusercontent.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/main/';
 
 /** @type {Array<{src:string,out:string,title:string,description:string,repo:string,blob:string,raw:string}>} */
 const DOCS = [

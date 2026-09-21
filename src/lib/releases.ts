@@ -17,7 +17,7 @@
  * of them. The API is asked for the newest release instead, prereleases and all.
  */
 
-export const RELEASES_REPO = 'NotRover/RoverTools-Releases';
+export const RELEASES_REPO = 'NotRover/RoverTools-Orange-Copy-Paste-Releases';
 export const RELEASES_PAGE = `https://github.com/${RELEASES_REPO}/releases`;
 
 const API = `https://api.github.com/repos/${RELEASES_REPO}/releases?per_page=10`;

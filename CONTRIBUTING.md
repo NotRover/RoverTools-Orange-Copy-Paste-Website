@@ -29,8 +29,8 @@ folders, and this site links out to them.
 Prerequisites: [Bun](https://bun.sh).
 
 ```bash
-git clone https://github.com/NotRover/RoverTools-OrangeCP-Website.git
-cd RoverTools-OrangeCP-Website
+git clone https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Website.git
+cd RoverTools-Orange-Copy-Paste-Website
 bun install
 ```
 

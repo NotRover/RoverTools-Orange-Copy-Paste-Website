@@ -1,6 +1,6 @@
 # Orange Copy Paste - Website
 
-The public site for [Orange Copy Paste](https://github.com/NotRover/RoverTools-Releases),
+The public site for [Orange Copy Paste](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Releases),
 the smart clipboard for Windows and Linux: a marketing landing page and the end-user
 documentation. Built with [Astro](https://astro.build) + [Starlight](https://starlight.astro.build),
 managed with [bun](https://bun.sh).

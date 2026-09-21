@@ -37,4 +37,4 @@ Coming soon. A Mac build is on the way, for both Apple silicon and Intel. Today,
 
 ## Where do I report a bug or ask for a feature?
 
-On the [releases repository](https://github.com/NotRover/RoverTools-Releases), where all builds are published.
+On the [releases repository](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Releases), where all builds are published.

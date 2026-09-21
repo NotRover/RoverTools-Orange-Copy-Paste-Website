@@ -7,7 +7,7 @@ You can run your own backend and point the app at it. The server only ever store
 so self-hosting does not change the security model. This page is a provider-agnostic overview;
 the full operational runbook, including one worked VPS setup, hardening, and the deploy
 pipeline, is in the backend repo's
-[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/DEPLOY.md).
+[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/docs/DEPLOY.md).
 
 ## What you are running
 
@@ -29,7 +29,7 @@ storage; only large image and file attachments need it.
 a server-only secret key. Since 2025-10-01 Supabase signs tokens with asymmetric keys verified
 via JWKS, so on a new project you leave the legacy JWT secret blank; the backend detects the
 algorithm per token. The exact env values and the pooler-vs-direct-host detail are in
-[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/DEPLOY.md).
+[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/docs/DEPLOY.md).
 
 **S3-compatible blob storage.** Create a bucket and an API token. The bucket must already exist;
 the service only presigns URLs, it never creates buckets.
@@ -96,5 +96,5 @@ app's [cloud sync setup](/docs/cloud-sync) for the client side.
 
 Migrations in detail, the build-on-box deploy pipeline, rollback, log retention, metrics, and
 troubleshooting are all in the backend
-[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Smart-Clipboard-App-Backend/blob/main/docs/DEPLOY.md).
+[`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/docs/DEPLOY.md).
 That runbook documents one concrete setup; adapt the host-specific parts to wherever you run it.
