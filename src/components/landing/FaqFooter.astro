@@ -1,4 +1,7 @@
 ---
+import { Icon } from 'astro-icon/components';
+import { REPO_URL } from '../../lib/github';
+
 const faqs = [
 	{
 		q: 'Is it free?',
@@ -57,7 +60,9 @@ const faqs = [
 			<a href="/docs/">Documentation</a>
 			<a href="/docs/security/">Security model</a>
 			<a href="/docs/updates/">Release notes</a>
-			<a href="https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App">Releases on GitHub</a>
+			<a class="foot-gh" href={REPO_URL} target="_blank" rel="noopener">
+				<Icon name="lucide:github" size={16} />GitHub
+			</a>
 		</nav>
 	</div>
 </footer>
@@ -161,6 +166,12 @@ const faqs = [
 
 	.foot-links a:hover {
 		color: var(--text);
+	}
+
+	.foot-gh {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
 	}
 
 	@media (max-width: 720px) {

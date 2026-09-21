@@ -1,5 +1,9 @@
 ---
+import { Icon } from 'astro-icon/components';
 import logo from '../../assets/app-icon.png';
+import { REPO_URL, fetchStars, formatStars } from '../../lib/github';
+
+const stars = await fetchStars();
 ---
 
 <header class="nav">
@@ -8,16 +12,43 @@ import logo from '../../assets/app-icon.png';
 			<img src={logo.src} alt="" width="26" height="26" />
 			<span>Orange Copy Paste</span>
 		</a>
+		<a
+			class="gh"
+			href={REPO_URL}
+			target="_blank"
+			rel="noopener"
+			aria-label="Star Orange Copy Paste on GitHub"
+		>
+			<span class="gh-main">
+				<Icon name="lucide:github" size={18} />
+				<span class="gh-label">Star</span>
+			</span>
+			<span class="gh-count">
+				<Icon name="lucide:star" size={14} />
+				<span data-stars>{stars != null ? formatStars(stars) : ''}</span>
+			</span>
+		</a>
 		<nav class="links" aria-label="Site">
-			<a href="/#features">Features</a>
-			<a href="/#sync">Sync</a>
-			<a href="/#spaces">Spaces</a>
 			<a href="/#security">Security</a>
 			<a href="/docs/">Docs</a>
 		</nav>
 		<a class="btn btn-primary nav-cta" href="/#download">Download</a>
 	</div>
 </header>
+
+<script>
+	/* The baked-in star count is only as fresh as the last site build. This asks
+	   GitHub for the current count and updates every star badge on the page (nav
+	   and footer). Allowed to fail: unauthenticated calls are rate limited per
+	   address, and a stale-but-present number beats a broken build. */
+	import { fetchStars, formatStars } from '../../lib/github';
+
+	const stars = await fetchStars();
+	if (stars != null) {
+		const text = formatStars(stars);
+		for (const el of document.querySelectorAll('[data-stars]')) el.textContent = text;
+	}
+</script>
 
 <style>
 	.nav {
@@ -50,7 +81,6 @@ import logo from '../../assets/app-icon.png';
 	.links {
 		display: flex;
 		gap: 1.5rem;
-		margin-left: auto;
 	}
 
 	.links a {
@@ -64,9 +94,72 @@ import logo from '../../assets/app-icon.png';
 		color: var(--text);
 	}
 
+	/* GitHub star button: a mark + Star on the left, the live count on the right,
+	   split by a hairline the way GitHub's own badge reads. */
+	.gh {
+		margin-left: auto;
+		display: inline-flex;
+		align-items: stretch;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		overflow: hidden;
+		text-decoration: none;
+		color: var(--text-secondary);
+		font-size: 0.85rem;
+		line-height: 1;
+		transition: color 0.15s ease, border-color 0.15s ease;
+	}
+
+	.gh:hover {
+		color: var(--text);
+		border-color: var(--border-light);
+	}
+
+	.gh-main {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.42rem;
+		padding: 0.42rem 0.6rem;
+	}
+
+	.gh-label {
+		font-weight: 600;
+	}
+
+	.gh-count {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.32rem;
+		padding: 0.42rem 0.6rem;
+		border-left: 1px solid var(--border);
+		background: rgba(255, 255, 255, 0.02);
+		font-variant-numeric: tabular-nums;
+		color: var(--text);
+	}
+
+	/* No number yet (GitHub unreachable at build time): drop the count segment so
+	   the button still reads as a clean "Star" link. */
+	.gh-count:has([data-stars]:empty) {
+		display: none;
+	}
+
+	.gh :global(svg) {
+		display: block;
+	}
+
+	.gh-count :global(svg) {
+		color: var(--accent);
+	}
+
 	.nav-cta {
 		padding: 0.5rem 1.05rem;
 		font-size: 0.88rem;
+	}
+
+	@media (max-width: 860px) {
+		.gh-label {
+			display: none;
+		}
 	}
 
 	@media (max-width: 720px) {
@@ -75,6 +168,9 @@ import logo from '../../assets/app-icon.png';
 		}
 		.nav-cta {
 			margin-left: auto;
+		}
+		.nav-row {
+			gap: 1rem;
 		}
 	}
 </style>
