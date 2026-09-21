@@ -48,8 +48,8 @@ restate them.
   clipboard entry cap, 5 MB synced file cap, 50 MB quota, hotkeys). **Verify against the
   app/backend code when editing** - the
   app is the source of truth, and stale numbers here mislead users.
-- Download links point at the public releases repo:
-  `https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Releases`.
+- Download links point at the App repo's GitHub Releases:
+  `https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases`.
 
 ## Developer docs mirror
 
