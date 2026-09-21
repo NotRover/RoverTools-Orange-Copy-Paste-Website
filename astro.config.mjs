@@ -27,7 +27,31 @@ export default defineConfig({
 					href: 'https://github.com/NotRover/RoverTools-Releases',
 				},
 			],
-			customCss: ['./src/styles/starlight-theme.css'],
+			customCss: ['./src/styles/starlight-theme.css', './src/styles/mermaid.css'],
+			// Fira Code (the app's mono) for the Mermaid plates, plus the global
+			// renderer that draws every .mermaid-figure (inline design diagrams and
+			// generated reference mirrors alike).
+			head: [
+				{
+					tag: 'link',
+					attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+				},
+				{
+					tag: 'link',
+					attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true },
+				},
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'stylesheet',
+						href: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap',
+					},
+				},
+				{
+					tag: 'script',
+					attrs: { type: 'module', src: '/mermaid-plates.js' },
+				},
+			],
 			// src/pages/404.astro serves the whole site, docs included, so Starlight's
 			// own /404 would only collide with it.
 			disable404Route: true,
@@ -63,6 +87,42 @@ export default defineConfig({
 						{ label: 'Linux notes', slug: 'docs/linux' },
 						{ label: 'Updates and releases', slug: 'docs/updates' },
 						{ label: 'FAQ', slug: 'docs/faq' },
+					],
+				},
+				{
+					label: 'Developers',
+					items: [
+						{ label: 'Overview', slug: 'docs/developers' },
+						{
+							label: 'Concepts',
+							items: [
+								{ label: 'Architecture', slug: 'docs/developers/architecture' },
+								{ label: 'Security model', slug: 'docs/developers/security' },
+							],
+						},
+						{
+							label: 'Guides',
+							items: [
+								{ label: 'Self-hosting', slug: 'docs/developers/self-hosting' },
+								{ label: 'Contributing', slug: 'docs/developers/contributing' },
+							],
+						},
+						{
+							label: 'Reference',
+							items: [
+								{
+									label: 'Backend architecture (wire contract)',
+									slug: 'docs/developers/reference/wire-contract',
+								},
+								{ label: 'Client architecture', slug: 'docs/developers/reference/client-internals' },
+								{ label: 'Architecture map', slug: 'docs/developers/reference/architecture-map' },
+								{ label: 'Permissions', slug: 'docs/developers/reference/permissions' },
+								{ label: 'Releasing', slug: 'docs/developers/reference/releasing' },
+								{ label: 'Bug fix history', slug: 'docs/developers/reference/bugfix-history' },
+								{ label: 'Space key handover', slug: 'docs/developers/design/space-access' },
+								{ label: 'Join approval', slug: 'docs/developers/design/space-join-approval' },
+							],
+						},
 					],
 				},
 			],

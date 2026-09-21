@@ -6,8 +6,8 @@ end-user documentation. Astro + Starlight, package manager **bun**. This is its 
 workspace root `CLAUDE.md` applies here too (copy rules, git rules, doc ownership).
 
 **Owns:** end-user how-to and the marketing story.
-**Not here:** the wire contract (backend `docs/ARCHITECTURE.md`), client internals (app
-`docs/ARCHITECTURE.md`), permissions (`docs/PERMISSIONS.md`). Link to those homes, never
+**Not here:** the wire contract (backend `docs/architecture.md`), client internals (app
+`docs/architecture.md`), permissions (`docs/permissions.md`). Link to those homes, never
 restate them.
 
 ## Layout
@@ -50,12 +50,38 @@ restate them.
 - Download links point at the public releases repo:
   `https://github.com/NotRover/RoverTools-Releases`.
 
+## Developer docs mirror
+
+The Developers > Reference pages are **generated**, not written here. `scripts/pull-dev-docs.mjs`
+reads the reference docs from their homes in the code repos and writes styled Starlight pages
+to `src/content/docs/docs/developers/reference/`, which is **git-ignored**. It runs
+automatically as the first step of `dev` and `build` (see `package.json`), so the copies are a
+build artifact - never committed, nothing to drift.
+
+- **Source of truth stays in the code repos.** To change what a Reference page says, edit its
+  home (backend/client/workspace repo) and rebuild. Never edit or commit a file under
+  `reference/` - it is overwritten on every build.
+- **Where it reads from:** the local sibling repo if checked out (your machine), else the raw
+  file from GitHub `main`. So a Cloudflare build (siblings absent) needs the source repos
+  public, or a read token in the build env.
+- **Mermaid is global.** `Mermaid.astro` and the generated mirrors both emit
+  `.mermaid-figure` markup; `public/mermaid-plates.js` (CDN mermaid, fixed-dark AMOLED theme)
+  renders them and `src/styles/mermaid.css` styles the plates. There is no npm `mermaid` dep.
+- **File trees use Starlight's `<FileTree>`.** A source doc marks a tree with a ` ```filetree `
+  fence (still a plain code block on GitHub); the generator converts it to a `<FileTree>` and
+  emits that page as `.mdx` instead of `.md`. MDX would read `{` as JS and curl the mermaid
+  quotes, so on an MDX page the diagram source rides in a base64 `data-src` the renderer
+  decodes. All of this is automatic in `pull-dev-docs.mjs` - a source doc only needs the fence.
+- DEPLOY.md is deliberately **not** mirrored (host access + recovery detail); the public
+  self-hosting page is hand-written and sanitized.
+
 ## Commands
 
 - Install: `bun install`
-- Dev server: `bun run dev`
+- Dev server: `bun run dev` (regenerates the reference mirrors first)
 - Build (also the verification step): `bun run build`
 - Preview built output: `bun run preview`
+- Regenerate mirrors only: `bun run prep:docs`
 
 ## Verification
 
