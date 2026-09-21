@@ -1,0 +1,179 @@
+---
+// Override of Starlight's desktop "On this page" table of contents.
+// Keeps the full outline visible (every section and subsection) so a reader sees
+// the whole document at a glance, and adds two behaviors over the default:
+//   1. the active link is highlighted as you read (scroll-spy);
+//   2. the rail scrolls to keep the current section in view when the outline is
+//      taller than the viewport - it follows you down the page.
+// Self-contained (no Starlight internals imported) so it survives version bumps.
+const { toc } = Astro.locals.starlightRoute;
+---
+
+{
+	toc && (
+		<oc-toc data-min-h={toc.minHeadingLevel} data-max-h={toc.maxHeadingLevel}>
+			<nav aria-labelledby="starlight__on-this-page">
+				<h2 id="starlight__on-this-page">{Astro.locals.t('tableOfContents.onThisPage')}</h2>
+				<ul class="oc-toc-root">
+					{toc.items.map((item) => (
+						<li class="oc-toc-group">
+							<a href={'#' + item.slug}>
+								<span>{item.text}</span>
+							</a>
+							{item.children.length > 0 && (
+								<ul class="oc-toc-sub">
+									{item.children.map((child) => (
+										<li>
+											<a href={'#' + child.slug}>
+												<span>{child.text}</span>
+											</a>
+										</li>
+									))}
+								</ul>
+							)}
+						</li>
+					))}
+				</ul>
+			</nav>
+		</oc-toc>
+	)
+}
+
+<style>
+	@layer starlight.core {
+		.oc-toc-root,
+		.oc-toc-sub {
+			padding: 0;
+			list-style: none;
+		}
+		.oc-toc-root a {
+			display: block;
+			border-radius: 0.25rem;
+			padding-block: 0.25rem;
+			padding-inline: 0.5rem;
+			line-height: 1.25;
+			color: var(--sl-color-text);
+			text-decoration: none;
+			overflow-wrap: anywhere;
+		}
+		.oc-toc-sub a {
+			padding-inline-start: 1.25rem;
+			font-size: var(--sl-text-xs);
+			color: var(--sl-color-gray-3);
+		}
+		.oc-toc-root a:hover {
+			color: var(--sl-color-white);
+		}
+		.oc-toc-root a[aria-current='true'] {
+			color: var(--sl-color-text-accent);
+		}
+		/* Faint emphasis on the top-level section you are currently inside. */
+		.oc-toc-group[data-current] > a {
+			color: var(--sl-color-white);
+			font-weight: 600;
+		}
+	}
+</style>
+
+<script>
+	class OcToc extends HTMLElement {
+		connectedCallback() {
+			const links = [...this.querySelectorAll('a')] as HTMLAnchorElement[];
+			const linkById = new Map<string, HTMLAnchorElement>();
+			for (const a of links) {
+				const id = decodeURIComponent(a.hash.slice(1));
+				if (id) linkById.set(id, a);
+			}
+			const headings = [...linkById.keys()]
+				.map((id) => document.getElementById(id))
+				.filter((el): el is HTMLElement => !!el);
+			if (headings.length === 0) return;
+
+			const groups = [...this.querySelectorAll<HTMLElement>('.oc-toc-group')];
+
+			// Nearest scrollable ancestor (Starlight's fixed .right-sidebar), cached.
+			let scrollParent: HTMLElement | null | undefined;
+			const getScrollParent = () => {
+				if (scrollParent !== undefined) return scrollParent;
+				let n = this.parentElement;
+				while (n) {
+					if (/(auto|scroll)/.test(getComputedStyle(n).overflowY)) break;
+					n = n.parentElement;
+				}
+				return (scrollParent = n);
+			};
+
+			const headerHeight = () =>
+				document.querySelector('header')?.getBoundingClientRect().height || 0;
+
+			const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			// Keep the active link inside a comfortable band of the rail's own scroll
+			// area, gliding there smoothly. Never moves the page; no-op when the
+			// outline already fits. The margin leaves context above and below the
+			// active item so the rail is not constantly nudging by a few pixels.
+			const followInRail = (link: HTMLElement) => {
+				const sp = getScrollParent();
+				if (!sp || sp.scrollHeight <= sp.clientHeight + 1) return;
+				const cr = sp.getBoundingClientRect();
+				const top = cr.top + headerHeight();
+				const margin = Math.min(88, (cr.bottom - top) * 0.28);
+				const lr = link.getBoundingClientRect();
+				let target = sp.scrollTop;
+				if (lr.top < top + margin) target -= top + margin - lr.top;
+				else if (lr.bottom > cr.bottom - margin) target += lr.bottom - (cr.bottom - margin);
+				if (Math.abs(target - sp.scrollTop) < 2) return;
+				sp.scrollTo({ top: target, behavior: reduceMotion ? 'auto' : 'smooth' });
+			};
+
+			let lastId = '';
+			const setActive = (id: string) => {
+				if (id === lastId) return;
+				const link = linkById.get(id);
+				if (!link) return;
+				lastId = id;
+				for (const a of links) a.removeAttribute('aria-current');
+				link.setAttribute('aria-current', 'true');
+				const activeGroup = link.closest('.oc-toc-group');
+				for (const g of groups) g.toggleAttribute('data-current', g === activeGroup);
+				followInRail(link);
+			};
+
+			// The line below the header a heading must cross to count as "current".
+			const update = () => {
+				const line = headerHeight() + 40;
+				let currentId = headings[0].id;
+				for (const h of headings) {
+					if (h.getBoundingClientRect().top <= line) currentId = h.id;
+					else break;
+				}
+				// At the very bottom, pin the last heading so the final section wins.
+				if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+					currentId = headings[headings.length - 1].id;
+				}
+				setActive(currentId);
+			};
+
+			let ticking = false;
+			const onScroll = () => {
+				if (ticking) return;
+				ticking = true;
+				requestAnimationFrame(() => {
+					ticking = false;
+					update();
+				});
+			};
+
+			window.addEventListener('scroll', onScroll, { passive: true });
+			window.addEventListener('resize', onScroll);
+			window.addEventListener('hashchange', update);
+			// Catch up if the page was scrolled while this tab was hidden (rAF paused).
+			document.addEventListener('visibilitychange', () => {
+				if (!document.hidden) update();
+			});
+			update();
+		}
+	}
+
+	if (!customElements.get('oc-toc')) customElements.define('oc-toc', OcToc);
+</script>

@@ -28,6 +28,11 @@ export default defineConfig({
 				},
 			],
 			customCss: ['./src/styles/starlight-theme.css', './src/styles/mermaid.css'],
+			// Override the desktop "On this page" rail: it follows the section you are
+			// reading and expands subsections only for that section (see the component).
+			components: {
+				TableOfContents: './src/components/starlight/TableOfContents.astro',
+			},
 			// Fira Code (the app's mono) for the Mermaid plates, plus the global
 			// renderer that draws every .mermaid-figure (inline design diagrams and
 			// generated reference mirrors alike).
