@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import icon from 'astro-icon';
 
 // Canonical origin, used for canonical links and the sitemap. Set SITE_URL in the
 // Cloudflare project once a custom domain is attached; until then Pages hands the
@@ -21,6 +22,7 @@ const ogImageAlt = 'Orange Copy Paste - the clipboard that remembers';
 export default defineConfig({
 	site,
 	integrations: [
+		icon(),
 		// Starlight adds its own sitemap only when none is registered. This one is
 		// registered explicitly so the noindex pages (/reset, and /404 if it were
 		// ever listed) stay out of it; the sitemap plugin does not read robots meta.

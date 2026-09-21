@@ -7,7 +7,9 @@
  * `data-dl` is what the script updates; if GitHub cannot be reached at either
  * point, every button falls back to the releases page.
  */
+import { Icon } from 'astro-icon/components';
 import { fetchBuild, RELEASES_PAGE } from '../../lib/releases';
+import { REPO_URL } from '../../lib/github';
 
 const build = await fetchBuild();
 ---
@@ -54,10 +56,33 @@ const build = await fetchBuild();
 			Updates arrive inside the app, signature-checked, and never install without
 			asking. A beta channel is one switch away in Settings.
 		</p>
+		<p class="dl-source reveal">
+			<a href={REPO_URL} target="_blank" rel="noopener">
+				<Icon name="lucide:github" size={16} />Open source. Browse the code on GitHub.
+			</a>
+		</p>
 	</div>
 </section>
 
 <style>
+	.dl-source {
+		margin-top: 1rem;
+	}
+
+	.dl-source a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		color: var(--text-muted);
+		text-decoration: none;
+		font-size: 0.85rem;
+		transition: color 0.15s ease;
+	}
+
+	.dl-source a:hover {
+		color: var(--text);
+	}
+
 	.dl {
 		background:
 			radial-gradient(60% 80% at 50% 110%, rgba(255, 62, 28, 0.13), transparent 70%),
