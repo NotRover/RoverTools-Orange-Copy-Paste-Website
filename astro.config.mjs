@@ -10,6 +10,12 @@ import mdx from '@astrojs/mdx';
 const site =
 	process.env.SITE_URL ?? process.env.CF_PAGES_URL ?? 'https://orange-copy-paste-app.pages.dev';
 
+// The social/embed card. Starlight already emits canonical, og:title/description/
+// url/site_name and twitter:card on every docs page; it does not emit an image or
+// theme-color, so those are added once here for the whole docs section.
+const ogImage = new URL('/og-banner.png', site).href;
+const ogImageAlt = 'Orange Copy Paste - the clipboard that remembers';
+
 // https://astro.build/config
 export default defineConfig({
 	site,
@@ -56,6 +62,16 @@ export default defineConfig({
 					tag: 'script',
 					attrs: { type: 'module', src: '/mermaid-plates.js' },
 				},
+				// Social/embed card image + theme colour for the docs pages. Starlight
+				// supplies the rest of the OG/Twitter set; these are what it omits.
+				{ tag: 'meta', attrs: { property: 'og:image', content: ogImage } },
+				{ tag: 'meta', attrs: { property: 'og:image:type', content: 'image/png' } },
+				{ tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+				{ tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+				{ tag: 'meta', attrs: { property: 'og:image:alt', content: ogImageAlt } },
+				{ tag: 'meta', attrs: { name: 'twitter:image', content: ogImage } },
+				{ tag: 'meta', attrs: { name: 'twitter:image:alt', content: ogImageAlt } },
+				{ tag: 'meta', attrs: { name: 'theme-color', content: '#ff3e1c' } },
 			],
 			// src/pages/404.astro serves the whole site, docs included, so Starlight's
 			// own /404 would only collide with it.

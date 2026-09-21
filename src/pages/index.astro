@@ -15,6 +15,26 @@ import FaqFooter from '../components/landing/FaqFooter.astro';
 const title = 'Orange Copy Paste - The clipboard that remembers';
 const description =
 	'Cross-device smart clipboard with history, notes and end-to-end encrypted sync. Free, works offline, for Windows and Linux.';
+
+// Absolute URLs for canonical + social cards, built from the resolved `site`.
+const canonical = new URL('/', Astro.site).href;
+const ogImage = new URL('/og-banner.png', Astro.site).href;
+
+// SoftwareApplication structured data: a free Windows/Linux utility, linking the
+// releases page as the download. Kept factual - no rating or search action we
+// cannot back.
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'SoftwareApplication',
+	name: 'Orange Copy Paste',
+	applicationCategory: 'UtilitiesApplication',
+	operatingSystem: 'Windows, Linux',
+	description,
+	url: canonical,
+	image: ogImage,
+	downloadUrl: 'https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases',
+	offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
 ---
 
 <!doctype html>
@@ -24,12 +44,34 @@ const description =
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+
+		<!-- Open Graph: the rich preview Discord, Slack, iMessage etc. unfurl -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Orange Copy Paste" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:type" content="image/png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Orange Copy Paste - the clipboard that remembers" />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter/X large-image card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image:alt" content="Orange Copy Paste - the clipboard that remembers" />
+
 		<meta name="color-scheme" content="dark" />
+		<!-- Discord tints the embed's side bar with this -->
+		<meta name="theme-color" content="#ff3e1c" />
 		<link rel="icon" type="image/png" href="/favicon-32.png" />
 		<link rel="apple-touch-icon" href="/app-icon.png" />
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 		<script is:inline>
 			document.documentElement.classList.add('js');
 		</script>

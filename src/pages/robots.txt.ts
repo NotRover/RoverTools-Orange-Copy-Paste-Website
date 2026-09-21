@@ -1,11 +1,16 @@
 import type { APIRoute } from 'astro';
 
-// A route rather than a static file, so the sitemap line follows whatever origin
-// the build was given (SITE_URL in production, CF_PAGES_URL on a preview deploy).
+// Served at /robots.txt. Everything is public and crawlable; the one thing worth
+// stating is where the sitemap is, built from the same `site` the rest of the
+// canonical/OG URLs use so it always points at the host actually being served.
 export const GET: APIRoute = ({ site }) => {
 	const sitemap = new URL('sitemap-index.xml', site).href;
+	const body = `User-agent: *
+Allow: /
 
-	return new Response(`User-agent: *\nAllow: /\n\nSitemap: ${sitemap}\n`, {
+Sitemap: ${sitemap}
+`;
+	return new Response(body, {
 		headers: { 'Content-Type': 'text/plain; charset=utf-8' },
 	});
 };
