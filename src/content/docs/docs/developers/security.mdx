@@ -3,47 +3,35 @@ title: Security model (technical)
 description: The end-to-end encryption scheme, for a reader who wants the mechanism.
 ---
 
-The design goal: the server cannot read your data even if it wanted to. This page is the
-technical summary. The plain-language version is on the [Security model](/docs/security) page,
-and the exact envelope, key derivation parameters, and DDL live in the
-[backend architecture doc](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/docs/architecture.md),
-which is their home.
+This page explains how the encryption works and what it does and does not protect, for a technical reader. The plain-language version is the [Security model](/docs/security/) page. The exact envelope, key derivation parameters and DDL live in the [backend architecture doc](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/docs/architecture.md), which is their home; this page does not repeat values.
+
+The goal is that the server can store and relay everything without being able to read any of it.
 
 ## Keys
 
-- The account **password** is run through Argon2id on the device and split with HKDF into two
-  independent keys: an auth key, which is the credential Supabase Auth receives, and a wrapping
-  key, which never leaves the device. The password itself is never sent anywhere, and the auth
-  key reveals nothing about the wrapping key.
-- That wrapping key unwraps the **User Master Key (UMK)**, a random key that exists only in
-  memory. It is zeroized on drop and never written to disk, logs, or the network.
-- Every clipboard entry and note gets its **own random content key**. The item is encrypted
-  with AES-256-GCM under that key; the content key is then wrapped under the UMK, and for shared
-  items also under each target space key.
-- Devices and space members exchange keys with **X25519**. A wrapped key is usable only by its
-  intended recipient. Device private keys live in the OS credential store (Windows Credential
-  Manager, GNOME Keyring, or KWallet).
+- The account **password** is stretched with Argon2id on the device, salted from the account email, and split with HKDF into two independent keys. The **auth key** is the only credential Supabase Auth receives. The **key-encryption key** never leaves the device. The password itself is not sent, and the auth key reveals nothing about the other key.
+- The key-encryption key unwraps the **User Master Key (UMK)**, a random key held only in memory, zeroized on drop, and never written to disk or logs.
+- The server keeps several **wrapped copies of the UMK**, and none of them opens without a secret the server lacks: one under the password's key-encryption key, one per device under that device's X25519 key, and optionally one under a key derived from the recovery code. The per-device copy is what lets a device that has signed in before unlock after a restart, or after a password reset, without the password.
+- Every clipboard entry and note gets its **own random content key**. The item is encrypted with AES-256-GCM under it, and the content key is wrapped under the UMK and, for shared items, under each target space key.
+- Devices and space members exchange keys with **X25519**, so a wrapped key is usable only by its recipient. Device private keys live in the operating system's credential store: Windows Credential Manager, GNOME Keyring or KWallet.
 
 ## Properties
 
-- The server holds nothing that opens the data. Supabase checks the auth key, but a guess at
-  it costs a full Argon2id run per attempt and a correct one only signs in; unwrapping the
-  master key is a client-side AES-GCM decryption under the other half of the split. There is
-  nothing server-side to reset into plaintext.
-- Each ciphertext is bound to its own item identity as additional authenticated data, so a
-  ciphertext cannot be transplanted onto another item and still decrypt.
-- Sharing never re-encrypts content. Adding a space to an item wraps that item's content key for
-  the space; the ciphertext is untouched.
-- A **Space** holds its keys as a keyring, newest first. Removing a member re-keys the space for
-  everyone remaining; old keys are retained so already-pulled history stays readable.
+- **Nothing on the server opens the data.** Supabase checks the auth key, but that key unwraps nothing. Guessing it costs a full Argon2id run per attempt, and a correct guess only signs in. Resetting the password server-side cannot produce plaintext.
+- **Ciphertext is bound to its item.** Each item's identity is additional authenticated data, so ciphertext moved onto another item fails to decrypt.
+- **Sharing never re-encrypts.** Adding a space to an item wraps its content key for that space; the ciphertext is untouched. This is why sharing to one more space is cheap and why content is keyed per item rather than under the master key.
+- **Spaces keep a keyring.** Keys are held newest first. Removing a member makes a new key for everyone left, and old keys stay so earlier items remain readable.
+- **Space keys can be checked.** An owner can publish a fingerprint of the current space key. When one is published, a member's app refuses a key that does not match it.
 
-## What it does not defend against
+## Where the guarantee stops
 
-The client computes its shared secret against a public key the server returned, and that key is
-not pinned. An active, malicious server could substitute a key it controls. This is out of scope
-for the current design, and it bounds what the scheme can promise: the guarantee is against a
-**passive** server that stores and relays but does not tamper.
+- **The server is trusted not to tamper.** Key exchange uses public keys the server returns, and device keys are not pinned, so an actively malicious server could hand out a key it controls. The space-key fingerprint narrows this for spaces whose owner published one; it does not cover device keys. The guarantee is against a passive server that stores and relays but does not substitute keys.
+- **Metadata is visible.** The server sees each item's type, size, timestamps, pinned flag and spaces, plus space names and membership. The full list is on the [Security model](/docs/security/#what-the-server-can-see) page.
+- **A device is as safe as its system account.** Anyone who can use the credential store of a signed-in device can reach its device key, and through the per-device copy, the UMK.
+- **Local files are plain.** History and notes are stored unencrypted on the device; encryption covers what leaves it.
+- **Losing every secret loses the data.** Without the password, the recovery code, and any device that was signed in, the UMK cannot be recovered by anyone, including the operator. That is the price of the server holding no usable key.
 
-The recovery flow trades one secret for another. If you set up a recovery code, it wraps a second
-copy of the UMK; losing both the password and the recovery code means the data cannot be
-recovered by anyone, including the operator. That is the point.
+## Next
+
+- [Architecture](/docs/developers/architecture/): how the app and server fit together.
+- [Backend architecture](/docs/developers/reference/wire-contract/): the envelope and every route, in full.

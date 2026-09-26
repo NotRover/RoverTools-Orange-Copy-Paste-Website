@@ -19,7 +19,22 @@ The app leans on standard tools for key injection and desktop integration:
 | GNOME Keyring or KWallet | Storage for sync keys. |
 | A tray host | The tray icon. |
 
-The `.deb` requires `xdotool` or `wtype`, and recommends `x11-utils` and `ydotool`. The `.rpm` requires `xdotool`. Install the other packages in the table yourself if your desktop does not already have them.
+The `.deb` requires `xdotool` or `wtype`, and recommends `x11-utils` and `ydotool`. The `.rpm` requires `xdotool`. The AppImage brings none of them. Install the other packages in the table yourself if your desktop does not already have them.
+
+Install the `.deb` with apt, so it pulls in what it requires:
+
+```bash
+sudo apt install ./Orange.Copy.Paste_*.deb
+```
+
+On GNOME or KDE with Wayland, `ydotool` only works while its service runs:
+
+```bash
+sudo apt install -y ydotool
+sudo systemctl enable --now ydotool
+```
+
+Without `x11-utils`, the app cannot read your monitor's work area and assumes a 1920x1080 screen when placing popups.
 
 ## How to set up hotkeys on Wayland
 

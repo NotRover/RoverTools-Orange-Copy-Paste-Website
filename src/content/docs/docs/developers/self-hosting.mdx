@@ -3,8 +3,9 @@ title: Self-hosting
 description: Run your own Orange Copy Paste sync backend.
 ---
 
-You can run your own backend and point the app at it. The server only ever stores ciphertext,
-so self-hosting does not change the security model. This page is a provider-agnostic overview;
+You can run your own backend and point the app at it. The server stores encrypted items and
+holds no key that opens them, so self-hosting does not change the security model; you see the
+same metadata any operator does (listed in the [security model](/docs/security/#what-the-server-can-see)). This page is a provider-agnostic overview;
 the full operational runbook, including one worked VPS setup, hardening, and the deploy
 pipeline, is in the backend repo's
 [`docs/DEPLOY.md`](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/docs/DEPLOY.md).
@@ -81,16 +82,57 @@ Then apply migrations:
 uv run alembic upgrade head
 ```
 
+Check that it is running. A healthy server answers with status 200:
+
+```bash
+curl http://localhost:8000/internal/healthz
+```
+
 Migrations are never applied automatically by the deploy: a merged migration has not reached the
 database until someone runs it. Apply them deliberately after deploying new code.
 
 ## TLS and the desktop app
 
 Put a reverse proxy in front of the service for TLS (the sample setup uses Caddy for automatic
-certificates). Then point the app at your API. The endpoints are compiled into the client, so
-either build the app with your values in `src-tauri/src/sync/config.rs`, or override an existing
-install through `settings.json` (`sync_server_url`, `supabase_url`, `supabase_anon_key`). See the
-app's [cloud sync setup](/docs/cloud-sync) for the client side.
+certificates). Then point the app at your API, as below.
+
+## Point the app at your server
+
+The app needs three values, and they are compiled in, so users never type them:
+
+| Value | Where to find it |
+|---|---|
+| Server URL | Your deployed API, for example `https://sync.example.com` |
+| Supabase project URL | Supabase, Settings, API Keys, **Project URL** |
+| Supabase publishable key | Supabase, Settings, API Keys. It starts with `sb_publishable_`; older projects call it the anon key |
+
+Never use the secret key (`sb_secret_`). It gives full access to your project, and anything compiled into the app can be read by anyone who has a copy.
+
+1. Set the three constants at the top of `src-tauri/src/sync/config.rs` in the app:
+   ```rust
+   const DEFAULT_SERVER_URL: &str = "https://sync.example.com";
+   const DEFAULT_SUPABASE_URL: &str = "https://your-project-ref.supabase.co";
+   const DEFAULT_SUPABASE_ANON_KEY: &str = "sb_publishable_...";
+   ```
+   These values are safe to commit. If they are empty, the **Account & Sync** screen says the build has no sync endpoints.
+2. Build or run the app. Sign up on the **Account & Sync** screen; your account and this device should appear.
+
+To point an installed copy at a different server without rebuilding, set `sync_server_url`,
+`supabase_url` and `supabase_anon_key` in `settings.json` in the app's data folder. There is no
+screen for this on purpose.
+
+### Set up Google sign-in
+
+Google sign-in needs all three of these, or it fails after the consent screen with no useful error:
+
+1. In Supabase, under Authentication, Providers, enable **Google** with the client ID and secret from Google Cloud Console.
+2. In Google Cloud Console, add `https://<project-ref>.supabase.co/auth/v1/callback` to the OAuth client's authorized redirect URIs.
+3. In Supabase, under Authentication, URL Configuration, add all three of `http://127.0.0.1:53170`, `http://127.0.0.1:53171` and `http://127.0.0.1:53172` to the redirect URLs.
+
+Step 3 is the easy one to miss. The app receives the sign-in on the first free port of those
+three on the user's computer. If they are not allowed, Google's consent succeeds but Supabase
+will not send the user back, and the app waits until it times out after 5 minutes. The ports are
+fixed in `src-tauri/src/sync/oauth.rs`.
 
 ## Deeper operations
 

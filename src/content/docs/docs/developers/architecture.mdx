@@ -20,15 +20,19 @@ delivery goes through Redis pub/sub.
 
 ## The sync flow
 
-1. The client stretches the account password with Argon2id and splits it in two. It
-   authenticates against Supabase directly with one half, the auth key. The password itself is
-   never sent.
-2. It bootstraps the account and receives its salt and password-wrapped master key.
-3. It derives the wrapping key from the other half and the salt and unwraps the User Master Key
-   in memory. A wrong password is simply a failed decryption.
-4. It registers the device and publishes the device's public key.
+1. The client stretches the account password with Argon2id, salted from the email, and splits
+   the result in two. It signs in with Supabase directly using one half, the auth key. The
+   password itself is never sent.
+2. It bootstraps the account and receives the account's key salt and the password-wrapped
+   master key.
+3. It derives the key-encryption key from the other half and that salt, and unwraps the User
+   Master Key in memory. A wrong password is simply a failed decryption.
+4. It registers the device, publishes the device's public key, and stores a copy of the master
+   key wrapped for that device, so the device can unlock again later without the password.
 5. Entries are encrypted locally, pushed, and pulled. Merges are last-write-wins on `updated_at`.
 6. The WebSocket streams live changes from other devices and space members.
+
+The keys and what each one protects are explained in the [technical security model](/docs/developers/security/).
 
 Deletes travel as tombstones (a push carrying a deletion marker, not a delete request), and a
 tombstone wins a conflict. Sharing is one primitive, the **Space**: persistent, multi-member,

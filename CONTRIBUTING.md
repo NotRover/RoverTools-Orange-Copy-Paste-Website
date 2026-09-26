@@ -1,17 +1,13 @@
-# Contributing to the RoverTools website
+# Contributing to the Orange Copy Paste website
 
-This repository is the public website for RoverTools, the cross-device Smart
-Clipboard app: the marketing landing page and the user documentation, built with
-[Astro](https://astro.build) and [Starlight](https://starlight.astro.build) and
-managed with [Bun](https://bun.sh).
-
-This is where the *user-facing* docs live (how to install and use the app). Deep
-engineering reference lives in the client and backend repositories' `docs/`
-folders, and this site links out to them.
+This file is for people changing the website: the landing page, the user guide
+and the hand-written developer pages. What the site is and how to run it is in
+the [README](README.md). The Developers > Reference pages are generated from the
+code repositories' docs, so change those at their source instead.
 
 ## Ways to contribute
 
-- Fix a typo, a broken link, or an out-of-date screenshot.
+- Fix a typo, a broken link, or a page that no longer matches the app.
 - Improve or expand a documentation page.
 - Report a problem with the site by opening an issue.
 
@@ -42,8 +38,8 @@ bun run dev
 
 ## Before you open a pull request
 
-Build the site — this typechecks the content and generates the static output, so
-it catches broken links and content errors:
+Build the site. It type-checks the content and generates the static output, and
+it must pass. It does not check links, so click through any you changed:
 
 ```bash
 bun run build
@@ -53,7 +49,11 @@ Please also:
 
 - Branch off `main`; keep each pull request scoped to one change.
 - Open pull requests as **drafts** until they are ready for review.
-- Write documentation in plain, concrete language with ASCII punctuation.
+- Follow the workspace
+  [writing guide](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/blob/main/docs/writing-docs.md)
+  and run its checklist. Check every number, label and shortcut against the app's code.
+- Mockups use invented but plausible content. Never add a screenshot of a real
+  clipboard.
 
 ## License
 
