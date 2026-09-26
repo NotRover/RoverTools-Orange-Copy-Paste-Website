@@ -11,8 +11,10 @@ which is their home.
 
 ## Keys
 
-- The account **password** is run through Argon2id on the device to derive a wrapping key. The
-  password is never sent to the server.
+- The account **password** is run through Argon2id on the device and split with HKDF into two
+  independent keys: an auth key, which is the credential Supabase Auth receives, and a wrapping
+  key, which never leaves the device. The password itself is never sent anywhere, and the auth
+  key reveals nothing about the wrapping key.
 - That wrapping key unwraps the **User Master Key (UMK)**, a random key that exists only in
   memory. It is zeroized on drop and never written to disk, logs, or the network.
 - Every clipboard entry and note gets its **own random content key**. The item is encrypted
@@ -24,8 +26,10 @@ which is their home.
 
 ## Properties
 
-- A wrong password is a failed AES-GCM decryption, not a server-side check. There is nothing
-  server-side to brute-force or to reset into plaintext.
+- The server holds nothing that opens the data. Supabase checks the auth key, but a guess at
+  it costs a full Argon2id run per attempt and a correct one only signs in; unwrapping the
+  master key is a client-side AES-GCM decryption under the other half of the split. There is
+  nothing server-side to reset into plaintext.
 - Each ciphertext is bound to its own item identity as additional authenticated data, so a
   ciphertext cannot be transplanted onto another item and still decrypt.
 - Sharing never re-encrypts content. Adding a space to an item wraps that item's content key for

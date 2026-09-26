@@ -19,10 +19,10 @@ Keep your clipboard history and notes in sync on every device. End-to-end encryp
 ## Setting up
 
 1. Open the **Account** screen and sign up with email and password, or with Google.
-2. If you signed in with Google, you still set an account password. That password is your encryption secret, and the server never sees it.
+2. If you signed in with Google, you still set an account password. That password is your encryption secret, and it never leaves your device.
 3. Save your **recovery code** somewhere safe. It is shown once and stored nowhere.
 
-Your password does double duty: it logs you in *and* it derives the key that unlocks your data. A wrong password is simply a failed decryption; there is nothing on the server that can bypass it. The full picture is in the [security model](/docs/security/).
+Your password does double duty: it logs you in *and* it unlocks your data, but the two jobs use two different keys derived from it on your device. Sign-in sends only the login key. The key that unlocks your data never leaves your machine, so nothing on the server can stand in for it. The full picture is in the [security model](/docs/security/).
 
 ## Sync modes
 
