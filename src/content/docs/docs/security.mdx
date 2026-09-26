@@ -10,7 +10,7 @@ The design goal is simple: **the server should be unable to read your data even 
 
 ## The shape of it
 
-1. Your password is run through **Argon2id** on your device to derive a key. The password itself is never transmitted.
+1. Your password is run through **Argon2id** on your device and split into two keys: a login key, which is the only thing sent when you sign in, and a wrapping key, which stays on the device. The password itself is never transmitted, and neither key can be worked out from the other.
 2. That key unwraps your **User Master Key (UMK)**, which exists only in memory and is wiped when the app exits or you sign out. It never touches disk, logs, or the network.
 3. Every clipboard entry and note gets its **own random content key**. The item is encrypted with **AES-256-GCM** under that key, and the key is then wrapped under your UMK (and, for shared items, under each target space key).
 4. The server stores the ciphertext and the wrapped keys. It has no key that opens anything. Even your settings blob is encrypted before upload.
@@ -20,7 +20,7 @@ Ciphertexts are also bound to their own item identity, so a ciphertext cannot be
 
 ## What this means in practice
 
-- **A wrong password is a failed decryption**, not a "wrong password" check the server performs. There is nothing server-side to guess against or reset into plaintext.
+- **The server cannot get at your data through your password.** Sign-in checks the login key, but that key cannot unwrap anything. Guessing at it costs a full Argon2id run per attempt, and even a correct guess only signs in. Nothing server-side can be reset into plaintext.
 - **Sharing never re-encrypts content.** Adding a space to an item wraps that item's key for the space; the content ciphertext is untouched.
 - **Removing a space member re-keys the space** for everyone remaining. Old keys are retained so history stays readable to members.
 - **A received space key is verified** against a fingerprint the owner published, and refused on mismatch.
