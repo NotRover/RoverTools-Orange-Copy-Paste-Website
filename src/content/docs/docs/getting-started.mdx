@@ -1,42 +1,72 @@
 ---
 title: Install and first run
-description: Get Orange Copy Paste running on Windows or Linux.
+description: Install Orange Copy Paste, copy three things, paste one by number, and pin it.
 ---
 
 import DocMock from '../../../components/docs/DocMock.astro';
 import TrayMenu from '../../../components/landing/mocks/TrayMenu.astro';
 
-## Windows
+In about five minutes you will install the app, copy three things, paste the second one by its number, and pin it so it stays. You need a Windows 10 or 11 PC or a Linux desktop, and a text editor such as Notepad to paste into. No account is needed.
 
-1. Download the installer from the [latest release](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases/latest).
-2. Run it. It installs per user, so no admin rights are needed.
-3. Launch the app. It appears in the system tray; left-click the tray icon to open the window.
+## 1. Install the app
+
+**On Windows:**
+
+1. Open the [latest release](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases/latest) and download the file ending in `-setup.exe`.
+2. Run it. It installs for your user only, so it does not ask for admin rights.
+3. Open **Orange Copy Paste** from the Start menu.
+
+**On Linux:** download the `.deb`, `.rpm` or AppImage from the same release and install it the way you usually would. If you use Wayland rather than X11, set up the two hotkeys first by following [How to set up hotkeys on Wayland](/docs/linux/#how-to-set-up-hotkeys-on-wayland). Without that, step 3 below does nothing.
+
+The app window opens on the clipboard screen, which is empty for now. An orange icon also appears in the system tray.
 
 <DocMock>
 	<TrayMenu />
 </DocMock>
 
-Windows 10 and 11 are supported, and Windows is the primary, fully featured target.
+## 2. Copy three things
 
-## Linux
+Open your text editor, type these three lines, and copy each one with <kbd>Ctrl</kbd>+<kbd>C</kbd>, one at a time:
 
-Builds ship as `.deb`, `.rpm` and AppImage from the same [releases page](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases/latest).
+```
+Order 4471 shipped
+meet@9:30, room B
+https://example.com/invoice/4471
+```
 
-X11 gives the smoothest experience. Wayland works with a small setup step for hotkeys. See the [Linux notes](/docs/linux/) for the runtime packages the app uses (`xdotool`, `wtype`, `ydotool`) and the per-compositor details.
+Look at the app window. The three entries are there, newest first.
 
-## macOS
+## 3. Open the paste popup
 
-Coming soon. A Mac build is on the way, for both Apple silicon and Intel. Until then, use Orange Copy Paste on Windows or Linux.
+Click on an empty line in your editor, then press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
 
-## First run
+A small popup opens at your cursor on its **Recent** tab. Your three entries are listed newest first, each with a number: `1` is the link, `2` is `meet@9:30, room B`, `3` is `Order 4471 shipped`.
 
-- **Copy something.** It appears in the history immediately. Text, links, images, files and rich HTML are all captured.
-- **Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.** The quick-paste popup opens at your cursor with your recent items. Press <kbd>1</kbd> to paste the first one.
-- **Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>** with something selected in another app. It is captured into history and a small receipt popup shows what was grabbed, with Pin and Delete one click away.
+If nothing opens, check that the tray icon is there, which means the app is running. On Wayland, check that your hotkeys are set up.
 
-## Good to know on day one
+## 4. Paste by number
 
-- **History is memory-only by default.** Unpinned history clears when the app restarts, until you turn on *Keep history across app restarts* in Settings. Pinned and saved entries always survive.
-- **Closing the window minimizes to the tray** by default. Quit from the tray menu.
-- **Run on startup** and **Start minimized** are one toggle each in [Settings](/docs/settings/).
-- No account is needed for any of this. When you want sync, see [Cloud sync](/docs/cloud-sync/).
+With the popup open, press <kbd>2</kbd>.
+
+The popup closes and `meet@9:30, room B` is typed into your editor where the cursor was. You did not have to leave the editor or find the entry with the mouse.
+
+## 5. Pin an entry
+
+Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> again, hover over `Order 4471 shipped`, and click **Pin**. Then click the **Pinned** tab.
+
+The entry is now on the **Pinned** tab, with its own number there. Pinned entries stay when you restart the app and when you use **Clear all**. Press <kbd>Esc</kbd> to close the popup.
+
+## What you did
+
+You used the app's main loop: copy as usual, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>, and paste with one number key. Pinning is how you keep what you reach for every day.
+
+Two defaults to know before you rely on it:
+
+- **Unpinned history is cleared when the app restarts.** Turn on **Keep history across app restarts** in [Settings](/docs/settings/) to keep it.
+- **Closing the window quits the app.** Turn on **Close to system tray** in Settings to keep it running in the tray instead.
+
+## Next steps
+
+- [Quick paste and capture](/docs/quick-paste/): the capture popup on <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>, and more slots.
+- [Clipboard history](/docs/clipboard-history/): search, filters and groups.
+- [Cloud sync](/docs/cloud-sync/): the same history on your other computers.

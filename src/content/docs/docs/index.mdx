@@ -6,7 +6,7 @@ description: A smart clipboard for Windows and Linux with history, notes, quick 
 import DocMock from '../../../components/docs/DocMock.astro';
 import HistoryShot from '../../../components/landing/mocks/HistoryShot.astro';
 
-Orange Copy Paste captures the text, images and files you copy, keeps a searchable history alongside your notes, and syncs them across your devices. Sync is end-to-end encrypted: every key stays on your machines and the server only ever stores ciphertext. Cloud sync is optional. The app is fully usable offline.
+Orange Copy Paste captures the text, images and files you copy, keeps a searchable history alongside your notes, and syncs them across your devices. Sync is end-to-end encrypted: items are encrypted on your computer, and the server cannot read what you copied. Cloud sync is optional. The app is fully usable offline.
 
 <DocMock scale={0.6}>
 	<HistoryShot />
@@ -24,13 +24,13 @@ Orange Copy Paste captures the text, images and files you copy, keeps a searchab
 
 ## Where to start
 
-1. [Install the app](/docs/getting-started/) on Windows or Linux.
-2. Copy a few things, then press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
-3. When you want your history on another machine, [set up sync](/docs/cloud-sync/).
+- New here? [Install and first run](/docs/getting-started/) takes about five minutes, from download to your first paste by number.
+- Not sure what a word means? [Concepts](/docs/concepts/) explains pinned, saved, spaces, devices and the rest.
+- Want your history on another computer? [Set up sync](/docs/cloud-sync/#how-to-set-up-sync).
+- Something not working? See [Troubleshooting](/docs/troubleshooting/).
 
 ## Principles the app is built on
 
 - **Local first.** No account is required, and everything works with the network gone. Your data lives on your machine.
-- **The server can never read your data.** Encryption happens on your device, and your password never leaves it. Signing in sends a separate login key derived from it. See the [security model](/docs/security/).
-- **Sharing is opt-in.** Nothing is shared unless you shared it, or you switched on a filter that says so. Send filters are off by default.
-- **Quiet.** The app lives in the tray, and the noisiest options ship disabled.
+- **The server cannot read what you copy.** Encryption happens on your computer, and your password never leaves it. The [security model](/docs/security/) lists what the server can and cannot see.
+- **Sharing is opt-in.** Nothing is shared unless you shared it, or you switched on automatic sharing for a space. It is off by default.

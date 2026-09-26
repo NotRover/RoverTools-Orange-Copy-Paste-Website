@@ -16,13 +16,17 @@ Keep your clipboard history and notes in sync on every device. End-to-end encryp
 	</AppShell>
 </DocMock>
 
-## Setting up
+## How to set up sync
 
-1. Open the **Account** screen and sign up with email and password, or with Google.
-2. If you signed in with Google, you still set an account password. That password is your encryption secret, and it never leaves your device.
-3. Save your **recovery code** somewhere safe. It is shown once and stored nowhere.
+1. Open the **Account & Sync** screen from the sidebar.
+2. Create an account:
+   - With email: on the **Sign Up** tab, enter your email and a password of at least 8 characters, then click **Create account**.
+   - With Google: click **Continue with Google** and finish in your browser. Back in the app, you still set a password under **Set your password**. That password is your encryption secret, and it never leaves your device.
+3. Save your **recovery code** when the app shows it: **Copy** it or **Save as file**, keep it somewhere safe, and click **I saved my recovery code**. It is shown once and stored nowhere.
 
-Your password does double duty: it logs you in *and* it unlocks your data, but the two jobs use two different keys derived from it on your device. Sign-in sends only the login key. The key that unlocks your data never leaves your machine, so nothing on the server can stand in for it. The full picture is in the [security model](/docs/security/).
+When it worked, the screen shows your account, with this computer listed under **Devices** as "this device". Sign in with the same email and password on your other computers to sync them too.
+
+Your password does double duty: it logs you in *and* it decrypts your data, but the two jobs use two different keys derived from it on your device. Sign-in sends only the login key. The key that decrypts your data never leaves your machine, so nothing on the server can stand in for it. The full picture is in the [security model](/docs/security/).
 
 ## Sync modes
 
@@ -42,15 +46,17 @@ Spaces are not affected by the mode: what you share to a space goes out right aw
 
 ## What syncs
 
-Clipboard entries, notes, and your preferences (theme, layout, sort, groups and their colors, and similar). Device-local choices like the sync mode itself, per-space auto-copy, and window position deliberately stay on each machine.
+Clipboard entries, notes, and some of your preferences. Which settings travel and which stay on each computer is listed in [Which settings sync](/docs/settings/#which-settings-sync).
 
 ## Files, images and folders
 
-Images and files ride along, up to **5 MB each**. A folder syncs as a single entry and unpacks on the other device. Anything over the cap is skipped and the app tells you; nothing is dropped silently. Accounts start with **50 MB** of encrypted file storage, with a heads-up around 85% full. Only images and files you upload count against it; text and notes take no file storage.
+Images and files ride along, up to **5 MB per entry**. For an entry holding several files, or a folder, the 5 MB covers all of them together. A folder syncs as a single entry and unpacks on the other device. Anything over the cap is skipped and the app tells you; nothing is dropped silently.
+
+Accounts start with **50 MB** of encrypted file storage. The storage bar turns amber at 85%, and the app notifies you at 90%. Only images and files you upload count against it; text and notes take no file storage.
 
 Two more ceilings keep an account bounded, and the app leaves anything past them on the device rather than failing:
 
-- A single entry's text is capped near **512 KB**. A larger clip stays local.
+- A single entry's text is capped at about **384 KB**. A larger clip stays local.
 - Up to **3,000 items** sync per account. Beyond that, new items stay local until you make room.
 
 The Account screen shows your storage, a separate synced-item count, per-type breakdowns, and a cloud view of everything stored. When something will not fit, it lands in a *not synced* list grouped by reason, with **Try again** once you have space.
@@ -59,7 +65,9 @@ The Account screen shows your storage, a separate synced-item count, per-type br
 
 Each installation registers as a device, named automatically from its platform. The Account screen lists them with live online/offline presence, and you can revoke a device you no longer use. You cannot revoke the device you are signed in on; sign out on that one instead. A revoked device has to sign in again before it syncs.
 
-To stop syncing without signing out, switch this device to **Manual**. To change your password without losing access, use **Change password** on a signed-in device: the key that unlocks your data stays the same, only what wraps it changes.
+To stop this device sending anything new, switch it to **Manual**. Items already in the cloud still stay up to date, and spaces keep syncing; to stop completely, sign out.
+
+To change your password, click **Change password** on a signed-in device, enter your **Current password** and the new one, and click **Save password**. Your synced items stay readable: the key that decrypts them stays the same, and only what wraps it changes.
 
 ## Deleting and removing
 
@@ -75,6 +83,12 @@ Deleting a synced entry asks you to confirm first, because the removal travels t
 
 Offline changes queue locally and drain in order when you reconnect. Conflicts resolve to the most recent edit. A delete you make offline is queued like any other change and reaches your other devices once you are back online.
 
-## Forgot your password?
+## How to reset a forgotten password
 
-Use your recovery code from the sign-in screen. A reset re-wraps the same master key, so your synced data survives. Without the code and without another signed-in device, encrypted cloud data cannot be recovered by anyone, including us. That is the point.
+1. On the **Sign In** tab, click **Forgot?**, enter your email, and click **Send reset link**. Ask from the computer you will reset on: the link only works in the app that asked for it.
+2. Open the link in the email. The app opens **Set a new password**.
+3. Enter the new password twice and click **Save password**.
+
+On a computer that has been signed in to this account before, that is all: your synced data stays readable. On one that has not, the app also asks for your **Recovery code** and you click **Unlock with the code**. Signing in on a computer you have used before works too.
+
+If you have no recovery code and no computer that was signed in, **Start over with a new key** gets you back into the account, but everything synced under the old key can no longer be read, on any device, by anyone, including us.

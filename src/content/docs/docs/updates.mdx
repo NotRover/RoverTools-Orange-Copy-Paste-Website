@@ -1,34 +1,44 @@
 ---
 title: Updates and releases
-description: How the in-app updater works, and where releases live.
+description: How the app checks for, downloads and installs updates, the beta channel, and where releases are published.
 ---
 
 import DocMock from '../../../components/docs/DocMock.astro';
 import UpdateCard from '../../../components/landing/mocks/UpdateCard.astro';
 
-## The updater
+How the app checks for updates, what it installs and when, and where every release is published.
+
+## Checking
 
 <DocMock scale={1}>
 	<UpdateCard />
 </DocMock>
 
-The app checks for updates shortly after launch and periodically while it runs, since it usually lives in the tray for weeks. A check is one small request that downloads nothing.
+The app checks shortly after it starts and then every 6 hours, since it usually runs in the tray for weeks. A check is one small request and downloads nothing. Turn it off with **Check for updates automatically** in [Settings](/docs/settings/), and use **Check now** whenever you like.
 
-From there, everything is user-driven:
+## Installing
 
-1. **Download** happens only when you ask, with progress shown.
-2. **Install** sits behind a second confirmation, because it restarts the app. A background download will never take the window from you mid-paste.
-3. Not interested? **Skip a version** and the banner stops; Settings still offers it if you change your mind.
+When a newer version is found, a banner offers it. Nothing is installed until you say so:
 
-If you would rather not manage any of this, turn on **Install updates automatically** in Settings. A newer version found at startup then downloads and installs on its own and the app reopens. It only ever runs at startup, never while you are working, and it needs automatic checks left on. It stays off by default.
+1. **Download** starts only when you press it, and shows progress.
+2. **Restart & install** is a separate step, because it restarts the app. A download never takes the window from you mid-paste.
+3. **Skip this version**, offered until you download, stops the banner for that version. The close button (**Remind me later**) hides the banner for now. Settings still offers a skipped version if you change your mind.
 
-Every bundle is verified against a signing key baked into the app before it installs. A bundle without a matching signature is refused, no matter where it came from.
+Every download is checked against a signing key built into the app before it installs. A file without a matching signature is refused, wherever it came from.
+
+## Installing automatically
+
+Turn on **Install updates automatically** in Settings and the app installs new versions itself, then reopens. It is off by default, and it only happens at startup, never while you are working:
+
+- It runs from the startup notice, so **Show splash screen on startup** must stay on. With the splash off, updates are never installed automatically.
+- **Check for updates automatically** must be on too; turning it off turns this off.
+- A version you skipped is never installed automatically. It is only shown.
 
 ## Channels
 
-- **Stable** (default): you get releases when they are ready.
-- **Beta:** flip *Get beta versions* in Settings to receive new features early, alongside every normal release. Betas are tested less. Turning the switch off stops future betas but cannot downgrade you.
+- **Stable** (default): releases when they are ready.
+- **Beta:** turn on **Get beta versions** in Settings to get new features early, alongside every normal release. Betas are tested less. Turning the switch off stops future betas, but it cannot move you back to an older version.
 
 ## Release notes
 
-Each release ships human-written notes sorted into **New**, **Improved** and **Fixed**. They show in the update banner, in Settings, and on the [releases page](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases), which is also where all installers are published.
+Every release ships notes written by a person, sorted into **New**, **Improved** and **Fixed**. They show in the update banner, in Settings, and on the [releases page](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases), which is also where all installers are published.

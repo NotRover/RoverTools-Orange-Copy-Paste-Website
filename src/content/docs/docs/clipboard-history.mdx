@@ -9,6 +9,8 @@ import GroupManager from '../../../components/landing/GroupManager.astro';
 import FilterCard from '../../../components/landing/FilterCard.astro';
 import BulkBar from '../../../components/landing/BulkBar.astro';
 
+Everything you copy lands in a searchable history of 100 entries. This page covers what gets captured, the limits, pinning and saving, groups, search and filters, and acting on many entries at once.
+
 <DocMock scale={0.6}>
 	<HistoryShot />
 </DocMock>
@@ -54,11 +56,11 @@ Groups are colored tags you define. Create, rename, recolor and delete them from
 
 Search matches entry content and group names. Filters stack on top:
 
-- **Quick:** pinned, saved, and, once you are signed in, mine or from others.
+- **Quick:** Pinned, Saved, and, once you are signed in, Mine or From others.
 - **Type:** text, url, html, image, video, document, file, folder.
-- **Cloud:** in cloud, or local only.
-- **Sharing:** shared, not shared, or per space.
-- **Groups** and **date** (Any time, Today, 7 days, or a custom range).
+- **Cloud:** Any, In cloud, or Local. Once you are in a space, the same section also filters by sharing: Any, In a space, Not shared, or one chip per space.
+- **Groups:** any of your groups.
+- **Date:** Any time, Today, 7 days, or Range, which lets you pick the start and end dates.
 
 Every filter option shows the number of items it would leave you *before* you apply it.
 
@@ -76,4 +78,4 @@ A single click copies the entry straight back to the clipboard; a double click o
 
 ## Sorting and layout
 
-Sort by Newest, Oldest, A to Z, Z to A, or Type. View as tiles, a list, or a single column. Entries group under collapsible day headers (Today, Yesterday, then dates), and long histories render progressively so scrolling stays smooth.
+Sort by Newest, Oldest, A to Z, Z to A, or Type. Switch between **Tiles view**, **Grid view** and **Single column** from the top bar. Entries group under collapsible day headers (Today, Yesterday, then dates), and long histories render progressively so scrolling stays smooth.

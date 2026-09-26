@@ -3,7 +3,7 @@ title: Linux notes
 description: What to install, what works where, and the Wayland setup step.
 ---
 
-Linux builds ship as `.deb`, `.rpm` and AppImage. **X11 is the smoothest experience.** Wayland works, with the setup step below for hotkeys.
+What to install for Linux, the one setup step Wayland needs, and what does not work on Linux yet. Builds ship as `.deb`, `.rpm` and AppImage. **X11 is the smoothest experience.** Wayland works once you set up the hotkeys.
 
 ## Runtime packages
 
@@ -19,21 +19,21 @@ The app leans on standard tools for key injection and desktop integration:
 | GNOME Keyring or KWallet | Storage for sync keys. |
 | A tray host | The tray icon. |
 
-The `.deb` declares `xdotool | wtype` as a dependency and recommends the rest.
+The `.deb` requires `xdotool` or `wtype`, and recommends `x11-utils` and `ydotool`. The `.rpm` requires `xdotool`. Install the other packages in the table yourself if your desktop does not already have them.
 
-## Wayland and global hotkeys
+## How to set up hotkeys on Wayland
 
-Built-in global hotkeys rely on X11 grabs, so they do not fire on native Wayland. The fix is one keybinding in your compositor that runs the app with a `--trigger` flag:
+The built-in hotkeys rely on X11, so on native Wayland they do not fire. Instead, bind two keys in your compositor that run the app with a `--trigger` flag. The running app picks the trigger up and opens the same popup the hotkey would.
 
-```bash
-orange-copy-paste --trigger paste
-```
+1. Find the app's command. For a `.deb` or `.rpm`, it is what the `Exec=` line points at in the installed `.desktop` file. For an AppImage, it is the AppImage's own path. The examples below use `orange-copy-paste`.
+2. Bind one key to `orange-copy-paste --trigger paste` (the quick-paste popup) and one to `orange-copy-paste --trigger copy` (capture the selection). Use any keys you like.
+   - **Sway:** in your config, `bindsym Ctrl+Shift+v exec orange-copy-paste --trigger paste`, and the same with `c` and `copy`.
+   - **Hyprland:** `bind = CTRL SHIFT, V, exec, orange-copy-paste --trigger paste`, and the same with `C` and `copy`.
+   - **GNOME:** Settings, then Keyboard, then **View and Customize Shortcuts**, then **Custom Shortcuts**. Add one shortcut per command.
+   - **KDE Plasma:** System Settings, then Shortcuts, then **Add New**, then **Command or Script**. Add one per command.
+3. Press your paste key with the app running. The quick-paste popup should open.
 
-```bash
-orange-copy-paste --trigger copy
-```
-
-Use the app's own binary name in place of `orange-copy-paste`: it is whatever the `Exec=` line points at in the installed `.desktop` file (for a `.deb` or `.rpm`), or the AppImage's own filename. Bind those to whatever keys you like. The running app picks the trigger up and shows the same popup the hotkey would. Cursor-anchored placement, always-on-top and transparency vary by compositor; where they are unavailable, popups center on the active monitor instead.
+Where the compositor does not allow cursor placement, always-on-top or transparency, popups open centered on the active monitor instead.
 
 ## Known gaps on Linux
 

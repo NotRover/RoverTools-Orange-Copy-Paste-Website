@@ -91,6 +91,7 @@ export default defineConfig({
 					items: [
 						{ label: 'What is Orange Copy Paste?', link: '/docs/' },
 						{ label: 'Install and first run', slug: 'docs/getting-started' },
+						{ label: 'Concepts', slug: 'docs/concepts' },
 					],
 				},
 				{
@@ -116,6 +117,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Linux notes', slug: 'docs/linux' },
 						{ label: 'Updates and releases', slug: 'docs/updates' },
+						{ label: 'Troubleshooting', slug: 'docs/troubleshooting' },
 						{ label: 'FAQ', slug: 'docs/faq' },
 					],
 				},

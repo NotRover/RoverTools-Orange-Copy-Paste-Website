@@ -7,6 +7,8 @@ import DocMock from '../../../components/docs/DocMock.astro';
 import QuickPastePopup from '../../../components/landing/mocks/QuickPastePopup.astro';
 import CapturePopup from '../../../components/landing/mocks/CapturePopup.astro';
 
+Two popups work from any app: one pastes a recent or pinned entry by number, and the other captures what you have selected and shows what it grabbed.
+
 ## The paste popup
 
 Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> anywhere. A small popup opens at your cursor with two tabs:
@@ -18,25 +20,26 @@ Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> anywhere. A small popup open
 	<QuickPastePopup />
 </DocMock>
 
-Each row has a slot number. Press <kbd>1</kbd> through <kbd>9</kbd> (then <kbd>0</kbd>) and that entry is written to the clipboard and pasted into the app you came from. You can also arrow through the list and press <kbd>Enter</kbd>, or click a row. Hold <kbd>Alt</kbd> with the number (or <kbd>Alt</kbd>+<kbd>Enter</kbd>) to paste and drop the entry from Recent in one step. Each row also has inline Pin, Copy and Delete buttons on hover.
+Each row has a slot number. Press <kbd>1</kbd> through <kbd>9</kbd> (then <kbd>0</kbd>) and that entry is pasted into the app you came from. You can also click a row, or pick one with the arrow keys and press <kbd>Enter</kbd>. Hovering a row shows **Pin**, **Copy without pasting** and **Delete**. Every key the popup takes, including paste-and-remove, is in the [shortcuts reference](/docs/shortcuts/#inside-the-paste-popup).
 
 The number of slots shown is configurable from 3 to 10 (default 3) in [Settings](/docs/settings/). If an entry points at files that no longer exist on disk, the app tells you instead of pasting a broken path.
 
 ## The capture popup
 
-Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> with something selected in any app. The selection is captured to history and a small receipt appears at your cursor showing what was grabbed: the type, a preview, and buttons to **Pin**, add to **Groups**, **Share**, or **Delete** it right there.
+Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> with something selected in any app. The selection is captured to history and a small receipt appears at your cursor showing what was grabbed: the type, a preview, and buttons to **Pin**, add to **Groups**, **Share**, or **Delete** it right there. To save it, press <kbd>S</kbd> or pick **Saved** in the groups list.
 
 <DocMock>
 	<CapturePopup />
 </DocMock>
 
-It dismisses on <kbd>Esc</kbd>, on losing focus, or with the close button.
+It closes on <kbd>Esc</kbd>, when you click elsewhere, or with the close button. Its keys are in the [shortcuts reference](/docs/shortcuts/#inside-the-capture-popup).
 
 Plain <kbd>Ctrl</kbd>+<kbd>C</kbd> still captures to history too, just without the receipt.
 
 ## Behavior details
 
 - Both popups are toggles: the same hotkey closes them.
+- **Copy without pasting** leaves the paste popup open. Turn off *Keep paste popup open after copying* in [Settings](/docs/settings/) to close it instead.
 - Drag either popup by its header to move it where you want.
 - Popups stay on top, skip the taskbar, and are clamped to your monitor's work area, so they never open half off-screen.
 - A brief *Copied* / *Pasted* toast appears at the bottom right if you have the in-app popup notifications enabled.
