@@ -13,7 +13,7 @@ Yes. Cloud accounts include 50 MB of encrypted storage for images and files; tex
 
 ## Can the server, or anyone at RoverTools, read my clips?
 
-No. Content is encrypted on your device with keys the server never holds, and your password never leaves your machine. See the [security model](/docs/security/) for exactly what the server does and does not see.
+No. Content is encrypted on your device with keys the server never holds, and your password never leaves your machine: signing in sends a separate login key derived from it. See the [security model](/docs/security/) for exactly what the server does and does not see.
 
 ## What if I forget my password?
 

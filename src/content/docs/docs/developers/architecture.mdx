@@ -20,10 +20,12 @@ delivery goes through Redis pub/sub.
 
 ## The sync flow
 
-1. The client authenticates against Supabase directly.
+1. The client stretches the account password with Argon2id and splits it in two. It
+   authenticates against Supabase directly with one half, the auth key. The password itself is
+   never sent.
 2. It bootstraps the account and receives its salt and password-wrapped master key.
-3. It derives a wrapping key from the account password with Argon2id and unwraps the User
-   Master Key in memory. A wrong password is simply a failed decryption.
+3. It derives the wrapping key from the other half and the salt and unwraps the User Master Key
+   in memory. A wrong password is simply a failed decryption.
 4. It registers the device and publishes the device's public key.
 5. Entries are encrypted locally, pushed, and pulled. Merges are last-write-wins on `updated_at`.
 6. The WebSocket streams live changes from other devices and space members.
