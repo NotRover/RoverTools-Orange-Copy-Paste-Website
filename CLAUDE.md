@@ -16,6 +16,23 @@ change done. This repo does not keep its own copy of the guide.
 `docs/architecture.md`), permissions (`docs/permissions.md`). Link to those homes, never
 restate them.
 
+## Working notes
+
+Context is lossy: compaction and long sessions wash out earlier detail. On any multi-step or
+multi-file task (a docs pass, a new page set, a landing redesign), keep a todo list for
+tracking and a working-notes file for the reasoning instead of trusting the context window
+to hold it.
+
+- **File:** `.scratch/<YYYY-MM-DD>-<topic-slug>.md`, at the workspace root when this repo is
+  checked out as a submodule, else at this repo's root. Gitignored; never commit it. One
+  file per task, reused across sessions.
+- **Contents, terse:** goal and issue/PR link, plan checklist, decisions with a one-line
+  reason, current state and next step, key files as `path:line`, which repo(s) each change
+  lands in, checks run so far and their results, open questions.
+- **Discipline:** create it early. Update it after each meaningful step, including
+  approaches ruled out and why, and prune stale notes. After a compaction, re-read it before
+  acting. Delete it once the work ships.
+
 ## Layout
 
 - `src/pages/index.astro` - the landing page, composed from `src/components/landing/*.astro`.
