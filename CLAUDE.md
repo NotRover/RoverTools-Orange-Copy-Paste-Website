@@ -99,6 +99,7 @@ writing guide's "Checklist before merging a doc change". For visual changes, eye
 
 ## Git
 
-Work on a dedicated branch in this repo; PRs against `main` as drafts. Keep commits scoped
+Whether a change goes straight to `main` or gets a PR follows the workspace root
+`CLAUDE.md` (the Git & Repos section); a PR is a draft against `main`. Keep commits scoped
 to this repo - never bundle a website change with a parent-repo commit except a deliberate
 submodule-pointer bump.
