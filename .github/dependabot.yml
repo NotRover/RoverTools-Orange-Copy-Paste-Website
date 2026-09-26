@@ -1,0 +1,16 @@
+# Dependabot for the website. Security updates are switched on in the repo
+# settings and ignore the schedule below; this file sets the monthly version
+# updates, grouped so one PR carries all minor and patch bumps.
+version: 2
+updates:
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      site-minor-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
