@@ -5,6 +5,12 @@ end-user documentation. Astro + Starlight, package manager **bun**. This is its 
 (`RoverTools-Orange-Copy-Paste-Website`), mounted as a submodule of the RoverTools workspace; the
 workspace root `CLAUDE.md` applies here too (copy rules, git rules, doc ownership).
 
+**Every page and every line of copy here follows the workspace writing guide, and there are no exceptions:**
+[`docs/writing-docs.md`](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/blob/main/docs/writing-docs.md)
+in the app repo (`../docs/writing-docs.md` when checked out as a submodule). Decide the
+kind of page before writing it, and run the guide's "Checklist before merging a doc change" before calling a
+change done. This repo does not keep its own copy of the guide.
+
 **Owns:** end-user how-to and the marketing story.
 **Not here:** the wire contract (backend `docs/architecture.md`), client internals (app
 `docs/architecture.md`), permissions (`docs/permissions.md`). Link to those homes, never
@@ -34,7 +40,8 @@ restate them.
   7px radius), status pills. Reuse these for any new mockup so all mockups stay
   pixel-consistent with the app. Wide window shots render at the app's native 920px.
 - **No real app screenshots with real data.** A capture of a running instance embeds the
-  user's actual clipboard content; mockups carry placeholder content instead.
+  user's actual clipboard content. Mockups carry invented but plausible content instead,
+  never lorem ipsum or `foo` (see "Page craft" in the writing guide).
 - Fonts: Sora (display), Inter (body), Fira Code (mono - used for anything the product
   literally shows). Loaded from Google Fonts in both stylesheets.
 - Animations respect `prefers-reduced-motion`, and `.reveal` hiding is gated behind the
@@ -86,7 +93,8 @@ build artifact - never committed, nothing to drift.
 
 ## Verification
 
-`bun run build` must pass for any change. For visual changes, eyeball the affected pages
+`bun run build` must pass for any change. Any content or copy change must also pass the
+writing guide's "Checklist before merging a doc change". For visual changes, eyeball the affected pages
 (`/`, `/docs/...`) in a browser or with a headless screenshot before calling it done.
 
 ## Git
