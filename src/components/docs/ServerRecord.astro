@@ -1,0 +1,103 @@
+---
+/**
+ * One clipboard entry as the server stores it: the fields it needs to route
+ * and store the item sit in the clear, everything else is ciphertext. The
+ * field list follows the "What the server can see" section of the security
+ * page; keep the two in step.
+ */
+const clear = [
+	['kind', 'clipboard entry'],
+	['type', 'Text'],
+	['pinned', 'yes'],
+	['size', '2.1 KB'],
+	['changed', '18:32'],
+	['spaces', 'Design team'],
+];
+const sealed = [
+	['content', 'q9J2xK41Vd8mThPZC7oW'],
+	['preview', 'Zt5mKd2Ga9Ho1Uv3Lx8B'],
+	['group', '7Ryb1Nc4Wq0sPe6JzK2m'],
+];
+---
+
+<div class="rec">
+	<div class="rec-col">
+		<div class="rec-head">
+			<p class="dg-st">&lt;&lt;in the clear&gt;&gt;</p>
+			<span class="dg-chip dg-chip--plain">server can read</span>
+		</div>
+		{
+			clear.map(([k, v]) => (
+				<div class="rec-row">
+					<span class="rec-k">{k}</span>
+					<span class="rec-v">{v}</span>
+				</div>
+			))
+		}
+	</div>
+	<div class="rec-col rec-col--sealed">
+		<div class="rec-head">
+			<p class="dg-st">&lt;&lt;encrypted on your computer&gt;&gt;</p>
+			<span class="dg-chip">server cannot read</span>
+		</div>
+		{
+			sealed.map(([k, v]) => (
+				<div class="rec-row">
+					<span class="rec-k">{k}</span>
+					<span class="rec-v rec-v--cipher">{v}</span>
+				</div>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.rec {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 0.7rem;
+	}
+
+	.rec-col {
+		border: 1px dashed var(--border-light);
+		border-radius: var(--radius-sm);
+		padding: 0.6rem 0.75rem 0.5rem;
+	}
+
+	.rec-col--sealed {
+		border: 1px solid var(--accent);
+		background: var(--accent-dim);
+	}
+
+	.rec-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.4rem;
+	}
+
+	.rec-row {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 1fr);
+		padding: 0.28rem 0;
+		border-top: 1px solid var(--border);
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+	}
+
+	.rec-k {
+		color: var(--text-muted);
+	}
+
+	.rec-v {
+		color: var(--text);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.rec-v--cipher {
+		color: var(--text-secondary);
+	}
+</style>

@@ -1,0 +1,76 @@
+---
+/**
+ * Where each kind of delete reaches, per place the item can live. Follows the
+ * "Deleting and removing" section of the cloud sync page; keep the two in step.
+ * `-` means the item was never there.
+ */
+const places = ['This computer', 'Your other computers', 'The space'];
+const rows: { what: string; st: string; cells: ('removed' | 'kept' | '-')[] }[] = [
+	{ what: 'Delete', st: 'your own item', cells: ['removed', 'removed', '-'] },
+	{ what: 'Delete', st: 'shared with you', cells: ['removed', 'removed', 'kept'] },
+	{ what: 'Delete', st: 'you shared it', cells: ['removed', 'removed', 'removed'] },
+	{ what: 'Remove from cloud', st: 'your own item', cells: ['kept', 'removed', '-'] },
+];
+---
+
+<div class="mx">
+	<span></span>
+	{places.map((p) => <p class="mx-place">{p}</p>)}
+	{
+		rows.map((r) => (
+			<>
+				<div class="mx-what">
+					<p class="dg-st">&lt;&lt;{r.st}&gt;&gt;</p>
+					<p class="dg-name">{r.what}</p>
+				</div>
+				{r.cells.map((c) => (
+					<div class="mx-cell">
+						{c === '-' ? (
+							<span class="mx-none">not there</span>
+						) : (
+							<span class:list={['dg-chip', { 'dg-chip--plain': c === 'kept' }]}>{c}</span>
+						)}
+					</div>
+				))}
+			</>
+		))
+	}
+</div>
+
+<style>
+	.mx {
+		display: grid;
+		grid-template-columns: minmax(10rem, 1.3fr) repeat(3, minmax(0, 1fr));
+	}
+
+	.mx > * {
+		border-top: 1px solid var(--border);
+		padding: 0.5rem 0.4rem;
+	}
+
+	.mx > :nth-child(-n + 4) {
+		border-top: 0;
+		padding-top: 0;
+	}
+
+	.mx-place {
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--text-muted);
+		text-align: center;
+		align-self: end;
+	}
+
+	.mx-cell {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.mx-none {
+		font-family: var(--font-mono);
+		font-size: 0.64rem;
+		color: var(--text-muted);
+		opacity: 0.6;
+	}
+</style>

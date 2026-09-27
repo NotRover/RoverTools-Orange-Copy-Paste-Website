@@ -6,6 +6,8 @@ description: Live shared clipboards between people, end-to-end encrypted.
 import DocMock from '../../../components/docs/DocMock.astro';
 import SpacesShot from '../../../components/landing/mocks/SpacesShot.astro';
 import SpaceMembers from '../../../components/landing/mocks/SpaceMembers.astro';
+import Diagram from '../../../components/docs/Diagram.astro';
+import Flow from '../../../components/docs/Flow.astro';
 
 A **Space** is a live feed shared between any number of people. Share a clipboard entry or a note into it and every member sees it in seconds. You can be in several spaces at once, and one item can be in several spaces at once. Everything stays end-to-end encrypted; the server relays ciphertext it cannot read.
 
@@ -21,6 +23,25 @@ A **Space** is a live feed shared between any number of people. Share a clipboar
 - **Join:** click **Join**, paste into **Paste an invite code or link**, and click **Join**. A code or link raises a **request to join**, not an instant membership, so a forwarded code only lets someone knock. Someone already inside has to let them in. Links open in a browser, so you can send one to a person who does not have the app yet.
 - **Invite by email** (owner only): type an address into **Invite by email** and click **Send**. The person accepts and joins right away, because naming their address is itself the approval. They need an existing account so a key can be prepared for them.
 - **Who can approve** a code or link request is the owner by default. Turn on *Members can approve requests* in the space settings to let any member let people in.
+
+<Diagram note="A code or link only lets someone ask. A person already in the space lets them in, and an email invite counts as that approval.">
+	<Flow
+		cols="5.5rem minmax(0,1fr) 5.5rem minmax(0,1fr) 7rem minmax(0,1fr)"
+		rows="auto 0.8rem auto"
+		pieces={[
+			{ t: 'lane', row: 1, label: 'Code or link' },
+			{ t: 'k', row: 1, col: 2, name: 'Request to join', st: 'code pasted' },
+			{ t: 'e', row: 1, col: 3, label: 'waits for' },
+			{ t: 'k', row: 1, col: 4, name: 'A member', st: 'often the owner' },
+			{ t: 'e', row: 1, col: 5, label: 'hands over key' },
+			{ t: 'k', row: 1, col: 6, name: 'In the space', st: 'can read', tone: 'key' },
+			{ t: 'lane', row: 3, label: 'Email invite' },
+			{ t: 'k', row: 3, col: 2, name: 'Owner invites', st: 'by address' },
+			{ t: 'e', row: 3, col: 3, cs: 3, label: 'accepted, key comes with it' },
+			{ t: 'k', row: 3, col: 6, name: 'In the space', st: 'can read', tone: 'key' },
+		]}
+	/>
+</Diagram>
 
 Invite codes are 8 characters, expire after **72 hours**, and are created once, along with the space. Use **Copy code** or **Copy link** to pass one on, and withdraw email invites you sent.
 
@@ -48,7 +69,35 @@ When someone joins, how far back they can read is fixed at that moment. The owne
 
 The members list shows who is in the space, who is online, and who owns it. Each space has its own key, individually wrapped for every member, so the server never holds a usable key. Any member who has the key can hand it to a newcomer, so you are not stuck waiting for the owner to come online; in the usual case the key arrives with the invite.
 
+<Diagram note="The server keeps one locked copy of the space key for each member, and can open none of them.">
+	<Flow
+		cols="minmax(0,1fr) 2rem minmax(0,1fr) 2rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, cs: 5, name: 'Space key', st: 'one per space, locks every shared item key', tone: 'key' },
+			{ t: 'v', row: 2, col: 1, label: 'locked for' },
+			{ t: 'v', row: 2, col: 3, label: 'locked for' },
+			{ t: 'v', row: 2, col: 5, label: 'locked for' },
+			{ t: 'k', row: 3, col: 1, name: 'Ana', st: 'only Ana can open', tone: 'srv' },
+			{ t: 'k', row: 3, col: 3, name: 'Ben', st: 'only Ben can open', tone: 'srv' },
+			{ t: 'k', row: 3, col: 5, name: 'You', st: 'only you can open', tone: 'srv' },
+		]}
+	/>
+</Diagram>
+
 Removing a member (owner only) mints a fresh key for everyone else. Old keys are kept so old items stay readable.
+
+<Diagram note="Each removal adds a new key for the members who are left. Older keys are kept, so earlier items still open.">
+	<Flow
+		cols="minmax(0,1fr) 7rem minmax(0,1fr) 7rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'Key 1', st: 'kept' },
+			{ t: 'e', row: 1, col: 2, label: 'member removed' },
+			{ t: 'k', row: 1, col: 3, name: 'Key 2', st: 'kept' },
+			{ t: 'e', row: 1, col: 4, label: 'member removed' },
+			{ t: 'k', row: 1, col: 5, name: 'Key 3', st: 'current', tone: 'key' },
+		]}
+	/>
+</Diagram>
 
 ## Leaving and deleting
 

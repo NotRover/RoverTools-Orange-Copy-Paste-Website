@@ -7,6 +7,8 @@ import DocMock from '../../../components/docs/DocMock.astro';
 import AppShell from '../../../components/landing/AppShell.astro';
 import AccountScreen from '../../../components/landing/AccountScreen.astro';
 import SyncModes from '../../../components/landing/mocks/SyncModes.astro';
+import Diagram from '../../../components/docs/Diagram.astro';
+import DeleteMatrix from '../../../components/docs/DeleteMatrix.astro';
 
 Keep your clipboard history and notes in sync on every device. End-to-end encrypted, so only you can read them.
 
@@ -76,6 +78,10 @@ Deleting a synced entry asks you to confirm first, because the removal travels t
 - **Your own items** leave all your synced devices.
 - **An item someone shared with you** leaves all your devices, but stays in the space for everyone else.
 - **An item you shared into a space** also leaves that space for everyone.
+
+<Diagram note="Delete reaches every computer you sync. Remove from cloud keeps the copy on this computer." min={34}>
+	<DeleteMatrix />
+</Diagram>
 
 *Remove from cloud* is different: it takes an item, or a whole selection, off the server and your other devices, but keeps the copy on the device you are on. Use it to free up cloud space without losing your local history.
 

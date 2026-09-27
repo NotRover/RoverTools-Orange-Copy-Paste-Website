@@ -1,0 +1,225 @@
+/* Docs diagrams (Diagram.astro, Flow.astro and the record/matrix parts).
+   Drawn in the landing's Sync and security style on a fixed dark plate; the
+   tokens (--bg, --accent, --font-mono ...) come from landing.css. */
+
+.dg-figure {
+	margin: 1.5rem 0;
+}
+
+/* take back the pane's side padding, as DocMock's wide plate does; only where
+   the pane has it (Starlight's 50rem breakpoint) */
+@media (min-width: 50rem) {
+	.dg-figure {
+		margin-inline: calc(-1 * var(--sl-content-pad-x, 1.5rem));
+	}
+
+	.dg-note {
+		padding-inline: var(--sl-content-pad-x, 1.5rem);
+	}
+}
+
+.dg-plate {
+	background: #0b0b0b;
+	border: 1px solid #262626;
+	border-radius: 14px;
+	padding: 1.1rem 1.2rem;
+	overflow-x: auto;
+	color: var(--text);
+	font-family: var(--font-body);
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.dg-note {
+	margin: 0.5rem 0 0;
+	font-size: 0.85rem;
+	color: var(--sl-color-gray-3);
+	text-wrap: pretty;
+}
+
+.dg-draw p {
+	margin: 0;
+}
+
+/* --- the grid ----------------------------------------------------------- */
+
+.dg-flow {
+	display: grid;
+	align-items: stretch;
+}
+
+.dg-lane {
+	align-self: center;
+	font-family: var(--font-mono);
+	font-size: 0.68rem;
+	color: var(--text-muted);
+	padding-right: 0.6rem;
+}
+
+/* nodes in a row share its height, so a row of boxes lines up */
+.dg-k {
+	align-self: stretch;
+	border: 1px solid var(--border-light);
+	border-radius: var(--radius-sm);
+	background: var(--surface);
+	padding: 0.45rem 0.7rem;
+}
+
+/* a node spanning rows fills them, so every edge pointing at it lands on it */
+.dg-k--tall {
+	align-self: stretch;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.dg-k--key {
+	border-color: var(--accent);
+	background: var(--accent-dim);
+}
+
+.dg-k--srv {
+	border-style: dashed;
+	background: #0b0b0b;
+}
+
+.dg-k--off {
+	opacity: 0.55;
+	border-style: dashed;
+}
+
+.dg-st {
+	font-family: var(--font-mono);
+	font-size: 0.64rem;
+	color: var(--text-muted);
+}
+
+.dg-name {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 0.88rem;
+	letter-spacing: -0.01em;
+	color: var(--text);
+}
+
+.dg-e span,
+.dg-v span {
+	position: relative;
+	font-family: var(--font-mono);
+	font-size: 0.62rem;
+	color: var(--text-secondary);
+	white-space: nowrap;
+}
+
+/* a horizontal edge: line, arrowhead on the right, label above */
+.dg-e {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 2.4rem;
+}
+
+.dg-e::before {
+	content: '';
+	position: absolute;
+	left: 0.35rem;
+	right: 0.35rem;
+	top: 50%;
+	border-top: 1px solid var(--border-light);
+}
+
+.dg-e::after {
+	content: '';
+	position: absolute;
+	right: 0.4rem;
+	top: calc(50% - 3.5px);
+	width: 7px;
+	height: 7px;
+	border-top: 1px solid var(--border-light);
+	border-right: 1px solid var(--border-light);
+	transform: rotate(45deg);
+}
+
+/* an edge running right to left */
+.dg-e--back::after {
+	right: auto;
+	left: 0.4rem;
+	transform: rotate(-135deg);
+}
+
+.dg-e span {
+	transform: translateY(-0.75rem);
+	padding: 0 0.3rem;
+}
+
+/* a vertical edge between rows; label beside the line */
+.dg-v {
+	position: relative;
+	min-height: 2.2rem;
+}
+
+.dg-v::before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0.25rem;
+	bottom: 0.25rem;
+	border-left: 1px dashed var(--border-light);
+}
+
+.dg-v--down::after,
+.dg-v--up::after {
+	content: '';
+	position: absolute;
+	left: calc(50% - 3.5px);
+	width: 7px;
+	height: 7px;
+	border-right: 1px solid var(--border-light);
+	border-bottom: 1px solid var(--border-light);
+}
+
+.dg-v--down::after {
+	bottom: 0.25rem;
+	transform: rotate(45deg);
+}
+
+.dg-v--up::after {
+	top: 0.25rem;
+	transform: rotate(-135deg);
+}
+
+.dg-v span {
+	position: absolute;
+	left: calc(50% + 0.6rem);
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* --- chips (squircle where the browser can) ------------------------------ */
+
+.dg-chip {
+	display: inline-block;
+	font-family: var(--font-mono);
+	font-size: 0.64rem;
+	line-height: 1.5;
+	color: var(--accent);
+	border: 1px solid var(--accent-dim-strong);
+	background: var(--accent-dim);
+	border-radius: var(--radius-xs);
+	padding: 0.05rem 0.5rem;
+	white-space: nowrap;
+}
+
+.dg-chip--plain {
+	color: var(--text-secondary);
+	border-color: var(--border-light);
+	background: var(--surface);
+}
+
+@supports (corner-shape: squircle) {
+	.dg-chip {
+		border-radius: 999px;
+		corner-shape: squircle;
+	}
+}

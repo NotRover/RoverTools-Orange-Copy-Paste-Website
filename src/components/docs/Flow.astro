@@ -1,0 +1,57 @@
+---
+/**
+ * A node-and-edge drawing on a CSS grid. Every piece names its own cell, so a
+ * page lays out a diagram as data. Node columns and edge columns alternate in
+ * `cols`; rows follow the same idea.
+ *
+ * - lane: a row label in the first column
+ * - k: a node; `tone` key (orange, a key you hold), srv (dashed, what the server
+ *   holds), off (dimmed, a dead end)
+ * - e: a horizontal edge with an arrowhead and a label above it; `back` points
+ *   it right to left
+ * - v: a vertical edge; `dir` down, up, or none for a plain connector
+ *
+ * `rs` and `cs` let a piece span several rows or columns.
+ */
+type Cell = { row: number; col: number; rs?: number; cs?: number };
+export type Piece =
+	| { t: 'lane'; label: string; row: number }
+	| ({ t: 'k'; name: string; st?: string; tone?: 'key' | 'srv' | 'off' } & Cell)
+	| ({ t: 'e'; label?: string; back?: boolean } & Cell)
+	| ({ t: 'v'; label?: string; dir?: 'down' | 'up' | 'none' } & Cell);
+
+interface Props {
+	cols: string;
+	rows?: string;
+	pieces: Piece[];
+}
+const { cols, rows, pieces } = Astro.props;
+
+const area = (p: Piece) =>
+	p.t === 'lane'
+		? `grid-area:${p.row} / 1`
+		: `grid-area:${p.row} / ${p.col} / span ${p.rs ?? 1} / span ${p.cs ?? 1}`;
+---
+
+<div class="dg-flow" style={`grid-template-columns:${cols};${rows ? `grid-template-rows:${rows}` : ''}`}>
+	{
+		pieces.map((p) =>
+			p.t === 'lane' ? (
+				<p class="dg-lane" style={area(p)}>{p.label}</p>
+			) : p.t === 'k' ? (
+				<div class:list={['dg-k', p.tone && `dg-k--${p.tone}`, { 'dg-k--tall': (p.rs ?? 1) > 1 }]} style={area(p)}>
+					{p.st && <p class="dg-st">&lt;&lt;{p.st}&gt;&gt;</p>}
+					<p class="dg-name">{p.name}</p>
+				</div>
+			) : p.t === 'e' ? (
+				<div class:list={['dg-e', { 'dg-e--back': p.back }]} style={area(p)} aria-hidden="true">
+					{p.label && <span>{p.label}</span>}
+				</div>
+			) : (
+				<div class:list={['dg-v', `dg-v--${p.dir ?? 'down'}`]} style={area(p)} aria-hidden="true">
+					{p.label && <span>{p.label}</span>}
+				</div>
+			)
+		)
+	}
+</div>

@@ -1,0 +1,30 @@
+---
+/**
+ * A diagram on a docs page, drawn like the landing's Sync and security
+ * section: a fixed dark plate (so it reads the same in both docs themes),
+ * <<stereotype>> nodes, labelled edges, and one short note underneath that
+ * states the figure's single claim.
+ *
+ * The drawing keeps a minimum width; on a narrow column the plate scrolls
+ * sideways, like a docs table, rather than restacking and losing its branches.
+ */
+import '../../styles/landing.css';
+import '../../styles/diagrams.css';
+
+interface Props {
+	/** The one thing the figure shows, as a sentence. Also the accessible name. */
+	note: string;
+	/** Minimum drawing width in rem before the plate starts to scroll. */
+	min?: number;
+}
+const { note, min = 36 } = Astro.props;
+---
+
+<figure class="dg-figure not-content">
+	<div class="dg-plate" role="img" aria-label={note}>
+		<div class="dg-draw" style={`min-width:${min}rem`}>
+			<slot />
+		</div>
+	</div>
+	<figcaption class="dg-note">{note}</figcaption>
+</figure>

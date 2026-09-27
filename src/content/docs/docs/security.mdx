@@ -5,13 +5,37 @@ description: How end-to-end encryption works in Orange Copy Paste, in plain term
 
 import DocMock from '../../../components/docs/DocMock.astro';
 import RecoveryCode from '../../../components/landing/mocks/RecoveryCode.astro';
+import Diagram from '../../../components/docs/Diagram.astro';
+import Flow from '../../../components/docs/Flow.astro';
+import ServerRecord from '../../../components/docs/ServerRecord.astro';
 
 Everything you sync is encrypted on your computer before it leaves, and the server stores only the encrypted result. The server has no key that can open it. This page explains how that works and where its limits are. The exact scheme, for developers, is in the [technical security model](/docs/developers/security/).
 
 ## How your data is locked
 
-1. When you sign in, the app turns your password into two separate keys on your computer. One is a login key, and it is the only thing sent to the server. The other stays on your computer and decrypts your data. The password itself is never sent, and one key cannot be worked out from the other.
-2. The key that stays behind decrypts your **master key**. The master key is held only in memory while the app runs, never written to disk or logs, and never sent anywhere unencrypted.
+<Diagram note="Your password makes two keys. The login key signs you in and opens nothing; the local key stays here and opens your master key.">
+	<Flow
+		cols="minmax(0,1fr) 5.5rem minmax(0,1fr) 5.5rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'Password', st: 'never sent' },
+			{ t: 'e', row: 1, col: 2, label: 'login key' },
+			{ t: 'k', row: 1, col: 3, name: 'Sync server', st: 'opens nothing', tone: 'srv' },
+			{ t: 'v', row: 2, col: 1, label: 'local key' },
+			{ t: 'k', row: 3, col: 1, name: 'Master key', st: 'in memory only', tone: 'key' },
+			{ t: 'e', row: 3, col: 2, label: 'locks' },
+			{ t: 'k', row: 3, col: 3, name: 'Item key', st: 'one per item', tone: 'key' },
+			{ t: 'e', row: 3, col: 4, label: 'encrypts' },
+			{ t: 'k', row: 3, col: 5, name: 'Your item', st: 'AES-256-GCM' },
+			{ t: 'v', row: 4, col: 1, label: 'after a restart', dir: 'up' },
+			{ t: 'v', row: 4, col: 3, label: 'also locks', dir: 'up' },
+			{ t: 'k', row: 5, col: 1, name: 'Device key', st: 'credential store', tone: 'key' },
+			{ t: 'k', row: 5, col: 3, name: 'Space key', st: 'one per space', tone: 'key' },
+		]}
+	/>
+</Diagram>
+
+1. When you sign in, the app turns your password into two separate keys on your computer. One is a **login key**, and it is the only thing sent to the server. The other, the **local key**, stays on your computer and decrypts your data. The password itself is never sent, and one key cannot be worked out from the other.
+2. The local key decrypts your **master key**. The master key is held only in memory while the app runs, never written to disk or logs, and never sent anywhere unencrypted.
 3. Every clipboard entry and note gets its own random key, and the item is encrypted with **AES-256-GCM** under it. That item key is then locked with your master key, and with the space key of each space the item is shared into.
 4. The server stores the encrypted items and the locked keys. Your settings are encrypted the same way before upload.
 5. Each device has its own key pair, kept in your system's credential store: Windows Credential Manager, GNOME Keyring or KWallet. That is how a computer you have signed in on before can decrypt your data again after a restart without asking for your password.
@@ -33,6 +57,21 @@ Each encrypted item is also tied to its own ID, so the server cannot swap the en
 
 Your **recovery code** is made from random data on your computer, shown once, and stored nowhere. The server keeps a copy of your master key locked with that code, which is useless without it. That is why a password reset can keep your data: the code, or a computer you have signed in on before, decrypts the same master key under the new password. Making a new code replaces the old one, and the old code stops working.
 
+<Diagram note="Any one of these opens the same master key. With none of them, nobody can read your synced data." min={30}>
+	<Flow
+		cols="minmax(0,1fr) 2rem minmax(0,1fr) 2rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'Your password', st: 'through the local key' },
+			{ t: 'k', row: 1, col: 3, name: 'Recovery code', st: 'shown once, stored nowhere' },
+			{ t: 'k', row: 1, col: 5, name: 'Known computer', st: 'signed in before' },
+			{ t: 'v', row: 2, col: 1, label: 'opens' },
+			{ t: 'v', row: 2, col: 3, label: 'opens' },
+			{ t: 'v', row: 2, col: 5, label: 'opens' },
+			{ t: 'k', row: 3, col: 1, cs: 5, name: 'Master key', st: 'the same one each time', tone: 'key' },
+		]}
+	/>
+</Diagram>
+
 If you lose your password and your recovery code, and have no computer that was signed in before, nobody can read your synced data, including us. The steps for each case are in [How to reset a forgotten password](/docs/cloud-sync/#how-to-reset-a-forgotten-password).
 
 ## What the server can see
@@ -44,6 +83,10 @@ The server needs some information to route and store your items, and it is not e
 - Space names, who is in each space, and who owns it.
 
 It cannot see what an item says, its preview, your group names, your settings, or comments in a space. Those are all encrypted.
+
+<Diagram note="One clipboard entry as the server stores it. It can route and count the item, but not read it." min={34}>
+	<ServerRecord />
+</Diagram>
 
 ## Limits
 

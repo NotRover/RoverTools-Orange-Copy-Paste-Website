@@ -4,30 +4,79 @@ import { KIND_COLORS, TYPE_LABELS } from './app-parts';
 /* Sync and security in one section, because they are one claim: your items
    reach your other computers, and the server that carries them cannot read
    them. The diagram shows the trip; the server box lists what it really holds,
-   type and time in the clear and the content as ciphertext. The key chain is the
-   real one (backend docs/architecture.md, sections 7.1 and 7.2), and the ledger
-   answers the questions a careful reader asks. */
+   type and time in the clear and the content as ciphertext. The key trip below
+   it follows the real envelope (backend docs/architecture.md, sections 7.1 and
+   7.2), and the ledger answers the questions a careful reader asks. */
 const held = [
 	{ kind: 'text', cipher: 'q9J2xK41Vd8mThPZC7oW', time: '18:32' },
 	{ kind: 'image', cipher: '7Ryb1Nc4Wq0sPe6JzK2m', time: '18:20' },
 	{ kind: 'url', cipher: 'Zt5mKd2Ga9Ho1Uv3Lx8B', time: '17:55' },
 ];
+/* One item's trip, in three lanes: encrypted on this computer, held locked on
+   the server, opened on your other computer. */
+type Piece =
+	| { t: 'lane'; row: number; label: string }
+	| { t: 'k'; row: number; col: number; name: string; st: string; key?: boolean; srv?: boolean }
+	| { t: 'e'; row: number; col: number; label: string }
+	| { t: 'v'; row: number; col: number; label?: string; head?: boolean };
+
+const trip: Piece[] = [
+	{ t: 'lane', row: 1, label: 'This computer' },
+	{ t: 'k', row: 1, col: 1, name: 'Password', st: 'only you know it' },
+	{ t: 'e', row: 1, col: 2, label: 'Argon2id' },
+	{ t: 'k', row: 1, col: 3, name: 'Master key', st: 'in memory only', key: true },
+	{ t: 'e', row: 1, col: 4, label: 'locks' },
+	{ t: 'k', row: 1, col: 5, name: 'Item key', st: 'one per item', key: true },
+	{ t: 'e', row: 1, col: 6, label: 'encrypts' },
+	{ t: 'k', row: 1, col: 7, name: 'Your item', st: 'what you copied' },
+
+	{ t: 'v', row: 2, col: 3, label: 'kept locked' },
+	{ t: 'v', row: 2, col: 5, label: 'uploads', head: true },
+	{ t: 'v', row: 2, col: 7, head: true },
+
+	{ t: 'lane', row: 3, label: 'Sync server' },
+	{ t: 'k', row: 3, col: 3, name: 'Master key', st: 'locked', srv: true },
+	{ t: 'k', row: 3, col: 5, name: 'Item key', st: 'locked', srv: true },
+	{ t: 'k', row: 3, col: 7, name: 'Your item', st: 'encrypted', srv: true },
+
+	{ t: 'v', row: 4, col: 3, head: true },
+	{ t: 'v', row: 4, col: 5, label: 'downloads', head: true },
+	{ t: 'v', row: 4, col: 7, head: true },
+
+	{ t: 'lane', row: 5, label: 'Other computer' },
+	{ t: 'k', row: 5, col: 1, name: 'Password', st: 'the same one' },
+	{ t: 'e', row: 5, col: 2, label: 'Argon2id' },
+	{ t: 'k', row: 5, col: 3, name: 'Master key', st: 'in memory only', key: true },
+	{ t: 'e', row: 5, col: 4, label: 'opens' },
+	{ t: 'k', row: 5, col: 5, name: 'Item key', st: 'unlocked', key: true },
+	{ t: 'e', row: 5, col: 6, label: 'decrypts' },
+	{ t: 'k', row: 5, col: 7, name: 'Your item', st: 'readable again' },
+];
+
+// the lane labels take the first column, so every piece sits one column over
+const at = (row: number, col = 0) => `--a: ${row} / ${col + 1}`;
+
 const ledger = [
 	{
-		q: 'If someone copies the server database',
-		a: 'They get ciphertext. Item types and times are visible. What is inside is not.',
+		q: 'The server database is copied',
+		a: 'They get ciphertext. Item types and times show, the content does not.',
+		verdict: 'ciphertext only',
 	},
 	{
-		q: 'If an update is tampered with',
-		a: 'Its signature does not match the key built into the app, so it does not install.',
+		q: 'An update is tampered with',
+		a: 'Its signature fails the check built into the app, so it does not install.',
+		verdict: 'refused',
 	},
 	{
-		q: 'If you forget your password',
-		a: 'Your recovery code opens the same master key, so your synced items are still yours.',
+		q: 'You forget your password',
+		a: 'Your recovery code opens the same master key, so nothing is lost.',
+		verdict: 'recoverable',
 	},
 	{
-		q: 'If someone uses your unlocked computer',
-		a: 'Local history is not encrypted, so the app stays fast and works offline. Lock your screen.',
+		q: 'Your computer is left unlocked',
+		a: 'Local history is not encrypted, so the app works offline. Lock your screen.',
+		verdict: 'up to you',
+		yours: true,
 	},
 ];
 ---
@@ -94,43 +143,46 @@ const ledger = [
 			</div>
 		</div>
 
-		<div class="chain reveal" aria-label="How your keys fit together">
-			<div class="k k--1">
-				<p class="st">&lt;&lt;you type it&gt;&gt;</p>
-				<p class="k-name">Password</p>
-			</div>
-			<div class="e e--1"><span>Argon2id</span></div>
-			<div class="k k--2 k--key">
-				<p class="st">&lt;&lt;in memory only&gt;&gt;</p>
-				<p class="k-name">Master key</p>
-			</div>
-			<div class="e e--2"><span>wraps</span></div>
-			<div class="k k--3 k--key">
-				<p class="st">&lt;&lt;one per item&gt;&gt;</p>
-				<p class="k-name">Item key</p>
-			</div>
-			<div class="e e--3"><span>AES-256-GCM</span></div>
-			<div class="k k--4">
-				<p class="st">&lt;&lt;what you copied&gt;&gt;</p>
-				<p class="k-name">Your item</p>
+		<p class="fig-note reveal">The server stores and forwards each item as ciphertext. Only your own computers turn it back into text.</p>
+
+		<div class="keys reveal">
+			<h3 class="keys-head">How one item stays locked on the way</h3>
+
+			<div class="chain">
+				{
+					trip.map((pc) =>
+						pc.t === 'lane' ? (
+							<p class="lane" style={at(pc.row)}>{pc.label}</p>
+						) : pc.t === 'k' ? (
+							<div class:list={['k', { 'k--key': pc.key, 'k--srv': pc.srv }]} style={at(pc.row, pc.col)}>
+								<p class="st">&lt;&lt;{pc.st}&gt;&gt;</p>
+								<p class="k-name">{pc.name}</p>
+							</div>
+						) : pc.t === 'e' ? (
+							<div class="e" style={at(pc.row, pc.col)} aria-hidden="true">
+								<span>{pc.label}</span>
+							</div>
+						) : (
+							<div class:list={['v', { 'v--head': pc.head }]} style={at(pc.row, pc.col)} aria-hidden="true">
+								{pc.label && <span>{pc.label}</span>}
+							</div>
+						)
+					)
+				}
 			</div>
 
-			<div class="v v--2"><span>also opens</span></div>
-			<div class="v v--3"><span>also wraps</span></div>
-			<div class="k k--r">
-				<p class="st">&lt;&lt;150-bit, shown once&gt;&gt;</p>
-				<p class="k-name">Recovery code</p>
-			</div>
-			<div class="k k--s k--key">
-				<p class="st">&lt;&lt;shared with X25519&gt;&gt;</p>
-				<p class="k-name">Space key</p>
-			</div>
 		</div>
+
+		<p class="fig-note reveal">Your password never leaves your computer, and the server holds every key only in locked form.</p>
 
 		<div class="ledger">
 			{
 				ledger.map((row) => (
 					<div class="row reveal">
+						<div class="row-head">
+							<p class="st">&lt;&lt;what if&gt;&gt;</p>
+							<span class:list={['verdict', { 'verdict--yours': row.yours }]}>{row.verdict}</span>
+						</div>
 						<p class="q">{row.q}</p>
 						<p class="a">{row.a}</p>
 					</div>
@@ -154,7 +206,6 @@ const ledger = [
 		border-radius: var(--radius);
 		padding: 1.4rem 1.4rem;
 		background: #0b0b0b;
-		margin-bottom: 0.8rem;
 	}
 
 	.bp-row {
@@ -355,15 +406,44 @@ const ledger = [
 		color: var(--accent);
 	}
 
-	/* the key chain: a main row, and two branches feeding up into it */
-	.chain {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) 6.5rem minmax(0, 1fr) 6.5rem minmax(0, 1fr) 7.5rem minmax(0, 1fr);
-		grid-template-rows: auto 1.7rem auto;
+	/* the key trip: three lanes, top to bottom */
+	.keys {
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
-		padding: 0.9rem 1.1rem;
-		margin-bottom: 0.8rem;
+		padding: 0.9rem 1.1rem 0.8rem;
+	}
+
+	.keys-head {
+		margin: 0 0 0.9rem;
+		font-family: var(--font-display);
+		font-size: 0.95rem;
+		letter-spacing: -0.01em;
+	}
+
+	.chain {
+		display: grid;
+		grid-template-columns: 7.5rem minmax(0, 1fr) 6rem minmax(0, 1fr) 6rem minmax(0, 1fr) 6rem minmax(0, 1fr);
+		grid-template-rows: auto 2rem auto 2rem auto;
+	}
+
+	.chain > * {
+		grid-area: var(--a);
+	}
+
+	.lane {
+		margin: 0;
+		align-self: center;
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--text-muted);
+	}
+
+	/* each diagram's note: close to its diagram, a wider gap before the next group */
+	.fig-note {
+		margin: 0.55rem 0 1.4rem;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		text-wrap: pretty;
 	}
 
 	.k {
@@ -378,24 +458,19 @@ const ledger = [
 		background: var(--accent-dim);
 	}
 
+	/* what the server holds: dashed, dark, and never orange, since nothing there opens */
+	.k--srv {
+		border-style: dashed;
+		border-color: var(--border-light);
+		background: #0b0b0b;
+	}
+
 	.k-name {
 		margin: 0.1rem 0 0;
 		font-family: var(--font-display);
 		font-weight: 700;
 		font-size: 0.9rem;
 	}
-
-	.k--1 { grid-area: 1 / 1; }
-	.e--1 { grid-area: 1 / 2; }
-	.k--2 { grid-area: 1 / 3; }
-	.e--2 { grid-area: 1 / 4; }
-	.k--3 { grid-area: 1 / 5; }
-	.e--3 { grid-area: 1 / 6; }
-	.k--4 { grid-area: 1 / 7; }
-	.v--2 { grid-area: 2 / 3; }
-	.v--3 { grid-area: 2 / 5; }
-	.k--r { grid-area: 3 / 3; }
-	.k--s { grid-area: 3 / 5; }
 
 	/* a horizontal edge: a line with an arrowhead and its label above */
 	.e {
@@ -437,7 +512,7 @@ const ledger = [
 		transform: translateY(-0.8rem);
 	}
 
-	/* a vertical edge pointing up into the main row */
+	/* a vertical edge between lanes; the ones with a head point down the trip */
 	.v {
 		position: relative;
 		display: flex;
@@ -449,27 +524,28 @@ const ledger = [
 		content: '';
 		position: absolute;
 		left: 50%;
-		top: 0.3rem;
-		bottom: 0.3rem;
-		border-left: 1px solid var(--border-light);
+		top: 0.25rem;
+		bottom: 0.25rem;
+		border-left: 1px dashed var(--border-light);
 	}
 
-	.v::after {
+	.v--head::after {
 		content: '';
 		position: absolute;
 		left: calc(50% - 3.5px);
-		top: 0.3rem;
+		bottom: 0.25rem;
 		width: 7px;
 		height: 7px;
-		border-top: 1px solid var(--border-light);
-		border-left: 1px solid var(--border-light);
+		border-right: 1px solid var(--border-light);
+		border-bottom: 1px solid var(--border-light);
 		transform: rotate(45deg);
 	}
 
 	.v span {
 		transform: none;
-		margin-left: 5.5rem;
+		margin-left: 6rem;
 		background: none;
+		white-space: nowrap;
 	}
 
 	/* the ledger */
@@ -479,24 +555,60 @@ const ledger = [
 		gap: 0.7rem;
 	}
 
+	/* each case is a node like the diagrams above: dark ground, hairline border,
+	   and a stereotype with the verdict chip beside it */
 	.row {
-		border-top: 2px solid var(--accent);
-		background: var(--surface);
-		border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-		padding: 0.65rem 0.8rem 0.75rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-sm);
+		background: #0b0b0b;
+		padding: 0.7rem 0.9rem 0.8rem;
+	}
+
+	.row-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.q {
-		margin: 0 0 0.3rem;
-		font-family: var(--font-mono);
-		font-size: 0.68rem;
-		color: var(--text-muted);
+		margin: 0.45rem 0 0.25rem;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 0.92rem;
+		letter-spacing: -0.01em;
+		color: var(--text);
 	}
 
 	.a {
 		margin: 0;
 		font-size: 0.84rem;
-		color: var(--text);
+		color: var(--text-secondary);
+		text-wrap: pretty;
+	}
+
+	.verdict {
+		font-family: var(--font-mono);
+		font-size: 0.66rem;
+		color: var(--accent);
+		border: 1px solid var(--accent-dim-strong);
+		background: var(--accent-dim);
+		border-radius: var(--radius-xs);
+		padding: 0.15rem 0.55rem;
+	}
+
+	/* the one case the app leaves to you: neutral, not a win */
+	.verdict--yours {
+		color: var(--text-secondary);
+		border-color: var(--border-light);
+		background: var(--surface);
+	}
+
+	@supports (corner-shape: squircle) {
+		.verdict {
+			border-radius: 999px;
+			corner-shape: squircle;
+		}
 	}
 
 	@media (max-width: 1100px) {
@@ -506,17 +618,21 @@ const ledger = [
 		.chain {
 			grid-template-columns: minmax(0, 1fr);
 			grid-template-rows: none;
-			gap: 0;
 		}
 		.chain > * {
 			grid-area: auto;
 		}
-		.k--r,
-		.k--s {
-			margin-top: 0.6rem;
+		.lane {
+			margin: 1rem 0 0.4rem;
+		}
+		.lane:first-child {
+			margin-top: 0;
+		}
+		.k--srv + .k--srv {
+			margin-top: 0.4rem;
 		}
 		.e {
-			min-height: 2.4rem;
+			min-height: 2.2rem;
 		}
 		.e::before {
 			left: 50%;
@@ -540,12 +656,6 @@ const ledger = [
 		}
 		.v {
 			display: none;
-		}
-		.k--r .st::after {
-			content: ' - also opens the master key';
-		}
-		.k--s .st::after {
-			content: ' - also wraps item keys';
 		}
 	}
 
