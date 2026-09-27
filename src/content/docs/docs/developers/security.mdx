@@ -3,17 +3,62 @@ title: Security model (technical)
 description: The end-to-end encryption scheme, for a reader who wants the mechanism.
 ---
 
+import Diagram from '../../../../components/docs/Diagram.astro';
+import Flow from '../../../../components/docs/Flow.astro';
+
 This page explains how the encryption works and what it does and does not protect, for a technical reader. The plain-language version is the [Security model](/docs/security/) page. The exact envelope, key derivation parameters and DDL live in the [backend architecture doc](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend/blob/main/docs/architecture.md), which is their home; this page does not repeat values.
 
 The goal is that the server can store and relay everything without being able to read any of it.
 
 ## Keys
 
+<Diagram note="The password yields two keys. The auth key only signs in; the KEK unwraps the UMK, which wraps each item's content key.">
+	<Flow
+		cols="minmax(0,1fr) 5.5rem minmax(0,1fr) 5.5rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'Password', st: 'Argon2id, then HKDF' },
+			{ t: 'e', row: 1, col: 2, label: 'auth key' },
+			{ t: 'k', row: 1, col: 3, name: 'Supabase Auth', st: 'unwraps nothing', tone: 'srv' },
+			{ t: 'v', row: 2, col: 1, label: 'KEK unwraps' },
+			{ t: 'k', row: 3, col: 1, name: 'UMK', st: 'memory only, zeroized', tone: 'key' },
+			{ t: 'e', row: 3, col: 2, label: 'wraps' },
+			{ t: 'k', row: 3, col: 3, name: 'Content key', st: 'random, per item', tone: 'key' },
+			{ t: 'e', row: 3, col: 4, label: 'AES-256-GCM' },
+			{ t: 'k', row: 3, col: 5, name: 'Ciphertext', st: 'item id as AAD', tone: 'srv' },
+			{ t: 'v', row: 4, col: 1, label: 'X25519 copy', dir: 'up' },
+			{ t: 'v', row: 4, col: 3, label: 'also wraps', dir: 'up' },
+			{ t: 'k', row: 5, col: 1, name: 'Device key', st: 'OS credential store', tone: 'key' },
+			{ t: 'k', row: 5, col: 3, name: 'Space key', st: 'kept as a keyring', tone: 'key' },
+		]}
+	/>
+</Diagram>
+
 - The account **password** is stretched with Argon2id on the device, salted from the account email, and split with HKDF into two independent keys. The **auth key** is the only credential Supabase Auth receives. The **key-encryption key** never leaves the device. The password itself is not sent, and the auth key reveals nothing about the other key.
 - The key-encryption key unwraps the **User Master Key (UMK)**, a random key held only in memory, zeroized on drop, and never written to disk or logs.
 - The server keeps several **wrapped copies of the UMK**, and none of them opens without a secret the server lacks: one under the password's key-encryption key, one per device under that device's X25519 key, and optionally one under a key derived from the recovery code. The per-device copy is what lets a device that has signed in before open it after a restart, or after a password reset, without the password.
 - Every clipboard entry and note gets its **own random content key**. The item is encrypted with AES-256-GCM under it, and the content key is wrapped under the UMK and, for shared items, under each target space key.
 - Devices and space members exchange keys with **X25519**, so a wrapped key is usable only by its recipient. Device private keys live in the operating system's credential store: Windows Credential Manager, GNOME Keyring or KWallet.
+
+<Diagram note="Every wrapped copy the server holds needs a secret it does not have. Any one secret yields the same UMK.">
+	<Flow
+		cols="minmax(0,1fr) 2rem minmax(0,1fr) 2rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'UMK under KEK', st: 'always', tone: 'srv' },
+			{ t: 'k', row: 1, col: 3, name: 'UMK per device', st: 'one per device', tone: 'srv' },
+			{ t: 'k', row: 1, col: 5, name: 'UMK under recovery', st: 'optional', tone: 'srv' },
+			{ t: 'v', row: 2, col: 1, label: 'opened with' },
+			{ t: 'v', row: 2, col: 3, label: 'opened with' },
+			{ t: 'v', row: 2, col: 5, label: 'opened with' },
+			{ t: 'k', row: 3, col: 1, name: 'KEK', st: 'from the password', tone: 'key' },
+			{ t: 'k', row: 3, col: 3, name: 'Device private key', st: 'X25519, credential store', tone: 'key' },
+			{ t: 'k', row: 3, col: 5, name: 'Recovery key', st: 'from the recovery code', tone: 'key' },
+			{ t: 'v', row: 4, col: 1 },
+			{ t: 'v', row: 4, col: 3 },
+			{ t: 'v', row: 4, col: 5 },
+			{ t: 'k', row: 5, col: 1, cs: 5, name: 'UMK', st: 'the same key from any path', tone: 'key' },
+		]}
+	/>
+</Diagram>
 
 ## Properties
 
@@ -24,6 +69,29 @@ The goal is that the server can store and relay everything without being able to
 - **Space keys can be checked.** An owner can publish a fingerprint of the current space key. When one is published, a member's app refuses a key that does not match it.
 
 ## Where the guarantee stops
+
+<Diagram note="The guarantee holds while the server relays keys as sent. A published fingerprint catches a swapped space key; device keys have no such check.">
+	<Flow
+		cols="6.5rem minmax(0,1fr) 5rem minmax(0,1fr) 5rem minmax(0,1fr)"
+		rows="auto 0.6rem auto 0.6rem auto"
+		pieces={[
+			{ t: 'lane', row: 1, label: 'As sent' },
+			{ t: 'k', row: 1, col: 2, name: 'Space key', st: 'from a member', tone: 'key' },
+			{ t: 'e', row: 1, col: 3, label: 'relays' },
+			{ t: 'k', row: 1, col: 4, name: 'Server', st: 'cannot open it', tone: 'srv' },
+			{ t: 'e', row: 1, col: 5, label: 'delivers' },
+			{ t: 'k', row: 1, col: 6, name: 'Member app', st: 'real key', tone: 'key' },
+			{ t: 'lane', row: 3, label: 'Swapped' },
+			{ t: 'k', row: 3, col: 2, name: 'Server key', st: 'server-made', tone: 'srv' },
+			{ t: 'e', row: 3, col: 3, cs: 3, label: 'delivers, no fingerprint' },
+			{ t: 'k', row: 3, col: 6, name: 'Member app', st: 'accepts it', tone: 'off' },
+			{ t: 'lane', row: 5, label: 'Fingerprint' },
+			{ t: 'k', row: 5, col: 2, name: 'Server key', st: 'server-made', tone: 'srv' },
+			{ t: 'e', row: 5, col: 3, cs: 3, label: 'checked against fingerprint' },
+			{ t: 'k', row: 5, col: 6, name: 'Member app', st: 'refuses it', tone: 'key' },
+		]}
+	/>
+</Diagram>
 
 - **The server is trusted not to tamper.** Key exchange uses public keys the server returns, and device keys are not pinned, so an actively malicious server could hand out a key it controls. The space-key fingerprint narrows this for spaces whose owner published one; it does not cover device keys. The guarantee is against a passive server that stores and relays but does not substitute keys.
 - **Metadata is visible.** The server sees each item's type, size, timestamps, pinned flag and spaces, plus space names and membership. The full list is on the [Security model](/docs/security/#what-the-server-can-see) page.
