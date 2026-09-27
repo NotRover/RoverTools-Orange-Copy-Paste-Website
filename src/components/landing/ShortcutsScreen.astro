@@ -19,7 +19,7 @@ const { scrollId } = Astro.props;
 
 const SECTIONS = [
 	{
-		title: 'Global Shortcuts',
+		title: 'Global shortcuts',
 		icon: SRC_ICONS.keyboard13,
 		entries: [
 			{ keys: ['Ctrl', 'C'], description: 'Capture (copy) selection to clipboard history without popup' },
@@ -31,16 +31,29 @@ const SECTIONS = [
 		title: 'Paste Popup',
 		icon: SET_ICONS.clipboardText,
 		entries: [
-			{ keys: ['1-9, 0'], description: 'Paste entry by slot number' },
-			{ keys: ['Up', 'Down'], description: 'Navigate entries' },
+			{ keys: ['Type'], description: 'Search the whole list' },
+			{ keys: ['1-9, 0'], description: 'Paste a numbered slot (while the search box is empty)' },
+			{ keys: ['Up', 'Down'], description: 'Move through the list' },
 			{ keys: ['Enter'], description: 'Paste selected entry' },
-			{ keys: ['Left', 'Right'], description: 'Switch between Recent / Pinned' },
+			{ keys: ['Alt', 'Enter'], description: 'Paste and remove from Recent' },
 			{ keys: ['Tab'], description: 'Toggle Recent / Pinned' },
+			{ keys: ['Space'], description: 'Show / hide the preview (search box empty)' },
 			{ keys: ['Esc'], description: 'Close popup' },
 		],
 	},
 	{
-		title: 'Clipboard Cards',
+		title: 'Copy Popup',
+		icon: SRC_ICONS.clipboard11,
+		entries: [
+			{ keys: ['P'], description: 'Pin / unpin the copied entry' },
+			{ keys: ['S'], description: 'Save / unsave the copied entry' },
+			{ keys: ['G'], description: 'Open the groups picker' },
+			{ keys: ['Del'], description: 'Delete from history' },
+			{ keys: ['Esc'], description: 'Close the open picker, or the popup' },
+		],
+	},
+	{
+		title: 'Clipboard cards',
 		icon: SRC_ICONS.clipboard11,
 		entries: [
 			{ keys: ['Click'], description: 'Copy entry to clipboard' },
@@ -53,10 +66,10 @@ const SECTIONS = [
 		title: 'Pin & Save',
 		icon: CHIP_ICONS.pin,
 		entries: [
-			{ keys: ['Pin'], description: 'Pin entry. Shows in quick-paste popup (max 10)' },
-			{ keys: ['Save'], description: 'Save entry. Survives app restarts independently of pin' },
+			{ keys: ['Pin'], description: 'Pin entry. Shows in quick-paste popup (max 10).' },
+			{ keys: ['Save'], description: 'Save entry. Survives app restarts independently of pin.' },
 			{ keys: ['Unsave'], description: 'Remove save (entry may be evicted from history)' },
-			{ keys: ['Max 10'], description: 'Pin limit reached. A toast notification appears' },
+			{ keys: ['Max 10'], description: 'Pin limit reached. A toast notification appears.' },
 		],
 	},
 	{
@@ -65,11 +78,11 @@ const SECTIONS = [
 		entries: [
 			{ keys: ['Groups menu'], description: 'Assign or remove group tags from an entry (right-click)' },
 			{ keys: ['Groups btn'], description: 'Open Group Manager to add, rename or delete groups' },
-			{ keys: ['Click chip'], description: 'Select a group. Input switches to rename mode' },
+			{ keys: ['Click chip'], description: 'Select a group. Input switches to rename mode.' },
 			{ keys: ['Click chip again'], description: 'Deselect group / return to add mode' },
 			{ keys: ['Click outside'], description: 'Deselect group without changes' },
 			{ keys: ['Enter'], description: 'Confirm add or rename' },
-			{ keys: ['Delete button'], description: 'Delete group. Undo available for 5 seconds via toast' },
+			{ keys: ['Delete button'], description: 'Delete group. Undo available for 5 seconds via toast.' },
 			{ keys: ['Color swatches'], description: 'Change the color of a selected group' },
 		],
 	},
@@ -77,17 +90,17 @@ const SECTIONS = [
 		title: 'System Groups',
 		icon: SRC_ICONS.squares12,
 		entries: [
-			{ keys: ['Pinned'], description: 'System group. Shows entries currently pinned to the popup' },
-			{ keys: ['Saved'], description: 'System group. Shows entries saved to survive restarts' },
+			{ keys: ['Pinned'], description: 'System group. Shows entries currently pinned to the popup.' },
+			{ keys: ['Saved'], description: 'System group. Shows entries saved to survive restarts.' },
 			{ keys: ['Reserved'], description: '"pinned" and "saved" cannot be used as custom group names' },
 		],
 	},
 	{
-		title: 'Search & Filter',
+		title: 'Search and filter',
 		icon: TB_ICONS.search,
 		entries: [
 			{ keys: ['Type'], description: 'Filter entries by content' },
-			{ keys: ['Esc / clear btn'], description: 'Clear search' },
+			{ keys: ['Esc or the clear button'], description: 'Clear search' },
 		],
 	},
 ];

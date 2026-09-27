@@ -11,7 +11,7 @@ import { CHIP_ICONS, SET_ICONS, TB_ICONS } from './app-parts';
 
 const general = [
 	['Close to system tray', 'Closing the window minimizes the app to the system tray instead of quitting.', true],
-	['Run on startup', 'Automatically launch when you sign in to Windows.', true],
+	['Run on startup', 'Launch the app when you sign in to this computer.', true],
 	['Start minimized', 'Start hidden in the system tray instead of showing the main window.', false],
 	['Show splash screen on startup', 'Display a brief startup screen when the app launches.', true],
 	[
@@ -37,8 +37,8 @@ const updates = [
 ] as const;
 
 const notifChecks = [
-	['Copy operations', 'Show notification on Ctrl+C', true],
-	['Paste operations', 'Show notification on Ctrl+Shift+V', true],
+	['Copy operations', 'Show a notification when you copy.', true],
+	['Paste operations', 'Show a notification when you paste from the popup.', true],
 ] as const;
 
 const soundChecks = [
@@ -46,7 +46,7 @@ const soundChecks = [
 	['Pasting', 'A click when you paste from the popup.', false],
 ] as const;
 
-const cueTests = ['Arrived', 'Invite', 'Unlocked', 'Refused'];
+const cueTests = ['Arrived', 'Invite', 'Space ready', 'Refused'];
 const slotOptions = [5, 7, 9];
 ---
 
@@ -89,7 +89,7 @@ const slotOptions = [5, 7, 9];
 				<div class="set-row" data-set-row="Desktop notifications">
 					<span class="set-row-info">
 						<span class="set-row-label">Desktop notifications</span>
-						<span class="set-row-desc">Show Windows notifications while the app is in the background.</span>
+						<span class="set-row-desc">Show system notifications while the app is in the background.</span>
 					</span>
 					<span class="set-toggle is-on"><span class="set-toggle-knob" /></span>
 				</div>
@@ -227,7 +227,7 @@ const slotOptions = [5, 7, 9];
 					<span class="set-row-info">
 						<span class="set-row-label">Open data folder</span>
 						<span class="set-row-desc">
-							Open the folder where clipboard history, pinned entries, and settings are stored.
+							Open the folder where your clipboard history, notes, and settings are stored.
 						</span>
 					</span>
 					<span class="set-action-btn"><Fragment set:html={SET_ICONS.folder14} />Open</span>

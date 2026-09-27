@@ -38,7 +38,7 @@ to hold it.
 - `src/pages/index.astro` - the landing page, composed from `src/components/landing/*.astro`.
   It is a plain Astro page, not a Starlight page, and commits to the app's dark theme.
 - `src/components/landing/` - one component per section (nav, hero, how-it-works, features,
-  showcase, sync, spaces, security, download, faq/footer). Scoped styles live in each.
+  showcase, spaces, sync and security, download, faq/footer). Scoped styles live in each.
 - `src/styles/landing.css` - global tokens and the `oc-*` app-mock parts (see below).
 - `src/styles/starlight-theme.css` - Starlight color/typography overrides for the docs.
 - `src/content/docs/docs/*.md` - the documentation pages, served under `/docs/...`.

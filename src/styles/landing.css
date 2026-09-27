@@ -185,7 +185,9 @@ body.landing {
 .section-lead {
 	color: var(--text-secondary);
 	font-size: 1.06rem;
-	max-width: 38rem;
+	max-width: 50rem;
+	/* no lone last word, and lines of even length */
+	text-wrap: pretty;
 	margin: 0 0 2.5rem;
 }
 

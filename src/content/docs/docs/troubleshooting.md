@@ -35,9 +35,9 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **"Cannot reach the sign-in service."** or **"The sign-in service is having trouble."** Check your internet connection. If it works, wait a few minutes and try again.
 
-**Google sign-in: "could not bind an OAuth loopback port".** Google sign-in needs one of the ports 53170 to 53172 on your computer, and other apps are using all three. Close the app using them, or restart your computer, then click **Continue with Google** again.
+**Google sign-in: "Could not start Google sign-in because another app is using the ports it needs."** Google sign-in needs one of the ports 53170 to 53172 on your computer, and other apps are using all three. Close the app using them, or restart your computer, then click **Continue with Google** again.
 
-**Google sign-in: "timed out waiting for the browser sign-in to complete".** Nothing came back from the browser within 5 minutes. Click **Continue with Google** again and finish in the browser tab it opens.
+**Google sign-in: "Google sign-in timed out. Try again."** Nothing came back from the browser within 5 minutes. Click **Continue with Google** again and finish in the browser tab it opens.
 
 **The app says "Reconnecting to your account".** You are still signed in, and the app is waiting for the server. It picks up on its own. To sign in again now instead, click **Sign in with a password instead**.
 
@@ -66,7 +66,7 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 | "is over the 5 MB limit for synced files" or "images" | Nothing. Items over 5 MB stay on this computer. |
 | "is over the 384 KB limit for one synced item" | Nothing. Very long text stays on this computer. |
 | "Cloud storage is full" or "Your account is full" | Remove synced images or files to free space, then **Try again**. |
-| "Not signed in to sync when this ... was copied" | Sign in, then **Try again**. |
+| "You were not signed in when this ... was copied." | Sign in, then choose **Upload to cloud** on the item. |
 | "Image upload failed" or "File upload failed" | Check your connection, then **Try again**. |
 | "Only the member who wrote this can change it in the space." | Nothing. Only the author can edit an item in a space. |
 

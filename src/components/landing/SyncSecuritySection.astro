@@ -1,0 +1,600 @@
+---
+import { KIND_COLORS, TYPE_LABELS } from './app-parts';
+
+/* Sync and security in one section, because they are one claim: your items
+   reach your other computers, and the server that carries them cannot read
+   them. The diagram shows the trip; the server box lists what it really holds,
+   type and time in the clear and the content as ciphertext. The key chain is the
+   real one (backend docs/architecture.md, sections 7.1 and 7.2), and the ledger
+   answers the questions a careful reader asks. */
+const held = [
+	{ kind: 'text', cipher: 'q9J2xK41Vd8mThPZC7oW', time: '18:32' },
+	{ kind: 'image', cipher: '7Ryb1Nc4Wq0sPe6JzK2m', time: '18:20' },
+	{ kind: 'url', cipher: 'Zt5mKd2Ga9Ho1Uv3Lx8B', time: '17:55' },
+];
+const ledger = [
+	{
+		q: 'If someone copies the server database',
+		a: 'They get ciphertext. Item types and times are visible. What is inside is not.',
+	},
+	{
+		q: 'If an update is tampered with',
+		a: 'Its signature does not match the key built into the app, so it does not install.',
+	},
+	{
+		q: 'If you forget your password',
+		a: 'Your recovery code opens the same master key, so your synced items are still yours.',
+	},
+	{
+		q: 'If someone uses your unlocked computer',
+		a: 'Local history is not encrypted, so the app stays fast and works offline. Lock your screen.',
+	},
+];
+---
+
+<section class="section sync" id="security">
+	<div class="wrap">
+		<p class="eyebrow reveal">Sync and security</p>
+		<h2 class="section-title reveal">Synced to every computer. Readable only on yours.</h2>
+		<p class="section-lead reveal">
+			Clips, notes and settings are encrypted on your computer before they leave it. The
+			server stores them but holds no key that opens them.
+		</p>
+
+		<div class="bp reveal" aria-label="How one copy travels between your devices">
+			<div class="bp-row">
+				<div class="bp-node">
+					<p class="st">&lt;&lt;device&gt;&gt;</p>
+					<p class="bp-name">Laptop</p>
+					<div class="clip">
+						<span class="chip" style="--k: var(--accent)">Text</span>
+						<span class="clip-text">Gate B12, boarding 18:40</span>
+					</div>
+					<p class="bp-foot">Plaintext stays here</p>
+				</div>
+
+				<div class="wire" aria-hidden="true">
+					<span class="wire-tag">AES-256-GCM</span>
+					<span class="wire-line"><span class="packet">q9J2xK41...</span></span>
+					<span class="wire-sub">encrypted before it leaves</span>
+				</div>
+
+				<div class="bp-node bp-node--relay">
+					<p class="st">&lt;&lt;relay&gt;&gt;</p>
+					<p class="bp-name">Sync server</p>
+					<div class="held">
+						{
+							held.map((h) => (
+								<div class="held-row">
+									<span class="chip" style={`--k:${KIND_COLORS[h.kind]}`}>{TYPE_LABELS[h.kind]}</span>
+									<span class="held-cipher">{h.cipher}</span>
+									<span class="held-time">{h.time}</span>
+								</div>
+							))
+						}
+					</div>
+					<p class="bp-foot">Sees the type and time, never the content</p>
+				</div>
+
+				<div class="wire wire--out" aria-hidden="true">
+					<span class="wire-tag">live</span>
+					<span class="wire-line"><span class="packet">q9J2xK41...</span></span>
+					<span class="wire-sub">or on your schedule</span>
+				</div>
+
+				<div class="bp-node">
+					<p class="st">&lt;&lt;device&gt;&gt;</p>
+					<p class="bp-name">Desktop</p>
+					<div class="clip">
+						<span class="chip" style="--k: var(--accent)">Text</span>
+						<span class="clip-text">Gate B12, boarding 18:40</span>
+					</div>
+					<p class="bp-foot">Decrypted on arrival</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="chain reveal" aria-label="How your keys fit together">
+			<div class="k k--1">
+				<p class="st">&lt;&lt;you type it&gt;&gt;</p>
+				<p class="k-name">Password</p>
+			</div>
+			<div class="e e--1"><span>Argon2id</span></div>
+			<div class="k k--2 k--key">
+				<p class="st">&lt;&lt;in memory only&gt;&gt;</p>
+				<p class="k-name">Master key</p>
+			</div>
+			<div class="e e--2"><span>wraps</span></div>
+			<div class="k k--3 k--key">
+				<p class="st">&lt;&lt;one per item&gt;&gt;</p>
+				<p class="k-name">Item key</p>
+			</div>
+			<div class="e e--3"><span>AES-256-GCM</span></div>
+			<div class="k k--4">
+				<p class="st">&lt;&lt;what you copied&gt;&gt;</p>
+				<p class="k-name">Your item</p>
+			</div>
+
+			<div class="v v--2"><span>also opens</span></div>
+			<div class="v v--3"><span>also wraps</span></div>
+			<div class="k k--r">
+				<p class="st">&lt;&lt;150-bit, shown once&gt;&gt;</p>
+				<p class="k-name">Recovery code</p>
+			</div>
+			<div class="k k--s k--key">
+				<p class="st">&lt;&lt;shared with X25519&gt;&gt;</p>
+				<p class="k-name">Space key</p>
+			</div>
+		</div>
+
+		<div class="ledger">
+			{
+				ledger.map((row) => (
+					<div class="row reveal">
+						<p class="q">{row.q}</p>
+						<p class="a">{row.a}</p>
+					</div>
+				))
+			}
+		</div>
+
+		<p class="mode-note reveal">
+			Pick Realtime, Passive (every 5 minutes) or Manual on each device. Deletes travel
+			too, offline work queues up, and conflicts resolve to the latest edit.
+			<br />
+			The full model, including what the server does see, is in the <a href="/docs/security/">security docs</a>.
+		</p>
+	</div>
+</section>
+
+<style>
+	.bp {
+		position: relative;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 1.4rem 1.4rem;
+		background: #0b0b0b;
+		margin-bottom: 0.8rem;
+	}
+
+	.bp-row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(7rem, 0.6fr) minmax(0, 1.2fr) minmax(7rem, 0.6fr) minmax(0, 1fr);
+		align-items: center;
+	}
+
+	.bp-node {
+		background: var(--surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-sm);
+		padding: 0.7rem 0.85rem 0.75rem;
+	}
+
+	.bp-node--relay {
+		border-style: dashed;
+		background: #121212;
+	}
+
+	.st {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--text-muted);
+	}
+
+	.bp-name {
+		margin: 0.05rem 0 0.45rem;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1rem;
+	}
+
+	.clip {
+		background: var(--bg);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		padding: 0.45rem 0.55rem;
+		display: grid;
+		gap: 0.3rem;
+	}
+
+	.chip {
+		justify-self: start;
+		font-size: 0.66rem;
+		font-weight: 500;
+		line-height: var(--chip-h);
+		padding: 0 0.45rem;
+		border-radius: var(--radius-xs);
+		color: var(--k);
+		background: color-mix(in srgb, var(--k) 14%, transparent);
+	}
+
+	.clip-text {
+		font-family: var(--font-mono);
+		font-size: 0.74rem;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* what the server holds: the type and time in the clear, the content not */
+	.held {
+		display: grid;
+		gap: 0.3rem;
+	}
+
+	.held-row {
+		display: grid;
+		grid-template-columns: 3.4rem minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 0.45rem;
+		background: var(--bg);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xs);
+		padding: 0.25rem 0.45rem;
+	}
+
+	.held-cipher {
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--text-muted);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.held-time {
+		font-family: var(--font-mono);
+		font-size: 0.64rem;
+		color: var(--text-secondary);
+	}
+
+	.bp-foot {
+		margin: 0.45rem 0 0;
+		font-size: 0.72rem;
+		color: var(--text-secondary);
+	}
+
+	.wire {
+		display: grid;
+		justify-items: center;
+		/* the packet rides 0.6rem either side of the line, so clear it with room to spare */
+		gap: 1.6rem;
+		padding: 0 0.4rem;
+	}
+
+	.wire-tag {
+		font-family: var(--font-mono);
+		font-size: 0.66rem;
+		color: var(--accent);
+		border: 1px solid var(--accent-dim-strong);
+		background: var(--bg);
+		border-radius: var(--radius-xs);
+		padding: 0.15rem 0.55rem;
+	}
+
+	.wire-sub {
+		font-size: 0.68rem;
+		color: var(--text-muted);
+		text-align: center;
+	}
+
+	.wire-line {
+		position: relative;
+		width: 100%;
+		height: 0;
+		border-top: 1px dashed var(--border-light);
+	}
+
+	/* the arrowhead on the wire's far end */
+	.wire-line::after {
+		content: '';
+		position: absolute;
+		right: -1px;
+		top: -5px;
+		width: 8px;
+		height: 8px;
+		border-top: 1px solid var(--border-light);
+		border-right: 1px solid var(--border-light);
+		transform: rotate(45deg);
+	}
+
+	.packet {
+		position: absolute;
+		top: -0.62rem;
+		left: 0;
+		font-family: var(--font-mono);
+		font-size: 0.62rem;
+		line-height: 1.2rem;
+		padding: 0 0.4rem;
+		border-radius: var(--radius-xs);
+		color: #fff;
+		background: var(--accent);
+		white-space: nowrap;
+		opacity: 0;
+		animation: travel 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+	}
+
+	.wire--out .packet {
+		animation-delay: 2s;
+	}
+
+	@keyframes travel {
+		0% { left: 0; transform: translateX(0); opacity: 0; }
+		8% { opacity: 1; }
+		42% { opacity: 1; }
+		50% { left: 100%; transform: translateX(-100%); opacity: 0; }
+		100% { left: 100%; transform: translateX(-100%); opacity: 0; }
+	}
+
+	/* squircle tags where the browser can draw one; a 7px rounded rect elsewhere */
+	@supports (corner-shape: squircle) {
+		.wire-tag,
+		.packet {
+			border-radius: 999px;
+			corner-shape: squircle;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.packet {
+			animation: none;
+			opacity: 1;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+	}
+
+	.mode-note {
+		margin: 1rem 0 0;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+	}
+
+	.mode-note a {
+		color: var(--accent);
+	}
+
+	/* the key chain: a main row, and two branches feeding up into it */
+	.chain {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 6.5rem minmax(0, 1fr) 6.5rem minmax(0, 1fr) 7.5rem minmax(0, 1fr);
+		grid-template-rows: auto 1.7rem auto;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 0.9rem 1.1rem;
+		margin-bottom: 0.8rem;
+	}
+
+	.k {
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-sm);
+		background: var(--surface);
+		padding: 0.45rem 0.7rem;
+	}
+
+	.k--key {
+		border-color: var(--accent);
+		background: var(--accent-dim);
+	}
+
+	.k-name {
+		margin: 0.1rem 0 0;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 0.9rem;
+	}
+
+	.k--1 { grid-area: 1 / 1; }
+	.e--1 { grid-area: 1 / 2; }
+	.k--2 { grid-area: 1 / 3; }
+	.e--2 { grid-area: 1 / 4; }
+	.k--3 { grid-area: 1 / 5; }
+	.e--3 { grid-area: 1 / 6; }
+	.k--4 { grid-area: 1 / 7; }
+	.v--2 { grid-area: 2 / 3; }
+	.v--3 { grid-area: 2 / 5; }
+	.k--r { grid-area: 3 / 3; }
+	.k--s { grid-area: 3 / 5; }
+
+	/* a horizontal edge: a line with an arrowhead and its label above */
+	.e {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.e::before {
+		content: '';
+		position: absolute;
+		left: 0.4rem;
+		right: 0.4rem;
+		top: 50%;
+		border-top: 1px solid var(--border-light);
+	}
+
+	.e::after {
+		content: '';
+		position: absolute;
+		right: 0.45rem;
+		top: calc(50% - 4px);
+		width: 7px;
+		height: 7px;
+		border-top: 1px solid var(--border-light);
+		border-right: 1px solid var(--border-light);
+		transform: rotate(45deg);
+	}
+
+	.e span,
+	.v span {
+		position: relative;
+		font-family: var(--font-mono);
+		font-size: 0.64rem;
+		color: var(--text-secondary);
+		background: var(--bg);
+		padding: 0 0.3rem;
+		transform: translateY(-0.8rem);
+	}
+
+	/* a vertical edge pointing up into the main row */
+	.v {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.v::before {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 0.3rem;
+		bottom: 0.3rem;
+		border-left: 1px solid var(--border-light);
+	}
+
+	.v::after {
+		content: '';
+		position: absolute;
+		left: calc(50% - 3.5px);
+		top: 0.3rem;
+		width: 7px;
+		height: 7px;
+		border-top: 1px solid var(--border-light);
+		border-left: 1px solid var(--border-light);
+		transform: rotate(45deg);
+	}
+
+	.v span {
+		transform: none;
+		margin-left: 5.5rem;
+		background: none;
+	}
+
+	/* the ledger */
+	.ledger {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.7rem;
+	}
+
+	.row {
+		border-top: 2px solid var(--accent);
+		background: var(--surface);
+		border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+		padding: 0.65rem 0.8rem 0.75rem;
+	}
+
+	.q {
+		margin: 0 0 0.3rem;
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--text-muted);
+	}
+
+	.a {
+		margin: 0;
+		font-size: 0.84rem;
+		color: var(--text);
+	}
+
+	@media (max-width: 1100px) {
+		.ledger {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.chain {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: none;
+			gap: 0;
+		}
+		.chain > * {
+			grid-area: auto;
+		}
+		.k--r,
+		.k--s {
+			margin-top: 0.6rem;
+		}
+		.e {
+			min-height: 2.4rem;
+		}
+		.e::before {
+			left: 50%;
+			right: auto;
+			top: 0.3rem;
+			bottom: 0.3rem;
+			border-top: none;
+			border-left: 1px solid var(--border-light);
+		}
+		.e::after {
+			right: auto;
+			left: calc(50% - 3.5px);
+			top: auto;
+			bottom: 0.3rem;
+			transform: rotate(135deg);
+		}
+		.e span {
+			transform: none;
+			margin-left: 7rem;
+			background: none;
+		}
+		.v {
+			display: none;
+		}
+		.k--r .st::after {
+			content: ' - also opens the master key';
+		}
+		.k--s .st::after {
+			content: ' - also wraps item keys';
+		}
+	}
+
+	@media (max-width: 900px) {
+		.bp {
+			padding: 1.6rem 1.1rem;
+		}
+		.bp-row {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.wire {
+			grid-template-columns: 1fr auto 1fr;
+			align-items: center;
+			padding: 0.5rem 0;
+			min-height: 5.5rem;
+		}
+		.wire-tag {
+			grid-column: 1;
+			justify-self: end;
+			margin-right: 0.8rem;
+		}
+		.wire-sub {
+			grid-column: 3;
+			justify-self: start;
+			margin-left: 0.8rem;
+			text-align: left;
+		}
+		.wire-line {
+			grid-column: 2;
+			grid-row: 1;
+			width: 0;
+			height: 5.5rem;
+			border-top: none;
+			border-left: 1px dashed var(--border-light);
+		}
+		.wire-line::after {
+			right: auto;
+			left: -5px;
+			top: auto;
+			bottom: -1px;
+			transform: rotate(135deg);
+		}
+		.packet {
+			display: none;
+		}
+	}
+	@media (max-width: 560px) {
+		.ledger {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>
