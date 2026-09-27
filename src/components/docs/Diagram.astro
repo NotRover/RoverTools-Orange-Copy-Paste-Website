@@ -5,8 +5,9 @@
  * <<stereotype>> nodes, labelled edges, and one short note underneath that
  * states the figure's single claim.
  *
- * The drawing keeps a minimum width; on a narrow column the plate scrolls
- * sideways, like a docs table, rather than restacking and losing its branches.
+ * The drawing keeps a minimum width; on a narrower column the script below
+ * zooms it down to fit, as DocMock does for the app shots, so nothing scrolls
+ * sideways and no branch is lost to a restack.
  */
 import '../../styles/landing.css';
 import '../../styles/diagrams.css';
@@ -28,3 +29,19 @@ const { note, min = 36 } = Astro.props;
 	</div>
 	<figcaption class="dg-note">{note}</figcaption>
 </figure>
+
+<script>
+	// Zoom each drawing down to its plate when the column is narrower than the
+	// drawing's minimum width. zoom reflows, so the plate hugs the result.
+	for (const plate of document.querySelectorAll<HTMLElement>('.dg-plate')) {
+		const draw = plate.querySelector<HTMLElement>('.dg-draw');
+		if (!draw) continue;
+		const fit = () => {
+			draw.style.zoom = '';
+			const pad = parseFloat(getComputedStyle(plate).paddingLeft) * 2;
+			const z = (plate.clientWidth - pad) / draw.scrollWidth;
+			if (z < 1) draw.style.zoom = String(z);
+		};
+		new ResizeObserver(fit).observe(plate);
+	}
+</script>

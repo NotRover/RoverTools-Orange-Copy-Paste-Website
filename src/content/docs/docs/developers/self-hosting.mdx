@@ -3,6 +3,9 @@ title: Self-hosting
 description: Run your own Orange Copy Paste sync backend.
 ---
 
+import Diagram from '../../../../components/docs/Diagram.astro';
+import Flow from '../../../../components/docs/Flow.astro';
+
 You can run your own backend and point the app at it. The server stores encrypted items and
 holds no key that opens them, so self-hosting does not change the security model; you see the
 same metadata any operator does (listed in the [security model](/docs/security/#what-the-server-can-see)). This page is a provider-agnostic overview;
@@ -23,6 +26,27 @@ Four parts. Only the first is code you ship; the other three are services it tal
 
 Redis is not optional: realtime and presence depend on it. Text and note sync work without blob
 storage; only large image and file attachments need it.
+
+<Diagram note="Only the FastAPI service is code you ship. Supabase, Redis and blob storage are services it talks to.">
+	<Flow
+		cols="minmax(0,1fr) 7rem minmax(0,1fr) 6rem minmax(0,1fr)"
+		rows="auto 2.2rem auto 2.2rem auto"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'Desktop app', st: 'compiled-in URLs' },
+			{ t: 'e', row: 1, col: 2, label: 'HTTPS, via proxy' },
+			{ t: 'k', row: 1, col: 3, rs: 5, name: 'FastAPI service', st: 'stateless' },
+			{ t: 'e', row: 1, col: 4, label: 'SQL' },
+			{ t: 'k', row: 1, col: 5, name: 'Postgres', st: 'Supabase, ciphertext', tone: 'srv' },
+			{ t: 'v', row: 2, col: 1, label: 'signs in' },
+			{ t: 'k', row: 3, col: 1, name: 'Supabase Auth', st: 'issues tokens', tone: 'srv' },
+			{ t: 'e', row: 3, col: 2, label: 'JWKS', back: true },
+			{ t: 'e', row: 3, col: 4, label: 'pub/sub' },
+			{ t: 'k', row: 3, col: 5, name: 'Redis', st: 'required, ephemeral', tone: 'srv' },
+			{ t: 'e', row: 5, col: 4, label: 'presigns' },
+			{ t: 'k', row: 5, col: 5, name: 'Blob storage', st: 'S3, optional', tone: 'srv' },
+		]}
+	/>
+</Diagram>
 
 ## External services
 
@@ -91,6 +115,25 @@ curl http://localhost:8000/internal/healthz
 Migrations are never applied automatically by the deploy: a merged migration has not reached the
 database until someone runs it. Apply them deliberately after deploying new code.
 
+<Diagram note="A deploy ships code, not schema. Until you apply the migration, routes that need it fail.">
+	<Flow
+		cols="5rem minmax(0,1fr) 5.5rem minmax(0,1fr) 5.5rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'lane', row: 1, label: 'Code' },
+			{ t: 'k', row: 1, col: 2, name: 'Merge to main', st: 'with a migration' },
+			{ t: 'e', row: 1, col: 3, label: 'deploy' },
+			{ t: 'k', row: 1, col: 4, name: 'New code live', st: 'needs new schema' },
+			{ t: 'v', row: 2, col: 4, label: 'queries' },
+			{ t: 'lane', row: 3, label: 'Database' },
+			{ t: 'k', row: 3, col: 2, name: 'Migration file', st: 'not applied' },
+			{ t: 'e', row: 3, col: 3, label: 'not run' },
+			{ t: 'k', row: 3, col: 4, name: 'Old schema', st: 'routes fail', tone: 'off' },
+			{ t: 'e', row: 3, col: 5, label: 'you apply it' },
+			{ t: 'k', row: 3, col: 6, name: 'Current schema', st: 'routes work', tone: 'key' },
+		]}
+	/>
+</Diagram>
+
 ## TLS and the desktop app
 
 Put a reverse proxy in front of the service for TLS (the sample setup uses Caddy for automatic
@@ -128,6 +171,23 @@ Google sign-in needs all three of these, or it fails after the consent screen wi
 1. In Supabase, under Authentication, Providers, enable **Google** with the client ID and secret from Google Cloud Console.
 2. In Google Cloud Console, add `https://<project-ref>.supabase.co/auth/v1/callback` to the OAuth client's authorized redirect URIs.
 3. In Supabase, under Authentication, URL Configuration, add all three of `http://127.0.0.1:53170`, `http://127.0.0.1:53171` and `http://127.0.0.1:53172` to the redirect URLs.
+
+<Diagram note="Each hop needs its own setting. Miss step 3 and the consent screen succeeds, but the app waits until it times out.">
+	<Flow
+		cols="minmax(0,1fr) 7rem minmax(0,1fr) 7rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'Desktop app', st: 'opens your browser' },
+			{ t: 'e', row: 1, col: 2, label: '1. provider on' },
+			{ t: 'k', row: 1, col: 3, name: 'Google', st: 'consent screen', tone: 'srv' },
+			{ t: 'e', row: 1, col: 4, label: '2. callback URI' },
+			{ t: 'k', row: 1, col: 5, name: 'Supabase', st: '/auth/v1/callback', tone: 'srv' },
+			{ t: 'v', row: 2, col: 5, label: '3. redirect URLs', left: true },
+			{ t: 'k', row: 3, col: 3, name: 'Desktop app', st: 'signed in', tone: 'key' },
+			{ t: 'e', row: 3, col: 4, label: 'hands back', back: true },
+			{ t: 'k', row: 3, col: 5, name: '127.0.0.1', st: 'first free port' },
+		]}
+	/>
+</Diagram>
 
 Step 3 is the easy one to miss. The app receives the sign-in on the first free port of those
 three on the user's computer. If they are not allowed, Google's consent succeeds but Supabase

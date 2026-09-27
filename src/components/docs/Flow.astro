@@ -18,7 +18,7 @@ export type Piece =
 	| { t: 'lane'; label: string; row: number }
 	| ({ t: 'k'; name: string; st?: string; tone?: 'key' | 'srv' | 'off' } & Cell)
 	| ({ t: 'e'; label?: string; back?: boolean } & Cell)
-	| ({ t: 'v'; label?: string; dir?: 'down' | 'up' | 'none' } & Cell);
+	| ({ t: 'v'; label?: string; dir?: 'down' | 'up' | 'none'; left?: boolean } & Cell);
 
 interface Props {
 	cols: string;
@@ -48,7 +48,7 @@ const area = (p: Piece) =>
 					{p.label && <span>{p.label}</span>}
 				</div>
 			) : (
-				<div class:list={['dg-v', `dg-v--${p.dir ?? 'down'}`]} style={area(p)} aria-hidden="true">
+				<div class:list={['dg-v', `dg-v--${p.dir ?? 'down'}`, { 'dg-v--left': p.left }]} style={area(p)} aria-hidden="true">
 					{p.label && <span>{p.label}</span>}
 				</div>
 			)

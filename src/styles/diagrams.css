@@ -23,7 +23,8 @@
 	border: 1px solid #262626;
 	border-radius: 14px;
 	padding: 1.1rem 1.2rem;
-	overflow-x: auto;
+	/* the drawing is zoomed to fit (Diagram.astro), never scrolled */
+	overflow: hidden;
 	color: var(--text);
 	font-family: var(--font-body);
 	font-size: 14px;
@@ -194,6 +195,12 @@
 	left: calc(50% + 0.6rem);
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+/* for an edge at the right edge of the drawing, where a label would run off */
+.dg-v--left span {
+	left: auto;
+	right: calc(50% + 0.6rem);
 }
 
 /* --- chips (squircle where the browser can) ------------------------------ */

@@ -3,6 +3,9 @@ title: Architecture
 description: How the desktop app and the sync backend fit together, and where the contract lives.
 ---
 
+import Diagram from '../../../../components/docs/Diagram.astro';
+import Flow from '../../../../components/docs/Flow.astro';
+
 Orange Copy Paste is a desktop app plus an optional sync backend. The app is the source of
 truth for your data; the backend is a relay that never sees plaintext.
 
@@ -18,7 +21,47 @@ fans changes out to a user's other devices and space members over a WebSocket, a
 presigned URLs for encrypted blobs. It is stateless, so it scales to N replicas; cross-replica
 delivery goes through Redis pub/sub.
 
+<Diagram note="The client holds every key and does all the crypto. Everything below the wire stores or relays ciphertext.">
+	<Flow
+		cols="minmax(0,1fr) 6rem minmax(0,1fr) 6rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'React UI', st: 'screens only' },
+			{ t: 'e', row: 1, col: 2, label: 'invoke, events' },
+			{ t: 'k', row: 1, col: 3, name: 'Rust core', st: 'state, keys, sync', tone: 'key' },
+			{ t: 'e', row: 1, col: 4, label: 'signs in' },
+			{ t: 'k', row: 1, col: 5, name: 'Supabase Auth', st: 'issues the JWT', tone: 'srv' },
+			{ t: 'v', row: 2, col: 3, label: 'HTTPS, WebSocket' },
+			{ t: 'k', row: 3, col: 1, name: 'Postgres', st: 'ciphertext rows', tone: 'srv' },
+			{ t: 'e', row: 3, col: 2, label: 'stores', back: true },
+			{ t: 'k', row: 3, col: 3, name: 'API replicas', st: 'verifies the JWT', tone: 'srv' },
+			{ t: 'e', row: 3, col: 4, label: 'presigns' },
+			{ t: 'k', row: 3, col: 5, name: 'Blob storage', st: 'S3 or R2, encrypted', tone: 'srv' },
+			{ t: 'v', row: 4, col: 3, label: 'pub/sub' },
+			{ t: 'k', row: 5, col: 3, name: 'Redis', st: 'fans out', tone: 'srv' },
+		]}
+	/>
+</Diagram>
+
 ## The sync flow
+
+<Diagram note="The master key is opened on the device before anything syncs, and the server hands back only wrapped keys.">
+	<Flow
+		cols="minmax(0,1fr) 5.5rem minmax(0,1fr) 5.5rem minmax(0,1fr)"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: '1. Sign in', st: 'auth key to Supabase' },
+			{ t: 'e', row: 1, col: 2 },
+			{ t: 'k', row: 1, col: 3, name: '2. Bootstrap', st: 'salt, wrapped UMK' },
+			{ t: 'e', row: 1, col: 4 },
+			{ t: 'k', row: 1, col: 5, name: '3. Unwrap UMK', st: 'KEK, in memory', tone: 'key' },
+			{ t: 'v', row: 2, col: 5 },
+			{ t: 'k', row: 3, col: 1, name: '6. Live changes', st: 'WebSocket' },
+			{ t: 'e', row: 3, col: 2, back: true },
+			{ t: 'k', row: 3, col: 3, name: '5. Push and pull', st: 'last write wins' },
+			{ t: 'e', row: 3, col: 4, back: true },
+			{ t: 'k', row: 3, col: 5, name: '4. Register device', st: 'key, device copy' },
+		]}
+	/>
+</Diagram>
 
 1. The client stretches the account password with Argon2id, salted from the email, and splits
    the result in two. It signs in with Supabase directly using one half, the auth key. The
@@ -31,6 +74,24 @@ delivery goes through Redis pub/sub.
    key wrapped for that device, so the device can open it again later without the password.
 5. Entries are encrypted locally, pushed, and pulled. Merges are last-write-wins on `updated_at`.
 6. The WebSocket streams live changes from other devices and space members.
+
+<Diagram note="Replicas share nothing in memory. A change reaches a socket on another replica through Redis.">
+	<Flow
+		cols="minmax(0,1fr) 6rem minmax(0,1fr) 6rem minmax(0,1fr)"
+		rows="auto 0.8rem auto"
+		pieces={[
+			{ t: 'k', row: 1, col: 1, name: 'Device A', st: 'pushes a change', tone: 'key' },
+			{ t: 'e', row: 1, col: 2, label: 'HTTPS' },
+			{ t: 'k', row: 1, col: 3, name: 'Replica 1', st: 'stores it', tone: 'srv' },
+			{ t: 'e', row: 1, col: 4, label: 'publish' },
+			{ t: 'k', row: 1, col: 5, rs: 3, name: 'Redis', st: 'pub/sub', tone: 'srv' },
+			{ t: 'k', row: 3, col: 1, name: 'Device B', st: 'decrypts it', tone: 'key' },
+			{ t: 'e', row: 3, col: 2, label: 'WebSocket', back: true },
+			{ t: 'k', row: 3, col: 3, name: 'Replica 2', st: 'holds the socket', tone: 'srv' },
+			{ t: 'e', row: 3, col: 4, label: 'deliver', back: true },
+		]}
+	/>
+</Diagram>
 
 The keys and what each one protects are explained in the [technical security model](/docs/developers/security/).
 
