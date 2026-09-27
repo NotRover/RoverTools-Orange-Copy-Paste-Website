@@ -28,7 +28,7 @@ delivery goes through Redis pub/sub.
 3. It derives the key-encryption key from the other half and that salt, and unwraps the User
    Master Key in memory. A wrong password is simply a failed decryption.
 4. It registers the device, publishes the device's public key, and stores a copy of the master
-   key wrapped for that device, so the device can unlock again later without the password.
+   key wrapped for that device, so the device can open it again later without the password.
 5. Entries are encrypted locally, pushed, and pulled. Merges are last-write-wins on `updated_at`.
 6. The WebSocket streams live changes from other devices and space members.
 

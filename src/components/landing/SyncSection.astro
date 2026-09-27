@@ -6,9 +6,9 @@
 		<p class="eyebrow reveal">Cloud sync</p>
 		<h2 class="section-title reveal">Sync that cannot read your data.</h2>
 		<p class="section-lead reveal">
-			Your password is the encryption secret, not just a login. Everything is encrypted
-			on your machine before it leaves, so the server only ever stores ciphertext. Not
-			your clips, not your notes, not even your settings are readable to anyone but you.
+			Your password protects the encryption key, as well as signing you in. Clips, notes
+			and settings are encrypted on your machine before they leave, and the server holds
+			no key that opens them. It still sees some details, such as item types and times.
 		</p>
 
 		<div class="flow reveal" aria-label="How encryption travels">
@@ -23,7 +23,7 @@
 			<div class="node">
 				<div class="node-title">The server</div>
 				<div class="node-body mono cipher">q9J2xK41Vd8mThPZC7oW3nRl...</div>
-				<div class="node-note">Ciphertext only. No key, ever.</div>
+				<div class="node-note">Stores it, cannot open it</div>
 			</div>
 			<div class="arrow">
 				<span class="lock">wrapped key</span>

@@ -53,8 +53,9 @@ const build = await fetchBuild();
 			<a data-dl="page" href={build?.page ?? RELEASES_PAGE}>every build and its notes</a>
 		</p>
 		<p class="dl-note reveal">
-			Updates arrive inside the app, signature-checked, and never install without
-			asking. A beta channel is one switch away in Settings.
+			Updates arrive inside the app and are signature-checked. They wait for you to
+			install them unless you turn on automatic installs. A beta channel is one switch
+			away in Settings.
 		</p>
 		<p class="dl-source reveal">
 			<a href={REPO_URL} target="_blank" rel="noopener">

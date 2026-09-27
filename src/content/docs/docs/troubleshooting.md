@@ -13,9 +13,9 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **Popups open in the middle of the screen instead of at the cursor (Linux).** Wayland does not tell apps where the cursor is, so the app centers them. This is expected.
 
-**`Too large`: "Not added to history."** What you copied is over 4 MB. It is still on your system clipboard, so pasting works; it just is not kept in history.
+**`Too large for history`: "Not added to history."** What you copied is over 4 MB. It is still on your system clipboard, so pasting works; it just is not kept in history.
 
-**`Max pins reached (10)`** You can pin up to 10 entries. Unpin one first, or use **Saved** instead, which has no limit. See [Concepts](/docs/concepts/#your-clipboard).
+**"You can pin up to 10 items. Unpin one first."** Unpin one, or use **Saved** instead, which has no limit. See [Concepts](/docs/concepts/#your-clipboard).
 
 **File or HTML entries do not copy back (Linux).** Copying file lists and rich HTML back to the clipboard only works on Windows today. See [Known gaps on Linux](/docs/linux/#known-gaps-on-linux).
 
@@ -23,9 +23,9 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **"That email and password do not match an account."** Check the email and password. If you forgot the password, see [How to reset a forgotten password](/docs/cloud-sync/#how-to-reset-a-forgotten-password).
 
-**"Confirm your email first. The link is in your inbox."** Open the confirmation email from sign-up, click the link, then sign in on the **Sign In** tab.
+**"Confirm your email first. The link is in your inbox."** Open the confirmation email from sign-up, click the link, then sign in on the **Sign in** tab.
 
-**"An account already uses that email. Sign in instead."** Switch to the **Sign In** tab.
+**"An account already uses that email. Sign in instead."** Switch to the **Sign in** tab.
 
 **"Incorrect password. It does not match the one this account was encrypted with."** The password was changed on another computer. Use the newest password.
 
@@ -47,15 +47,15 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 ## Password and recovery code
 
-**"this reset link was already used, or it was requested from a different install of the app."** A reset link only works once, and only in the app that asked for it. Click **Forgot?** and **Send reset link** again in this app, then use the new email.
+**"This reset link was already used, or it was sent to a different install of the app."** A reset link only works once, and only in the app that asked for it. Click **Forgot?** and **Send reset link** again in this app, then use the new email.
 
-**"this device has never held your encryption key".** This computer has not been signed in to your account before, so a new password alone cannot decrypt your synced data. Enter your **Recovery code** and click **Unlock with the code**, or reset from a computer you have signed in on before. The last resort is **Start over with a new key**, which loses everything synced so far.
+**"This device has never held your encryption key ..."** This computer has not been signed in to your account before, so a new password alone cannot decrypt your synced data. Enter your **Recovery code** and click **Use the recovery code**, or reset from a computer you have signed in on before. The last resort is **Start over with a new key**, which loses everything synced so far.
 
 **"That recovery code does not match this account."** Check the code. Dashes, spaces and upper or lower case do not matter.
 
-**"no recovery code was ever saved for this account".** Reset from a computer you have signed in on before, or use **Start over with a new key**.
+**"This account has no recovery code."** Reset from a computer you have signed in on before, or use **Start over with a new key**.
 
-**"the current password is wrong".** Retype your current password. It is needed to change your password or make a new recovery code.
+**"The current password is wrong."** Retype your current password. It is needed to change your password or make a new recovery code.
 
 ## Sync and storage
 
@@ -84,17 +84,15 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 ## Spaces
 
-**"join space 404: Invalid invite code"** Check the code: it is 8 characters. Ask for the link instead if typing it is error-prone.
+**"That code did not work. Check it, or ask for a new invite link."** The code is wrong or has expired. Check the code: it is 8 characters. Invite codes last 72 hours, so if it is older, ask a member for a new one.
 
-**"join space 410: Invite code expired"** Invite codes last 72 hours. Ask a member for a new one.
-
-**"Asked to join ... Somebody in it has to let you in."** This is expected: a code sends a request, and someone in the space has to approve it. See [Creating and joining](/docs/spaces/#creating-and-joining).
+**"Asked to join ... Somebody in it has to let you in."** This is expected: a code sends a request, and the owner has to approve it, or any member if the owner allows it. See [Creating and joining](/docs/spaces/#creating-and-joining).
 
 **"No account uses that email yet. Ask them to sign up first."** An email invite only works for someone who already has an account. Ask them to sign up, or send them the invite link.
 
 **"Only the owner can invite people to this space."** Ask the owner to invite them, or share the invite code or link.
 
-**"Owner cannot leave; delete the space"** An owner cannot leave their own space. Use **Delete space** instead.
+**"Could not leave the space."** If you own the space, you cannot leave it. Use **Delete space** instead.
 
 **"Waiting for this space's key"** You are in the space, but no member has sent you its key yet. It arrives on its own once any member with the key opens the app. You do not need to rejoin.
 

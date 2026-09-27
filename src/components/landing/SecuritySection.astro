@@ -14,7 +14,7 @@ const specs = [
 	},
 	{
 		term: 'Per-item keys',
-		def: 'Every item is encrypted under its own random key. One item never unlocks another, and sharing wraps a key instead of re-encrypting content.',
+		def: "Every item is encrypted under its own random key. One item's key opens nothing else, and sharing wraps a key instead of re-encrypting content.",
 	},
 	{
 		term: 'OS keychain',
@@ -38,10 +38,10 @@ const specs = [
 <section class="section sec" id="security">
 	<div class="wrap">
 		<p class="eyebrow reveal">Security</p>
-		<h2 class="section-title reveal">Built so trust is not required.</h2>
+		<h2 class="section-title reveal">The server stores it. It cannot read it.</h2>
 		<p class="section-lead reveal">
-			The key that unlocks your data never leaves your device. There is nothing on the
-			server to reset or subpoena into plaintext.
+			The keys that open your data are made and used on your devices. What the server
+			holds is encrypted, so there is nothing there to reset or hand over as plaintext.
 		</p>
 		<dl class="specs">
 			{

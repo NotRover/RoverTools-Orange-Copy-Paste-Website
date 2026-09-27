@@ -3,7 +3,7 @@ title: Linux notes
 description: What to install, what works where, and the Wayland setup step.
 ---
 
-What to install for Linux, the one setup step Wayland needs, and what does not work on Linux yet. Builds ship as `.deb`, `.rpm` and AppImage. **X11 is the smoothest experience.** Wayland works once you set up the hotkeys.
+What to install for Linux, the one setup step Wayland needs, and what does not work on Linux yet. Builds ship as `.deb` and AppImage. **X11 is the smoothest experience.** Wayland works once you set up the hotkeys.
 
 ## Runtime packages
 
@@ -19,7 +19,7 @@ The app leans on standard tools for key injection and desktop integration:
 | GNOME Keyring or KWallet | Storage for sync keys. |
 | A tray host | The tray icon. |
 
-The `.deb` requires `xdotool` or `wtype`, and recommends `x11-utils` and `ydotool`. The `.rpm` requires `xdotool`. The AppImage brings none of them. Install the other packages in the table yourself if your desktop does not already have them.
+The `.deb` requires `xdotool` or `wtype`, and recommends `x11-utils` and `ydotool`. The AppImage brings none of them. Install the other packages in the table yourself if your desktop does not already have them.
 
 Install the `.deb` with apt, so it pulls in what it requires:
 
@@ -40,7 +40,7 @@ Without `x11-utils`, the app cannot read your monitor's work area and assumes a 
 
 The built-in hotkeys rely on X11, so on native Wayland they do not fire. Instead, bind two keys in your compositor that run the app with a `--trigger` flag. The running app picks the trigger up and opens the same popup the hotkey would.
 
-1. Find the app's command. For a `.deb` or `.rpm`, it is what the `Exec=` line points at in the installed `.desktop` file. For an AppImage, it is the AppImage's own path. The examples below use `orange-copy-paste`.
+1. Find the app's command. For the `.deb`, it is what the `Exec=` line points at in the installed `.desktop` file. For an AppImage, it is the AppImage's own path. The examples below use `orange-copy-paste`.
 2. Bind one key to `orange-copy-paste --trigger paste` (the quick-paste popup) and one to `orange-copy-paste --trigger copy` (capture the selection). Use any keys you like.
    - **Sway:** in your config, `bindsym Ctrl+Shift+v exec orange-copy-paste --trigger paste`, and the same with `c` and `copy`.
    - **Hyprland:** `bind = CTRL SHIFT, V, exec, orange-copy-paste --trigger paste`, and the same with `C` and `copy`.
