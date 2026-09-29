@@ -9,9 +9,9 @@ The app uses a small set of words on its screens and in these docs. This page sa
 
 **Entry.** One thing you copied: text, a link, an image, a file or folder, or rich HTML. Each copy becomes one entry in your history.
 
-**History.** Your recent entries, newest first. It keeps the last **100** entries that are not pinned or saved; when a new one arrives, the oldest unpinned, unsaved one drops off. By default history is cleared when the app restarts. See [Clipboard history](/docs/clipboard-history/).
+**History.** Your entries, newest first. It has no entry limit, and by default it stays when the app or your PC restarts. See [Clipboard history](/docs/clipboard-history/).
 
-**Pinned.** An entry you pinned stays at hand on the **Pinned** tab of the paste popup, with its own number. You can pin up to **10** entries. Pinned entries are never dropped from history, survive restarts, and are kept by **Clear all**.
+**Pinned.** An entry you pinned stays at hand on the **Pinned** tab of the paste popup, with its own number. You can pin up to **10** entries. Pinned entries are never dropped from history, survive restarts, and are kept by **Clear history**.
 
 **Saved.** Also a way to keep an entry, but without the 10-entry limit and without a place in the paste popup. Saving puts the entry in the built-in **Saved** group. Saved entries are kept exactly like pinned ones. Use pins for the few things you paste all the time, and Saved for everything else worth keeping.
 

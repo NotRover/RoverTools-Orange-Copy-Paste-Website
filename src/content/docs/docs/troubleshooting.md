@@ -19,6 +19,26 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **File or HTML entries do not copy back (Linux).** Copying file lists and rich HTML back to the clipboard only works on Windows today. See [Known gaps on Linux](/docs/linux/#known-gaps-on-linux).
 
+## Missing history
+
+**"Could not load your clipboard history. Nothing was deleted. Restart the app to try again."** The app could not read your history when it started, even after trying again. Your entries are still on this PC. Restart the app. The history also shows, and the message goes away, as soon as a later load works, for example when you switch back to the app window. If the message comes back after every restart, [open an issue](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/issues) with the exact text.
+
+**My clipboard history is empty on a new PC, or after a restart.** Older versions cleared unsaved history when the app restarted, and a PC that signed out and back in could stop downloading items it had synced before. Update to the latest version (**Check now** under **Updates** in Settings). Then:
+
+1. If you use cloud sync, start the app signed in. What your account holds comes back on its own, including your spaces' items. In **Manual** mode, press **Refresh** on the **Account & Sync** screen.
+2. If anything is still missing, click **Restore** on the **Restore from cloud** line of the **Account & Sync** screen. See [How to restore your history from the cloud](/docs/cloud-sync/#how-to-restore-your-history-from-the-cloud).
+3. Check that **Keep history across restarts** is on in [Settings](/docs/settings/#history).
+
+Entries that never reached the cloud and were cleared by an older version cannot be brought back.
+
+**"Nothing to restore." but entries are still missing.** This PC already has everything your account holds. The missing entries never reached the cloud, for example because you were signed out when you copied them or they were over a [sync limit](/docs/cloud-sync/#files-images-and-folders).
+
+**"Could not restore from the cloud. Check your connection and try again."** or **"Cannot reach the server. Check your connection and try again."** The app could not reach the server, or lost it partway. Check your internet connection and click **Restore** again. Anything already restored stays.
+
+**"Sign in on the Account screen first."** or **"Your session expired. Sign in again on the Account screen."** after clicking **Restore**. This PC is not signed in, or its sign-in has expired. Sign in on the **Account & Sync** screen, then click **Restore** again.
+
+**Old or deleted entries came back after updating.** The first start after updating can bring back entries an older version dropped, and items whose removal never reached the server. Delete the ones you do not want. Deleting a synced item removes it from your other devices too.
+
 ## Signing in
 
 **"That email and password do not match an account."** Check the email and password. If you forgot the password, see [How to reset a forgotten password](/docs/cloud-sync/#how-to-reset-a-forgotten-password).
@@ -74,6 +94,8 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **"items are waiting to sync"** This computer is set to **Manual**, so new items only upload when you choose. Upload them with **Upload to cloud**, or switch to another mode under **Automatic syncing**. See [Sync modes](/docs/cloud-sync/#sync-modes).
 
+**My settings changed on every device after I signed in on a new PC.** Older versions sent the new PC's settings over your account's, so its defaults reached your other devices. Update the app, then set your theme, layout and other synced settings again on one device. See [Which settings sync](/docs/settings/#which-settings-sync).
+
 **The sync status shows "Offline".** The app cannot reach the server. Changes queue on this computer and upload in order when you are back online.
 
 ## Saving on this computer
@@ -103,3 +125,5 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 **An update error with a "Try again" button.** Check your internet connection and click **Try again**. If it keeps failing, download the latest version from the [releases page](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases/latest) and install it over the current one.
 
 **Updates never install on their own.** Automatic installs happen on the splash screen, so **Show splash screen on startup** has to be on, and a version you skipped is never installed automatically. See [Updates](/docs/updates/).
+
+**My theme, layouts, filters or groups reset after updating (Windows).** Updating from version 0.3.7 or older to any version from 0.3.8 to 0.4.2 reset them. Update to the latest version. If you are signed in, it brings back your [synced settings](/docs/settings/#which-settings-sync) from your account when it starts, unless the reset already reached your account. Set anything that is still reset again. Your history and notes filters and the notes layout and sort order do not sync, so set those on each PC.
