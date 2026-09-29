@@ -50,6 +50,33 @@ Spaces are not affected by the mode: what you share to a space goes out right aw
 
 Clipboard entries, notes, and some of your preferences. Which settings travel and which stay on each computer is listed in [Which settings sync](/docs/settings/#which-settings-sync).
 
+## How to restore your history from the cloud
+
+This guide shows you how to download to this PC anything your account holds that is missing here, such as your history on a new PC, or after a restart that cleared it. Only items that reached the cloud can come back. An entry this PC never synced is not in your account.
+
+1. Open the **Account & Sync** screen. You need to be signed in.
+2. In the card with your account, find the **Restore from cloud** line and click **Restore**. The button reads **Restoring...** while it runs.
+3. Read the result, which replaces the line's description:
+   - "Restored 1,445 items." Everything missing is back.
+   - "Restored 3 items. 2 more are downloading." Images and files take longer. They appear as each download finishes.
+   - "2 items are downloading." Only images or files were missing, and they appear as each download finishes.
+   - "Nothing to restore." This PC already has everything your account holds.
+
+Deleted items stay deleted. A restore never brings back something you deleted, on this PC or on another device. If the line shows an error instead, see [Missing history](/docs/troubleshooting/#missing-history).
+
+### When restore runs on its own
+
+The same restore runs without the button:
+
+- after every sign-in, including signing out and back in with the same account;
+- at startup and when you press **Refresh**, if this PC's own record lists items it no longer has;
+- at startup and when you press **Refresh**, if your account holds more of your own items than this PC;
+- the first time a space's key arrives on this PC, for that space's items.
+
+In **Manual** mode, the automatic restore waits until you press **Refresh** or **Restore**.
+
+The first start after updating from an older version can bring back older entries: ones the old 100-entry limit or the clear after a reboot had dropped, and items you deleted whose removal never reached the server. For someone who has used the app for a long time, that can be thousands of entries. What to do about them is in [Missing history](/docs/troubleshooting/#missing-history).
+
 ## Files, images and folders
 
 Images and files ride along, up to **5 MB per entry**. For an entry holding several files, or a folder, the 5 MB covers all of them together. A folder syncs as a single entry and unpacks on the other device. Anything over the cap is skipped and the app tells you; nothing is dropped silently.
@@ -84,6 +111,8 @@ Deleting a synced entry asks you to confirm first, because the removal travels t
 </Diagram>
 
 *Remove from cloud* is different: it takes an item, or a whole selection, off the server and your other devices, but keeps the copy on the device you are on. Use it to free up cloud space without losing your local history.
+
+An item you delete while you are signed out leaves this PC only. It stays in the cloud and on your other devices, and it stays deleted here: a restore does not bring it back. To remove it everywhere, delete it on a device that still has it.
 
 ## Offline and conflicts
 

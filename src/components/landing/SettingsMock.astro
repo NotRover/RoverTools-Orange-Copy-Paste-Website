@@ -22,9 +22,13 @@ const general = [
 ] as const;
 
 const history = [
-	['Keep history across app restarts', 'Clipboard history is preserved when the app restarts (cleared after reboot).', true],
+	[
+		'Keep history across restarts',
+		'Unsaved entries stay when the app or PC restarts. Pinned and Saved entries, and anything in the cloud or a space, are always kept. Applies to this PC only.',
+		true,
+	],
 	['Click a card to view it', 'A double click copies instead. Off, a click copies and a double click opens it too.', false],
-	['Auto-save copied entries', 'Automatically add every new clipboard entry to the Saved group.', false],
+	['Auto-save copied entries', 'Automatically add every new clipboard entry to the Saved group. Applies to this PC only.', true],
 ] as const;
 
 const updates = [

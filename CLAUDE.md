@@ -68,7 +68,7 @@ to hold it.
 
 ## Content rules
 
-- Docs state numbers and behavior that live in the app (100 entries, 10 pins, 4 MB
+- Docs state numbers and behavior that live in the app (10 pins, 4 MB
   clipboard entry cap, 5 MB synced file cap, 50 MB quota, hotkeys). **Verify against the
   app/backend code when editing** - the
   app is the source of truth, and stale numbers here mislead users.

@@ -21,7 +21,7 @@ Reset it from the sign-in screen. On a computer you have signed in on before, yo
 
 ## Why did my history disappear after a restart?
 
-Unpinned history is cleared on restart unless you turn on **Keep history across app restarts** in [Settings](/docs/settings/). Pinned and saved entries always stay.
+Older versions cleared unsaved history on restart by default, and could leave a new PC with an empty history after signing in. Update the app. If you use cloud sync, what your account holds comes back on its own at the next start. See [Missing history](/docs/troubleshooting/#missing-history) for the steps, and [Settings](/docs/settings/#history) for **Keep history across restarts**.
 
 ## Why was a file not synced?
 
