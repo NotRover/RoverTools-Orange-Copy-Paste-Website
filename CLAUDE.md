@@ -2,12 +2,12 @@
 
 Public site for the Orange Copy Paste desktop app: a marketing landing page plus the
 end-user documentation. Astro + Starlight, package manager **bun**. This is its own repo
-(`RoverTools-Orange-Copy-Paste-Website`), mounted as a submodule of the RoverTools workspace; the
+(`RoverTools-Orange-Copy-Paste-Website`), cloned inside the app repo's folder, which ignores it (not a submodule); the
 workspace root `CLAUDE.md` applies here too (copy rules, git rules, doc ownership).
 
 **Every page and every line of copy here follows the workspace writing guide, and there are no exceptions:**
 [`docs/writing-docs.md`](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/blob/main/docs/writing-docs.md)
-in the app repo (`../docs/writing-docs.md` when checked out as a submodule). Decide the
+in the app repo (`../docs/writing-docs.md` when cloned inside it). Decide the
 kind of page before writing it, and run the guide's "Checklist before merging a doc change" before calling a
 change done. This repo does not keep its own copy of the guide.
 
@@ -24,7 +24,7 @@ tracking and a working-notes file for the reasoning instead of trusting the cont
 to hold it.
 
 - **File:** `.scratch/<YYYY-MM-DD>-<topic-slug>.md`, at the workspace root when this repo is
-  checked out as a submodule, else at this repo's root. Gitignored; never commit it. One
+  cloned inside the app repo, else at this repo's root. Gitignored; never commit it. One
   file per task, reused across sessions.
 - **Contents, terse:** goal and issue/PR link, plan checklist, decisions with a one-line
   reason, current state and next step, key files as `path:line`, which repo(s) each change
@@ -118,5 +118,4 @@ writing guide's "Checklist before merging a doc change". For visual changes, eye
 
 Whether a change goes straight to `main` or gets a PR follows the workspace root
 `CLAUDE.md` (the Git & Repos section); a PR is a draft against `main`. Keep commits scoped
-to this repo - never bundle a website change with a parent-repo commit except a deliberate
-submodule-pointer bump.
+to this repo - never bundle a website change with a parent-repo commit.

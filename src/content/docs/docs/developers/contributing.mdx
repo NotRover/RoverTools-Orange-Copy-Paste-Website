@@ -14,11 +14,15 @@ short version.
 | [Backend](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend) | Python 3.14, FastAPI | uv |
 | [Website](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Website) | Astro + Starlight | bun |
 
-The client lives directly in the parent repo; the backend and website are submodules with their
-own repos. Keep each change scoped to one repo. To get all three at once:
+The client lives directly in the parent repo. The backend and the website are separate repos,
+cloned into the client's folder, which ignores them. Keep each change scoped to one repo. To
+get all three:
 
 ```bash
-git clone --recurse-submodules https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App.git
+git clone https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App.git
+cd RoverTools-Orange-Copy-Paste-App
+git clone https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Backend.git orange-copy-paste-clipboard-backend
+git clone https://github.com/NotRover/RoverTools-Orange-Copy-Paste-Website.git orange-copy-paste-clipboard-website
 ```
 
 ## Setup and checks
