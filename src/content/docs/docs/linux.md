@@ -15,7 +15,7 @@ The app leans on standard tools for key injection and desktop integration:
 | `wtype` | Key injection on wlroots Wayland compositors (Sway, Hyprland, River). |
 | `ydotool` + `ydotoold` | Fallback for GNOME and KDE Wayland. Needs access to `/dev/uinput`. |
 | `x11-utils` (`xdpyinfo`) | Monitor work area for popup placement. |
-| `xdg-utils` | The *Open data folder* button. |
+| `xdg-utils` | The *Open data folder* and *Open log folder* buttons. |
 | GNOME Keyring or KWallet | Storage for sync keys. |
 | A tray host | The tray icon. |
 
