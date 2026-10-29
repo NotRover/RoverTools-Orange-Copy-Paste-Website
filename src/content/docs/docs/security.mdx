@@ -90,7 +90,7 @@ It cannot see what an item says, its preview, your group names, your settings, o
 
 ## Limits
 
-- **Your local data is not encrypted.** History and notes are stored as plain files on your computer. Encryption protects what leaves it. If other people can get into your computer, use your system's disk encryption.
+- **Your local data is plain unless you turn encryption on.** By default, history and notes are stored readable on your computer, and encryption protects what leaves it. **Encrypt history and notes on this PC** in [Settings](/docs/settings/#data) encrypts the text of every entry and note with a key kept in your credential store; images and files saved to disk stay plain, and so do details like times, types, pins and groups. Anyone who can sign in to your system account can still read it. If other people can get into your computer, use your system's disk encryption as well.
 - **Your device key is only as safe as your system account.** Anyone who can sign in to your system account can reach your credential store, and with it your synced data.
 - **Updates are signed.** The app only installs an update whose signature matches the key built into it.
 - **Google sign-in happens in your own browser**, which then hands back to the app through an address that only exists on your computer. The app has no built-in browser window that could see your Google password.
