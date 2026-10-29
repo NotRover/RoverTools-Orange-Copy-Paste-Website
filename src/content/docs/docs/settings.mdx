@@ -69,6 +69,7 @@ Older versions had **Keep history across restarts** and **Auto-save copied entri
 
 ## Data
 
+- **Encrypt history and notes on this PC:** off by default. Applies to this PC only. When on, the text of every entry and note in the local database is encrypted with a key kept in this PC's credential store (Windows Credential Manager, the macOS Keychain, or the Secret Service on Linux). Images and files saved to disk are not. Turning it on or off rewrites every entry, which can take a few seconds on a large history; the switch moves once that is done. If the app cannot read the key, the switch stays on and a note under it says new entries are being stored in plain text.
 - **Open data folder:** the **Open** button shows the folder holding your history, pinned entries, notes and settings.
 - **Open log folder:** the **Open** button shows the folder holding the app log. Attach `app.log` to a bug report; it holds no clipboard contents.
 
