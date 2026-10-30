@@ -1100,18 +1100,18 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		await readThrough(acctScroll);
 
 		const mode = accountScreen?.querySelector<HTMLElement>('.acct-mode') ?? null;
-		const passive = acctSeg?.querySelectorAll<HTMLElement>('.acct-seg-pill')[1] ?? null;
-		if (mode && passive) {
+		const manual = acctSeg?.querySelectorAll<HTMLElement>('.acct-seg-pill')[1] ?? null;
+		if (mode && manual) {
 			say('Syncing is set per device, not per account.');
 			await bringIntoView(acctScroll, mode, 120);
-			await clickOn(passive, 0.5, 0.5);
+			await clickOn(manual, 0.5, 0.5);
 			acctSeg?.querySelectorAll('.acct-seg-pill').forEach((p) => p.classList.remove('active'));
-			passive.classList.add('active');
+			manual.classList.add('active');
 			if (acctModeDesc) {
 				acctModeDesc.textContent =
-					'This device uploads what you copy, and picks up the rest when you open the app.';
+					'Nothing uploads on its own from this device. You pick what to send.';
 			}
-			say('Passive here, realtime on the laptop. Neither device decides for the other.');
+			say('Manual here, realtime on the laptop. Neither device decides for the other.');
 			await hold(2400);
 		}
 	}

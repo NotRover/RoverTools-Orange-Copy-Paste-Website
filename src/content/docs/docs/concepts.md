@@ -27,7 +27,7 @@ The app uses a small set of words on its screens and in these docs. This page sa
 
 **Device.** Each computer where you sign in to your account. Devices are listed on the **Account & Sync** screen, where you can see which are online and revoke one you no longer use.
 
-**Sync mode.** How this device exchanges items with your other devices: **Realtime**, **Passive** or **Manual**. Each device has its own. See [Sync modes](/docs/cloud-sync/#sync-modes).
+**Sync mode.** How this device exchanges items with your other devices: **Realtime** or **Manual**. Each device has its own. See [Sync modes](/docs/cloud-sync/#sync-modes).
 
 **Recovery code.** A code the app shows once when you set up your account (also called a backup code). With it, you can reset a forgotten password on a new computer and keep your synced data. It is stored nowhere, so keep it safe. See [How to reset a forgotten password](/docs/cloud-sync/#how-to-reset-a-forgotten-password).
 
