@@ -32,7 +32,7 @@ storage; only large image and file attachments need it.
 		cols="minmax(0,1fr) 7rem minmax(0,1fr) 6rem minmax(0,1fr)"
 		rows="auto 2.2rem auto 2.2rem auto"
 		pieces={[
-			{ t: 'k', row: 1, col: 1, name: 'Desktop app', st: 'compiled-in URLs' },
+			{ t: 'k', row: 1, col: 1, name: 'Desktop app', st: 'Settings > Developer' },
 			{ t: 'e', row: 1, col: 2, label: 'HTTPS, via proxy' },
 			{ t: 'k', row: 1, col: 3, rs: 5, name: 'FastAPI service', st: 'stateless' },
 			{ t: 'e', row: 1, col: 4, label: 'SQL' },
@@ -72,6 +72,7 @@ REDIS_URL=redis://redis:6379/0
 
 # Supabase Auth (verify only)
 SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=            # publishable key; the app fetches it from the server
 SUPABASE_JWT_SECRET=          # blank on projects from 2025-10-01 onward
 SUPABASE_SERVICE_ROLE_KEY=    # server-only secret key; never ship to clients
 
@@ -137,11 +138,16 @@ database until someone runs it. Apply them deliberately after deploying new code
 ## TLS and the desktop app
 
 Put a reverse proxy in front of the service for TLS (the sample setup uses Caddy for automatic
-certificates). Then point the app at your API, as below.
+certificates). The app accepts `https://` anywhere. It also accepts plain `http://` to the
+machine it runs on, and, once you turn on **Allow plain http on private networks** in the
+Developer page, to a LAN, Tailscale or `.local` address; everyone on that network can read
+that traffic, so use it for a home lab, not across the internet. A self-signed certificate
+works too: pin its SHA-256 fingerprint in the same section. The pin covers the server URL
+only; Supabase keeps its public certificate.
 
 ## Point the app at your server
 
-The app needs three values, and they are compiled in, so users never type them:
+The app needs three values:
 
 | Value | Where to find it |
 |---|---|
@@ -149,20 +155,40 @@ The app needs three values, and they are compiled in, so users never type them:
 | Supabase project URL | Supabase, Settings, API Keys, **Project URL** |
 | Supabase publishable key | Supabase, Settings, API Keys. It starts with `sb_publishable_`; older projects call it the anon key |
 
-Never use the secret key (`sb_secret_`). It gives full access to your project, and anything compiled into the app can be read by anyone who has a copy.
+Never use the secret key (`sb_secret_`). It gives full access to your project, and anything compiled into the app or served to it can be read by anyone who has a copy.
 
-1. Set the three constants at the top of `src-tauri/src/sync/config.rs` in the app:
-   ```rust
-   const DEFAULT_SERVER_URL: &str = "https://sync.example.com";
-   const DEFAULT_SUPABASE_URL: &str = "https://your-project-ref.supabase.co";
-   const DEFAULT_SUPABASE_ANON_KEY: &str = "sb_publishable_...";
-   ```
-   These values are safe to commit. If they are empty, the **Account & Sync** screen says the build has no sync endpoints.
-2. Build or run the app. Sign up on the **Account & Sync** screen; your account and this device should appear.
+Set `SUPABASE_ANON_KEY` in the server's `.env` to the publishable key. The server then
+answers `GET /.well-known/orange-copy-paste.json` with its Supabase URL, that key, the reset
+page and its versions, so users only have to type the server URL.
 
-To point an installed copy at a different server without rebuilding, set `sync_server_url`,
-`supabase_url` and `supabase_anon_key` in `settings.json` in the app's data folder. There is no
-screen for this on purpose.
+In the installed app:
+
+1. Open Settings, pick **Developer** in the list on the left, and turn on **Developer options**. Confirm, and the settings below the switch appear.
+2. Sign out if you are signed in: the Backend group hides its form while a session, a device record and the account keys belong to the current server, and shows an **Open Account** button instead.
+3. Under **Backend**, enter the server URL and press **Discover**. The other fields fill in from the server; type them yourself if your server does not provide them.
+4. Press **Test connection**. It checks the health route, that the server speaks the API version this app expects, that the WebSocket route is reachable through your proxy, and that Supabase answers for the key. If the certificate is not trusted, the report shows its fingerprint and offers to pin it.
+5. Press **Save**, then sign up or sign in on the **Account** screen. Your account and this device should appear.
+
+**Reset to official** returns to the server the app shipped with. What the section shows is listed on the [Settings](/docs/settings/#developer) page.
+
+For a build of your own, you can also compile the values in, so users never type them: set the
+three constants at the top of `src-tauri/src/sync/config.rs` in the app. They are safe to
+commit. If they are empty, the **Account** screen says the build has no sync endpoints.
+
+```rust
+const DEFAULT_SERVER_URL: &str = "https://sync.example.com";
+const DEFAULT_SUPABASE_URL: &str = "https://your-project-ref.supabase.co";
+const DEFAULT_SUPABASE_ANON_KEY: &str = "sb_publishable_...";
+```
+
+### Updates for a fork
+
+A fork signs its own bundles and publishes its own feed. Users can read updates from it
+under **Update feed** on the Developer page: the feed URL and the minisign public key the
+fork's bundles are signed with. Leave the key empty only for a mirror of the official feed,
+which carries bundles signed with the built-in key. The release pipeline that produces a feed
+is described in the app repo's
+[`docs/releasing.md`](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/blob/main/docs/releasing.md).
 
 ### Set up Google sign-in
 
