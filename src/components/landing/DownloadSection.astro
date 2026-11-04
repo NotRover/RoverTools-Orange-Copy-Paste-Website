@@ -33,12 +33,9 @@ const build = await fetchBuild();
 			</div>
 			<div class="dl-card reveal">
 				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} />Linux<span class="dl-beta">Beta</span></h3>
-				<p>An AppImage that runs without installing, or a deb package. X11 has the best support; Wayland needs one setup step.</p>
+				<p>A deb package for Debian, Ubuntu and their relatives. It updates itself. X11 has the best support; Wayland needs one setup step.</p>
 				<div class="dl-row">
-					<a class="btn btn-ghost" data-dl="appImage" href={build?.appImage ?? RELEASES_PAGE}>
-						AppImage
-					</a>
-					<a class="btn btn-ghost" data-dl="deb" href={build?.deb ?? RELEASES_PAGE}>.deb</a>
+					<a class="btn btn-primary" data-dl="deb" href={build?.deb ?? RELEASES_PAGE}>Download the .deb</a>
 					<a class="dl-note-link" href="/docs/linux/">Linux notes</a>
 				</div>
 			</div>
@@ -227,7 +224,7 @@ const build = await fetchBuild();
 	const build = await fetchBuild();
 	if (build) {
 		for (const el of document.querySelectorAll<HTMLAnchorElement>('a[data-dl]')) {
-			const href = build[el.dataset.dl as 'windows' | 'appImage' | 'deb' | 'macArm' | 'macIntel' | 'page'];
+			const href = build[el.dataset.dl as 'windows' | 'deb' | 'macArm' | 'macIntel' | 'page'];
 			if (href) el.href = href;
 		}
 		for (const el of document.querySelectorAll('[data-dl-version]')) {

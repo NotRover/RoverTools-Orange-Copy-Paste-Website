@@ -31,16 +31,16 @@ const build = await fetchBuild();
 const primary = [
 	{ os: 'windows', logo: 'windows', label: 'Download for Windows', dl: 'windows', href: build?.windows },
 	{ os: 'mac', logo: 'apple', label: 'Download for Mac', dl: 'macArm', href: build?.macArm },
-	{ os: 'linux', logo: 'linux', label: 'Download for Linux', dl: 'appImage', href: build?.appImage },
+	{ os: 'linux', logo: 'linux', label: 'Download for Linux', dl: 'deb', href: build?.deb },
 ] as const;
 
 /* What the line under the button offers: the other two platforms, plus the
-   build the button did not pick on a Mac (Intel) and on Linux (the deb). It
-   links to the download section, where every file is. */
+   build the button did not pick on a Mac (Intel). It links to the download
+   section, where every file is. */
 const others = {
 	windows: { lead: '', items: [['apple', 'macOS'], ['linux', 'Linux']], note: ', both in beta' },
 	mac: { lead: 'Apple silicon build, in beta. ', items: [['apple', 'Intel Macs'], ['windows', 'Windows'], ['linux', 'Linux']], note: '' },
-	linux: { lead: 'AppImage build, in beta; the deb is with the other downloads. ', items: [['windows', 'Windows'], ['apple', 'macOS']], note: '' },
+	linux: { lead: 'Deb package, in beta. ', items: [['windows', 'Windows'], ['apple', 'macOS']], note: '' },
 } as const;
 ---
 

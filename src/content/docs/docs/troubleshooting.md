@@ -17,7 +17,7 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **The paste popup opens, but nothing is pasted (Linux).** The app types the paste with a helper tool, and it is missing. Install `xdotool` on X11, `wtype` on Sway, Hyprland or River, or `ydotool` with `ydotoold` running on GNOME or KDE Wayland. See [Runtime packages](/docs/linux/#runtime-packages).
 
-**Popups open in the middle of the screen instead of at the cursor (Linux).** Native Wayland does not tell apps where the cursor is, so the app centers them. This is expected when you run the app with `GDK_BACKEND=wayland`; see [Running natively on Wayland](/docs/linux/#running-natively-on-wayland).
+**Popups open in the middle of the screen instead of at the cursor (Linux).** Native Wayland does not tell apps where the cursor is, so the app centers them. This is expected. See [What Linux leaves out](/docs/linux/#what-linux-leaves-out).
 
 **`Too large for history`: "Not added to history."** What you copied is over 4 MB. It is still on your system clipboard, so pasting works; it just is not kept in history.
 
@@ -128,6 +128,6 @@ Entries that never reached the cloud and were cleared by an older version cannot
 
 **An update error with a "Try again" button.** Check your internet connection and click **Try again**. If it keeps failing, download the latest version from the [releases page](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/releases/latest) and install it over the current one.
 
-**Updates never install on their own.** Automatic installs happen on the splash screen, so **Show splash screen on startup** has to be on, and a version you skipped is never installed automatically. See [Updates](/docs/updates/).
+**Updates never install on their own.** Automatic installs happen on the splash screen, so **Show splash screen on startup** has to be on, and a version you skipped is never installed automatically. Linux has no splash screen, so it never installs on its own; install from the update banner. See [Updates](/docs/updates/).
 
 **My theme, layouts, filters or groups reset after updating (Windows).** Updating from version 0.3.7 or older to any version from 0.3.8 to 0.4.2 reset them. Update to the latest version. If you are signed in, it brings back your [synced settings](/docs/settings/#which-settings-sync) from your account when it starts, unless the reset already reached your account. Set anything that is still reset again. Your history and notes filters and the notes layout and sort order do not sync, so set those on each PC.

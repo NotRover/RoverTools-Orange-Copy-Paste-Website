@@ -27,7 +27,6 @@ export interface Build {
 	/** the GitHub release page for this version, for anyone who wants the rest */
 	page: string;
 	windows?: string;
-	appImage?: string;
 	deb?: string;
 	/** the .dmg for Apple silicon */
 	macArm?: string;
@@ -57,17 +56,15 @@ export function pickBuild(releases: Release[]): Build | null {
 				?.browser_download_url;
 
 		const windows = find('x64-setup.exe');
-		const appImage = find('amd64.AppImage');
 		const deb = find('amd64.deb');
 		const macArm = find('aarch64.dmg');
 		const macIntel = find('x64.dmg');
-		if (!windows && !appImage && !deb && !macArm && !macIntel) continue;
+		if (!windows && !deb && !macArm && !macIntel) continue;
 
 		return {
 			version: (release.tag_name ?? '').replace(/^v/, ''),
 			page: release.html_url ?? RELEASES_PAGE,
 			windows,
-			appImage,
 			deb,
 			macArm,
 			macIntel,
