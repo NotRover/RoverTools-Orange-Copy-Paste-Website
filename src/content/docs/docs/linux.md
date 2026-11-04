@@ -14,12 +14,11 @@ The app leans on standard tools for key injection and desktop integration:
 | `xdotool` | Key injection and cursor position on X11 and XWayland. |
 | `wtype` | Key injection on wlroots Wayland compositors (Sway, Hyprland, River). |
 | `ydotool` + `ydotoold` | Fallback for GNOME and KDE Wayland. Needs access to `/dev/uinput`. |
-| `x11-utils` (`xdpyinfo`) | Monitor work area for popup placement. |
 | `xdg-utils` | The *Open data folder* and *Open log folder* buttons. |
 | GNOME Keyring or KWallet | Storage for sync keys. |
 | A tray host | The tray icon. |
 
-The `.deb` requires `xdotool` or `wtype`, and recommends `x11-utils` and `ydotool`. The AppImage brings none of them. Install the other packages in the table yourself if your desktop does not already have them.
+The `.deb` requires `xdotool` or `wtype`, and recommends `ydotool`. The AppImage brings none of them. Install the other packages in the table yourself if your desktop does not already have them.
 
 Install the `.deb` with apt, so it pulls in what it requires:
 
@@ -34,8 +33,6 @@ sudo apt install -y ydotool
 sudo systemctl enable --now ydotool
 ```
 
-Without `x11-utils`, the app cannot read your monitor's work area and assumes a 1920x1080 screen when placing popups.
-
 ## How to set up hotkeys on Wayland
 
 The built-in hotkeys rely on X11, so on native Wayland they do not fire. Instead, bind two keys in your compositor that run the app with a `--trigger` flag. The running app picks the trigger up and opens the same popup the hotkey would.
@@ -48,7 +45,7 @@ The built-in hotkeys rely on X11, so on native Wayland they do not fire. Instead
    - **KDE Plasma:** System Settings, then Shortcuts, then **Add New**, then **Command or Script**. Add one per command.
 3. Press your paste key with the app running. The quick-paste popup should open.
 
-Where the compositor does not allow cursor placement, always-on-top or transparency, popups open centered on the active monitor instead.
+Where the compositor does not allow cursor placement, always-on-top or transparency, popups open centered on the active monitor instead, and the copy and paste notification appears where the compositor places new windows rather than in the bottom-right corner.
 
 ## Known gaps on Linux
 

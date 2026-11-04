@@ -1,7 +1,9 @@
 /**
- * Icon markup copied verbatim from the app (src/components/icons.tsx) so the
- * mockups draw the same glyphs the product does. Sizes match the app's call
- * sites: 9px on entry chips, 18px on sidebar nav, 8px on window buttons.
+ * Icon markup copied verbatim from the app so the mockups draw the same glyphs
+ * the product does: the app's own icons (src/components/icons.tsx) and the
+ * Tabler icons it imports from @tabler/icons-react. Sizes and stroke widths
+ * match the app's call sites: 9px on entry chips, 18px on sidebar nav, 8px on
+ * window buttons.
  */
 
 const svg = (attrs: string, body: string) =>
@@ -12,6 +14,62 @@ const stroke = (size: number, width: number, body: string) =>
 		`width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"`,
 		body,
 	);
+
+/* Tabler bodies, copied from @tabler/icons 3.50.0 (the version the app's
+   @tabler/icons-react pins). Outline icons draw on a 24 grid at stroke 2
+   unless the app passes another `stroke`; `playFilled` is a filled variant. */
+const T = {
+	cloudCheck: '<path d="M11 18.004h-4.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.388 0 2.585 .82 3.138 2.007"/><path d="M15 19l2 2l4 -4"/>',
+	cloudUp: '<path d="M12 18.004h-5.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.38 0 2.57 .811 3.128 1.986"/><path d="M19 22v-6"/><path d="M22 19l-3 -3l-3 3"/>',
+	cloud: '<path d="M6.657 18c-2.572 0 -4.657 -2.007 -4.657 -4.483c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.913 0 3.464 1.56 3.464 3.486c0 1.927 -1.551 3.487 -3.465 3.487h-11.878"/>',
+	cloudOff: '<path d="M9.58 5.548c.24 -.11 .492 -.207 .752 -.286c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.913 0 3.464 1.56 3.464 3.486c0 .957 -.383 1.824 -1.003 2.454m-2.997 1.033h-11.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.13 -.582 .37 -1.128 .7 -1.62"/><path d="M3 3l18 18"/>',
+	userCircle: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M9 10a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/>',
+	adjustments: '<path d="M12 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 6l8 0"/><path d="M16 6l4 0"/><path d="M6 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 12l2 0"/><path d="M10 12l10 0"/><path d="M15 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 18l11 0"/><path d="M19 18l1 0"/>',
+	clipboardText: '<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2"/><path d="M9 12h6"/><path d="M9 16h6"/>',
+	history: '<path d="M12 8l0 4l2 2"/><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/>',
+	volume: '<path d="M15 8a5 5 0 0 1 0 8"/><path d="M17.7 5a9 9 0 0 1 0 14"/><path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5"/>',
+	folderOpen: '<path d="M5 19l2.757 -7.351a1 1 0 0 1 .936 -.649h12.307a1 1 0 0 1 .986 1.164l-.996 5.211a2 2 0 0 1 -1.964 1.625h-14.026a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v2"/>',
+	download: '<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/>',
+	refresh: '<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/>',
+	playFilled: '<path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z"/>',
+	bold: '<path d="M7 5h6a3.5 3.5 0 0 1 0 7h-6l0 -7"/><path d="M13 12h1a3.5 3.5 0 0 1 0 7h-7v-7"/>',
+	italic: '<path d="M11 5l6 0"/><path d="M7 19l6 0"/><path d="M14 5l-4 14"/>',
+	strikethrough: '<path d="M5 12l14 0"/><path d="M16 6.5a4 2 0 0 0 -4 -1.5h-1a3.5 3.5 0 0 0 0 7h2a3.5 3.5 0 0 1 0 7h-1.5a4 2 0 0 1 -4 -1.5"/>',
+	code: '<path d="M7 8l-4 4l4 4"/><path d="M17 8l4 4l-4 4"/><path d="M14 4l-4 16"/>',
+	list: '<path d="M9 6l11 0"/><path d="M9 12l11 0"/><path d="M9 18l11 0"/><path d="M5 6l0 .01"/><path d="M5 12l0 .01"/><path d="M5 18l0 .01"/>',
+	listCheck: '<path d="M3.5 5.5l1.5 1.5l2.5 -2.5"/><path d="M3.5 11.5l1.5 1.5l2.5 -2.5"/><path d="M3.5 17.5l1.5 1.5l2.5 -2.5"/><path d="M11 6l9 0"/><path d="M11 12l9 0"/><path d="M11 18l9 0"/>',
+	alignLeft: '<path d="M4 6l16 0"/><path d="M4 12l10 0"/><path d="M4 18l14 0"/>',
+	link: '<path d="M9 15l6 -6"/><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>',
+	users: '<path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/>',
+	circleCheck: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M9 12l2 2l4 -4"/>',
+	alertCircle: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 8v4"/><path d="M12 16h.01"/>',
+	copy: '<path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666"/><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"/>',
+	share: '<path d="M3 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M15 6a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M8.7 10.7l6.6 -3.4"/><path d="M8.7 13.3l6.6 3.4"/>',
+	chartBar: '<path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6"/><path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -10"/><path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -14"/><path d="M4 20h14"/>',
+	server: '<path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-2"/><path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2"/><path d="M7 8l0 .01"/><path d="M7 16l0 .01"/>',
+	stack2: '<path d="M12 4l-8 4l8 4l8 -4l-8 -4"/><path d="M4 12l8 4l8 -4"/><path d="M4 16l8 4l8 -4"/>',
+	deviceDesktop: '<path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10"/><path d="M7 20h10"/><path d="M9 16v4"/><path d="M15 16v4"/>',
+	deviceLaptop: '<path d="M3 19l18 0"/><path d="M5 7a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1l0 -8"/>',
+	arrowUpRight: '<path d="M17 7l-10 10"/><path d="M8 7l9 0l0 9"/>',
+	arrowDownLeft: '<path d="M17 7l-10 10"/><path d="M16 17l-9 0l0 -9"/>',
+	arrowUp: '<path d="M12 5l0 14"/><path d="M18 11l-6 -6"/><path d="M6 11l6 -6"/>',
+	arrowDown: '<path d="M12 5l0 14"/><path d="M18 13l-6 6"/><path d="M6 13l6 6"/>',
+	ban: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M5.7 5.7l12.6 12.6"/>',
+	clipboard: '<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2"/>',
+	note: '<path d="M13 20l7 -7"/><path d="M13 20v-6a1 1 0 0 1 1 -1h6v-7a2 2 0 0 0 -2 -2h-12a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7"/>',
+	layoutGrid: '<path d="M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"/><path d="M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"/><path d="M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"/><path d="M14 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"/>',
+	messageCircle: '<path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>',
+	filter: '<path d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227"/>',
+	plus: '<path d="M12 5l0 14"/><path d="M5 12l14 0"/>',
+	key: '<path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0"/><path d="M15 9h.01"/>',
+	chevronDown: '<path d="M6 9l6 6l6 -6"/>',
+	shieldCheck: '<path d="M11.46 20.846a12 12 0 0 1 -7.96 -14.846a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06"/><path d="M15 19l2 2l4 -4"/>',
+	search: '<path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>',
+};
+
+/* the app's own rounded bell (icons.tsx BellIcon): Tabler has no rounded one */
+const BELL =
+	'<path d="M12 3.5a6.5 6.5 0 0 1 6.5 6.5v3.2c0 1.5.6 2.6 1.6 3.6.4.4.1 1.2-.5 1.2H4.4c-.6 0-.9-.8-.5-1.2 1-1 1.6-2.1 1.6-3.6V10A6.5 6.5 0 0 1 12 3.5z"/><path d="M9.5 20.5a2.5 2.5 0 0 0 5 0"/>';
 
 /* ---- entry type icons, 9px at stroke-width 2.2 on the cards ---- */
 export const CHIP_ICONS: Record<string, string> = {
@@ -138,88 +196,50 @@ export const NAV_ICONS = {
 		2,
 		'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
 	),
-	/* Phosphor CloudCheck, duotone, 20px - the connected sync state */
-	cloudCheck: svg(
-		'width="20" height="20" fill="currentColor" viewBox="0 0 256 256"',
-		'<path d="M240,128a80,80,0,0,1-80,80H72A56,56,0,1,1,85.92,97.74l0,.1A80,80,0,0,1,240,128Z" opacity="0.2"/><path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L144,148.69l42.34-42.35A8,8,0,0,1,197.66,106.34Z"/>',
-	),
-	/* Phosphor CloudArrowUp, duotone, 20px - the sidebar's "syncing" state */
-	cloudArrowUp: svg(
-		'width="20" height="20" fill="currentColor" viewBox="0 0 256 256"',
-		'<path d="M240,128a80,80,0,0,1-80,80H72A56,56,0,1,1,85.92,97.74l0,.1A80,80,0,0,1,240,128Z" opacity="0.2"/><path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1-11.32,11.32L168,123.31V172a8,8,0,0,1-16,0V123.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0Z"/>',
-	),
-	/* the same CloudCheck at 11px, as the filter's Cloud segment draws it */
-	cloudCheck11: svg(
-		'width="11" height="11" fill="currentColor" viewBox="0 0 256 256"',
-		'<path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L144,148.69l42.34-42.35A8,8,0,0,1,197.66,106.34Z"/>',
-	),
-	/* Phosphor BellSimple, regular, 21px */
-	bell: svg(
-		'width="21" height="21" fill="currentColor" viewBox="0 0 256 256"',
-		'<path d="M168,224a8,8,0,0,1-8,8H96a8,8,0,1,1,0-16h64A8,8,0,0,1,168,224Zm53.85-32A15.8,15.8,0,0,1,208,200H48a16,16,0,0,1-13.8-24.06C39.75,166.38,48,139.34,48,104a80,80,0,1,1,160,0c0,35.33,8.26,62.38,13.81,71.94A15.89,15.89,0,0,1,221.84,192ZM208,184c-7.73-13.27-16-43.95-16-80a64,64,0,1,0-128,0c0,36.06-8.28,66.74-16,80Z"/>',
-	),
-	/* Phosphor UserCircle, regular, 22px */
-	user: svg(
-		'width="22" height="22" fill="currentColor" viewBox="0 0 256 256"',
-		'<path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/>',
-	),
+	/** IconCloudCheck, 20px - the connected sync state (Sidebar.tsx) */
+	cloudCheck: stroke(20, 2, T.cloudCheck),
+	/** IconCloudUp, 20px - the sidebar's "syncing" state */
+	cloudArrowUp: stroke(20, 2, T.cloudUp),
+	/** IconCloudCheck at 11px, as the filter's In cloud segment draws it */
+	cloudCheck11: stroke(11, 2, T.cloudCheck),
+	/** the app's own rounded BellIcon (icons.tsx), 21px - Tabler has no rounded bell */
+	bell: stroke(21, 2, BELL),
+	/** IconUserCircle, 22px */
+	user: stroke(22, 2, T.userCircle),
+};
+
+/* Settings section marks, at the 15px the app draws them (SettingsScreen.tsx
+   SECTIONS) */
+export const SET_ICONS = {
+	/** General: IconAdjustmentsHorizontal */
+	sliders: stroke(15, 2, T.adjustments),
+	/** Quick Paste: IconClipboardText */
+	clipboardText: stroke(15, 2, T.clipboardText),
+	/** History: IconHistory */
+	clock: stroke(15, 2, T.history),
+	/** Notifications: the app's BellIcon */
+	bell: stroke(15, 2, BELL),
+	/** Sounds: IconVolume */
+	speaker: stroke(15, 2, T.volume),
+	/** Data: IconFolderOpen */
+	folderOpen: stroke(15, 2, T.folderOpen),
+	/** Updates: IconDownload */
+	download: stroke(15, 2, T.download),
+	/** the 14px IconFolderOpen on the Data section's Open buttons */
+	folder14: stroke(14, 2, T.folderOpen),
+	/** the 14px IconRefresh on the Updates button */
+	refresh14: stroke(14, 2, T.refresh),
+	/** the 8px IconPlayerPlayFilled on each sound test */
+	play8: svg('width="8" height="8" viewBox="0 0 24 24" fill="currentColor"', T.playFilled),
+	/** Confirmations: IconShieldCheck */
+	shieldCheck: stroke(15, 2, T.shieldCheck),
+	/** Developer: IconCode */
+	code: stroke(15, 2, T.code),
+	/** the contents list's search box: IconSearch, 13px (SettingsNav.tsx) */
+	search13: stroke(13, 2, T.search),
 };
 
 /* ---- window buttons: 8px glyphs on a 10 unit grid ---- */
-/* Settings section marks, at the 15px the app draws them. The app uses Phosphor
-   here; these are the same shapes in the stroke set the rest of the mock uses. */
-export const SET_ICONS = {
-	sliders: stroke(
-		15,
-		2,
-		'<line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/><circle cx="9" cy="8" r="2.6"/><circle cx="16" cy="16" r="2.6"/>',
-	),
-	clipboardText: stroke(
-		15,
-		2,
-		'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4V2.8h5V4"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="13.5" y2="15"/>',
-	),
-	clock: stroke(
-		15,
-		2,
-		'<circle cx="12" cy="12" r="8.5"/><polyline points="12 7.2 12 12 15.4 14"/>',
-	),
-	bell: stroke(
-		15,
-		2,
-		'<path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14.5 18 8.5"/><path d="M13.7 19.5a2 2 0 0 1-3.4 0"/>',
-	),
-	speaker: stroke(
-		15,
-		2,
-		'<polygon points="10 6 6 9.5 3 9.5 3 14.5 6 14.5 10 18"/><path d="M14.5 9.2a4 4 0 0 1 0 5.6"/><path d="M17.5 6.5a8 8 0 0 1 0 11"/>',
-	),
-	folderOpen: stroke(
-		15,
-		2,
-		'<path d="M3 8V5.8A1.8 1.8 0 0 1 4.8 4h4l2 2.6h6.4A1.8 1.8 0 0 1 19 8.4V9"/><path d="M3 9h17.2a1 1 0 0 1 1 1.2l-1.5 7.4a1.6 1.6 0 0 1-1.6 1.4H4.6A1.6 1.6 0 0 1 3 17.4Z"/>',
-	),
-	download: stroke(
-		15,
-		2,
-		'<path d="M12 3.5v11"/><polyline points="7.5 10.5 12 15 16.5 10.5"/><path d="M4.5 18.5h15"/>',
-	),
-	/* the 14px folder on the Data section's action button */
-	folder14: stroke(
-		14,
-		2,
-		'<path d="M3 8V5.8A1.8 1.8 0 0 1 4.8 4h4l2 2.6h6.4A1.8 1.8 0 0 1 19 8.4V9"/><path d="M3 9h17.2a1 1 0 0 1 1 1.2l-1.5 7.4a1.6 1.6 0 0 1-1.6 1.4H4.6A1.6 1.6 0 0 1 3 17.4Z"/>',
-	),
-	/* the 14px refresh on the Updates button */
-	refresh14: stroke(
-		14,
-		2,
-		'<polyline points="20 5 20 10 15 10"/><polyline points="4 19 4 14 9 14"/><path d="M18.6 9.5A7.5 7.5 0 0 0 6.2 6.6L4 9"/><path d="M5.4 14.5a7.5 7.5 0 0 0 12.4 2.9L20 15"/>',
-	),
-	/* the 8px filled triangle on each sound test */
-	play8: svg('width="8" height="8" viewBox="0 0 24 24" fill="currentColor"', '<polygon points="6 4 20 12 6 20"/>'),
-};
-
 export const WIN_ICONS = {
 	min: svg(
 		'width="8" height="8" viewBox="0 0 10 10" fill="none"',
@@ -275,233 +295,166 @@ export const TB_ICONS = {
 	close: stroke(9, 3, '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'),
 };
 
-/* ---- Spaces glyphs: Phosphor paths lifted from @phosphor-icons/react, at the
-   sizes and weights SpacesScreen.tsx asks for ---- */
-const phos = (size: number, path: string) =>
-	svg(`width="${size}" height="${size}" viewBox="0 0 256 256" fill="currentColor"`, `<path d="${path}"/>`);
-
-const CLIPBOARD_BOLD =
-	'M200,28H165.47a51.88,51.88,0,0,0-74.94,0H56A20,20,0,0,0,36,48V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V48A20,20,0,0,0,200,28ZM155.71,60H100.29a28,28,0,0,1,55.42,0ZM196,212H60V52H77.41A52.13,52.13,0,0,0,76,64v8A12,12,0,0,0,88,84h80a12,12,0,0,0,12-12V64a52.13,52.13,0,0,0-1.41-12H196Z';
-const CLIPBOARD_REG =
-	'M200,32H163.74a47.92,47.92,0,0,0-71.48,0H56A16,16,0,0,0,40,48V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm-72,0a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm72,184H56V48H82.75A47.93,47.93,0,0,0,80,64v8a8,8,0,0,0,8,8h80a8,8,0,0,0,8-8V64a47.93,47.93,0,0,0-2.75-16H200Z';
-
+/* ---- glyphs for the other screens, at the sizes SpacesScreen.tsx,
+   AccountScreen.tsx, NoteEditor.tsx and the rest ask for ---- */
 export const SRC_ICONS = {
-	/** note editor toolbar: bold, 13px bold */
-	bold13: phos(
-		13,
-		'M185.08,114.46A48,48,0,0,0,148,36H80A12,12,0,0,0,68,48V200a12,12,0,0,0,12,12h80a52,52,0,0,0,25.08-97.54ZM92,60h56a24,24,0,0,1,0,48H92Zm68,128H92V132h68a28,28,0,0,1,0,56Z',
-	),
-	/** note editor toolbar: italic, 13px bold */
-	italic13: phos(
-		13,
-		'M204,56a12,12,0,0,1-12,12H160.65l-40,120H144a12,12,0,0,1,0,24H64a12,12,0,0,1,0-24H95.35l40-120H112a12,12,0,0,1,0-24h80A12,12,0,0,1,204,56Z',
-	),
-	/** note editor toolbar: strike, 13px bold */
-	strike13: phos(
-		13,
-		'M228,128a12,12,0,0,1-12,12H185.86A41.48,41.48,0,0,1,196,168c0,14.45-7.81,28.32-21.43,38.05C162,215.05,145.44,220,128,220s-34-4.95-46.57-13.95C67.81,196.32,60,182.45,60,168a12,12,0,0,1,24,0c0,15.18,20.15,28,44,28s44-12.82,44-28c0-12.76-9.3-20.18-35.35-28H40a12,12,0,0,1,0-24H216A12,12,0,0,1,228,128ZM75.11,100a12,12,0,0,0,12-12c0-16,17.58-28,40.89-28,17.36,0,31.37,6.65,37.48,17.78a12,12,0,0,0,21-11.56C176.13,47.3,154.25,36,128,36,91,36,63.11,58.35,63.11,88A12,12,0,0,0,75.11,100Z',
-	),
-	/** note editor toolbar: code, 13px bold */
-	code13: phos(
-		13,
-		'M71.68,97.22,34.74,128l36.94,30.78a12,12,0,1,1-15.36,18.44l-48-40a12,12,0,0,1,0-18.44l48-40A12,12,0,0,1,71.68,97.22Zm176,21.56-48-40a12,12,0,1,0-15.36,18.44L221.26,128l-36.94,30.78a12,12,0,1,0,15.36,18.44l48-40a12,12,0,0,0,0-18.44ZM164.1,28.72a12,12,0,0,0-15.38,7.18l-64,176a12,12,0,0,0,7.18,15.37A11.79,11.79,0,0,0,96,228a12,12,0,0,0,11.28-7.9l64-176A12,12,0,0,0,164.1,28.72Z',
-	),
-	/** note editor toolbar: bullets, 13px bold */
-	bullets13: phos(
-		13,
-		'M76,64A12,12,0,0,1,88,52H216a12,12,0,0,1,0,24H88A12,12,0,0,1,76,64Zm140,52H88a12,12,0,0,0,0,24H216a12,12,0,0,0,0-24Zm0,64H88a12,12,0,0,0,0,24H216a12,12,0,0,0,0-24ZM44,112a16,16,0,1,0,16,16A16,16,0,0,0,44,112Zm0-64A16,16,0,1,0,60,64,16,16,0,0,0,44,48Zm0,128a16,16,0,1,0,16,16A16,16,0,0,0,44,176Z',
-	),
-	/** note editor toolbar: checks, 13px bold */
-	checks13: phos(
-		13,
-		'M228,128a12,12,0,0,1-12,12H128a12,12,0,0,1,0-24h88A12,12,0,0,1,228,128ZM128,76h88a12,12,0,0,0,0-24H128a12,12,0,0,0,0,24Zm88,104H128a12,12,0,0,0,0,24h88a12,12,0,0,0,0-24ZM79.51,39.51,56,63l-7.51-7.52a12,12,0,0,0-17,17l16,16a12,12,0,0,0,17,0l32-32a12,12,0,0,0-17-17Zm0,64L56,127l-7.51-7.52a12,12,0,1,0-17,17l16,16a12,12,0,0,0,17,0l32-32a12,12,0,0,0-17-17Zm0,64L56,191l-7.51-7.52a12,12,0,1,0-17,17l16,16a12,12,0,0,0,17,0l32-32a12,12,0,0,0-17-17Z',
-	),
-	/** note editor toolbar: alignLeft, 13px bold */
-	alignLeft13: phos(
-		13,
-		'M28,64A12,12,0,0,1,40,52H216a12,12,0,0,1,0,24H40A12,12,0,0,1,28,64Zm12,52H168a12,12,0,0,0,0-24H40a12,12,0,0,0,0,24Zm176,16H40a12,12,0,0,0,0,24H216a12,12,0,0,0,0-24Zm-48,40H40a12,12,0,0,0,0,24H168a12,12,0,0,0,0-24Z',
-	),
-	/** note editor toolbar: link, 13px bold */
-	link13: phos(
-		13,
-		'M117.18,188.74a12,12,0,0,1,0,17l-5.12,5.12A58.26,58.26,0,0,1,70.6,228h0A58.62,58.62,0,0,1,29.14,127.92L63.89,93.17a58.64,58.64,0,0,1,98.56,28.11,12,12,0,1,1-23.37,5.44,34.65,34.65,0,0,0-58.22-16.58L46.11,144.89A34.62,34.62,0,0,0,70.57,204h0a34.41,34.41,0,0,0,24.49-10.14l5.11-5.12A12,12,0,0,1,117.18,188.74ZM226.83,45.17a58.65,58.65,0,0,0-82.93,0l-5.11,5.11a12,12,0,0,0,17,17l5.12-5.12a34.63,34.63,0,1,1,49,49L175.1,145.86A34.39,34.39,0,0,1,150.61,156h0a34.63,34.63,0,0,1-33.69-26.72,12,12,0,0,0-23.38,5.44A58.64,58.64,0,0,0,150.56,180h.05a58.28,58.28,0,0,0,41.47-17.17l34.75-34.75a58.62,58.62,0,0,0,0-82.91Z',
-	),
+	/** note editor toolbar: IconBold, 13px */
+	bold13: stroke(13, 2, T.bold),
+	/** note editor toolbar: IconItalic, 13px */
+	italic13: stroke(13, 2, T.italic),
+	/** note editor toolbar: IconStrikethrough, 13px */
+	strike13: stroke(13, 2, T.strikethrough),
+	/** note editor toolbar: IconCode, 13px */
+	code13: stroke(13, 2, T.code),
+	/** note editor toolbar: IconList, 13px */
+	bullets13: stroke(13, 2, T.list),
+	/** note editor toolbar: IconListCheck, 13px */
+	checks13: stroke(13, 2, T.listCheck),
+	/** note editor toolbar: IconAlignLeft, 13px */
+	alignLeft13: stroke(13, 2, T.alignLeft),
+	/** note editor toolbar: IconLink, which the app draws at 12px */
+	link13: stroke(12, 2, T.link),
 	/** the shortcuts zone head: the app's keyboard glyph at 13px */
 	keyboard13: stroke(
 		13,
 		2,
 		'<rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><path d="M6 8h.01"/><path d="M10 8h.01"/><path d="M14 8h.01"/><path d="M18 8h.01"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M7 16h10"/>',
 	),
-	/** the storage zone head: Phosphor CloudCheck at 13px */
-	cloud13: phos(
-		13,
-		'M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L144,148.69l42.34-42.35A8,8,0,0,1,197.66,106.34Z',
-	),
-	/** notification glyphs, from the popout's own icon set: UsersThree size 15 */
-	usersThree15: phos(
-		15,
-		'M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z',
-	),
-	/** CheckCircle size 15 */
-	checkCircle15: phos(
-		15,
-		'M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z',
-	),
-	/** WarningCircle size 15 */
-	warningCircle15: phos(
-		15,
-		'M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z',
-	),
-	/** the account screen's Devices zone head, and a Windows device row: Desktop size 13 */
+	/** the Cloud sync zone head: IconCloud, 13px */
+	cloud13: stroke(13, 2, T.cloud),
+	/** notification glyphs (NotificationsPopout.tsx): IconUsers, 15px */
+	usersThree15: stroke(15, 2, T.users),
+	/** IconCircleCheck, 15px */
+	checkCircle15: stroke(15, 2, T.circleCheck),
+	/** IconAlertCircle, 15px */
+	warningCircle15: stroke(15, 2, T.alertCircle),
 	/* the popups' CloseIcon at 10px, stroke 2.5 */
 	close10: stroke(10, 2.5, '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'),
-	/* Phosphor Copy and ShareNetwork at 12, as the invite and member rows call them */
-	copy12: phos(
-		12,
-		'M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z',
-	),
-	shareNetwork12: phos(
-		12,
-		'M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z',
-	),
-	/* Phosphor DownloadSimple, at the two sizes the update card calls it */
-	download15: phos(
-		15,
-		'M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0ZM93.66,109.66,120,83.31V152a8,8,0,0,0,16,0V83.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,11.32,11.32Z',
-	),
-	download14: phos(
-		14,
-		'M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0ZM93.66,109.66,120,83.31V152a8,8,0,0,0,16,0V83.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40a8,8,0,0,0,11.32,11.32Z',
-	),
-	chartBar13: phos(
+	/** IconCopy at 12, as the invite and member rows call it */
+	copy12: stroke(12, 2, T.copy),
+	/** IconShare at 12 */
+	shareNetwork12: stroke(12, 2, T.share),
+	/** IconDownload, the update card's section mark at 15px */
+	download15: stroke(15, 2, T.download),
+	/** IconDownload, the update card's button at 14px */
+	download14: stroke(14, 2, T.download),
+	/** the Storage zone head: IconChartBar, 13px */
+	chartBar13: stroke(13, 2, T.chartBar),
+	/** storage breakdown, cloud: IconServer, 13px */
+	hardDrives13: stroke(13, 2, T.server),
+	/** storage breakdown, items: IconStack2, 13px */
+	stack13: stroke(13, 2, T.stack2),
+	/** the Devices zone head: IconDeviceDesktop, 13px */
+	desktop13: stroke(13, 2, T.deviceDesktop),
+	/** IconDeviceLaptop, 15px (device rows now show the OS logo instead) */
+	laptop15: stroke(15, 2, T.deviceLaptop),
+	/** IconDeviceDesktop, 15px (device rows now show the OS logo instead) */
+	desktop15: stroke(15, 2, T.deviceDesktop),
+	/** the Spaces rows direction badge, shared out: IconArrowUpRight, 11px */
+	arrowUpRight11: stroke(11, 2, T.arrowUpRight),
+	/** the Spaces rows direction badge, shared in: IconArrowDownLeft, 11px */
+	arrowDownLeft11: stroke(11, 2, T.arrowDownLeft),
+	/** the share mark on a note card (NoteCard.tsx): IconShare, 15px */
+	shareNetwork15: stroke(15, 2, T.share),
+	/** the synced tick on a note card: IconCloudCheck, 15px */
+	cloudCheck15: stroke(15, 2, T.cloudCheck),
+	/** the waiting-to-upload mark on a note card: IconCloudUp, 15px */
+	cloudArrowUp15: stroke(15, 2, T.cloudUp),
+	/** the filter card's Mine chip: IconArrowUp, 10px (FilterParts.tsx OwnerChips) */
+	arrowUp10: stroke(10, 2, T.arrowUp),
+	/** the filter card's From others chip: IconArrowDown, 10px */
+	arrowDown10: stroke(10, 2, T.arrowDown),
+	/** the removed-item placeholder's mark: IconBan, 11px */
+	prohibit11: stroke(11, 2, T.ban),
+	/** the feed segment's clipboard-only button: IconClipboard, 11px */
+	clipboard11: stroke(11, 2, T.clipboard),
+	/** the feed segment's notes-only button: IconNote, 11px */
+	note11: stroke(11, 2, T.note),
+	/** the spaces toolbar's All-items button: IconLayoutGrid, 12px */
+	squares12: stroke(12, 2, T.layoutGrid),
+	/** the spaces toolbar's Rows layout button: the app's own RowsIcon (icons.tsx), 12px */
+	rows12: stroke(12, 2, '<rect x="3" y="4" width="18" height="5" rx="1.5"/><rect x="3" y="12.5" width="18" height="5" rx="1.5"/>'),
+	/** comment count on a shared item: IconMessageCircle, 10px */
+	chat10: stroke(10, 2, T.messageCircle),
+	/** source chip on a shared clipboard item: IconClipboard, 9px */
+	clipboard: stroke(9, 2, T.clipboard),
+	/** source chip on a shared note: IconNote, 9px */
+	note: stroke(9, 2, T.note),
+	/** auto-copy flag on a space row: IconClipboard, 9px */
+	clipboard9: stroke(9, 2, T.clipboard),
+	/** share-rule flag on a space row: IconFilter, 9px */
+	funnel9: stroke(9, 2, T.filter),
+	/** Local segment in the Cloud filter: IconCloudOff, 11px */
+	cloudSlash11: stroke(11, 2, T.cloudOff),
+	/** In-a-space segment in the sharing filter: IconShare, 11px */
+	shareNetwork11: stroke(11, 2, T.share),
+	/** the filter card's own head icon: IconFilter, 12px */
+	funnel12: stroke(12, 2, T.filter),
+	/** Create button: IconPlus, 11px */
+	plus11: stroke(11, 2, T.plus),
+	/** Join button: IconKey, 11px */
+	key11: stroke(11, 2, T.key),
+	/** Recovery-card brand badge: IconKey, 20px (AccountScreen.tsx recovery stage) */
+	key20: stroke(20, 2, T.key),
+	/** the recovery-code row on the Account screen: IconKey, 15px */
+	key15: stroke(15, 2, T.key),
+	/** the bulk bar's Cloud button: IconCloud, 11px (BulkActionsBar.tsx) */
+	cloud11: stroke(11, 2, T.cloud),
+	/** the footer marks on a clipboard card (ChipBar.tsx): 14px at stroke 2.5,
+	 *  thicker than the note card's so they read at that size */
+	share14: stroke(14, 2.5, T.share),
+	cloudCheck14: stroke(14, 2.5, T.cloudCheck),
+	cloudUp14: stroke(14, 2.5, T.cloudUp),
+	/** shortcuts screen section marks, the app's own icons (icons.tsx) at 13px:
+	 *  ClipboardPasteIcon, ClipboardIcon and SystemGroupsIcon */
+	clipboardPaste13: stroke(
 		13,
-		'M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z',
+		2,
+		'<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><polyline points="16 12 12 16 8 12"/>',
 	),
-	hardDrives13: phos(
+	clipboard13: stroke(
 		13,
-		'M208,136H48a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V152A16,16,0,0,0,208,136Zm0,64H48V152H208v48Zm0-160H48A16,16,0,0,0,32,56v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V56A16,16,0,0,0,208,40Zm0,64H48V56H208v48ZM192,80a12,12,0,1,1-12-12A12,12,0,0,1,192,80Zm0,96a12,12,0,1,1-12-12A12,12,0,0,1,192,176Z',
+		2,
+		'<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>',
 	),
-	stack13: phos(
-		13,
-		'M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z',
-	),
-	desktop13: phos(
-		13,
-		'M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24h72v16H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V200h72a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40ZM48,56H208a8,8,0,0,1,8,8v80H40V64A8,8,0,0,1,48,56ZM208,184H48a8,8,0,0,1-8-8V160H216v16A8,8,0,0,1,208,184Z',
-	),
-	/** a mac device row: Laptop size 15 */
-	laptop15: phos(
-		15,
-		'M232,168h-8V72a24,24,0,0,0-24-24H56A24,24,0,0,0,32,72v96H24a8,8,0,0,0-8,8v16a24,24,0,0,0,24,24H216a24,24,0,0,0,24-24V176A8,8,0,0,0,232,168ZM48,72a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8v96H48ZM224,192a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8v-8H224ZM152,88a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,88Z',
-	),
-	/** a windows device row: Desktop size 15 */
-	desktop15: phos(
-		15,
-		'M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24h72v16H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V200h72a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40ZM48,56H208a8,8,0,0,1,8,8v80H40V64A8,8,0,0,1,48,56ZM208,184H48a8,8,0,0,1-8-8V160H216v16A8,8,0,0,1,208,184Z',
-	),
-	/** the Spaces rows direction badge, shared out from this account:
-	 *  ArrowUpRight size 11, weight bold (SpacesScreen.tsx DirectionBadge) */
-	arrowUpRight11: phos(
-		11,
-		'M204,64V168a12,12,0,0,1-24,0V93L72.49,200.49a12,12,0,0,1-17-17L163,76H88a12,12,0,0,1,0-24H192A12,12,0,0,1,204,64Z',
-	),
-	/** the Spaces rows direction badge, shared in by a member:
-	 *  ArrowDownLeft size 11, weight bold */
-	arrowDownLeft11: phos(
-		11,
-		'M200.49,72.48,93,180h75a12,12,0,0,1,0,24H64a12,12,0,0,1-12-12V88a12,12,0,0,1,24,0v75L183.51,55.51a12,12,0,0,1,17,17Z',
-	),
-	/** the share mark on a clipboard or note card (ChipBar.tsx, NoteCard.tsx):
-	 *  ShareNetwork size 15, regular */
-	shareNetwork15: phos(
-		15,
-		'M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z',
-	),
-	/** the synced tick on a card: CloudCheck size 15, regular */
-	cloudCheck15: phos(
-		15,
-		'M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Zm37.66-93.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L144,148.69l42.34-42.35A8,8,0,0,1,197.66,106.34Z',
-	),
-	/** the waiting-to-upload mark on a card: CloudArrowUp size 15, regular */
-	cloudArrowUp15: phos(
-		15,
-		'M178.34,165.66,160,147.31V208a8,8,0,0,1-16,0V147.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0l32,32a8,8,0,0,1-11.32,11.32ZM160,40A88.08,88.08,0,0,0,81.29,88.68,64,64,0,1,0,72,216h40a8,8,0,0,0,0-16H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.12A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,100.8,66,8,8,0,0,0,3.2,15.34,7.9,7.9,0,0,0,3.2-.68A88,88,0,0,0,160,40Z',
-	),
-	/** the filter card's Mine chip: ArrowUp size 10, weight bold
-	 *  (FilterParts.tsx OwnerChips) - straight, not the diagonal badge arrow */
-	arrowUp10: phos(
-		10,
-		'M208.49,120.49a12,12,0,0,1-17,0L140,69V216a12,12,0,0,1-24,0V69L64.49,120.49a12,12,0,0,1-17-17l72-72a12,12,0,0,1,17,0l72,72A12,12,0,0,1,208.49,120.49Z',
-	),
-	/** the filter card's From others chip: ArrowDown size 10, weight bold */
-	arrowDown10: phos(
-		10,
-		'M208.49,152.49l-72,72a12,12,0,0,1-17,0l-72-72a12,12,0,0,1,17-17L116,187V40a12,12,0,0,1,24,0V187l51.51-51.52a12,12,0,0,1,17,17Z',
-	),
-	/** the removed-item placeholder's mark: Prohibit size 11, weight bold */
-	prohibit11: phos(
-		11,
-		'M128,20A108,108,0,1,0,236,128,108.12,108.12,0,0,0,128,20Zm84,108a83.6,83.6,0,0,1-16.75,50.28L77.72,60.75A84,84,0,0,1,212,128ZM44,128A83.6,83.6,0,0,1,60.75,77.72L178.28,195.25A84,84,0,0,1,44,128Z',
-	),
-	/** the feed segment's clipboard-only button: Clipboard size 11 */
-	clipboard11: phos(11, CLIPBOARD_REG),
-	/** the feed segment's notes-only button: Note size 11 */
-	note11: phos(
-		11,
-		'M88,96a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,96Zm8,40h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Zm32,16H96a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM224,48V156.69A15.86,15.86,0,0,1,219.31,168L168,219.31A15.86,15.86,0,0,1,156.69,224H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H152V160a8,8,0,0,1,8-8h48V48H48Zm120-40v28.7L196.69,168Z',
-	),
-	/** the spaces toolbar's All-items button: SquaresFour size 12 */
-	squares12: phos(
-		12,
-		'M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z',
-	),
-	/** the spaces toolbar's Rows layout button: Rows size 12 */
-	rows12: phos(
-		12,
-		'M208,136H48a16,16,0,0,0-16,16v40a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V152A16,16,0,0,0,208,136Zm0,56H48V152H208v40Zm0-144H48A16,16,0,0,0,32,64v40a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V64A16,16,0,0,0,208,48Zm0,56H48V64H208v40Z',
-	),
-	/** comment count on a shared item: ChatCircle size 10 */
-	chat10: phos(
-		10,
-		'M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z',
-	),
-	/** source chip on a shared clipboard item: Clipboard size 9, weight bold */
-	clipboard: phos(9, CLIPBOARD_BOLD),
-	/** source chip on a shared note: Note size 9 */
-	note: phos(
-		9,
-		'M88,96a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,96Zm8,40h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Zm32,16H96a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM224,48V156.69A15.86,15.86,0,0,1,219.31,168L168,219.31A15.86,15.86,0,0,1,156.69,224H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H152V160a8,8,0,0,1,8-8h48V48H48Zm120-40v28.7L196.69,168Z',
-	),
-	/** auto-copy flag on a space row: Clipboard size 9 */
-	clipboard9: phos(9, CLIPBOARD_REG),
-	/** share-rule flag on a space row: Funnel size 9 */
-	funnel9: phos(
-		9,
-		'M230.6,49.53A15.81,15.81,0,0,0,216,40H40A16,16,0,0,0,28.19,66.76l.08.09L96,139.17V216a16,16,0,0,0,24.87,13.32l32-21.34A16,16,0,0,0,160,194.66V139.17l67.74-72.32.08-.09A15.8,15.8,0,0,0,230.6,49.53ZM40,56h0Zm106.18,74.58A8,8,0,0,0,144,136v58.66L112,216V136a8,8,0,0,0-2.16-5.47L40,56H216Z',
-	),
-	/** Local segment in the Cloud filter: CloudSlash size 11 */
-	cloudSlash11: phos(11, 'M53.92,34.62A8,8,0,1,0,42.08,45.38L81.32,88.55l-.06.12A65,65,0,0,0,72,88a64,64,0,0,0,0,128h88a87.34,87.34,0,0,0,31.8-5.93l10.28,11.31a8,8,0,1,0,11.84-10.76ZM160,200H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.3.12A88.4,88.4,0,0,0,72,128a8,8,0,0,0,16,0,72.25,72.25,0,0,1,5.06-26.54l87,95.7A71.66,71.66,0,0,1,160,200Zm88-72a87.89,87.89,0,0,1-22.35,58.61A8,8,0,0,1,213.71,176,72,72,0,0,0,117.37,70a8,8,0,0,1-9.48-12.89A88,88,0,0,1,248,128Z'),
-	/** In-a-space segment in the sharing filter: ShareNetwork size 11 */
-	shareNetwork11: phos(11, 'M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z'),
-	/** the filter card's own head icon: Funnel size 12 */
-	funnel12: phos(12, 'M230.6,49.53A15.81,15.81,0,0,0,216,40H40A16,16,0,0,0,28.19,66.76l.08.09L96,139.17V216a16,16,0,0,0,24.87,13.32l32-21.34A16,16,0,0,0,160,194.66V139.17l67.74-72.32.08-.09A15.8,15.8,0,0,0,230.6,49.53ZM40,56h0Zm106.18,74.58A8,8,0,0,0,144,136v58.66L112,216V136a8,8,0,0,0-2.16-5.47L40,56H216Z'),
-	/** Create button: Plus size 11 */
-	plus11: phos(11, 'M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z'),
-	/** Join button: Key size 11 */
-	key11: phos(
-		11,
-		'M216.57,39.43A80,80,0,0,0,83.91,120.78L28.69,176A15.86,15.86,0,0,0,24,187.31V216a16,16,0,0,0,16,16H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A79.73,79.73,0,0,0,160,176h.1A80,80,0,0,0,216.57,39.43ZM224,98.1c-1.09,34.09-29.75,61.86-63.89,61.9H160a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A63.72,63.72,0,0,1,96,95.92c0-34.14,27.81-62.8,61.9-63.89A64,64,0,0,1,224,98.1ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z',
-	),
-	/** Recovery-card brand badge: the same Phosphor Key at size 20
-	 *  (AccountScreen.tsx recovery stage renders `<Key size={20} />`) */
-	key20: phos(
-		20,
-		'M216.57,39.43A80,80,0,0,0,83.91,120.78L28.69,176A15.86,15.86,0,0,0,24,187.31V216a16,16,0,0,0,16,16H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A79.73,79.73,0,0,0,160,176h.1A80,80,0,0,0,216.57,39.43ZM224,98.1c-1.09,34.09-29.75,61.86-63.89,61.9H160a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A63.72,63.72,0,0,1,96,95.92c0-34.14,27.81-62.8,61.9-63.89A64,64,0,0,1,224,98.1ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z',
-	),
+	systemGroups13: stroke(13, 2, '<circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>'),
 };
 
 /* ---- the capture popup's action row: pin and star unfilled at 13px, trash 13px,
    exactly as CopyPopup.tsx calls them ---- */
+/**
+ * The OS marks the app shows beside a device on the Account screen
+ * (`icons.tsx`: WindowsIcon, AppleIcon, LinuxIcon, AndroidIcon), with the same
+ * flat brand colours. 24x24 viewBox; `osLogo(name, size)` sizes one.
+ */
+const OS_LOGO_PATHS = {
+	windows: ['#0078D4', 'M2 2h9.3v9.3H2zM12.7 2H22v9.3h-9.3zM2 12.7h9.3V22H2zM12.7 12.7H22V22h-9.3z'],
+	apple: [
+		'#A2AAAD',
+		'M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701',
+	],
+	android: [
+		'#3DDC84',
+		'M17.523 15.341a1 1 0 1 1 0-2 1 1 0 0 1 0 2m-11.046 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2m11.405-6.02 1.997-3.459a.416.416 0 0 0-.72-.416l-2.022 3.503C15.59 8.244 13.853 7.851 12 7.851s-3.59.393-5.137 1.099L4.841 5.447a.416.416 0 0 0-.72.415l1.997 3.46C2.689 11.187.343 14.659 0 18.761h24c-.344-4.102-2.689-7.574-6.118-9.44',
+	],
+	linux: [
+		'#A2AAAD',
+		'M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z',
+	],
+} as const;
+
+export type OsLogo = keyof typeof OS_LOGO_PATHS;
+
+/** One OS mark as inline SVG, `size` pixels square, in its brand colour or
+ *  in `fill` (such as `currentColor` on a coloured button). */
+export function osLogo(name: OsLogo, size: number, fill?: string): string {
+	const [brand, d] = OS_LOGO_PATHS[name];
+	return svg(
+		`width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true"`,
+		`<path fill="${fill ?? brand}" d="${d}"/>`,
+	);
+}
+
 export const MENU_ICONS = {
 	/** CopyIcon at its 13px menu size */
 	copy: stroke(
@@ -515,26 +468,14 @@ export const MENU_ICONS = {
 		2,
 		'<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>',
 	),
-	/** Phosphor CloudArrowUp, size 13 */
-	cloudUp: phos(
-		13,
-		'M196.49,151.51a12,12,0,0,1-17,17L168,157v51a12,12,0,0,1-24,0V157l-11.51,11.52a12,12,0,1,1-17-17l32-32a12,12,0,0,1,17,0ZM160,36A92.08,92.08,0,0,0,79,84.37,68,68,0,1,0,72,220h28a12,12,0,0,0,0-24H72a44,44,0,0,1-1.81-87.95A91.7,91.7,0,0,0,68,128a12,12,0,0,0,24,0,68,68,0,1,1,132.6,21.29,12,12,0,1,0,22.8,7.51A92.06,92.06,0,0,0,160,36Z',
-	),
-	/** Phosphor ShareNetwork, size 13 */
-	share: phos(
-		13,
-		'M176,156a43.78,43.78,0,0,0-29.09,11L106.1,140.8a44.07,44.07,0,0,0,0-25.6L146.91,89a43.83,43.83,0,1,0-13-20.17L93.09,95a44,44,0,1,0,0,65.94L133.9,187.2A44,44,0,1,0,176,156Zm0-120a20,20,0,1,1-20,20A20,20,0,0,1,176,36ZM64,148a20,20,0,1,1,20-20A20,20,0,0,1,64,148Zm112,72a20,20,0,1,1,20-20A20,20,0,0,1,176,220Z',
-	),
-	/** Phosphor Tag, size 13 - the Groups row */
-	tag: phos(
-		13,
-		'M246.15,133.18,146.83,33.86A19.85,19.85,0,0,0,132.69,28H40A12,12,0,0,0,28,40v92.69a19.85,19.85,0,0,0,5.86,14.14l99.32,99.32a20,20,0,0,0,28.28,0l84.69-84.69A20,20,0,0,0,246.15,133.18Zm-98.83,93.17L52,131V52h79l95.32,95.32ZM104,88A16,16,0,1,1,88,72,16,16,0,0,1,104,88Z',
-	),
-	/** Phosphor CaretDown, size 11 - the submenu chevron */
-	caret: phos(
-		11,
-		'M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z',
-	),
+	/** IconCloudUp, 13px */
+	cloudUp: stroke(13, 2, T.cloudUp),
+	/** IconShare, 13px */
+	share: stroke(13, 2, T.share),
+	/** the app's own TagIcon (icons.tsx) at 13px, as the copy popup draws it - the Groups row */
+	tag: stroke(13, 2.2, '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'),
+	/** IconChevronDown, 11px - the note editor's menu caret */
+	caret: stroke(11, 2, T.chevronDown),
 	pin: stroke(
 		13,
 		2,

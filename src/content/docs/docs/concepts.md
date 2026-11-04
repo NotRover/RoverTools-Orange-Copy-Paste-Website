@@ -19,7 +19,7 @@ The app uses a small set of words on its screens and in these docs. This page sa
 
 **Note.** A document you write in the app, next to your history. Notes are always kept, and can hold clipboard entries inside them. See [Notes](/docs/notes/).
 
-**Paste popup and capture popup.** The two small windows that open at your cursor from any app: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> to paste an entry by number, and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> to capture the selection and see what was grabbed. The numbers in the paste popup are called **slots**. See [Quick paste and capture](/docs/quick-paste/).
+**Paste popup and capture popup.** The two small windows that open at your cursor from any app: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> to paste an entry by number, and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> to capture the selection and see what was grabbed. On a Mac the key is Cmd instead of Ctrl. The numbers in the paste popup are called **slots**. See [Quick paste and capture](/docs/quick-paste/).
 
 ## Your account and devices
 

@@ -5,6 +5,9 @@
  * The screen scrolls the way the app's does - the demo scrolls it to whatever
  * it is about to touch. Metrics (620px column, 22px section gap, 11/14px rows,
  * the 37x21 toggle, the 16px child checkbox) come from SettingsScreen.css.
+ * The contents list on the right is SettingsNav.tsx: a search box over one
+ * entry per section, the one in view lit, and an asterisk on an entry whose
+ * section holds a changed setting.
  * Styles are the global `set-*` parts in landing.css.
  */
 import { CHIP_ICONS, SET_ICONS, TB_ICONS } from './app-parts';
@@ -29,15 +32,30 @@ const history = [
 	],
 	['Click a card to view it', 'A double click copies instead. Off, a click copies and a double click opens it too.', false],
 	['Auto-save copied entries', 'Automatically add every new clipboard entry to the Saved group. Applies to this PC only.', true],
+	['Keep paste popup open after copying', 'Copying an entry from the paste popup leaves it open. Pasting still closes it.', true],
 ] as const;
 
 const updates = [
 	[
 		'Check for updates automatically',
-		'Look for a newer version shortly after the app starts. Updates are never installed without asking.',
+		'Look for a newer version shortly after the app starts.',
 		true,
 	],
-	['Get beta versions', 'Receive new features early, alongside every normal release. Betas are tested less, so expect the occasional rough edge.', false],
+	[
+		'Install updates automatically',
+		'When a newer version is found at startup, download and install it on the spot, then reopen. Nothing installs while you are working. Needs automatic checks on.',
+		false,
+	],
+	[
+		'Get beta versions',
+		'Receive new features early, alongside every normal release. Betas are tested less, so expect the occasional rough edge. Turning this off stops future betas. It cannot move you back to an older version.',
+		false,
+	],
+] as const;
+
+const dataFolders = [
+	['Open data folder', 'Open the folder where your clipboard history, notes, and settings are stored.'],
+	['Open log folder', 'Open the folder holding the app log. Attach app.log to a bug report.'],
 ] as const;
 
 const notifChecks = [
@@ -50,11 +68,63 @@ const soundChecks = [
 	['Pasting', 'A click when you paste from the popup.', false],
 ] as const;
 
+const confirmations = [
+	[
+		'Confirm before deleting synced items',
+		'Ask first when deleting an item that has a cloud copy, since the delete also removes it from your other devices.',
+		true,
+	],
+	[
+		'Confirm before removing from a space',
+		'Ask first when taking an item out of a space, since it is removed for everyone in that space.',
+		true,
+	],
+	[
+		'Confirm before removing everything from the cloud',
+		'Ask first when Remove from cloud on the Account screen takes all your items off the server and your other devices.',
+		true,
+	],
+] as const;
+
+/* the section icons again, at the list's 14px (SettingsNav.tsx) */
+const at14 = (icon: string) => icon.replace('width="15" height="15"', 'width="14" height="14"');
+const navSections = [
+	['General', at14(SET_ICONS.sliders)],
+	['Confirmations', at14(SET_ICONS.shieldCheck)],
+	['Notifications', at14(SET_ICONS.bell)],
+	['Sounds', at14(SET_ICONS.speaker)],
+	['Quick Paste', at14(SET_ICONS.clipboardText)],
+	['History', at14(SET_ICONS.clock)],
+	['Data', at14(SET_ICONS.folderOpen)],
+	['Updates', at14(SET_ICONS.download)],
+	['Developer', at14(SET_ICONS.code)],
+] as const;
+const navActive = 'General';
+const navMarked = ['History'];
+
 const cueTests = ['Arrived', 'Invite', 'Space ready', 'Refused'];
 const slotOptions = [5, 7, 9];
 ---
 
 <div class="set-screen" id="demo-set-scroll">
+	<div class="set-layout">
+	<nav class="set-nav" aria-label="Settings sections">
+		<span class="set-nav-search">
+			<Fragment set:html={SET_ICONS.search13} />
+			<span class="set-nav-placeholder">Search settings</span>
+		</span>
+		<span class="set-nav-list">
+			{
+				navSections.map(([label, icon]) => (
+					<span class:list={['set-nav-item', label === navActive && 'active']}>
+						<Fragment set:html={icon} />
+						{label}
+						{navMarked.includes(label) && <span class="set-nav-mark">*</span>}
+					</span>
+				))
+			}
+		</span>
+	</nav>
 	<div class="set-inner">
 		<div class="scr-head">
 			<span class="scr-eyebrow">Preferences</span>
@@ -70,6 +140,28 @@ const slotOptions = [5, 7, 9];
 			<div class="set-group">
 				{
 					general.map(([label, desc, on]) => (
+						<div class="set-row" data-set-row={label}>
+							<span class="set-row-info">
+								<span class="set-row-label">{label}</span>
+								<span class="set-row-desc">{desc}</span>
+							</span>
+							<span class:list={['set-toggle', on && 'is-on']}>
+								<span class="set-toggle-knob" />
+							</span>
+						</div>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.shieldCheck} />
+				<h3 class="set-section-title">Confirmations</h3>
+			</div>
+			<div class="set-group">
+				{
+					confirmations.map(([label, desc, on]) => (
 						<div class="set-row" data-set-row={label}>
 							<span class="set-row-info">
 								<span class="set-row-label">{label}</span>
@@ -227,15 +319,26 @@ const slotOptions = [5, 7, 9];
 				<h3 class="set-section-title">Data</h3>
 			</div>
 			<div class="set-group">
-				<div class="set-row" data-set-row="Open data folder">
+				<div class="set-row" data-set-row="Encrypt history and notes on this PC">
 					<span class="set-row-info">
-						<span class="set-row-label">Open data folder</span>
+						<span class="set-row-label">Encrypt history and notes on this PC</span>
 						<span class="set-row-desc">
-							Open the folder where your clipboard history, notes, and settings are stored.
+							The text of every entry and note in the local database is encrypted with a key kept in this PC's credential store. Images and files on disk are not. Turning this on or off rewrites every entry, which can take a few seconds.
 						</span>
 					</span>
-					<span class="set-action-btn"><Fragment set:html={SET_ICONS.folder14} />Open</span>
+					<span class="set-toggle"><span class="set-toggle-knob" /></span>
 				</div>
+				{
+					dataFolders.map(([label, desc]) => (
+						<div class="set-row" data-set-row={label}>
+							<span class="set-row-info">
+								<span class="set-row-label">{label}</span>
+								<span class="set-row-desc">{desc}</span>
+							</span>
+							<span class="set-action-btn"><Fragment set:html={SET_ICONS.folder14} />Open</span>
+						</div>
+					))
+				}
 			</div>
 		</section>
 
@@ -247,7 +350,7 @@ const slotOptions = [5, 7, 9];
 			<div class="set-group">
 				<div class="set-row">
 					<span class="set-row-info">
-						<span class="set-row-label">App version 0.2.2</span>
+						<span class="set-row-label">App version 0.5.2</span>
 						<span class="set-row-desc">Check whether a newer version has been released.</span>
 					</span>
 					<span class="set-action-btn"><Fragment set:html={SET_ICONS.refresh14} />Check now</span>
@@ -267,5 +370,24 @@ const slotOptions = [5, 7, 9];
 				}
 			</div>
 		</section>
+
+		<section class="set-section">
+			<div class="set-section-head">
+				<span class="set-section-icon" set:html={SET_ICONS.code} />
+				<h3 class="set-section-title">Developer</h3>
+			</div>
+			<div class="set-group">
+				<div class="set-row" data-set-row="Developer options">
+					<span class="set-row-info">
+						<span class="set-row-label">Developer options</span>
+						<span class="set-row-desc">
+							Use your own server, inspect the sync connection, and read updates from another feed. The settings appear below once this is on.
+						</span>
+					</span>
+					<span class="set-toggle"><span class="set-toggle-knob" /></span>
+				</div>
+			</div>
+		</section>
+	</div>
 	</div>
 </div>

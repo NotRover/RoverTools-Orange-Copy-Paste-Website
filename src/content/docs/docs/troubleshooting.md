@@ -13,6 +13,8 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **"Orange Copy Paste is damaged and can't be opened" (Mac).** The downloaded build is not signed with an Apple certificate. Clear the quarantine flag once; the command is in [First launch](/docs/macos/#first-launch).
 
+**I pointed the app at my own server and want the default back.** Sign out, then in Settings under **Developer** press **Reset to default**. Turning the **Developer options** switch off does not do it; it only hides the group. The full list, including the update feed, is [How to undo a developer setting](/docs/settings/#how-to-undo-a-developer-setting).
+
 **The paste popup opens, but nothing is pasted (Linux).** The app types the paste with a helper tool, and it is missing. Install `xdotool` on X11, `wtype` on Sway, Hyprland or River, or `ydotool` with `ydotoold` running on GNOME or KDE Wayland. See [Runtime packages](/docs/linux/#runtime-packages).
 
 **Popups open in the middle of the screen instead of at the cursor (Linux).** Wayland does not tell apps where the cursor is, so the app centers them. This is expected.

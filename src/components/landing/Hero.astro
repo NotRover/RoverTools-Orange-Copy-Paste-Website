@@ -19,11 +19,29 @@ const earlier = [
 ] as const;
 
 import { fetchBuild, RELEASES_PAGE } from '../../lib/releases';
+import { osLogo } from './app-parts';
 
 /* Straight at the installer rather than at the download section: the section is
-   still there for anyone who wants Linux or the version. DownloadSection's
-   script refreshes every `data-dl` link on the page, this one included. */
+   still there for anyone who wants the other file or the version. One button
+   per platform is rendered and only the visitor's is shown (Windows until the
+   script runs, and for anyone it cannot place). DownloadSection's script
+   refreshes every `data-dl` link on the page, the hidden ones included. */
 const build = await fetchBuild();
+
+const primary = [
+	{ os: 'windows', logo: 'windows', label: 'Download for Windows', dl: 'windows', href: build?.windows },
+	{ os: 'mac', logo: 'apple', label: 'Download for Mac', dl: 'macArm', href: build?.macArm },
+	{ os: 'linux', logo: 'linux', label: 'Download for Linux', dl: 'appImage', href: build?.appImage },
+] as const;
+
+/* What the line under the button offers: the other two platforms, plus the
+   build the button did not pick on a Mac (Intel) and on Linux (the deb). It
+   links to the download section, where every file is. */
+const others = {
+	windows: { lead: '', items: [['apple', 'macOS'], ['linux', 'Linux']] },
+	mac: { lead: 'Apple silicon build. ', items: [['apple', 'Intel Macs'], ['windows', 'Windows'], ['linux', 'Linux']] },
+	linux: { lead: 'AppImage build; the deb is with the other downloads. ', items: [['windows', 'Windows'], ['apple', 'macOS']] },
+} as const;
 ---
 
 <section class="hero">
@@ -37,14 +55,44 @@ const build = await fetchBuild();
 				usable offline.
 			</p>
 			<div class="ctas">
-				<a class="btn btn-primary" data-dl="windows" href={build?.windows ?? RELEASES_PAGE}>
-					Download for Windows
-				</a>
+				{
+					primary.map((p) => (
+						<a
+							class="btn btn-primary"
+							data-dl={p.dl}
+							data-os={p.os}
+							href={p.href ?? RELEASES_PAGE}
+							hidden={p.os !== 'windows'}
+						>
+							<span class="cta-logo" set:html={osLogo(p.logo, 18, 'currentColor')} />
+							{p.label}
+						</a>
+					))
+				}
 				<a class="btn btn-ghost" href="/docs/">Read the docs</a>
 			</div>
-			<p class="meta">
-				Free. No account needed. Linux builds: deb and AppImage.
-			</p>
+			{
+				primary.map((p) => {
+					const o = others[p.os];
+					return (
+						<p class="meta" data-os={p.os} hidden={p.os !== 'windows'}>
+							Free. No account needed. {o.lead}
+							<a class="meta-link" href="#download">
+								Also for
+								{o.items.map(([logo, name], i) => (
+									<>
+										{i > 0 && (i === o.items.length - 1 ? ' and' : ',')}{' '}
+										<span class="meta-os">
+											<span class="meta-logo" set:html={osLogo(logo, 13)} />
+											{name}
+										</span>
+									</>
+								))}
+							</a>
+						</p>
+					);
+				})
+			}
 		</div>
 
 		<div class="hero-demo" aria-hidden="true">
@@ -114,6 +162,22 @@ const build = await fetchBuild();
 <script>
 	import { CHIP_ICONS } from './app-parts';
 	import { makeCard } from './mock-cards';
+
+	/* Show the button for the visitor's own desktop. Phones and anything else
+	   unplaced keep the Windows one, which is the download section's first card
+	   too. A Mac cannot tell its chip from here (Safari and Chrome both report
+	   MacIntel), so the Mac button takes the Apple silicon build and its meta line
+	   points at the Intel one. */
+	{
+		const ua = navigator.userAgent;
+		const plat = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ?? navigator.platform ?? '';
+		let os = 'windows';
+		if (/mac/i.test(plat) || /Macintosh/.test(ua)) os = 'mac';
+		else if (/linux/i.test(plat) && !/Android/i.test(ua)) os = 'linux';
+		for (const el of document.querySelectorAll<HTMLElement>('.hero [data-os]')) {
+			el.hidden = el.dataset.os !== os;
+		}
+	}
 
 	/* what the watcher picks up, in the order it happens */
 	const snippets = [
@@ -346,6 +410,46 @@ const build = await fetchBuild();
 		display: flex;
 		gap: 0.9rem;
 		flex-wrap: wrap;
+	}
+
+	/* `.btn` and `.meta` set their own display, which would beat the `hidden`
+	   attribute on the buttons for the other platforms. */
+	.hero [hidden] {
+		display: none;
+	}
+
+	.cta-logo {
+		display: inline-flex;
+		flex-shrink: 0;
+	}
+
+	.meta-link {
+		color: var(--text-secondary);
+		text-decoration: none;
+		border-bottom: 1px dashed var(--border);
+		transition: color 0.15s ease, border-color 0.15s ease;
+	}
+
+	.meta-link:hover {
+		color: var(--text);
+		border-bottom-color: var(--text-muted);
+	}
+
+	/* Inline, not flex: a flex box sits on its own bottom edge, which leaves the
+	   name above the surrounding text's baseline. The logo is nudged down to
+	   centre on the lowercase letters. */
+	.meta-os {
+		white-space: nowrap;
+	}
+
+	.meta-logo :global(svg) {
+		display: inline-block;
+		vertical-align: -0.16em;
+		margin-right: 0.3em;
+	}
+
+	.cta-logo :global(svg) {
+		display: block;
 	}
 
 	.meta {

@@ -12,9 +12,12 @@ import { NAV_ICONS, WIN_ICONS } from './app-parts';
 interface Props {
 	nav?: 'clipboard' | 'notes' | 'spaces' | 'shortcuts' | 'account' | 'settings';
 	class?: string;
+	/** Unread rows in the notification centre, drawn as the bell's count
+	 *  badge (Sidebar.tsx). 0 hides it; over 9 reads 9+. */
+	unread?: number;
 }
 
-const { nav = 'clipboard', class: klass = '' } = Astro.props;
+const { nav = 'clipboard', class: klass = '', unread = 3 } = Astro.props;
 const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
 ---
 
@@ -34,7 +37,10 @@ const logoUrl = `data:image/svg+xml;utf8,${encodeURIComponent(logo)}`;
 		</div>
 		<div class="oc-side-bottom">
 			<span class="oc-navbtn" set:html={NAV_ICONS.sun} />
-			<span class="oc-navbtn" set:html={NAV_ICONS.bell} />
+			<span class="oc-navbtn">
+				<Fragment set:html={NAV_ICONS.bell} />
+				{unread > 0 && <span class="oc-nav-badge"><span>{unread > 9 ? '9+' : unread}</span></span>}
+			</span>
 			<span class:list={['oc-navbtn', nav === 'account' && 'active']} set:html={NAV_ICONS.user} />
 			<span class:list={['oc-navbtn', nav === 'settings' && 'active']} set:html={NAV_ICONS.gear} />
 		</div>

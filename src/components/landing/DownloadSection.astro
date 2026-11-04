@@ -10,6 +10,7 @@
 import { Icon } from 'astro-icon/components';
 import { fetchBuild, RELEASES_PAGE } from '../../lib/releases';
 import { REPO_URL } from '../../lib/github';
+import { osLogo } from './app-parts';
 
 const build = await fetchBuild();
 ---
@@ -20,18 +21,18 @@ const build = await fetchBuild();
 		<h2 class="section-title reveal">Your clipboard is about to get a memory.</h2>
 		<p class="section-lead reveal center">
 			Free, no account, nothing to configure. Install it, copy something, press
-			Ctrl+Shift+V.
+			Ctrl+Shift+V (Cmd+Shift+V on a Mac).
 		</p>
 		<div class="dl-cards">
 			<div class="dl-card reveal">
-				<h3>Windows</h3>
+				<h3><span class="dl-logo" set:html={osLogo('windows', 22)} />Windows</h3>
 				<p>Installer for Windows 10 and 11. Installs per user, no admin needed.</p>
 				<a class="btn btn-primary" data-dl="windows" href={build?.windows ?? RELEASES_PAGE}>
 					Download the installer
 				</a>
 			</div>
 			<div class="dl-card reveal">
-				<h3>Linux</h3>
+				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} />Linux</h3>
 				<p>AppImage to run it as it comes, or a deb to install it. X11 is the smoothest ride, and Wayland works with a small setup step.</p>
 				<div class="dl-row">
 					<a class="btn btn-ghost" data-dl="appImage" href={build?.appImage ?? RELEASES_PAGE}>
@@ -42,7 +43,7 @@ const build = await fetchBuild();
 				</div>
 			</div>
 			<div class="dl-card reveal">
-				<h3>macOS</h3>
+				<h3><span class="dl-logo" set:html={osLogo('apple', 22)} />macOS</h3>
 				<p>A disk image for each chip, macOS 10.15 and later. Hotkeys use Cmd. The first launch asks for one permission.</p>
 				<div class="dl-row">
 					<a class="btn btn-ghost" data-dl="macArm" href={build?.macArm ?? RELEASES_PAGE}>
@@ -107,7 +108,9 @@ const build = await fetchBuild();
 
 	.dl-cards {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 20rem));
+		/* Wide enough that each card's buttons and note link sit on one line;
+		   the shortest wrap-free width is the macOS row with its two chips. */
+		grid-template-columns: repeat(3, minmax(0, 23.5rem));
 		justify-content: center;
 		gap: 1.2rem;
 		text-align: left;
@@ -121,9 +124,25 @@ const build = await fetchBuild();
 	}
 
 	.dl-card h3 {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
 		font-family: var(--font-display);
 		font-size: 1.2rem;
 		margin: 0 0 0.4rem;
+	}
+
+	.dl-logo {
+		display: inline-flex;
+		flex-shrink: 0;
+	}
+
+	.dl-logo :global(svg) {
+		display: block;
+	}
+
+	.dl-card .btn {
+		white-space: nowrap;
 	}
 
 	.dl-card p {
@@ -135,12 +154,13 @@ const build = await fetchBuild();
 	.dl-row {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
+		gap: 0.75rem;
 	}
 
 	.dl-note-link {
 		font-size: 0.85rem;
 		color: var(--accent);
+		white-space: nowrap;
 	}
 
 	.dl-version {
@@ -167,7 +187,7 @@ const build = await fetchBuild();
 
 	@media (max-width: 1024px) {
 		.dl-cards {
-			grid-template-columns: repeat(2, minmax(0, 22rem));
+			grid-template-columns: repeat(2, minmax(0, 24rem));
 		}
 	}
 

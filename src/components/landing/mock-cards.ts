@@ -77,11 +77,11 @@ export function makeCard(s: MockEntry, o: CardOptions = {}): HTMLElement {
 		? `<span class="oc-owner-chip"><span class="oc-owner-avatar">${s.owner[0]!.toUpperCase()}</span><span class="oc-owner-name">${s.owner}</span></span>`
 		: '';
 	const shared = s.spaces
-		? `<span class="oc-share-mark">${SRC_ICONS.shareNetwork15}<span class="oc-share-count">${s.spaces}</span></span>`
+		? `<span class="oc-share-mark">${SRC_ICONS.share14}<span class="oc-share-count">${s.spaces}</span></span>`
 		: '';
 	// ChipBar.tsx: CloudCheck 15 once synced, CloudArrowUp 15 while waiting to upload
 	const sync = s.sync
-		? `<span class="oc-sync-tick${s.sync === 'pending' ? ' oc-sync-tick--pending' : ''}">${s.sync === 'pending' ? SRC_ICONS.cloudArrowUp15 : SRC_ICONS.cloudCheck15}</span>`
+		? `<span class="oc-sync-tick${s.sync === 'pending' ? ' oc-sync-tick--pending' : ''}">${s.sync === 'pending' ? SRC_ICONS.cloudUp14 : SRC_ICONS.cloudCheck14}</span>`
 		: '';
 	const check = o.select ? `<span class="oc-card-check">${CHIP_ICONS.check}</span>` : '';
 

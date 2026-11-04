@@ -8,7 +8,7 @@
  * The scroll shell is `set-screen`, which is what the app does too: the
  * shortcuts screen and the account screen both borrow the settings screen's.
  */
-import { CHIP_ICONS, SET_ICONS, SRC_ICONS, TB_ICONS } from './app-parts';
+import { CHIP_ICONS, MENU_ICONS, SRC_ICONS, TB_ICONS } from './app-parts';
 
 interface Props {
 	/** id put on the scrolling box, so the demo can scroll it */
@@ -29,7 +29,7 @@ const SECTIONS = [
 	},
 	{
 		title: 'Paste Popup',
-		icon: SET_ICONS.clipboardText,
+		icon: SRC_ICONS.clipboardPaste13,
 		entries: [
 			{ keys: ['Type'], description: 'Search the whole list' },
 			{ keys: ['1-9, 0'], description: 'Paste a numbered slot (while the search box is empty)' },
@@ -43,7 +43,7 @@ const SECTIONS = [
 	},
 	{
 		title: 'Copy Popup',
-		icon: SRC_ICONS.clipboard11,
+		icon: MENU_ICONS.copy,
 		entries: [
 			{ keys: ['P'], description: 'Pin / unpin the copied entry' },
 			{ keys: ['S'], description: 'Save / unsave the copied entry' },
@@ -54,7 +54,7 @@ const SECTIONS = [
 	},
 	{
 		title: 'Clipboard cards',
-		icon: SRC_ICONS.clipboard11,
+		icon: SRC_ICONS.clipboard13,
 		entries: [
 			{ keys: ['Click'], description: 'Copy entry to clipboard' },
 			{ keys: ['Right-click'], description: 'Open context menu (Copy, Pin, Save, Groups, Delete)' },
@@ -88,7 +88,7 @@ const SECTIONS = [
 	},
 	{
 		title: 'System Groups',
-		icon: SRC_ICONS.squares12,
+		icon: SRC_ICONS.systemGroups13,
 		entries: [
 			{ keys: ['Pinned'], description: 'System group. Shows entries currently pinned to the popup.' },
 			{ keys: ['Saved'], description: 'System group. Shows entries saved to survive restarts.' },

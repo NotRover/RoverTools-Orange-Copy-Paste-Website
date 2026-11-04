@@ -1,10 +1,11 @@
 ---
 /**
- * The cloud sync mode and device list, from AccountScreen.css.
+ * The cloud sync mode and device list, from AccountScreen.tsx and
+ * AccountScreen.css. Each device shows its OS mark at 20px, as the app does.
  *
  * Drawn at the app's own size: the page that places it does the scaling.
  */
-import { SRC_ICONS } from '../app-parts';
+import { SRC_ICONS, osLogo } from '../app-parts';
 
 interface Props {
 	/** wrap the sync mode in the app's own "Cloud sync" zone. The showcase tile
@@ -60,20 +61,29 @@ const { cloudZone = false } = Astro.props;
 	</div>
 	<div class="acct-card acct-card--rows">
 		<div class="acct-row">
-			<span class="acct-row-icon" set:html={SRC_ICONS.desktop15} />
+			<span class="acct-row-icon" set:html={osLogo('windows', 20)} />
 			<div class="acct-row-main">
-				<span class="acct-row-name">studio-desktop<span class="acct-badge acct-badge--owner">this device</span></span>
+				<span class="acct-row-name">SALMAN-DESKTOP<span class="acct-badge acct-badge--owner">this device</span></span>
 				<span class="acct-row-meta">windows - online</span>
 			</div>
 			<span class="acct-dot online"></span>
 		</div>
 		<div class="acct-row">
-			<span class="acct-row-icon" set:html={SRC_ICONS.laptop15} />
+			<span class="acct-row-icon" set:html={osLogo('apple', 20)} />
 			<div class="acct-row-main">
-				<span class="acct-row-name">rio-macbook</span>
+				<span class="acct-row-name">Rio's MacBook Pro</span>
 				<span class="acct-row-meta">macos - online</span>
 			</div>
 			<span class="acct-dot online"></span>
+			<div class="acct-row-actions"><span class="acct-btn acct-btn--sm acct-btn--danger">Remove</span></div>
+		</div>
+		<div class="acct-row">
+			<span class="acct-row-icon" set:html={osLogo('linux', 20)} />
+			<div class="acct-row-main">
+				<span class="acct-row-name">rio-thinkpad</span>
+				<span class="acct-row-meta">linux - last seen 2h ago</span>
+			</div>
+			<span class="acct-dot"></span>
 			<div class="acct-row-actions"><span class="acct-btn acct-btn--sm acct-btn--danger">Remove</span></div>
 		</div>
 	</div>

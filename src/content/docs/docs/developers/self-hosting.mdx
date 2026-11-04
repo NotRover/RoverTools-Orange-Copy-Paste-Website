@@ -169,7 +169,7 @@ In the installed app:
 4. Press **Test connection**. It checks the health route, that the server speaks the API version this app expects, that the WebSocket route is reachable through your proxy, and that Supabase answers for the key. If the certificate is not trusted, the report shows its fingerprint and offers to pin it.
 5. Press **Save**, then sign up or sign in on the **Account** screen. Your account and this device should appear.
 
-**Reset to default**, the row above Update feed in the Developer group, returns to the server the app shipped with after a confirmation. Sign out first; the session and keys belong to the server you are on. What the section shows is listed on the [Settings](/docs/settings/#developer) page.
+**Reset to default**, the row above Update feed in the Developer group, returns to the server the app shipped with after a confirmation. Sign out first; the session and keys belong to the server you are on. Turning **Developer options** off does not undo the server; the steps are under [How to undo a developer setting](/docs/settings/#how-to-undo-a-developer-setting). What the section shows is listed on the [Settings](/docs/settings/#developer) page.
 
 For a build of your own, you can also compile the values in, so users never type them: set the
 three constants at the top of `src-tauri/src/sync/config.rs` in the app. They are safe to

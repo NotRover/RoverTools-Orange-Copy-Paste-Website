@@ -38,7 +38,7 @@ Everything you sync is encrypted on your computer before it leaves, and the serv
 2. The local key decrypts your **master key**. The master key is held only in memory while the app runs, never written to disk or logs, and never sent anywhere unencrypted.
 3. Every clipboard entry and note gets its own random key, and the item is encrypted with **AES-256-GCM** under it. That item key is then locked with your master key, and with the space key of each space the item is shared into.
 4. The server stores the encrypted items and the locked keys. Your settings are encrypted the same way before upload.
-5. Each device has its own key pair, kept in your system's credential store: Windows Credential Manager, GNOME Keyring or KWallet. That is how a computer you have signed in on before can decrypt your data again after a restart without asking for your password.
+5. Each device has its own key pair, kept in your system's credential store: Windows Credential Manager, the macOS Keychain, GNOME Keyring or KWallet. That is how a computer you have signed in on before can decrypt your data again after a restart without asking for your password.
 
 Each encrypted item is also tied to its own ID, so the server cannot swap the encrypted content of one item onto another.
 
