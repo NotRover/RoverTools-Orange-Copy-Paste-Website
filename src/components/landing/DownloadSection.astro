@@ -33,7 +33,7 @@ const build = await fetchBuild();
 			</div>
 			<div class="dl-card reveal">
 				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} />Linux<span class="dl-beta">Beta</span></h3>
-				<p>AppImage to run it as it comes, or a deb to install it. X11 is the smoothest ride, and Wayland works with a small setup step.</p>
+				<p>AppImage to run it as it comes, or a deb to install it. X11 has the best support. Wayland works after a small setup step.</p>
 				<div class="dl-row">
 					<a class="btn btn-ghost" data-dl="appImage" href={build?.appImage ?? RELEASES_PAGE}>
 						AppImage

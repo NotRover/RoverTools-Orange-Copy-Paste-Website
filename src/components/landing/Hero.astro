@@ -498,9 +498,17 @@ const others = {
 		flex-shrink: 0;
 	}
 
-	/* dropped for a plain Ctrl+C cycle; the flex gap collapses with it */
+	/* Dropped for a plain Ctrl+C cycle. It stays in the row at zero width, with
+	   its vertical padding and borders intact, so the row keeps its height and
+	   the window below does not shift; the negative margin eats its gap. */
 	.capture-keys .kbd.is-hidden {
-		display: none;
+		visibility: hidden;
+		width: 0;
+		padding-left: 0;
+		padding-right: 0;
+		border-left-width: 0;
+		border-right-width: 0;
+		margin-right: -0.3rem;
 	}
 
 	/* ---- hero window: the app's real 920x560 ---- */
