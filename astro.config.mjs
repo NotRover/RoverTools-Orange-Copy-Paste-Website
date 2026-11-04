@@ -115,6 +115,7 @@ export default defineConfig({
 				{
 					label: 'More',
 					items: [
+						{ label: 'Mac notes', slug: 'docs/macos' },
 						{ label: 'Linux notes', slug: 'docs/linux' },
 						{ label: 'Updates and releases', slug: 'docs/updates' },
 						{ label: 'Troubleshooting', slug: 'docs/troubleshooting' },
