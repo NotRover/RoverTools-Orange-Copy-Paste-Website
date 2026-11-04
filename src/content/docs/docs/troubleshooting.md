@@ -17,7 +17,7 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 **The paste popup opens, but nothing is pasted (Linux).** The app types the paste with a helper tool, and it is missing. Install `xdotool` on X11, `wtype` on Sway, Hyprland or River, or `ydotool` with `ydotoold` running on GNOME or KDE Wayland. See [Runtime packages](/docs/linux/#runtime-packages).
 
-**Popups open in the middle of the screen instead of at the cursor (Linux).** Wayland does not tell apps where the cursor is, so the app centers them. This is expected.
+**Popups open in the middle of the screen instead of at the cursor (Linux).** Native Wayland does not tell apps where the cursor is, so the app centers them. This is expected when you run the app with `GDK_BACKEND=wayland`; see [Running natively on Wayland](/docs/linux/#running-natively-on-wayland).
 
 **`Too large for history`: "Not added to history."** What you copied is over 4 MB. It is still on your system clipboard, so pasting works; it just is not kept in history.
 
