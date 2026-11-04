@@ -149,7 +149,9 @@ const build = await fetchBuild();
 		color: var(--accent);
 		background: var(--accent-dim);
 		border: 1px solid var(--accent-dim-strong);
-		border-radius: 999px;
+		/* Squircle where the browser can draw one, a rounded rectangle elsewhere. */
+		border-radius: 0.45rem;
+		corner-shape: squircle;
 		padding: 0.25rem 0.5rem;
 		margin-left: 0.15rem;
 	}
