@@ -51,5 +51,5 @@ Where the compositor does not allow cursor placement, always-on-top or transpare
 
 These degrade gracefully rather than break, but they are real:
 
-- The app reads the clipboard on a timer rather than being told about changes, so a copy that is replaced within about a fifth of a second may be missed.
+- On Wayland the app reads the clipboard on a timer rather than being told about changes, so a copy that is replaced within about a fifth of a second may be missed. On X11 it is told.
 - Rich HTML is captured only when the source app puts `text/html` on the clipboard alongside the text; most browsers and office apps do, some terminals and editors do not.
