@@ -6,7 +6,7 @@ description: Every global hotkey and popup key in Orange Copy Paste.
 import DocMock from '../../../components/docs/DocMock.astro';
 import CardMenu from '../../../components/landing/CardMenu.astro';
 
-Every key and click the app responds to: the global hotkeys, the keys inside each popup, and what clicking a clipboard card does.
+Every key and click the app responds to: the global hotkeys, the keys inside each popup, and what clicking a clipboard card does. On a Mac, read <kbd>Cmd</kbd> for <kbd>Ctrl</kbd> and <kbd>Option</kbd> for <kbd>Alt</kbd> throughout; the app's own Shortcuts screen shows the Mac keys.
 
 ## Global shortcuts
 
@@ -16,7 +16,7 @@ Every key and click the app responds to: the global hotkeys, the keys inside eac
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> | Capture the current selection to history and show the capture receipt popup. |
 | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> | Open the quick-paste popup at your cursor. |
 
-Both popup hotkeys are toggles: pressing the combination again while the popup is open closes it. These three combinations are fixed and cannot be remapped. On native Wayland, where the app cannot grab global keys, bind the same two actions in your compositor instead. See the [Linux notes](/docs/linux/).
+Both popup hotkeys are toggles: pressing the combination again while the popup is open closes it. These three combinations are fixed and cannot be remapped. On a Mac they are <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> and <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>, and the first paste needs the Accessibility permission; see the [Mac notes](/docs/macos/). On native Wayland, where the app cannot grab global keys, bind the same two actions in your compositor instead. See the [Linux notes](/docs/linux/).
 
 ## Inside the paste popup
 

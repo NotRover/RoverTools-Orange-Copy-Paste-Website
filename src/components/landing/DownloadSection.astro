@@ -41,10 +41,16 @@ const build = await fetchBuild();
 					<a class="dl-note-link" href="/docs/linux/">Linux notes</a>
 				</div>
 			</div>
-			<div class="dl-card dl-card--soon reveal">
+			<div class="dl-card reveal">
 				<h3>macOS</h3>
-				<p>A Mac build is on the way. Everything here, on Apple silicon and Intel.</p>
-				<span class="btn btn-ghost dl-soon-cta" aria-disabled="true">Coming soon...</span>
+				<p>A disk image for each chip, macOS 10.15 and later. Hotkeys use Cmd. The first launch asks for one permission.</p>
+				<div class="dl-row">
+					<a class="btn btn-ghost" data-dl="macArm" href={build?.macArm ?? RELEASES_PAGE}>
+						Apple silicon
+					</a>
+					<a class="btn btn-ghost" data-dl="macIntel" href={build?.macIntel ?? RELEASES_PAGE}>Intel</a>
+					<a class="dl-note-link" href="/docs/macos/">Mac notes</a>
+				</div>
 			</div>
 		</div>
 		<p class="dl-version reveal">
@@ -120,16 +126,6 @@ const build = await fetchBuild();
 		margin: 0 0 0.4rem;
 	}
 
-	.dl-card--soon {
-		border-style: dashed;
-		background: color-mix(in srgb, var(--surface) 60%, transparent);
-	}
-
-	.dl-soon-cta {
-		pointer-events: none;
-		opacity: 0.5;
-	}
-
 	.dl-card p {
 		color: var(--text-secondary);
 		font-size: 0.92rem;
@@ -192,7 +188,7 @@ const build = await fetchBuild();
 	const build = await fetchBuild();
 	if (build) {
 		for (const el of document.querySelectorAll<HTMLAnchorElement>('a[data-dl]')) {
-			const href = build[el.dataset.dl as 'windows' | 'appImage' | 'deb' | 'page'];
+			const href = build[el.dataset.dl as 'windows' | 'appImage' | 'deb' | 'macArm' | 'macIntel' | 'page'];
 			if (href) el.href = href;
 		}
 		for (const el of document.querySelectorAll('[data-dl-version]')) {

@@ -6,7 +6,7 @@ description: Install Orange Copy Paste, copy three things, paste one by number, 
 import DocMock from '../../../components/docs/DocMock.astro';
 import TrayMenu from '../../../components/landing/mocks/TrayMenu.astro';
 
-In about five minutes you will install the app, copy three things, paste the second one by its number, and pin it so it stays. You need a Windows 10 or 11 PC or a Linux desktop, and a text editor such as Notepad to paste into. No account is needed.
+In about five minutes you will install the app, copy three things, paste the second one by its number, and pin it so it stays. You need a Windows 10 or 11 PC, a Mac on macOS 10.15 or later, or a Linux desktop, and a text editor such as Notepad or TextEdit to paste into. No account is needed.
 
 ## 1. Install the app
 
@@ -16,9 +16,11 @@ In about five minutes you will install the app, copy three things, paste the sec
 2. Run it. It installs for your user only, so it does not ask for admin rights.
 3. Open **Orange Copy Paste** from the Start menu.
 
+**On a Mac:** download the `.dmg` for your chip from the same release (`aarch64` for Apple silicon, `x64` for Intel), open it and drag the app into Applications. The first launch needs two things, a one-line fix for the unsigned-app warning and the Accessibility permission; both are in the [Mac notes](/docs/macos/#first-launch). Read <kbd>Cmd</kbd> wherever this page says <kbd>Ctrl</kbd>.
+
 **On Linux:** download the `.deb` or AppImage from the same release and install it the way you usually would. If you use Wayland rather than X11, set up the two hotkeys first by following [How to set up hotkeys on Wayland](/docs/linux/#how-to-set-up-hotkeys-on-wayland). Without that, step 3 below does nothing.
 
-The app window opens on the clipboard screen, which is empty for now. An orange icon also appears in the system tray.
+The app window opens on the clipboard screen, which is empty for now. An orange icon also appears in the system tray (the menu bar on a Mac).
 
 <DocMock>
 	<TrayMenu />

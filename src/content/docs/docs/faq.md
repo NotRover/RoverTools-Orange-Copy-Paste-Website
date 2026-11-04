@@ -33,7 +33,7 @@ No. You share items one at a time into a space. Automatic sharing is off until y
 
 ## Is there a Mac version?
 
-Not yet. A Mac build for Apple silicon and Intel is planned. Today the app runs on Windows and [Linux](/docs/linux/).
+Yes, for Apple silicon and Intel, on macOS 10.15 and later. See the [Mac notes](/docs/macos/) for which file to download and what the first launch asks. The app also runs on Windows and [Linux](/docs/linux/).
 
 ## Where do I report a bug or ask for a feature?
 

@@ -54,6 +54,5 @@ Where the compositor does not allow cursor placement, always-on-top or transpare
 
 These degrade gracefully rather than break, but they are real:
 
-- Copying file lists and rich HTML **back to** the clipboard is Windows-only today; those entries error on Linux.
-- File-drop and HTML sources are not captured into history on Linux (text and images are).
-- Image entries are labelled with a raw timestamp instead of a localized date.
+- The app reads the clipboard on a timer rather than being told about changes, so a copy that is replaced within about a fifth of a second may be missed.
+- Rich HTML is captured only when the source app puts `text/html` on the clipboard alongside the text; most browsers and office apps do, some terminals and editors do not.

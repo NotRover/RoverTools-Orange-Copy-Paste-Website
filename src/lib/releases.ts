@@ -29,6 +29,10 @@ export interface Build {
 	windows?: string;
 	appImage?: string;
 	deb?: string;
+	/** the .dmg for Apple silicon */
+	macArm?: string;
+	/** the .dmg for Intel Macs */
+	macIntel?: string;
 }
 
 interface Asset {
@@ -55,7 +59,9 @@ export function pickBuild(releases: Release[]): Build | null {
 		const windows = find('x64-setup.exe');
 		const appImage = find('amd64.AppImage');
 		const deb = find('amd64.deb');
-		if (!windows && !appImage && !deb) continue;
+		const macArm = find('aarch64.dmg');
+		const macIntel = find('x64.dmg');
+		if (!windows && !appImage && !deb && !macArm && !macIntel) continue;
 
 		return {
 			version: (release.tag_name ?? '').replace(/^v/, ''),
@@ -63,6 +69,8 @@ export function pickBuild(releases: Release[]): Build | null {
 			windows,
 			appImage,
 			deb,
+			macArm,
+			macIntel,
 		};
 	}
 

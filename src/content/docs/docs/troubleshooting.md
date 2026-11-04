@@ -7,7 +7,11 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 
 ## Copying and pasting
 
-**Pressing <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> does nothing.** Check that the app is running: its icon should be in the system tray. On Linux with Wayland, the built-in hotkeys do not work; follow [How to set up hotkeys on Wayland](/docs/linux/#how-to-set-up-hotkeys-on-wayland).
+**Pressing <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> does nothing.** Check that the app is running: its icon should be in the system tray. On a Mac the hotkey is <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> and the icon is in the menu bar. On Linux with Wayland, the built-in hotkeys do not work; follow [How to set up hotkeys on Wayland](/docs/linux/#how-to-set-up-hotkeys-on-wayland).
+
+**The paste popup opens, but nothing is pasted (Mac).** The app needs the Accessibility permission to press Cmd+V for you. Turn it on under **System Settings**, then **Privacy & Security**, then **Accessibility**. See [First launch](/docs/macos/#first-launch).
+
+**"Orange Copy Paste is damaged and can't be opened" (Mac).** The downloaded build is not signed with an Apple certificate. Clear the quarantine flag once; the command is in [First launch](/docs/macos/#first-launch).
 
 **The paste popup opens, but nothing is pasted (Linux).** The app types the paste with a helper tool, and it is missing. Install `xdotool` on X11, `wtype` on Sway, Hyprland or River, or `ydotool` with `ydotoold` running on GNOME or KDE Wayland. See [Runtime packages](/docs/linux/#runtime-packages).
 
@@ -16,8 +20,6 @@ Find the message you saw, or the problem you have, and follow the fix. Messages 
 **`Too large for history`: "Not added to history."** What you copied is over 4 MB. It is still on your system clipboard, so pasting works; it just is not kept in history.
 
 **"You can pin up to 10 items. Unpin one first."** Unpin one, or use **Saved** instead, which has no limit. See [Concepts](/docs/concepts/#your-clipboard).
-
-**File or HTML entries do not copy back (Linux).** Copying file lists and rich HTML back to the clipboard only works on Windows today. See [Known gaps on Linux](/docs/linux/#known-gaps-on-linux).
 
 ## Missing history
 
