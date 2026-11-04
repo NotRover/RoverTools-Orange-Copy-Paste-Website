@@ -32,8 +32,8 @@ const build = await fetchBuild();
 				</a>
 			</div>
 			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} />Linux</h3>
-				<p>AppImage to run it as it comes, or a deb to install it. X11 is the smoothest ride, and Wayland works with a small setup step.</p>
+				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} />Linux<span class="dl-beta">Beta</span></h3>
+				<p>AppImage to run it as it comes, or a deb to install it. X11 is the smoothest ride, and Wayland works with a small setup step. Newer than the Windows app, so expect a rough edge or two.</p>
 				<div class="dl-row">
 					<a class="btn btn-ghost" data-dl="appImage" href={build?.appImage ?? RELEASES_PAGE}>
 						AppImage
@@ -43,8 +43,8 @@ const build = await fetchBuild();
 				</div>
 			</div>
 			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('apple', 22)} />macOS</h3>
-				<p>A disk image for each chip, macOS 10.15 and later. Hotkeys use Cmd. The first launch asks for one permission.</p>
+				<h3><span class="dl-logo" set:html={osLogo('apple', 22)} />macOS<span class="dl-beta">Beta</span></h3>
+				<p>A disk image for each chip, macOS 10.15 and later. Hotkeys use Cmd. The first launch asks for one permission. Newer than the Windows app, so expect a rough edge or two.</p>
 				<div class="dl-row">
 					<a class="btn btn-ghost" data-dl="macArm" href={build?.macArm ?? RELEASES_PAGE}>
 						Apple silicon
@@ -135,6 +135,23 @@ const build = await fetchBuild();
 	.dl-logo {
 		display: inline-flex;
 		flex-shrink: 0;
+	}
+
+	/* The Linux and Mac apps shipped later than the Windows one and are still
+	   settling; the chip says so where the download is. */
+	.dl-beta {
+		font-family: var(--font-body);
+		font-size: 0.68rem;
+		font-weight: 600;
+		line-height: 1;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--accent);
+		background: var(--accent-dim);
+		border: 1px solid var(--accent-dim-strong);
+		border-radius: 999px;
+		padding: 0.25rem 0.5rem;
+		margin-left: 0.15rem;
 	}
 
 	.dl-logo :global(svg) {

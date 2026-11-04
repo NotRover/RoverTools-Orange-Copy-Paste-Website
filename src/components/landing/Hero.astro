@@ -38,9 +38,9 @@ const primary = [
    build the button did not pick on a Mac (Intel) and on Linux (the deb). It
    links to the download section, where every file is. */
 const others = {
-	windows: { lead: '', items: [['apple', 'macOS'], ['linux', 'Linux']] },
-	mac: { lead: 'Apple silicon build. ', items: [['apple', 'Intel Macs'], ['windows', 'Windows'], ['linux', 'Linux']] },
-	linux: { lead: 'AppImage build; the deb is with the other downloads. ', items: [['windows', 'Windows'], ['apple', 'macOS']] },
+	windows: { lead: '', items: [['apple', 'macOS'], ['linux', 'Linux']], note: ', both in beta' },
+	mac: { lead: 'Apple silicon build, in beta. ', items: [['apple', 'Intel Macs'], ['windows', 'Windows'], ['linux', 'Linux']], note: '' },
+	linux: { lead: 'AppImage build, in beta; the deb is with the other downloads. ', items: [['windows', 'Windows'], ['apple', 'macOS']], note: '' },
 } as const;
 ---
 
@@ -88,6 +88,7 @@ const others = {
 										</span>
 									</>
 								))}
+								{o.note}
 							</a>
 						</p>
 					);

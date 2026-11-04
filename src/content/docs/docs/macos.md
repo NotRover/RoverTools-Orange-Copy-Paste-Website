@@ -3,7 +3,7 @@ title: Mac notes
 description: Which download to pick, the two prompts on first launch, and what differs from Windows.
 ---
 
-Which download to pick, the two things macOS asks on first launch, and what differs from the Windows app. The app runs on macOS 10.15 and later, on Apple silicon and Intel.
+Which download to pick, the two things macOS asks on first launch, and what differs from the Windows app. The Mac app is in beta: it came later than the Windows app, so expect a rough edge or two and [report](https://github.com/NotRover/RoverTools-Orange-Copy-Paste-App/issues) what you hit. It runs on macOS 10.15 and later, on Apple silicon and Intel.
 
 ## Which download
 

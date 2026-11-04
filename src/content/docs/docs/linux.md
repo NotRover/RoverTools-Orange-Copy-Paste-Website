@@ -3,7 +3,7 @@ title: Linux notes
 description: What to install, what works where, and the Wayland setup step.
 ---
 
-What to install for Linux, the one setup step Wayland needs, and what does not work on Linux yet. Builds ship as `.deb` and AppImage. **X11 is the smoothest experience**, so on a Wayland desktop the app runs through XWayland by default (see [Running natively on Wayland](#running-natively-on-wayland)). Wayland works once you set up the hotkeys.
+What to install for Linux, the one setup step Wayland needs, and what does not work on Linux yet. The Linux app is in beta: it came later than the Windows app, and the [Known gaps](#known-gaps-on-linux) below are real. Builds ship as `.deb` and AppImage. **X11 is the smoothest experience**, so on a Wayland desktop the app runs through XWayland by default (see [Running natively on Wayland](#running-natively-on-wayland)). Wayland works once you set up the hotkeys.
 
 ## Runtime packages
 
