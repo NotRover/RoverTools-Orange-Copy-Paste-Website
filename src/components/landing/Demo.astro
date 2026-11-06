@@ -1887,13 +1887,10 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			grid-template-columns: minmax(0, 1fr);
 			gap: 1.2rem;
 		}
+		/* an even grid, three to a row, so every column lines up */
 		.demo-steps {
-			flex-direction: row;
-			flex-wrap: wrap;
-		}
-		.demo-step {
-			width: auto;
-			flex: 1 1 12rem;
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 		.demo-frame {
 			--dz: 0.59;
@@ -1916,9 +1913,16 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		.demo-step-note {
 			display: none;
 		}
+		/* on a phone the grid is two to a row. Each chapter
+		   starts the same distance left of its cell's centre (sized for the
+		   longest name), so the numbers line up in a column and the block
+		   still reads centred under the centred heading */
+		.demo-steps {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
 		.demo-step {
-			flex: 1 1 8rem;
 			align-items: center;
+			padding-left: max(0.8rem, calc(50% - 3.9rem));
 		}
 		.demo-frame {
 			--dz: 0.32;

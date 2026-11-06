@@ -28,7 +28,7 @@ const build = await fetchBuild();
 		    visitor's own platform gets the orange button (the script below). */}
 		<div class="dl-cards">
 			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('windows', 22)} /><span class="dl-name">Windows<span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></span></h3>
+				<h3><span class="dl-logo" set:html={osLogo('windows', 22)} /><span class="dl-name">Windows</span><span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></h3>
 				<p>An installer for Windows 10 and 11. It installs for your user only, so no admin rights are needed.</p>
 				<div class="dl-row">
 					<a class="btn btn-primary" data-main="windows" data-dl="windows" href={build?.windows ?? RELEASES_PAGE}>
@@ -38,7 +38,7 @@ const build = await fetchBuild();
 				</div>
 			</div>
 			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} /><span class="dl-name">Linux<span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></span><span class="dl-beta">Beta</span></h3>
+				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} /><span class="dl-name">Linux</span><span class="dl-beta">Beta</span><span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></h3>
 				<p>A .deb for Debian, Ubuntu and their relatives. Best on X11; Wayland needs one setup step.</p>
 				<div class="dl-row">
 					<a class="btn btn-ghost" data-main="linux" data-dl="deb" href={build?.deb ?? RELEASES_PAGE}>Download the .deb</a>
@@ -46,7 +46,7 @@ const build = await fetchBuild();
 				</div>
 			</div>
 			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('apple', 22)} /><span class="dl-name">macOS<span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></span><span class="dl-beta">Beta</span></h3>
+				<h3><span class="dl-logo" set:html={osLogo('apple', 22)} /><span class="dl-name">macOS</span><span class="dl-beta">Beta</span><span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></h3>
 				<p>One disk image per chip, for macOS 10.15 and later. The first launch asks for one permission.</p>
 				<div class="dl-row">
 					<a class="btn btn-ghost" data-main="mac" data-dl="macArm" href={build?.macArm ?? RELEASES_PAGE}>
@@ -140,7 +140,7 @@ const build = await fetchBuild();
 		gap: 0.55rem;
 		font-family: var(--font-display);
 		font-size: 1.25rem;
-		margin: 0 0 0.95rem;
+		margin: 0 0 0.8rem;
 	}
 
 	.dl-logo {
@@ -175,25 +175,18 @@ const build = await fetchBuild();
 		white-space: nowrap;
 	}
 
-	/* The version tucks in right under the name, its end on the name's end,
-	   like a subscript, the same one on every card. It is placed out of flow
-	   so the name keeps its line beside the logo, and the heading's bottom
-	   margin leaves it the room. It is hidden when GitHub could not be asked,
-	   at build time or in the browser: no number beats a vague one. */
-	.dl-name {
-		position: relative;
-	}
-
+	/* The version sits at the far end of the heading row, in the card's top
+	   corner, level with the name and the same on every card. It is hidden
+	   when GitHub could not be asked, at build time or in the browser: no
+	   number beats a vague one. */
 	.dl-ver {
-		position: absolute;
-		right: 0;
-		top: 100%;
-		margin-top: -0.1rem;
+		margin-left: auto;
+		align-self: center;
 		font-family: var(--font-mono);
-		font-size: 0.72rem;
+		font-size: 0.75rem;
 		font-weight: 500;
 		line-height: 1;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		white-space: nowrap;
 	}
 
@@ -250,6 +243,23 @@ const build = await fetchBuild();
 	@media (max-width: 760px) {
 		.dl-cards {
 			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	/* On a phone the buttons share the card's full width and the setup notes
+	   drop to their own centred line, so nothing runs past the card's edge. */
+	@media (max-width: 520px) {
+		.dl-row {
+			flex-wrap: wrap;
+		}
+		.dl-row .btn {
+			flex: 1 1 0;
+			justify-content: center;
+		}
+		.dl-note-link {
+			flex-basis: 100%;
+			margin-left: 0;
+			text-align: center;
 		}
 	}
 </style>

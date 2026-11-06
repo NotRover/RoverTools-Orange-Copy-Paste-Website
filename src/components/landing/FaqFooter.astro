@@ -195,6 +195,9 @@ const faqs = [
 		.faq-grid {
 			display: flex;
 			flex-direction: column;
+			/* The desktop grid's start alignment would shrink each question
+			   to its text here; in one column they all take the full width. */
+			align-items: stretch;
 		}
 
 		.faq-col {

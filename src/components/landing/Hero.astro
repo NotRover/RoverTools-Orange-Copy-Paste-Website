@@ -703,4 +703,13 @@ const others = {
 			--mz: 0.35;
 		}
 	}
+
+	/* On a phone both buttons take the full width, so they read as a pair
+	   instead of two ragged lengths. */
+	@media (max-width: 520px) {
+		.ctas > * {
+			flex: 1 1 100%;
+			justify-content: center;
+		}
+	}
 </style>
