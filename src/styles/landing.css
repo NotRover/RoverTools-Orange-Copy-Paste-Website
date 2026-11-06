@@ -2,7 +2,7 @@
    and the product are the same object. The landing commits to the app's
    default dark look on purpose; the docs follow the reader's theme. */
 
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:opsz,wght@14..32,400..700&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
 	--bg: #0e0e0e;
@@ -136,8 +136,31 @@ body.landing {
 	color: var(--text);
 	font-family: var(--font-body);
 	font-size: 16px;
-	line-height: 1.6;
+	/* light text on a dark ground reads tighter than it is, so a touch more
+	   than 1.6 */
+	line-height: 1.65;
+	/* Inter's optical sizes: the text cut opens up letter and word spacing at
+	   card-copy sizes, the display cut tightens it on the big lines */
+	font-optical-sizing: auto;
+	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
+}
+
+/* Page copy only - the mockups draw the app and keep its own breaks. No lone
+   last word on a paragraph, and headings that wrap do so in even halves at a
+   heading's line height rather than the body's. */
+.landing :where(p, li, figcaption, dd):not(:where(.oc-window, .mock) *) {
+	text-wrap: pretty;
+}
+
+.landing :where(h2, h3):not(:where(.oc-window, .mock) *) {
+	line-height: 1.3;
+	text-wrap: balance;
+}
+
+/* the mockups outside a window were laid out at the old 1.6; keep them there */
+.landing :where(.mock, .sp-demo) {
+	line-height: 1.6;
 }
 
 .landing a {
@@ -185,7 +208,10 @@ body.landing {
 .section-lead {
 	color: var(--text-secondary);
 	font-size: 1.06rem;
-	max-width: 50rem;
+	line-height: 1.6;
+	/* about 70 characters a line: at 50rem a lead ran past 90 and the eye
+	   lost its place coming back */
+	max-width: 40rem;
 	/* no lone last word, and lines of even length */
 	text-wrap: pretty;
 	margin: 0 0 2.5rem;
