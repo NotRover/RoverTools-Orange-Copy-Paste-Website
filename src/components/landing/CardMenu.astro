@@ -9,6 +9,8 @@
  * it off a positioned parent - a bento tile rather than the window shell.
  */
 import { GROUP_COLORS, MENU_ICONS, TB_ICONS } from './app-parts';
+/* Rows and order follow CardMenu.tsx for a clipboard entry: Copy, Select,
+   Pin, Save, cloud, Share to space, Groups, View, then Delete. */
 
 interface Props {
 	/** left offset inside the window, in the window's own pixels */
@@ -35,6 +37,9 @@ const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
 <div class="oc-menu" style={pos}>
 	<span class="oc-menu-item oc-menu-item--copy">
 		<Fragment set:html={MENU_ICONS.copy} />Copy
+	</span>
+	<span class="oc-menu-item oc-menu-item--select">
+		<Fragment set:html={TB_ICONS.select} />Select
 	</span>
 	<span class="oc-menu-item oc-menu-item--pin">
 		<Fragment set:html={MENU_ICONS.pin} />Pin
@@ -72,7 +77,7 @@ const pos = x === undefined ? undefined : `left:${x}px;top:${y}px`;
 		</span>
 	</span>
 	<span class="oc-menu-item oc-menu-item--expand">
-		<Fragment set:html={MENU_ICONS.expand} />Expand
+		<Fragment set:html={MENU_ICONS.expand} />View
 	</span>
 	<span class="oc-menu-sep"></span>
 	<span class="oc-menu-item oc-menu-item--danger">

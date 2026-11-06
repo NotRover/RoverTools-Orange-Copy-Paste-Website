@@ -89,11 +89,6 @@
 	border-color: var(--border-light);
 }
 
-/* the entry holding the clipboard keeps its accent border under the pointer */
-.oc-window .oc-card--in-clipboard.demo-hot {
-	border-color: var(--accent);
-}
-
 /* Topbar.css */
 .oc-window .oc-tb-btn.demo-hot {
 	color: var(--text);

@@ -461,8 +461,12 @@ body.landing {
 	overflow: hidden;
 }
 
-.oc-card--in-clipboard {
-	border-color: var(--accent);
+/* What is on the clipboard: accent fading in from the left edge, from
+   .entry-card--in-clipboard in EntryCard.css (--clip-glow, 12% in the dark
+   theme). A layer over the card's surface, so the card stays opaque. */
+.oc-card--in-clipboard,
+.oc-card--picked {
+	background-image: linear-gradient(90deg, rgba(255, 62, 28, 0.12), transparent 60%);
 }
 
 .oc-card-media {
@@ -655,11 +659,15 @@ body.landing {
 	gap: 6px;
 }
 
+/* One line, like ChipBar.tsx: the app never wraps the chip row, it shortens
+   or folds what does not fit. Here the group chip shortens its name first,
+   then anything still too wide is cut at the row's edge. */
 .oc-chips {
 	display: flex;
 	align-items: center;
 	gap: 4px;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
+	overflow: hidden;
 	flex: 1;
 	min-width: 0;
 }
@@ -707,12 +715,24 @@ body.landing {
 	flex-shrink: 0;
 }
 
+/* "In clipboard", in the accent, from renderClipboardChip in ChipBar.tsx.
+   Shown only on the card the clipboard holds. */
+.oc-chip--clip {
+	display: none;
+}
+
+.oc-card--in-clipboard .oc-chip--clip {
+	display: inline-flex;
+}
+
 /* group tags carry a dot instead of an icon, and clip long names */
 .oc-chip--group {
 	min-width: 0;
+	flex-shrink: 1;
 }
 
 .oc-chip--group .oc-chip-label {
+	min-width: 0;
 	max-width: 74px;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -909,6 +929,24 @@ body.landing {
 
 .oc-search:has(.oc-search-field.is-typed) .oc-search-clear {
 	display: flex;
+}
+
+/* A query is set: the box stays marked after focus leaves, so a filtered
+   list never passes for the whole history. From .cs-inline-search--active
+   in Topbar.css. */
+.oc-search:has(.oc-search-field.is-typed) .oc-search-field {
+	border-color: var(--accent);
+	background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+	font-weight: 500;
+}
+
+.oc-search:has(.oc-search-field.is-typed) .oc-search-icon {
+	color: var(--accent);
+}
+
+.oc-search:has(.oc-search-field.is-typed) .oc-search-clear {
+	background: var(--accent);
+	color: #fff;
 }
 
 .oc-window .oc-search-clear.demo-hot {
@@ -1697,8 +1735,10 @@ html.js .reveal.in {
 	opacity: 1;
 }
 
-/* The app marks a picked card with the filled checkbox and nothing else - its
-   .entry-card--selected sets no border of its own - so neither does this. */
+/* A picked card carries the same edge glow as the entry on the clipboard
+   (the rule sits with .oc-card--in-clipboard). In select mode the app drops
+   the clipboard glow, so only picked cards glow - the demo leaves `active`
+   off while selecting for the same reason. */
 
 /* who sent an entry that came from another member of a space */
 .oc-owner-chip {

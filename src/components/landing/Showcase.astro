@@ -35,12 +35,12 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 		</p>
 
 		<!-- wide shot: the clipboard screen -->
-		<figure class="wide reveal">
+		<figure class="wide wide--large reveal">
 			<HistoryShot />
 			<figcaption>
 				<strong>The history screen</strong>
 				Sort, filters, search and a three-way layout switch across the top; day groups
-				on a timeline; the entry sitting on your clipboard outlined in orange.
+				on a timeline; the entry sitting on your clipboard marked with an orange glow and an In clipboard chip.
 			</figcaption>
 		</figure>
 
@@ -69,7 +69,7 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 		</div>
 
 		<!-- wide shot: the spaces screen -->
-		<figure class="wide wide--spaces reveal">
+		<figure class="wide wide--large reveal">
 			<SpacesShot />
 			<figcaption>
 				<strong>The Spaces screen</strong>
@@ -147,6 +147,7 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 							<div class="oc-card-footer">
 								<span class="oc-chips">
 									<span class="oc-chip" style={`--cc:${KIND_COLORS.text}`}><Fragment set:html={CHIP_ICONS.text} /><span class="oc-chip-label">Text</span></span>
+									<span class="oc-chip oc-chip--clip"><Fragment set:html={CHIP_ICONS.clipboard} /><span class="oc-chip-label">In clipboard</span></span>
 									<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS.teal}`}><span class="oc-chip-dot"></span><span class="oc-chip-label">work</span></span>
 								</span>
 								<span class="oc-time">Just now</span>
@@ -247,19 +248,19 @@ import { CHIP_ICONS, KIND_COLORS, GROUP_COLORS } from './app-parts';
 
 /* Three panels and a three-column feed do not fit 1180: the feed alone needs
 	   3 x 240 plus its gaps. Drawn at 1440x830 and scaled to the section measure
-	   rather than to the 920 shot, so this one shot is wider than the others -
-	   which is the point, it is the screen with the most in it.
+	   rather than to the 920 shot. The history screen is drawn the same size, so
+	   the two full screens on the page read at one scale.
 	   It gets its own scale ladder (--sz) rather than riding on the 920 shot's
 	   --mz: 1440 runs out of room at a different viewport width than 920 does,
 	   so multiplying one by a constant overflows on half the steps. */
 
-.wide--spaces :global(.oc-window) {
+.wide--large :global(.oc-window) {
 		width: 1440px;
 		height: 830px;
 		zoom: var(--sz, 0.8);
 	}
 
-.wide--spaces figcaption {
+.wide--large figcaption {
 		max-width: 1152px;
 	}
 
@@ -418,7 +419,7 @@ figcaption {
 		justify-content: flex-start;
 		/* the menu is absolutely positioned, so the mock has to be told to leave
 		   room for it - the card behind it is only 90px tall */
-		min-height: 292px;
+		min-height: 320px;
 	}
 
 .mock--menu :global(.oc-menu) {
@@ -617,55 +618,55 @@ figcaption {
 	   to stay under it. */
 
 @media (max-width: 1200px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.72;
 		}
 	}
 
 @media (max-width: 1085px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.62;
 		}
 	}
 
 @media (max-width: 941px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.52;
 		}
 	}
 
 @media (max-width: 797px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.43;
 		}
 	}
 
 @media (max-width: 667px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.35;
 		}
 	}
 
 @media (max-width: 552px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.28;
 		}
 	}
 
 @media (max-width: 451px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.22;
 		}
 	}
 
 @media (max-width: 365px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.18;
 		}
 	}
 
 @media (max-width: 307px) {
-		.wide--spaces :global(.oc-window) {
+		.wide--large :global(.oc-window) {
 			--sz: 0.15;
 		}
 	}

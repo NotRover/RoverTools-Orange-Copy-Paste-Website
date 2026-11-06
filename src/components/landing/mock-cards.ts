@@ -40,6 +40,11 @@ export interface CardOptions {
 	picked?: boolean;
 }
 
+/* The "In clipboard" chip, from renderClipboardChip in ChipBar.tsx. Every card
+   carries it and CSS shows it only on .oc-card--in-clipboard, so a scene that
+   moves the class from card to card moves the chip with it. */
+export const CLIP_CHIP = `<span class="oc-chip oc-chip--clip">${CHIP_ICONS.clipboard}<span class="oc-chip-label">In clipboard</span></span>`;
+
 export function makeCard(s: MockEntry, o: CardOptions = {}): HTMLElement {
 	const card = document.createElement('div');
 	card.className =
@@ -93,6 +98,7 @@ export function makeCard(s: MockEntry, o: CardOptions = {}): HTMLElement {
 			<div class="oc-card-footer">
 				<span class="oc-chips">
 					<span class="oc-chip" style="--cc:${KIND_COLORS[s.kind as keyof typeof KIND_COLORS]}">${CHIP_ICONS[s.kind as keyof typeof CHIP_ICONS] ?? ''}<span class="oc-chip-label">${TYPE_LABELS[s.kind as keyof typeof TYPE_LABELS]}</span></span>
+					${CLIP_CHIP}
 					${group}
 					${owner}
 				</span>

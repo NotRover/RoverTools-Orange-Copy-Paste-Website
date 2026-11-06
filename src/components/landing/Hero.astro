@@ -205,7 +205,10 @@ const others = {
 	const menu = win?.querySelector<HTMLElement>('.oc-menu') ?? null;
 	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+	/* kept inside the window with room for the whole arrow, not just its tip */
 	function moveCursor(x: number, y: number) {
+		x = Math.max(4, Math.min(x, 920 - 22));
+		y = Math.max(4, Math.min(y, 560 - 26));
 		if (cursor) cursor.style.transform = `translate(${x}px, ${y}px)`;
 	}
 
@@ -291,11 +294,7 @@ const others = {
 		card.classList.add('enter');
 		stack.prepend(card);
 		requestAnimationFrame(() => requestAnimationFrame(() => card.classList.remove('enter')));
-		if (stack.children.length > 7) {
-			const last = stack.lastElementChild as HTMLElement;
-			last.classList.add('leave');
-			setTimeout(() => last.remove(), 350);
-		}
+		if (stack.children.length > 7) stack.lastElementChild?.remove();
 	}
 
 	if (reduced || !stack || !sweep) {
@@ -402,8 +401,11 @@ const others = {
 
 	.sub {
 		color: var(--text-secondary);
-		font-size: 1.12rem;
-		max-width: 32rem;
+		/* the same mono as the line under the buttons, a step larger */
+		font-family: var(--font-mono);
+		font-size: 0.92rem;
+		line-height: 1.6;
+		max-width: 34rem;
 		margin: 0 0 2rem;
 	}
 
@@ -480,11 +482,15 @@ const others = {
 		color: var(--text-muted);
 	}
 
-	/* Two lines on purpose: what this download is, then where the others are.
-	   Run together, the link wraps at whatever word the width allows and its
-	   dashed underline breaks across the two lines. */
+	/* One line: what this download is, then where the others are. The link
+	   never breaks inside itself, so on a narrow screen it drops to the next
+	   line whole instead of splitting its dashed underline. */
 	.meta-line {
-		display: block;
+		margin-right: 0.6em;
+	}
+
+	.meta-link {
+		white-space: nowrap;
 	}
 
 	/* ---- capture strip ---- */
@@ -544,30 +550,36 @@ const others = {
 		height: 560px;
 	}
 
-	.hero-demo :global(.oc-card) {
-		transition: transform 0.35s ease, opacity 0.35s ease, border-color 0.25s ease;
+	/* A new capture fades in where it lands, as `cardFadeIn` does in
+	   EntryCard.css: opacity only, 0.18s ease-out. The app has no exit
+	   animation, so the card pushed off the end simply goes. */
+	/* pointer.css gives every mock card the app's 0.15s hover transitions on
+	   `.oc-window .oc-card`; this keeps those and adds the fade. */
+	.hero-demo :global(.oc-window .oc-card) {
+		transition:
+			opacity 0.18s ease-out,
+			transform 0.15s ease,
+			box-shadow 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
 	}
 
-	.hero-demo :global(.oc-card.enter) {
-		transform: translateY(-14px);
-		opacity: 0;
-	}
-
-	.hero-demo :global(.oc-card.leave) {
-		transform: translateY(10px);
+	.hero-demo :global(.oc-window .oc-card.enter) {
 		opacity: 0;
 	}
 
 	/* The right-click menu is part of the loop, not furniture: it stays shut
-	   until the cursor opens it, and closes when the row is picked. No transform
-	   here on purpose - the script measures it while it is hidden. */
+	   until the cursor opens it, and closes when the row is picked. It pops in
+	   with `card-menu-pop` (CardMenu.css) and closes at once, as the app's does.
+	   The resting state has no transform - the script measures it while hidden. */
 	.hero-demo :global(.oc-menu) {
 		opacity: 0;
 		visibility: hidden;
-		transition: opacity 0.13s ease, visibility 0.13s;
+		transform-origin: top right;
 	}
 
 	.hero-demo :global(.oc-menu.open) {
+		animation: heroMenuPop 0.11s cubic-bezier(0.16, 1, 0.3, 1);
 		opacity: 1;
 		visibility: visible;
 	}
@@ -611,6 +623,17 @@ const others = {
 
 	.hero-demo :global(.fake-cursor.clicking .click-ring) {
 		animation: clickRing 0.45s ease-out;
+	}
+
+	@keyframes heroMenuPop {
+		from {
+			opacity: 0;
+			transform: scale(0.92) translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
 	}
 
 	@keyframes clickRing {

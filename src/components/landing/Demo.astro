@@ -349,9 +349,14 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	}
 
 	/** send the pointer to a point in the window's own coordinates */
+	/* the pointer never leaves the window: a target near an edge, or one a
+	   reflow pushed below the fold, is met at the edge instead. The margins keep
+	   the whole arrow on screen, not just its tip. */
 	function moveTo(x: number, y: number, instant = false) {
-		aimX = x;
-		aimY = y;
+		aimX = Math.max(4, Math.min(x, 1440 - 22));
+		aimY = Math.max(4, Math.min(y, 830 - 26));
+		x = aimX;
+		y = aimY;
 		if (instant || reduced) {
 			if (frame) cancelAnimationFrame(frame);
 			frame = 0;
@@ -570,25 +575,75 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	/* ---- the grid ---------------------------------------------------------- */
 	let order = ENTRIES.map((_, i) => i);
 	/* the entry whose content is on the clipboard right now - the app draws that
-	   one with an accent border and keeps it there until something else is copied */
+	   one with an accent glow from its left edge and keeps it there until
+	   something else is copied */
 	let onClipboard = 0;
+
+	/* The app keys each card by its entry, so a redraw keeps the nodes it can and
+	   only a card that was not on screen before fades in. Rebuilding every node
+	   instead made the whole grid blink each time select mode came on, a copy
+	   moved a card up, or a sort reordered them - and made image cards decode
+	   again. A card whose look did not change is reused as it is; one that did
+	   is swapped in place without the fade. */
+	const drawn = new Map<number, { key: string; el: HTMLElement }>();
+	/* which entries are in the grid right now: a card a search hid keeps its
+	   node in `drawn`, but coming back is still an arrival and fades in */
+	let shown = new Set<number>();
 
 	function render(opts: { select?: boolean; picked?: number[]; only?: number[] } = {}) {
 		if (!grid) return;
-		grid.textContent = '';
 		const visible = order.filter((i) => !opts.only || opts.only.includes(i));
-		visible.forEach((i) => {
+		const next: HTMLElement[] = [];
+		for (const i of visible) {
 			const e = ENTRIES[i]!;
-			grid.appendChild(
-				makeCard(e, {
-					age: e.age,
-					active: i === onClipboard && !opts.select,
-					select: opts.select,
-					picked: opts.picked?.includes(i),
-				}),
-			);
+			const o = {
+				age: e.age,
+				active: i === onClipboard && !opts.select,
+				select: opts.select,
+				picked: opts.picked?.includes(i),
+			};
+			const key = JSON.stringify([e, o]);
+			let hit = drawn.get(i);
+			/* a card the script ticked or marked in place has moved on from the
+			   key it was drawn with, so its classes have to agree too */
+			if (!hit || hit.key !== key || cardClass(hit.el) !== makeClass(o)) {
+				const el = makeCard(e, o);
+				/* swapped where it stands, so the cards around it never move */
+				if (hit?.el.isConnected) hit.el.replaceWith(el);
+				hit = { key, el };
+				drawn.set(i, hit);
+			}
+			const el = hit.el;
+			el.classList.remove('demo-new');
+			if (!shown.has(i) && !reduced) {
+				el.classList.add('demo-new');
+				el.addEventListener('animationend', () => el.classList.remove('demo-new'), { once: true });
+			}
+			next.push(el);
+		}
+		/* drop what is going first, then move only what changed place:
+		   re-inserting a node restarts its animations and drops the pointer's
+		   hover off it */
+		const keep = new Set(next);
+		[...grid.children].forEach((c) => {
+			if (!keep.has(c as HTMLElement)) c.remove();
 		});
+		next.forEach((el, k) => {
+			if (grid.children[k] !== el) grid.insertBefore(el, grid.children[k] ?? null);
+		});
+		shown = new Set(visible);
+		if (hot && !hot.isConnected) setHot(null);
 		if (shownCount) shownCount.textContent = String(visible.length);
+	}
+
+	/** a card's own classes, without the ones the pointer and the fade add */
+	function cardClass(el: HTMLElement) {
+		return [...el.classList].filter((c) => !c.startsWith('demo-')).join(' ');
+	}
+
+	/** the class list makeCard draws a card with, for spotting in-place edits */
+	function makeClass(o: { active?: boolean; picked?: boolean }) {
+		return 'oc-card' + (o.active ? ' oc-card--in-clipboard' : '') + (o.picked ? ' oc-card--picked' : '');
 	}
 
 	function setStep(n: number) {
@@ -1057,11 +1112,14 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 			ENTRIES[i]!.spaces = 1;
 			ENTRIES[i]!.sync = 'synced';
 		});
-		render({ select: true, picked });
-		say('Everyone in the space gets them on their own devices.');
-		await hold(2300);
+		// closing the list after a tick ends select mode in the app, so the
+		// bar goes and the cards come back as plain cards
 		closePops();
 		selectBtn?.classList.remove('is-on');
+		selectBtn?.querySelector('.oc-tb-badge')?.remove();
+		render();
+		say('Closing the list ends select mode. Everyone in the space gets them on their own devices.');
+		await hold(2300);
 	}
 
 	/* ---- the new screens -------------------------------------------------- */
@@ -1456,18 +1514,18 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		padding-right: 24px;
 	}
 
-	/* Only the card that arrives gets the long transition - it has to be slow
-	   enough to read as something landing. Every other card keeps the app's own
-	   0.15s from pointer.css, which is what its hover needs. */
+	/* The card that arrives fades in the way any new entry card does in the
+	   app: `cardFadeIn` in EntryCard.css, opacity only, 0.18s ease-out. */
 	.demo-window :global(.sp-arrival) {
 		transition:
-			transform 0.3s ease,
-			opacity 0.3s ease,
-			border-color 0.2s ease;
+			opacity 0.18s ease-out,
+			transform 0.15s ease,
+			box-shadow 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
 	}
 
 	.demo-window :global(.sp-arrival.demo-arrive) {
-		transform: translateY(-12px);
 		opacity: 0;
 	}
 
@@ -1480,26 +1538,70 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 	/* The popups the toolbar opens: placed by the script, in the window's own
 	   pixels, and shut until it opens them.
 
-	   The app drops them in rather than fading them - `sortDropIn` in
-	   Topbar.css, 0.12s from four pixels up, on the sort menu, the filter card
-	   and the card menu alike. A popup that only fades has no direction, and
-	   reads as appearing rather than opening. */
+	   Each one opens with the app's own keyframes and closes at once, because
+	   the app mounts them to open and unmounts them to close:
+	   - sort menu and filter card: `sortDropIn`, Topbar.css and SearchFilter.css
+	   - group manager: `gm-slide-in`, GroupManagerCard.css
+	   - bulk bar: `bulk-popup-in`, BulkActionsBar.css
+	   The resting state carries no transform, so the script can measure a popup
+	   while it is shut. */
 	.demo-pop {
 		position: absolute;
 		z-index: 40;
 		opacity: 0;
 		visibility: hidden;
-		transform: translateY(-4px);
-		transition:
-			opacity 0.12s ease-out,
-			transform 0.12s ease-out,
-			visibility 0.12s;
 	}
 
 	.demo-pop.is-open {
 		opacity: 1;
 		visibility: visible;
-		transform: translateY(0);
+		animation: demoDropIn 0.12s ease-out;
+	}
+
+	.demo-pop--gm.is-open {
+		animation: demoSlideIn 0.12s ease-out;
+	}
+
+	.demo-pop--bulk.is-open {
+		animation: demoBulkIn 0.13s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	/* the bulk bar's flyouts, 0.12s in the app */
+	.demo-pop--bulk :global(.bulk-popup-groups-flyout:not([hidden])) {
+		animation: demoBulkIn 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	@keyframes demoDropIn {
+		from {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes demoSlideIn {
+		from {
+			opacity: 0;
+			transform: translateX(4px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes demoBulkIn {
+		from {
+			opacity: 0;
+			transform: translateY(-4px) scale(0.98);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
 	}
 
 	/* a toolbar button reads as held down while its popup is open */
@@ -1547,21 +1649,35 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		display: none;
 	}
 
-	/* the card menu drops in the same way the toolbar's popups do */
+	/* The card menu pops from its corner: `card-menu-pop` in CardMenu.css,
+	   0.11s, a little scale and four pixels of drop, origin top right. Its
+	   Groups flyout uses the same keyframes. Closing is instant, as in the app. */
 	.demo-window :global(.oc-menu) {
 		opacity: 0;
 		visibility: hidden;
-		transform: translateY(-4px);
-		transition:
-			opacity 0.12s ease-out,
-			transform 0.12s ease-out,
-			visibility 0.12s;
+		transform-origin: top right;
 	}
 
 	.demo-window :global(.oc-menu.open) {
 		opacity: 1;
 		visibility: visible;
-		transform: translateY(0);
+		animation: demoMenuPop 0.11s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.demo-window :global(.oc-menu.open .oc-menu-groups-flyout:not([hidden])) {
+		transform-origin: top right;
+		animation: demoMenuPop 0.11s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	@keyframes demoMenuPop {
+		from {
+			opacity: 0;
+			transform: scale(0.92) translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
 	}
 
 	/* ---- a screen arriving ----
@@ -1637,20 +1753,28 @@ const sortOptions = ['Newest', 'Oldest', 'A to Z', 'Z to A', 'Type'];
 		animation: demoCardIn 0.18s ease-out both;
 	}
 
-	/* Every card the grid redraws - a search narrowing, a sort reordering - is a
-	   new node, so this replays itself without being asked, exactly as it does
-	   in the app. */
-	.demo-window :global(.oc-grid > .oc-card) {
-		animation: demoCardIn 0.18s ease-out;
+	/* Only a card the grid had not drawn before fades in - one a search brings
+	   back, say - as in the app; render() marks those. An entry card only fades
+	   (`cardFadeIn`, EntryCard.css); the six-pixel rise belongs to note cards. */
+	.demo-window :global(.oc-grid > .oc-card.demo-new) {
+		animation: demoEntryIn 0.18s ease-out;
+	}
+
+	@keyframes demoEntryIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.demo-pop,
-		.demo-window :global(.oc-menu) {
-			transform: none;
-			transition:
-				opacity 0.12s ease-out,
-				visibility 0.12s;
+		.demo-pop.is-open,
+		.demo-window :global(.oc-menu.open),
+		.demo-window :global(.oc-menu.open .oc-menu-groups-flyout),
+		.demo-pop--bulk :global(.bulk-popup-groups-flyout) {
+			animation: none;
 		}
 
 		.demo-screen.demo-intro :global(.set-section),

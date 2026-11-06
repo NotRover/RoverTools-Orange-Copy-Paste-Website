@@ -21,7 +21,7 @@ A background watcher checks the clipboard a few times a second and records every
 
 Images are saved to disk at full quality the moment they arrive and previewed from there, which keeps the app light even with large screenshots. Copied videos play directly on the card with play, seek and mute controls. Multi-file copies show a thumbnail strip with a +N chip that expands to the full list.
 
-The entry currently held by the operating system clipboard is marked with an accent border and an *In clipboard* chip.
+The entry on the system clipboard glows orange from its left edge and has an *In clipboard* chip. After you copy several entries at once, every one of them is marked.
 
 ## Limits
 
@@ -56,7 +56,7 @@ Groups are colored tags you define. Create, rename, recolor and delete them from
 	<FilterCard />
 </DocMock>
 
-Search matches entry content and group names. Filters stack on top:
+Search matches entry content and group names. While the box holds a query it stays highlighted, so a filtered list is never mistaken for your whole history. Filters stack on top:
 
 - **Quick:** Pinned, Saved, and, once you are signed in, Mine or From others.
 - **Type:** text, url, html, image, video, document, file, folder.
@@ -74,7 +74,7 @@ While you are signed out, or while the app is reconnecting to your account, the 
 	<BulkBar flyout={false} />
 </DocMock>
 
-Select multiple entries (with range select) to copy them as one item, pin, save, assign groups, share with a space, upload to or remove from your account, remove from a space, or delete, all in one action. Copy joins the selected entries into a single clipboard payload; it is unavailable when the selection mixes text and files, which the clipboard cannot carry as one item. To start, choose **Select** from an entry's right-click menu, which turns on selection mode with that entry picked. <kbd>Esc</kbd> or a click outside the entries exits selection mode.
+Select multiple entries (with range select) to copy them as one item, pin, save, assign groups, share with a space, upload to or remove from your account, remove from a space, or delete, all in one action. Copy joins the selected entries into a single clipboard payload; it is unavailable when the selection mixes text and files, which the clipboard cannot carry as one item. To start, choose **Select** from an entry's right-click menu, which turns on selection mode with that entry picked. Selected entries glow orange from the left edge. Each action ends selection mode once it runs. The **Groups** and **Share** menus end it when you close them, so you can tick several groups or spaces first. <kbd>Esc</kbd> or a click outside the entries also exits selection mode.
 
 ## Opening an entry
 

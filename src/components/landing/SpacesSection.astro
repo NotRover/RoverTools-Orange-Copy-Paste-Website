@@ -3,7 +3,7 @@ import { CHIP_ICONS, GROUP_COLORS, KIND_COLORS, TYPE_LABELS, THUMBS } from './ap
 
 /* The right-hand mock is a space feed drawn from the app's own entry cards, so it
    reads as the same product as every other mockup on the page: the kind chip, the
-   "shared by" owner chip, a real image thumbnail, and the accent border the app
+   "shared by" owner chip, a real image thumbnail, and the accent glow the app
    puts on the entry that just landed on the clipboard - which is what auto-copy
    does the moment a teammate shares. Newest first, like the app. */
 const space = { name: 'design-team', members: 4 };
@@ -88,6 +88,12 @@ const feed = [
 												<Fragment set:html={CHIP_ICONS[e.kind]} />
 												<span class="oc-chip-label">{TYPE_LABELS[e.kind]}</span>
 											</span>
+											{e.active && (
+												<span class="oc-chip oc-chip--clip">
+													<Fragment set:html={CHIP_ICONS.clipboard} />
+													<span class="oc-chip-label">In clipboard</span>
+												</span>
+											)}
 											{'group' in e && e.group && (
 												<span class="oc-chip oc-chip--group" style={`--cc:${GROUP_COLORS[e.group[1]]}`}>
 													<span class="oc-chip-dot" />
