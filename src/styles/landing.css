@@ -225,19 +225,24 @@ body.landing {
 	line-height: 1;
 	padding: 0.38em 0.55em 0.42em;
 	border: 1px solid var(--border-light);
-	border-bottom-width: 3px;
 	border-radius: var(--radius-xs);
+	/* The lip is a shadow, not a thicker bottom border, so a press never
+	   changes the key's box. Animating a border width against a margin made
+	   the two round differently mid-transition, and the strip and everything
+	   under it twitched by a pixel on every press. The margin reserves the
+	   lip's 2px below the key. */
+	box-shadow: 0 2px 0 var(--border-light);
+	margin-bottom: 2px;
 	background: var(--surface);
 	color: var(--text);
-	transition: transform 0.1s ease, border-bottom-width 0.1s ease, margin-bottom 0.1s ease;
+	transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
-/* The lip sinks from 3px to 1px; the margin takes up the 2px so the key's
-   box, and the strip it sits in, keep their height and nothing below shifts. */
+/* Pressed: the key sinks onto its lip. Only transform and shadow move, and
+   neither takes part in layout. */
 .kbd.pressed {
 	transform: translateY(2px);
-	border-bottom-width: 1px;
-	margin-bottom: 2px;
+	box-shadow: 0 0 0 var(--accent);
 	background: var(--accent-dim-strong);
 	border-color: var(--accent);
 }
