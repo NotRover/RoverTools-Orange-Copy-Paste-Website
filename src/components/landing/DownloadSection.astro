@@ -20,50 +20,56 @@ const build = await fetchBuild();
 		<p class="eyebrow reveal">Download</p>
 		<h2 class="section-title reveal">Your clipboard is about to get a memory.</h2>
 		<p class="section-lead reveal center">
-			Free, no account, nothing to configure. Install it, copy something, press
-			Ctrl+Shift+V (Cmd+Shift+V on a Mac).
+			Free, no account, nothing to set up. Install it and your next copy is kept.
 		</p>
+		{/* Each card says the same three things in the same order - what you get,
+		    what it runs on, the one thing to know - in two lines at desktop width, then one
+		    main button and its setup notes, pinned to the card's foot. Only the
+		    visitor's own platform gets the orange button (the script below). */}
 		<div class="dl-cards">
 			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('windows', 22)} />Windows</h3>
-				<p>Installer for Windows 10 and 11. Installs per user, no admin needed.</p>
-				<a class="btn btn-primary" data-dl="windows" href={build?.windows ?? RELEASES_PAGE}>
-					Download the installer
-				</a>
-			</div>
-			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} />Linux<span class="dl-beta">Beta</span></h3>
-				<p>A deb package for Debian, Ubuntu and their relatives. It updates itself. X11 has the best support; Wayland needs one setup step.</p>
+				<h3><span class="dl-logo" set:html={osLogo('windows', 22)} /><span class="dl-name">Windows<span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></span></h3>
+				<p>An installer for Windows 10 and 11. It installs for your user only, so no admin rights are needed.</p>
 				<div class="dl-row">
-					<a class="btn btn-primary" data-dl="deb" href={build?.deb ?? RELEASES_PAGE}>Download the .deb</a>
-					<a class="dl-note-link" href="/docs/linux/">Linux notes</a>
+					<a class="btn btn-primary" data-main="windows" data-dl="windows" href={build?.windows ?? RELEASES_PAGE}>
+						Download the installer
+					</a>
+					<a class="dl-note-link" href="/docs/getting-started/">Setup notes</a>
 				</div>
 			</div>
 			<div class="dl-card reveal">
-				<h3><span class="dl-logo" set:html={osLogo('apple', 22)} />macOS<span class="dl-beta">Beta</span></h3>
-				<p>A disk image for each chip, macOS 10.15 and later. Hotkeys use Cmd. The first launch asks for one permission.</p>
+				<h3><span class="dl-logo" set:html={osLogo('linux', 22)} /><span class="dl-name">Linux<span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></span><span class="dl-beta">Beta</span></h3>
+				<p>A .deb for Debian, Ubuntu and their relatives. Best on X11; Wayland needs one setup step.</p>
 				<div class="dl-row">
-					<a class="btn btn-ghost" data-dl="macArm" href={build?.macArm ?? RELEASES_PAGE}>
+					<a class="btn btn-ghost" data-main="linux" data-dl="deb" href={build?.deb ?? RELEASES_PAGE}>Download the .deb</a>
+					<a class="dl-note-link" href="/docs/linux/">Setup notes</a>
+				</div>
+			</div>
+			<div class="dl-card reveal">
+				<h3><span class="dl-logo" set:html={osLogo('apple', 22)} /><span class="dl-name">macOS<span class="dl-ver" data-dl-version hidden={!build}>{build ? `v${build.version}` : ''}</span></span><span class="dl-beta">Beta</span></h3>
+				<p>One disk image per chip, for macOS 10.15 and later. The first launch asks for one permission.</p>
+				<div class="dl-row">
+					<a class="btn btn-ghost" data-main="mac" data-dl="macArm" href={build?.macArm ?? RELEASES_PAGE}>
 						Apple silicon
 					</a>
 					<a class="btn btn-ghost" data-dl="macIntel" href={build?.macIntel ?? RELEASES_PAGE}>Intel</a>
-					<a class="dl-note-link" href="/docs/macos/">Mac notes</a>
+					<a class="dl-note-link" href="/docs/macos/">Setup notes</a>
 				</div>
 			</div>
 		</div>
-		<p class="dl-version reveal">
-			<span data-dl-version>{build ? `Version ${build.version}` : 'Latest build'}</span>
-			<span class="dl-sep">-</span>
-			<a data-dl="page" href={build?.page ?? RELEASES_PAGE}>every build and its notes</a>
-		</p>
-		<p class="dl-note reveal">
-			Updates arrive inside the app and are signature-checked. They wait for you to
-			install them unless you turn on automatic installs. A beta channel is one switch
-			away in Settings.
+		{/* Under the cards, quieter than them: the beta channel, then the two
+		    links out - the code and the release notes - side by side as the
+		    section's sign-off. */}
+		<p class="dl-beta-line reveal">
+			Want new features early? Turn on <span class="dl-setting">Get beta versions</span> in
+			Settings, under Updates.
 		</p>
 		<p class="dl-source reveal">
 			<a href={REPO_URL} target="_blank" rel="noopener">
 				<Icon name="lucide:github" size={16} />Open source. Browse the code on GitHub.
+			</a>
+			<a data-dl="page" href={build?.page ?? RELEASES_PAGE}>
+				<Icon name="lucide:file-text" size={16} />Release notes
 			</a>
 		</p>
 	</div>
@@ -71,7 +77,11 @@ const build = await fetchBuild();
 
 <style>
 	.dl-source {
-		margin-top: 1rem;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem 1.75rem;
+		margin: 2.4rem 0 0;
 	}
 
 	.dl-source a {
@@ -113,11 +123,15 @@ const build = await fetchBuild();
 		text-align: left;
 	}
 
+	/* a column, so the button row sits on the card's foot whatever the copy
+	   above it does, and the three rows line up across the cards */
 	.dl-card {
+		display: flex;
+		flex-direction: column;
 		background: var(--surface);
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
-		padding: 1.25rem 1.3rem;
+		padding: 1.5rem;
 	}
 
 	.dl-card h3 {
@@ -125,8 +139,8 @@ const build = await fetchBuild();
 		align-items: center;
 		gap: 0.55rem;
 		font-family: var(--font-display);
-		font-size: 1.2rem;
-		margin: 0 0 0.4rem;
+		font-size: 1.25rem;
+		margin: 0 0 0.95rem;
 	}
 
 	.dl-logo {
@@ -161,10 +175,36 @@ const build = await fetchBuild();
 		white-space: nowrap;
 	}
 
+	/* The version tucks in right under the name, its end on the name's end,
+	   like a subscript, the same one on every card. It is placed out of flow
+	   so the name keeps its line beside the logo, and the heading's bottom
+	   margin leaves it the room. It is hidden when GitHub could not be asked,
+	   at build time or in the browser: no number beats a vague one. */
+	.dl-name {
+		position: relative;
+	}
+
+	.dl-ver {
+		position: absolute;
+		right: 0;
+		top: 100%;
+		margin-top: -0.1rem;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		font-weight: 500;
+		line-height: 1;
+		color: var(--text-secondary);
+		white-space: nowrap;
+	}
+
 	.dl-card p {
 		color: var(--text-secondary);
-		font-size: 0.92rem;
-		margin: 0 0 1.2rem;
+		font-size: 0.9rem;
+		margin: 0 0 1.6rem;
+	}
+
+	.dl-card .dl-row {
+		margin-top: auto;
 	}
 
 	.dl-row {
@@ -174,32 +214,32 @@ const build = await fetchBuild();
 	}
 
 	.dl-note-link {
+		margin-left: auto;
 		font-size: 0.85rem;
-		color: var(--accent);
+		color: var(--text-secondary);
 		white-space: nowrap;
+		transition: color 0.15s ease;
 	}
 
-	.dl-version {
-		margin: 1.4rem 0 0;
+	.dl-note-link:hover {
+		color: var(--text);
+	}
+
+	.dl-beta-line {
+		margin: 2.2rem 0 0;
 		font-size: 0.85rem;
 		color: var(--text-muted);
 	}
 
-	.dl-version a {
+	/* The toggle's own label, lifted by weight and colour rather than set in
+	   mono: a mono run inside a sentence brings its wide spaces with it, and
+	   the line reads unevenly spaced. */
+	.dl-setting {
+		font-weight: 500;
 		color: var(--text-secondary);
 	}
 
-	.dl-sep {
-		margin: 0 0.5rem;
-		opacity: 0.6;
-	}
 
-	.dl-note {
-		margin: 2.2rem auto 0;
-		max-width: 34rem;
-		font-size: 0.85rem;
-		color: var(--text-muted);
-	}
 
 	@media (max-width: 1024px) {
 		.dl-cards {
@@ -221,6 +261,25 @@ const build = await fetchBuild();
 	   are rate limited per address, and the links it would replace already work. */
 	import { fetchBuild } from '../../lib/releases';
 
+	/* Orange goes on the visitor's own platform only, the same guess the hero
+	   makes: Windows unless the browser says Mac or Linux. The page is built
+	   with Windows orange, so without this script it reads like the hero. */
+	{
+		const ua = navigator.userAgent;
+		const plat =
+			(navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ??
+			navigator.platform ??
+			'';
+		let os = 'windows';
+		if (/mac/i.test(plat) || /Macintosh/.test(ua)) os = 'mac';
+		else if (/linux/i.test(plat) && !/Android/i.test(ua)) os = 'linux';
+		for (const el of document.querySelectorAll<HTMLElement>('#download [data-main]')) {
+			const mine = el.dataset.main === os;
+			el.classList.toggle('btn-primary', mine);
+			el.classList.toggle('btn-ghost', !mine);
+		}
+	}
+
 	const build = await fetchBuild();
 	if (build) {
 		for (const el of document.querySelectorAll<HTMLAnchorElement>('a[data-dl]')) {
@@ -228,7 +287,8 @@ const build = await fetchBuild();
 			if (href) el.href = href;
 		}
 		for (const el of document.querySelectorAll('[data-dl-version]')) {
-			el.textContent = `Version ${build.version}`;
+			el.textContent = `v${build.version}`;
+			(el as HTMLElement).hidden = false;
 		}
 	}
 </script>

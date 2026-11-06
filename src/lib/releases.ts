@@ -82,8 +82,42 @@ export function pickBuild(releases: Release[]): Build | null {
  * no version and links to the releases page is worse than one with the real
  * links, but it is a great deal better than a build that fails because GitHub
  * was briefly unreachable.
+ *
+ * The answer is kept for an hour. GitHub allows 60 unauthenticated calls an
+ * hour per address, and without a cache every page load spent three of them -
+ * the hero and the download section at render, then the browser - so a dev
+ * server ran dry after twenty reloads and the version vanished until the hour
+ * turned. On the server one answer (or one failure, for five minutes) serves
+ * every render; in the browser a good answer is kept in localStorage, so a
+ * return visit inside the hour does not ask again. A release can therefore
+ * take up to an hour to show for someone who was just here.
  */
-export async function fetchBuild(): Promise<Build | null> {
+const KEEP_MS = 60 * 60 * 1000;
+const RETRY_MS = 5 * 60 * 1000;
+const STORE_KEY = 'oc-latest-build';
+
+let held: { at: number; ok: boolean; build: Promise<Build | null> } | null = null;
+
+export function fetchBuild(): Promise<Build | null> {
+	const now = Date.now();
+	if (held && now - held.at < (held.ok ? KEEP_MS : RETRY_MS)) return held.build;
+
+	const stored = readStored(now);
+	if (stored) {
+		held = { at: now, ok: true, build: Promise.resolve(stored) };
+		return held.build;
+	}
+
+	const entry = { at: now, ok: true, build: askGitHub() };
+	held = entry;
+	entry.build.then((b) => {
+		entry.ok = b !== null;
+		if (b) writeStored(b);
+	});
+	return entry.build;
+}
+
+async function askGitHub(): Promise<Build | null> {
 	try {
 		const response = await fetch(API, {
 			headers: { accept: 'application/vnd.github+json' },
@@ -92,5 +126,26 @@ export async function fetchBuild(): Promise<Build | null> {
 		return pickBuild((await response.json()) as Release[]);
 	} catch {
 		return null;
+	}
+}
+
+/* localStorage is the browser's only; on the server, and in a private window
+   that refuses it, these quietly do nothing */
+function readStored(now: number): Build | null {
+	try {
+		const raw = globalThis.localStorage?.getItem(STORE_KEY);
+		if (!raw) return null;
+		const saved = JSON.parse(raw) as { at: number; build: Build };
+		return now - saved.at < KEEP_MS ? saved.build : null;
+	} catch {
+		return null;
+	}
+}
+
+function writeStored(build: Build) {
+	try {
+		globalThis.localStorage?.setItem(STORE_KEY, JSON.stringify({ at: Date.now(), build }));
+	} catch {
+		/* full, blocked or absent: the next load just asks GitHub again */
 	}
 }

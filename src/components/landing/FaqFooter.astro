@@ -34,13 +34,23 @@ const faqs = [
 	<div class="wrap">
 		<p class="eyebrow reveal">FAQ</p>
 		<h2 class="section-title reveal">Fair questions.</h2>
+		{/* Masonry: two independent columns, so opening a question pushes down
+		    only the ones under it, never the one beside it. Questions alternate
+		    left and right, so the page still reads across in the list's order;
+		    on one column `order` puts them back in sequence. */}
 		<div class="faq-grid">
 			{
-				faqs.map((f) => (
-					<details class="reveal">
-						<summary>{f.q}</summary>
-						<p>{f.a}</p>
-					</details>
+				[0, 1].map((col) => (
+					<div class="faq-col">
+						{faqs.map((f, i) =>
+							i % 2 === col ? (
+								<details class="reveal" style={`order:${i}`}>
+									<summary>{f.q}</summary>
+									<p>{f.a}</p>
+								</details>
+							) : null,
+						)}
+					</div>
 				))
 			}
 		</div>
@@ -71,6 +81,13 @@ const faqs = [
 	.faq-grid {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		gap: 0.9rem;
+	}
+
+	.faq-col {
+		display: flex;
+		flex-direction: column;
 		gap: 0.9rem;
 	}
 
@@ -176,7 +193,12 @@ const faqs = [
 
 	@media (max-width: 720px) {
 		.faq-grid {
-			grid-template-columns: minmax(0, 1fr);
+			display: flex;
+			flex-direction: column;
+		}
+
+		.faq-col {
+			display: contents;
 		}
 		.foot-links {
 			margin-left: 0;
