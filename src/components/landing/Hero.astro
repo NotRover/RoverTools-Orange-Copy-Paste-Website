@@ -29,18 +29,18 @@ import { osLogo } from './app-parts';
 const build = await fetchBuild();
 
 const primary = [
-	{ os: 'windows', logo: 'windows', label: 'Download for Windows', dl: 'windows', href: build?.windows },
-	{ os: 'mac', logo: 'apple', label: 'Download for Mac', dl: 'macArm', href: build?.macArm },
-	{ os: 'linux', logo: 'linux', label: 'Download for Linux', dl: 'deb', href: build?.deb },
+	{ os: 'windows', logo: 'windows', label: 'Download for Windows', dl: 'windows', href: build?.windows, beta: false },
+	{ os: 'mac', logo: 'apple', label: 'Download for Mac', dl: 'macArm', href: build?.macArm, beta: true },
+	{ os: 'linux', logo: 'linux', label: 'Download for Linux', dl: 'deb', href: build?.deb, beta: true },
 ] as const;
 
 /* What the line under the button offers: the other two platforms, plus the
    build the button did not pick on a Mac (Intel). It links to the download
    section, where every file is. */
 const others = {
-	windows: { lead: '', items: [['apple', 'macOS'], ['linux', 'Linux']], note: ', both in beta' },
-	mac: { lead: 'Apple silicon build, in beta. ', items: [['apple', 'Intel Macs'], ['windows', 'Windows'], ['linux', 'Linux']], note: '' },
-	linux: { lead: 'Deb package, in beta. ', items: [['windows', 'Windows'], ['apple', 'macOS']], note: '' },
+	windows: { lead: '', items: [['apple', 'macOS'], ['linux', 'Linux']] },
+	mac: { lead: 'Apple silicon build. ', items: [['apple', 'Intel Macs'], ['windows', 'Windows'], ['linux', 'Linux']] },
+	linux: { lead: 'Deb package. ', items: [['windows', 'Windows'], ['apple', 'macOS']] },
 } as const;
 ---
 
@@ -66,6 +66,7 @@ const others = {
 						>
 							<span class="cta-logo" set:html={osLogo(p.logo, 18, 'currentColor')} />
 							{p.label}
+							{p.beta && <span class="cta-beta">Beta</span>}
 						</a>
 					))
 				}
@@ -76,7 +77,7 @@ const others = {
 					const o = others[p.os];
 					return (
 						<p class="meta" data-os={p.os} hidden={p.os !== 'windows'}>
-							Free. No account needed. {o.lead}
+							<span class="meta-line">Free. No account needed. {o.lead}</span>
 							<a class="meta-link" href="#download">
 								Also for
 								{o.items.map(([logo, name], i) => (
@@ -88,7 +89,6 @@ const others = {
 										</span>
 									</>
 								))}
-								{o.note}
 							</a>
 						</p>
 					);
@@ -453,11 +453,38 @@ const others = {
 		display: block;
 	}
 
+	/* The Mac and Linux apps are in beta. Said once, quietly, on the button that
+	   downloads them, rather than in the line under it. Raised like a
+	   superscript, in the button's own white. */
+	.cta-beta {
+		align-self: flex-start;
+		margin-top: -0.15rem;
+		margin-left: -0.15rem;
+		font-size: 0.6rem;
+		font-weight: 700;
+		line-height: 1;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		padding: 0.18rem 0.35rem;
+		border-radius: 0.35rem;
+		corner-shape: squircle;
+		background: rgba(255, 255, 255, 0.2);
+		color: #fff;
+	}
+
 	.meta {
 		margin-top: 1.3rem;
 		font-family: var(--font-mono);
 		font-size: 0.78rem;
+		line-height: 1.7;
 		color: var(--text-muted);
+	}
+
+	/* Two lines on purpose: what this download is, then where the others are.
+	   Run together, the link wraps at whatever word the width allows and its
+	   dashed underline breaks across the two lines. */
+	.meta-line {
+		display: block;
 	}
 
 	/* ---- capture strip ---- */
